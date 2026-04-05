@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BolivarAutos | Venta de Autos Usados en Winnipeg</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            box-shadow: 3px 3px 15px rgba(0,0,0,0.4);
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: #2563eb;
+            color: white;
+        }
+        
+        .car-card {
+            opacity: 1;
+            transition: all 0.4s ease;
+        }
+        
+        .car-card.hidden {
+            display: none;
+        }
+        
+        /* Logo Styles */
+        .logo-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+        }
+        
+        .logo-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            background: #1e293b;
+            padding: 12px 24px 12px 14px;
+            border-radius: 8px;
+            border: 2px solid #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        
+        .logo-b {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+        }
+        
+        .logo-dot {
+            width: 20px;
+            height: 20px;
+            background: #2563eb;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin: 0 7px;
+            position: relative;
+            top: 3px;
+        }
+        
+        .logo-livar {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 0.5px;
+            line-height: 1;
+        }
+        
+        .brand-location {
+            display: flex;
+            flex-direction: column;
+            margin-left: 12px;
+            justify-content: center;
+        }
+        
+        .brand-text {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+        
+        .location-text {
+            font-size: 9px;
+            font-weight: 600;
+            color: #64748b;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-white">
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/593998871836?text=Hola,%20me%20interesa%20información%20sobre%20los%20autos" 
+       target="_blank" 
+       class="whatsapp-float"
+       title="Contáctanos por WhatsApp">
+        <svg viewBox="0 0 32 32" fill="white" width="35" height="35">
+            <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.924 0-7.435 6.050-13.485 13.485-13.485s13.485 6.050 13.485 13.485c0 7.435-6.050 13.485-13.485 13.485zM21.960 18.828c-0.216-0.107-1.277-0.627-1.474-0.699s-0.342-0.107-0.485 0.107c-0.144 0.215-0.556 0.699-0.681 0.843s-0.251 0.161-0.467 0.054c-0.216-0.107-0.913-0.336-1.738-1.073-0.643-0.574-1.077-1.283-1.203-1.498s-0.013-0.331 0.094-0.438c0.096-0.096 0.216-0.251 0.323-0.377s0.144-0.215 0.216-0.359c0.072-0.143 0.036-0.269-0.018-0.377s-0.485-1.169-0.665-1.601c-0.175-0.421-0.353-0.364-0.485-0.371-0.126-0.007-0.269-0.007-0.413-0.007s-0.377 0.054-0.574 0.269c-0.198 0.215-0.754 0.735-0.754 1.794s0.772 2.080 0.879 2.224c0.107 0.143 1.517 2.315 3.675 3.245 0.513 0.221 0.914 0.353 1.227 0.452 0.515 0.164 0.984 0.141 1.354 0.085 0.413-0.061 1.277-0.522 1.456-1.025s0.18-0.936 0.126-1.025c-0.054-0.089-0.198-0.143-0.413-0.251z"/>
+        </svg>
+    </a>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Car Image">
+        </div>
+    </div>
+
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="logo-container">
+                    <div class="logo-box">
+                        <div class="logo-b">B</div>
+                        <div class="logo-dot"></div>
+                        <div class="logo-livar">LIVAR</div>
+                    </div>
+                    <div class="brand-location">
+                        <span class="brand-text">AUTOS</span>
+                        <span class="location-text">WINNIPEG</span>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="changeLanguage('es')" id="btn-lang-es" class="px-4 py-2 rounded-lg font-semibold bg-gray-900 text-white">ES</button>
+                    <button onclick="changeLanguage('en')" id="btn-lang-en" class="px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700">EN</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20 md:py-32">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl">
+                <h2 class="text-4xl md:text-6xl font-bold mb-6" id="hero-title">
+                    Tu próximo auto está aquí
+                </h2>
+                <p class="text-xl md:text-2xl mb-8 text-gray-300" id="hero-subtitle">
+                    Autos usados certificados con garantía. Dealer autorizado por MPI en Winnipeg.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#inventory" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-center transition">
+                        <span id="hero-btn-inventory">Ver Inventario</span>
+                    </a>
+                    <a href="https://wa.me/593998871836" target="_blank" class="bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold text-center hover:bg-gray-100 transition">
+                        <span id="hero-btn-contact">Contactar por WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Garantía -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="h-20 flex items-center justify-center mb-4">
+                        <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="45" fill="#2563eb" opacity="0.1"/>
+                            <circle cx="50" cy="50" r="40" fill="none" stroke="#2563eb" stroke-width="3"/>
+                            <path d="M50 15 L58 25 L50 22 L42 25 Z" fill="#2563eb"/>
+                            <path d="M50 22 C35 22 35 30 35 40 C35 55 42 70 50 78 C58 70 65 55 65 40 C65 30 65 22 50 22 Z" fill="#2563eb"/>
+                            <path d="M42 45 L48 52 L60 38" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-900" id="feature-1-title">Garantía</h3>
+                    <p class="text-gray-600 text-sm" id="feature-1-desc">Todos los vehículos incluyen garantía</p>
+                </div>
+                
+                <!-- Manitoba MPI -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="h-20 flex items-center justify-center mb-4">
+                        <img src="images/img_01.png" alt="Manitoba" class="h-16 w-auto object-contain">
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-900" id="feature-2-title">Dealer Autorizado MPI</h3>
+                    <p class="text-gray-600 text-sm" id="feature-2-desc">Licencia oficial para operar en Manitoba</p>
+                </div>
+                
+                <!-- Carfax -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="h-20 flex items-center justify-center mb-4">
+                        <img src="images/img_02.png" alt="Carfax" class="h-16 w-auto object-contain">
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-900" id="feature-3-title">Carfax Incluido</h3>
+                    <p class="text-gray-600 text-sm" id="feature-3-desc">Historial completo de cada vehículo</p>
+                </div>
+                
+                <!-- Safety -->
+                <div class="text-center flex flex-col items-center">
+                    <div class="h-20 flex items-center justify-center mb-4">
+                        <div class="text-5xl">🔧</div>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-gray-900" id="feature-4-title">Safety Inspection</h3>
+                    <p class="text-gray-600 text-sm" id="feature-4-desc">Inspección completa de seguridad</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inventory Section -->
+    <section id="inventory" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" id="inventory-title">Explora Nuestro Inventario</h2>
+                <p class="text-gray-600 text-lg" id="inventory-subtitle">Encuentra el auto perfecto para ti</p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 mb-12">
+                <button onclick="filterCars('all')" class="filter-btn active px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-800" id="filter-all">
+                    Todos
+                </button>
+                <button onclick="filterCars('likenew')" class="filter-btn px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-800" id="filter-likenew">
+                    Like New
+                </button>
+                <button onclick="filterCars('sedan')" class="filter-btn px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-800" id="filter-sedan">
+                    Sedán
+                </button>
+                <button onclick="filterCars('suv')" class="filter-btn px-6 py-3 rounded-lg font-semibold bg-gray-200 text-gray-800" id="filter-suv">
+                    SUVs
+                </button>
+            </div>
+
+            <!-- Car Grid -->
+            <div id="carGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Cars will be populated by JavaScript -->
+            </div>
+
+            <!-- Coming Soon -->
+            <div class="mt-16 text-center py-16 bg-gray-50 rounded-xl">
+                <h3 class="text-2xl font-bold mb-4" id="coming-soon-title">Más Autos Próximamente</h3>
+                <p class="text-gray-600 mb-6" id="coming-soon-text">Estamos constantemente actualizando nuestro inventario</p>
+                <a href="https://wa.me/593998871836" target="_blank" class="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                    <span id="coming-soon-btn">Consultar Disponibilidad</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-16 bg-gray-900 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8" id="contact-title">Contáctanos</h2>
+            
+            <div class="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="font-bold mb-2" id="contact-whatsapp-label">WhatsApp</h3>
+                    <p class="text-gray-300 flex items-center justify-center gap-2">
+                        <span style="font-size: 24px;">🇪🇨</span>
+                        +593 99 887 1836
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold mb-2" id="contact-phone-label">Teléfono Local</h3>
+                    <p class="text-gray-300 flex items-center justify-center gap-2">
+                        <span style="font-size: 24px;">🇨🇦</span>
+                        +1 204 509 6153
+                    </p>
+                </div>
+            </div>
+            
+            <p class="text-gray-400 mb-8">
+                <span id="contact-location">Winnipeg, Manitoba, Canadá</span>
+            </p>
+            
+            <a href="https://wa.me/593998871836" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold transition">
+                <span id="contact-btn">Contactar por WhatsApp</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-gray-400 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">© 2026 BolivarAutos | LIVARKAR Services Management Ltda.</p>
+            <p class="text-xs mt-2" id="footer-text">Dealer autorizado por MPI - Winnipeg, Manitoba, Canada</p>
+        </div>
+    </footer>
+
+    <script>
+const cars = [
+    {category: 'sedan', name: 'Chevrolet Cobalt 2017', price: 14900, km: 196000, image: 'images/img_03.jpg'},
+    {category: 'sedan', name: 'Chevrolet Cobalt 2009', price: 6900, km: 101000, image: 'images/img_04.jpg'},
+    {category: 'sedan', name: 'Volkswagen Jetta 2014', price: 9900, km: 147000, image: 'images/img_05.jpg'},
+    {category: 'sedan', name: 'Volkswagen Jetta 2012', price: 8400, km: 186000, image: 'images/img_06.jpg'},
+    {category: 'sedan', name: 'Chevrolet Malibu 2013', price: 9500, km: 136000, image: 'images/img_07.jpg'},
+    {category: 'likenew', name: 'Nissan Sentra 2012', price: 7900, km: 132000, image: 'images/img_08.jpg'},
+    {category: 'likenew', name: 'Nissan Sentra 2012', price: 8900, km: 89000, image: 'images/img_09.jpg'},
+    {category: 'sedan', name: 'Kia Rio 2009', price: 6600, km: 152000, image: 'images/img_10.jpg'},
+    {category: 'sedan', name: 'Kia Rio 2014', price: 8600, km: 156000, image: 'images/img_11.jpg'},
+    {category: 'suv', name: 'Mazda CX7 2011', price: 9000, km: 189000, image: 'images/img_12.jpg'},
+    {category: 'suv', name: 'Nissan Rogue 2014', price: 12600, km: 120000, image: 'images/img_13.jpg'},
+    {category: 'suv', name: 'Nissan Rogue 2014', price: 10600, km: 180000, image: 'images/img_14.jpg'},
+    {category: 'suv', name: 'Chevrolet Equinox 2017', price: 8600, km: 228000, image: 'images/img_15.jpg'},
+    {category: 'suv', name: 'Chevrolet Equinox 2015', price: 9900, km: 97000, image: 'images/img_16.jpg'},
+];
+
+        let currentLang = 'es';
+        let currentFilter = 'all';
+
+        // Populate car grid
+        function populateCars() {
+            const grid = document.getElementById('carGrid');
+            grid.innerHTML = '';
+            
+            cars.forEach((car, index) => {
+                const shouldShow = currentFilter === 'all' || car.category === currentFilter;
+                const card = document.createElement('div');
+                card.className = `car-card card-hover bg-white rounded-xl shadow-md overflow-hidden ${!shouldShow ? 'hidden' : ''}`;
+                card.dataset.category = car.category;
+                
+                card.innerHTML = `
+                    <div class="relative cursor-pointer" onclick="openGallery(${index})">
+                        <img src="${car.image}" alt="${car.name}" class="w-full h-64 object-contain bg-gray-100">
+                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-60 text-white px-3 py-1 rounded-full text-sm">
+                            📸 Ver Fotos
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl mb-2">${car.name}</h3>
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-2xl font-bold text-blue-600">CAD $${car.price.toLocaleString()}</span>
+                            <span class="text-gray-600 text-sm">${car.km.toLocaleString()} km</span>
+                        </div>
+                        <div class="space-y-2 text-sm text-gray-600 mb-4">
+                            <p>✓ Garantía</p>
+                            <p>✓ Safety Inspection</p>
+                            <p>✓ Carfax disponible</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="https://wa.me/593998871836?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(car.name)}" 
+                               target="_blank"
+                               class="block text-center bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition">
+                                Consultar
+                            </a>
+                            <a href="https://wa.me/593998871836?text=Necesito%20el%20Carfax%20del%20${encodeURIComponent(car.name)}" 
+                               target="_blank"
+                               class="block text-center bg-gray-700 hover:bg-gray-800 text-white py-3 rounded-lg font-semibold transition">
+                                Carfax
+                            </a>
+                        </div>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Gallery functions
+        function openGallery(carIndex) {
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            modalImage.src = cars[carIndex].image;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal on click outside
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Filter cars
+        function filterCars(category) {
+            currentFilter = category;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.car-card').forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Language system
+        const translations = {
+            es: {
+                'hero-title': 'Tu próximo auto está aquí',
+                'hero-subtitle': 'Autos usados certificados con garantía. Dealer autorizado por MPI en Winnipeg.',
+                'hero-btn-inventory': 'Ver Inventario',
+                'hero-btn-contact': 'Contactar por WhatsApp',
+                'feature-1-title': 'Garantía',
+                'feature-1-desc': 'Todos los vehículos incluyen garantía',
+                'feature-2-title': 'Dealer Autorizado MPI',
+                'feature-2-desc': 'Licencia oficial para operar en Manitoba',
+                'feature-3-title': 'Carfax Incluido',
+                'feature-3-desc': 'Historial completo de cada vehículo',
+                'feature-4-title': 'Safety Inspection',
+                'feature-4-desc': 'Inspección completa de seguridad',
+                'inventory-title': 'Explora Nuestro Inventario',
+                'inventory-subtitle': 'Encuentra el auto perfecto para ti',
+                'filter-all': 'Todos',
+                'filter-likenew': 'Like New',
+                'filter-sedan': 'Sedán',
+                'filter-suv': 'SUVs',
+                'coming-soon-title': 'Más Autos Próximamente',
+                'coming-soon-text': 'Estamos constantemente actualizando nuestro inventario',
+                'coming-soon-btn': 'Consultar Disponibilidad',
+                'contact-title': 'Contáctanos',
+                'contact-whatsapp-label': 'WhatsApp',
+                'contact-phone-label': 'Teléfono Local',
+                'contact-location': 'Winnipeg, Manitoba, Canadá',
+                'contact-btn': 'Contactar por WhatsApp',
+                'footer-text': 'Dealer autorizado por MPI - Winnipeg, Manitoba, Canada'
+            },
+            en: {
+                'hero-title': 'Your Next Car is Here',
+                'hero-subtitle': 'Certified used cars with warranty. MPI authorized dealer in Winnipeg.',
+                'hero-btn-inventory': 'View Inventory',
+                'hero-btn-contact': 'Contact via WhatsApp',
+                'feature-1-title': 'Warranty',
+                'feature-1-desc': 'All vehicles include warranty',
+                'feature-2-title': 'MPI Authorized Dealer',
+                'feature-2-desc': 'Official license to operate in Manitoba',
+                'feature-3-title': 'Carfax Included',
+                'feature-3-desc': 'Complete history of each vehicle',
+                'feature-4-title': 'Safety Inspection',
+                'feature-4-desc': 'Complete safety inspection',
+                'inventory-title': 'Explore Our Inventory',
+                'inventory-subtitle': 'Find the perfect car for you',
+                'filter-all': 'All',
+                'filter-likenew': 'Like New',
+                'filter-sedan': 'Sedan',
+                'filter-suv': 'SUVs',
+                'coming-soon-title': 'More Cars Coming Soon',
+                'coming-soon-text': 'We are constantly updating our inventory',
+                'coming-soon-btn': 'Check Availability',
+                'contact-title': 'Contact Us',
+                'contact-whatsapp-label': 'WhatsApp',
+                'contact-phone-label': 'Local Phone',
+                'contact-location': 'Winnipeg, Manitoba, Canada',
+                'contact-btn': 'Contact via WhatsApp',
+                'footer-text': 'MPI authorized dealer - Winnipeg, Manitoba, Canada'
+            }
+        };
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            Object.keys(t).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = t[key];
+                }
+            });
+
+            document.getElementById('btn-lang-es').className = lang === 'es'
+                ? 'px-4 py-2 rounded-lg font-semibold bg-gray-900 text-white'
+                : 'px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700';
+            document.getElementById('btn-lang-en').className = lang === 'en'
+                ? 'px-4 py-2 rounded-lg font-semibold bg-gray-900 text-white'
+                : 'px-4 py-2 rounded-lg font-semibold bg-gray-200 text-gray-700';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCars();
+        });
+    </script>
+</body>
+</html>
