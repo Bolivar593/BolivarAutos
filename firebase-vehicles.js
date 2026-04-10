@@ -12,7 +12,7 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 
 async function loadFirebaseVEHICULOS_BG() {
-  const container = document.getElementById("firebase-inventory");
+  const container = document.getElementById("carGrid ");
   if (!container) return;
   try {
     const snapshot = await db.collection("VEHICULOS_BG").get();
