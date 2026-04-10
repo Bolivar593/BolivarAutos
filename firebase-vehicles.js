@@ -13,32 +13,32 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-async function loadFirebaseVehicles() {
+async function loadFirebaseVEHICULOS_BG() {
   try {
-    const snapshot = await db.collection("vehicles")
+    const snapshot = await db.collection("VEHICULOS_BG")
       .where("status", "==", "available")
       .get();
 
     if (snapshot.empty) return;
 
-    const vehicles = [];
+    const VEHICULOS_BG = [];
     snapshot.forEach(doc => {
-      vehicles.push({ id: doc.id, ...doc.data() });
+      VEHICULOS_BG.push({ id: doc.id, ...doc.data() });
     });
 
-    injectVehicles(vehicles);
+    injectVEHICULOS_BG(VEHICULOS_BG);
   } catch (err) {
     console.error("Firebase load error:", err);
   }
 }
 
-function injectVehicles(vehicles) {
+function injectVEHICULOS_BG(VEHICULOS_BG) {
   const container = document.getElementById("firebase-inventory");
   if (!container) return;
 
   container.innerHTML = "";
 
-  vehicles.forEach(v => {
+  VEHICULOS_BG.forEach(v => {
     const price = v.price ? "$" + Number(v.price).toLocaleString() : "Consultar";
     const img = (v.images && v.images[0]) ? v.images[0] : "";
     const km = v.mileage ? Number(v.mileage).toLocaleString() + " km" : "";
@@ -59,4 +59,4 @@ function injectVehicles(vehicles) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", loadFirebaseVehicles);
+document.addEventListener("DOMContentLoaded", loadFirebaseVEHICULOS_BG);
