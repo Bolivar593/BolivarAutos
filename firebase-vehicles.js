@@ -15,7 +15,7 @@ const db = firebase.firestore();
 async function loadFirebaseVEHICULOS_BG() {
   try {
     const snapshot = await db.collection("VEHICULOS_BG")
-      .where("status", "==", "available")
+      
       .get();
     if (snapshot.empty) return;
     const vehicles = [];
