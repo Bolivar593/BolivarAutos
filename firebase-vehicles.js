@@ -12,7 +12,7 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 
 async function loadFirebaseVEHICULOS_BG() {
-  const container = document.getElementById("carGrid ");
+  const container = document.getElementById("firebase-inventory ");
   if (!container) return;
   try {
     const snapshot = await db.collection("VEHICULOS_BG").get();
@@ -28,7 +28,7 @@ async function loadFirebaseVEHICULOS_BG() {
 }
 
 function injectVehicles(vehicles) {
-  const container = document.getElementById("carGrid");
+  const container = document.getElementById("firebase-inventory");
   if (!container) return;
   container.innerHTML = "";
   vehicles.forEach(v => {
