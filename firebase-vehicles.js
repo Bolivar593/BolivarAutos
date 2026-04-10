@@ -50,4 +50,8 @@ function injectVehicles(vehicles) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", loadFirebaseVEHICULOS_BG);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", loadFirebaseVEHICULOS_BG);
+} else {
+  loadFirebaseVEHICULOS_BG();
+}
