@@ -12,41 +12,33 @@ if (!firebase.apps.length) {
 const db = firebase.firestore();
 
 async function loadFirebaseVEHICULOS_BG() {
-  const container = document.getElementById("firebase-inventory ");
-  if (!container) return;
   try {
     const snapshot = await db.collection("VEHICULOS_BG").get();
     if (snapshot.empty) return;
-    const vehicles = [];
     snapshot.forEach(doc => {
-      vehicles.push({ id: doc.id, ...doc.data() });
+      const v = doc.data();
+      const price = v.precio ? "CAD $" + Number(v.precio).toLocaleString() : "Consultar";
+      const img = (v.fotos && v.fotos[0]) ? v.fotos[0] : "";
+      const km = v.km ? Number(v.km).toLocaleString() + " km" : "";
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-2xl shadow-lg overflow-hidden card-hover";
+      card.innerHTML = `
+        ${img ? `<img src="${img}" class="w-full h-48 object-cover">` : `<div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">Sin foto</div>`}
+        <div class="p-5">
+          <h3 class="font-bold text-lg text-gray-900 mb-1">${v.nombre || ""}</h3>
+          ${km ? `<p class="text-gray-500 text-sm mb-1">🛣 ${km}</p>` : ""}
+          ${v.categoria ? `<p class="text-gray-500 text-sm mb-2">🚗 ${v.categoria}</p>` : ""}
+          <p class="text-blue-600 font-bold text-xl mb-3">${price}</p>
+          <div class="flex gap-2">
+            <a href="https://wa.me/15935993888?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(v.nombre||'')}" target="_blank" class="flex-1 bg-blue-600 text-white text-center py-2 rounded-lg text-sm font-semibold">Consultar</a>
+          </div>
+        </div>`;
+      const grid = document.getElementById("carGrid");
+      if (grid) grid.appendChild(card);
     });
-    injectVehicles(vehicles);
   } catch (err) {
-    console.error("Firebase load error:", err);
+    console.error("Firebase error:", err);
   }
 }
 
-function injectVehicles(vehicles) {
-  const container = document.getElementById("firebase-inventory");
-  if (!container) return;
-  container.innerHTML = "";
-  vehicles.forEach(v => {
-    const price = v.precio ? "CAD $" + Number(v.precio).toLocaleString() : "Consultar";
-    const img = (v.fotos && v.fotos[0]) ? v.fotos[0] : "";
-    const km = v.km ? Number(v.km).toLocaleString() + " km" : "";
-    const card = document.createElement("div");
-    card.style.cssText = "background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin:20px auto;max-width:400px;";
-    card.innerHTML = `
-      ${img ? `<img src="${img}" style="width:100%;height:220px;object-fit:cover;">` : `<div style="height:220px;background:#e5e7eb;display:flex;align-items:center;justify-content:center;color:#9ca3af;">Sin foto</div>`}
-      <div style="padding:16px;">
-        <h3 style="margin:0 0 8px;font-size:1.1rem;color:#1e293b;">${v.nombre || ""}</h3>
-        ${km ? `<p style="margin:0 0 4px;color:#64748b;font-size:0.9rem;">🛣 ${km}</p>` : ""}
-        ${v.categoria ? `<p style="margin:0 0 4px;color:#64748b;font-size:0.9rem;">🚗 ${v.categoria}</p>` : ""}
-        <p style="margin:8px 0 0;font-size:1.2rem;font-weight:bold;color:#2563eb;">${price}</p>
-      </div>`;
-    container.appendChild(card);
-  });
-}
-
-loadFirebaseVEHICULOS_BG();
+setTimeout(loadFirebaseVEHICULOS_BG, 1500);
