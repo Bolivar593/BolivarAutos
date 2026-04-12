@@ -11,22 +11,25 @@ if (!firebase.apps.length) {
 }
 const db = firebase.firestore();
 
-// Modal para ver todas las fotos
 function fbOpenGallery(fotosJson) {
-  const fotos = JSON.parse(decodeURIComponent(fotosJson));
-  let html = `
-    <div id="fbModal" onclick="document.getElementById('fbModal').remove()" style="
-      position:fixed; top:0; left:0; width:100%; height:100%; 
-      background:rgba(0,0,0,0.9); z-index:99999; 
-      display:flex; flex-direction:column; align-items:center; 
-      justify-content:center; padding:20px; box-sizing:border-box; cursor:pointer;">
-      <p style="color:white; margin-bottom:15px; font-size:14px;">Toca en cualquier lugar para cerrar</p>
-      <div style="display:flex; flex-direction:column; gap:10px; overflow-y:auto; max-height:85vh; width:100%; max-width:600px;">`;
+  var fotos = JSON.parse(decodeURIComponent(fotosJson));
+  var modal = document.createElement('div');
+  modal.id = 'fbModal';
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;display:flex;flex-direction:column;';
+  
+  var header = '<div style="display:flex;justify-content:flex-end;padding:12px 16px;flex-shrink:0;">' +
+    '<button onclick="document.getElementById(\'fbModal\').remove()" style="background:rgba(255,255,255,0.2);color:white;border:none;border-radius:50%;width:36px;height:36px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>' +
+    '</div>';
+  
+  var imgs = '';
   fotos.forEach(function(src) {
-    html += `<img src="${src}" style="width:100%; border-radius:8px; display:block;">`;
+    imgs += '<img src="' + src + '" style="width:100%;border-radius:8px;display:block;margin-bottom:10px;">';
   });
-  html += `</div></div>`;
-  document.body.insertAdjacentHTML('beforeend', html);
+  
+  var body = '<div style="overflow-y:scroll;flex:1;padding:0 16px 20px;">' + imgs + '</div>';
+  
+  modal.innerHTML = header + body;
+  document.body.appendChild(modal);
 }
 
 async function loadFirebaseVEHICULOS_BG() {
@@ -46,18 +49,13 @@ async function loadFirebaseVEHICULOS_BG() {
       card.className = "bg-white rounded-2xl shadow-lg overflow-hidden card-hover";
 
       card.innerHTML = `
-        <div style="position:relative; width:100%; height:200px; overflow:hidden; background:#e5e7eb;">
-          ${img1 
+        <div style="position:relative; width:100%; height:192px; overflow:hidden; background:#e5e7eb; flex-shrink:0;">
+          ${img1
             ? `<img src="${img1}" style="width:100%; height:100%; object-fit:cover; display:block;">`
             : `<div style="width:100%; height:100%; background:#d1d5db;"></div>`
           }
           ${fotos.length > 0 ? `
-          <button onclick="fbOpenGallery('${fotosParam}')" style="
-            position:absolute; bottom:10px; right:10px; 
-            background:rgba(0,0,0,0.6); color:white; border:none; 
-            border-radius:20px; padding:6px 14px; font-size:13px; cursor:pointer;">
-            &#128247; Ver Fotos
-          </button>` : ''}
+          <button onclick="fbOpenGallery('${fotosParam}')" style="position:absolute; bottom:10px; right:10px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:20px; padding:6px 14px; font-size:13px; cursor:pointer;">&#128247; Ver Fotos</button>` : ''}
         </div>
         <div class="p-5">
           <h3 class="font-bold text-xl text-gray-900 mb-2">${nombre}</h3>
@@ -69,15 +67,8 @@ async function loadFirebaseVEHICULOS_BG() {
           <p style="color:#374151; font-size:0.9rem; margin-bottom:4px;">&#10003; Safety Inspection</p>
           <p style="color:#374151; font-size:0.9rem; margin-bottom:16px;">&#10003; Carfax disponible</p>
           <div class="flex gap-2">
-            <a href="https://wa.me/593998871836?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(nombre)}" 
-               target="_blank" 
-               style="flex:1; background:#2563eb; color:white; text-align:center; padding:12px; border-radius:10px; font-weight:600; font-size:0.95rem; text-decoration:none;">
-              Consultar
-            </a>
-            <a href="#" onclick="return false;" 
-               style="flex:1; background:#374151; color:white; text-align:center; padding:12px; border-radius:10px; font-weight:600; font-size:0.95rem; text-decoration:none;">
-              Carfax
-            </a>
+            <a href="https://wa.me/593998871836?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(nombre)}" target="_blank" style="flex:1; background:#2563eb; color:white; text-align:center; padding:12px; border-radius:10px; font-weight:600; font-size:0.95rem; text-decoration:none;">Consultar</a>
+            <a href="#" onclick="return false;" style="flex:1; background:#374151; color:white; text-align:center; padding:12px; border-radius:10px; font-weight:600; font-size:0.95rem; text-decoration:none;">Carfax</a>
           </div>
         </div>`;
 
