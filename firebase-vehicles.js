@@ -23,15 +23,30 @@ function fbOpenGallery(fotosJson) {
   fotos.forEach(function(src) {
     imgs += '<img src="' + src + '" style="width:100%;max-height:75vh;object-fit:contain;border-radius:8px;display:block;margin-bottom:12px;">';
   });
-  var body = '<div style="overflow-y:scroll;flex:1;padding:0 16px 20px;">' + imgs + '</div>';
-  modal.innerHTML = header + body;
+  modal.innerHTML = header + '<div style="overflow-y:scroll;flex:1;padding:0 16px 20px;">' + imgs + '</div>';
   document.body.appendChild(modal);
+}
+
+function getExistingPhotoHeight() {
+  var grid = document.getElementById('carGrid');
+  if (!grid) return 230;
+  var cards = grid.querySelectorAll('.card-hover');
+  for (var i = 0; i < cards.length; i++) {
+    var firstChild = cards[i].firstElementChild;
+    if (firstChild && firstChild.offsetHeight > 50) {
+      return firstChild.offsetHeight;
+    }
+  }
+  return 230;
 }
 
 async function loadFirebaseVEHICULOS_BG() {
   try {
     const snapshot = await db.collection("VEHICULOS_BG").get();
     if (snapshot.empty) return;
+
+    var photoHeight = getExistingPhotoHeight();
+
     snapshot.forEach(doc => {
       const v = doc.data();
       const nombre = v.nombre || "";
@@ -45,7 +60,7 @@ async function loadFirebaseVEHICULOS_BG() {
       card.className = "bg-white rounded-2xl shadow-lg overflow-hidden card-hover";
 
       card.innerHTML = `
-        <div style="position:relative; width:100%; height:230px; overflow:hidden; background:white; flex-shrink:0;">
+        <div style="position:relative;width:100%;height:${photoHeight}px;overflow:hidden;background:white;flex-shrink:0;">
           ${img1 ? `<img src="${img1}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">` : ''}
           <button onclick="fbOpenGallery('${fotosParam}')" style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;">&#128247; Ver Fotos</button>
         </div>
