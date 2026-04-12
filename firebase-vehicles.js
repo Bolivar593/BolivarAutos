@@ -3,7 +3,7 @@ const firebaseConfig = {
   authDomain: "bolivarautos-919e4.firebaseapp.com",
   projectId: "bolivarautos-919e4",
   storageBucket: "bolivarautos-919e4.firebasestorage.app",
-  messagingSenderId: "397354528397",
+  messagingSenderId: "397354528937",
   appId: "1:397354528397:web:52fd2ec53984af7aaa7cc4"
 };
 if (!firebase.apps.length) {
@@ -13,17 +13,57 @@ const db = firebase.firestore();
 
 function fbOpenGallery(fotosJson) {
   var fotos = JSON.parse(decodeURIComponent(fotosJson));
+  var scrollPos = window.scrollY;
+
+  // Block page scroll
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + scrollPos + 'px';
+  document.body.style.width = '100%';
+
+  function closeModal() {
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollPos);
+    var m = document.getElementById('fbModal');
+    if (m) m.remove();
+  }
+
   var modal = document.createElement('div');
   modal.id = 'fbModal';
-  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;display:flex;flex-direction:column;';
-  var header = '<div style="display:flex;justify-content:flex-end;padding:12px 16px;flex-shrink:0;">' +
-    '<button onclick="document.getElementById(\'fbModal\').remove()" style="background:rgba(255,255,255,0.2);color:white;border:none;border-radius:50%;width:36px;height:36px;font-size:22px;cursor:pointer;line-height:1;">&#215;</button>' +
-    '</div>';
-  var imgs = '';
+  modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;display:flex;flex-direction:column;box-sizing:border-box;';
+
+  var header = document.createElement('div');
+  header.style.cssText = 'display:flex;justify-content:flex-end;padding:12px 16px;flex-shrink:0;';
+  var closeBtn = document.createElement('button');
+  closeBtn.innerHTML = '&#215;';
+  closeBtn.style.cssText = 'background:rgba(255,255,255,0.2);color:white;border:none;border-radius:50%;width:36px;height:36px;font-size:22px;cursor:pointer;line-height:1;';
+  closeBtn.onclick = closeModal;
+  header.appendChild(closeBtn);
+
+  var body = document.createElement('div');
+  body.style.cssText = 'overflow-y:scroll;flex:1;padding:0 16px 20px;';
+
   fotos.forEach(function(src) {
-    imgs += '<img src="' + src + '" style="width:100%;max-height:75vh;object-fit:contain;border-radius:8px;display:block;margin-bottom:12px;">';
+    var imgWrap = document.createElement('div');
+    imgWrap.style.cssText = 'margin-bottom:12px;text-align:center;';
+    var img = document.createElement('img');
+    img.src = src;
+    img.style.cssText = 'width:100%;max-height:75vh;object-fit:contain;border-radius:8px;display:block;cursor:zoom-in;transition:transform 0.2s;';
+    var zoomed = false;
+    img.ondblclick = function() {
+      zoomed = !zoomed;
+      img.style.transform = zoomed ? 'scale(1.8)' : 'scale(1)';
+      img.style.cursor = zoomed ? 'zoom-out' : 'zoom-in';
+    };
+    imgWrap.appendChild(img);
+    body.appendChild(imgWrap);
   });
-  modal.innerHTML = header + '<div style="overflow-y:scroll;flex:1;padding:0 16px 20px;">' + imgs + '</div>';
+
+  modal.appendChild(header);
+  modal.appendChild(body);
   document.body.appendChild(modal);
 }
 
@@ -60,7 +100,7 @@ async function loadFirebaseVEHICULOS_BG() {
       card.className = "bg-white rounded-2xl shadow-lg overflow-hidden card-hover";
 
       card.innerHTML = `
-        <div style="position:relative;width:100%;height:${photoHeight}px;overflow:hidden;background:white;flex-shrink:0;">
+        <div style="position:relative;width:100%;height:${photoHeight}px;overflow:hidden;background:#f3f4f6;flex-shrink:0;">
           ${img1 ? `<img src="${img1}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">` : ''}
           <button onclick="fbOpenGallery('${fotosParam}')" style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;">&#128247; Ver Fotos</button>
         </div>
