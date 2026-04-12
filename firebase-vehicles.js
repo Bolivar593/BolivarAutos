@@ -20,36 +20,20 @@ async function loadFirebaseVEHICULOS_BG() {
       const price = v.precio ? "CAD $" + Number(v.precio).toLocaleString() : "Consultar";
       const fotos = (v.fotos && v.fotos.length > 0) ? v.fotos : [];
       const img1 = fotos[0] || "";
-      const img2 = fotos[1] || "";
-      const img3 = fotos[2] || "";
       const km = v.km ? Number(v.km).toLocaleString() + " km" : "";
-
-      // Build photo section
-      let photoHTML = "";
-      if (img1 && img2 && img3) {
-        photoHTML = `
-          <div style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; height:200px; gap:2px;">
-            <img src="${img1}" style="grid-row:1/3; width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
-            <img src="${img2}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
-            <img src="${img3}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
-          </div>`;
-      } else if (img1 && img2) {
-        photoHTML = `
-          <div style="display:grid; grid-template-columns:1fr 1fr; height:200px; gap:2px;">
-            <img src="${img1}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
-            <img src="${img2}" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'">
-          </div>`;
-      } else if (img1) {
-        photoHTML = `<img src="${img1}" style="width:100%; height:200px; object-fit:cover;" onerror="this.style.display='none'">`;
-      } else {
-        photoHTML = `<div style="width:100%; height:200px; background:#e5e7eb; display:flex; align-items:center; justify-content:center; color:#9ca3af;">Sin foto</div>`;
-      }
 
       const card = document.createElement("div");
       card.className = "bg-white rounded-2xl shadow-lg overflow-hidden card-hover";
+      card.style.cssText = "display:flex; flex-direction:column;";
+
       card.innerHTML = `
-        ${photoHTML}
-        <div class="p-5">
+        <div style="width:100%; height:192px; overflow:hidden; flex-shrink:0;">
+          ${img1
+            ? `<img src="${img1}" style="width:100%; height:100%; object-fit:cover; display:block;">`
+            : `<div style="width:100%; height:100%; background:#e5e7eb; display:flex; align-items:center; justify-content:center; color:#9ca3af;">Sin foto</div>`
+          }
+        </div>
+        <div class="p-5" style="flex:1;">
           <h3 class="font-bold text-lg text-gray-900 mb-1">${v.nombre || ""}</h3>
           ${km ? `<p class="text-gray-500 text-sm mb-1">🛣 ${km}</p>` : ""}
           ${v.categoria ? `<p class="text-gray-500 text-sm mb-2">🚗 ${v.categoria}</p>` : ""}
@@ -59,6 +43,7 @@ async function loadFirebaseVEHICULOS_BG() {
             <a href="#" onclick="return false;" class="flex-1 bg-gray-800 text-white text-center py-2 rounded-lg text-sm font-semibold">Carfax</a>
           </div>
         </div>`;
+
       const grid = document.getElementById("carGrid");
       if (grid) grid.appendChild(card);
     });
