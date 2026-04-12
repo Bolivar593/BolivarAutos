@@ -21,7 +21,7 @@ function fbOpenGallery(fotosJson) {
     '</div>';
   var imgs = '';
   fotos.forEach(function(src) {
-    imgs += '<img src="' + src + '" style="width:100%;max-height:80vh;object-fit:contain;border-radius:8px;display:block;margin-bottom:12px;">';
+    imgs += '<img src="' + src + '" style="width:100%;max-height:75vh;object-fit:contain;border-radius:8px;display:block;margin-bottom:12px;">';
   });
   var body = '<div style="overflow-y:scroll;flex:1;padding:0 16px 20px;">' + imgs + '</div>';
   modal.innerHTML = header + body;
@@ -39,26 +39,14 @@ async function loadFirebaseVEHICULOS_BG() {
       const km = v.km ? Number(v.km).toLocaleString() : "";
       const fotos = (v.fotos && v.fotos.length > 0) ? v.fotos : [];
       const img1 = fotos[0] || "";
-      const img2 = fotos[1] || "";
-      const img3 = fotos[2] || "";
       const fotosParam = encodeURIComponent(JSON.stringify(fotos));
-      const noPhoto = '<div style="background:#d1d5db;width:100%;height:100%;"></div>';
 
       const card = document.createElement("div");
       card.className = "bg-white rounded-2xl shadow-lg overflow-hidden card-hover";
 
       card.innerHTML = `
-        <div style="position:relative; width:100%; overflow:hidden;">
-          <div style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:115px 115px; gap:2px; background:#e5e7eb;">
-            <div style="background:#1a1a2e; display:flex; align-items:center; justify-content:center; padding:10px;">
-              <p style="color:white; font-weight:bold; font-size:13px; text-align:center; line-height:1.6; margin:0;">
-                Cad ${precio}<br>${nombre}<br>km ${km}
-              </p>
-            </div>
-            ${img2 ? `<img src="${img2}" style="width:100%;height:100%;object-fit:cover;display:block;">` : noPhoto}
-            ${img3 ? `<img src="${img3}" style="width:100%;height:100%;object-fit:cover;display:block;">` : (img1 ? `<img src="${img1}" style="width:100%;height:100%;object-fit:cover;display:block;">` : noPhoto)}
-            ${img1 ? `<img src="${img1}" style="width:100%;height:100%;object-fit:cover;display:block;">` : noPhoto}
-          </div>
+        <div style="position:relative; width:100%; height:230px; overflow:hidden; background:white; flex-shrink:0;">
+          ${img1 ? `<img src="${img1}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">` : ''}
           <button onclick="fbOpenGallery('${fotosParam}')" style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;">&#128247; Ver Fotos</button>
         </div>
         <div class="p-5">
