@@ -19,19 +19,19 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .lbtn.on{background:#2a52a0;color:#fff;border:1.5px solid #2a52a0}
 .lbtn.off{background:#fff;color:#333;border:1.5px solid #ccc}
 .steps{display:flex;gap:5px;margin-bottom:1.1rem}
-.step{flex:1;height:5px;border-radius:3px;background:#e0e0e0}
+.step{flex:1;height:4px;border-radius:2px;background:#e0e0e0}
 .step.done{background:#2a52a0}
 .step.active{background:#5b80c4}
 .card{background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:1rem 1.1rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
-.sec-label{font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
-.rate-row{display:flex;align-items:center;gap:8px}
-.rate-row label{font-size:13px;color:#888;white-space:nowrap}
+.sec-label{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.rate-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.rate-row label{font-size:12px;color:#888;white-space:nowrap}
 .rate-box{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff}
-.rate-prefix{font-size:15px;font-weight:700;color:#2a52a0;padding:0 7px;background:#f0f4f9}
-.rate-input{font-size:16px;font-weight:700;color:#2a52a0;border:none;width:54px;outline:none;text-align:center;padding:7px 4px}
-.rate-suffix{font-size:13px;color:#5b80c4;font-weight:500;padding-right:9px}
+.rate-prefix{font-size:14px;font-weight:700;color:#2a52a0;padding:0 6px;background:#f0f4f9}
+.rate-input{font-size:14px;font-weight:700;color:#2a52a0;border:none;width:48px;outline:none;text-align:center;padding:6px 4px}
+.rate-suffix{font-size:12px;color:#5b80c4;font-weight:500;padding-right:8px}
 .zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px}
-.zcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:10px 11px;cursor:pointer;background:#fff}
+.zcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:9px 11px;cursor:pointer;background:#fff}
 .zcard.sel{border-color:#2a52a0;background:#eef2f8}
 .zcard .zn{font-size:13px;font-weight:600;color:#222;margin-bottom:2px}
 .zcard.sel .zn{color:#2a52a0}
@@ -48,8 +48,8 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .cal-day.past{color:#ccc;cursor:default}
 .cal-day.empty{cursor:default}
 .dur-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.dur-row label{font-size:13px;color:#888;white-space:nowrap}
-.dur-row select{font-size:14px;padding:7px 9px;border:1px solid #ddd;border-radius:8px;flex:1}
+.dur-row label{font-size:12px;color:#888;white-space:nowrap}
+.dur-row select{font-size:13px;padding:7px 9px;border:1px solid #ddd;border-radius:8px;flex:1}
 .time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:7px;max-height:240px;overflow-y:auto}
 .tslot{border:1.5px solid #e0e0e0;border-radius:10px;padding:9px 6px;text-align:center;cursor:pointer;background:#fff}
 .tslot.sel{border-color:#2a52a0;background:#eef2f8}
@@ -72,17 +72,16 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .sum-tax span:last-child{color:#5b80c4;font-weight:600}
 .sum-divider{border:none;border-top:1px dashed #c0cfe0;margin:8px 0}
 .sum-total{display:flex;justify-content:space-between;font-size:18px;font-weight:700;padding-top:10px;margin-top:8px;border-top:1.5px solid #c0cfe0;color:#2a52a0}
-.msg-label{font-size:12px;font-weight:600;color:#2e7d32;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:none}
-.msgbox{background:#f8fff8;border:1.5px solid #b2dfb2;border-radius:12px;padding:1rem;font-size:13px;color:#1a3a1a;line-height:1.8;white-space:pre-wrap;margin-bottom:.75rem;display:none}
+.msg-label{font-size:11px;font-weight:600;color:#2e7d32;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:none}
+.msgbox{background:#f8fff8;border:1.5px solid #b2dfb2;border-radius:12px;padding:1rem;font-size:13px;color:#1a3a1a;line-height:1.7;white-space:pre-wrap;margin-bottom:.75rem;display:none}
 .btn-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.btn-grid2b{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
-.btn{padding:14px 8px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent}
+.btn{padding:14px 8px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent;width:100%;display:block}
 .btn:active{transform:scale(0.97)}
 .btn:disabled{opacity:0.35;cursor:default}
 .btn-wa{background:#25D366;color:#fff}
 .btn-sms{background:#2a52a0;color:#fff}
 .btn-copy{background:#f0f0f0;color:#333;border:1px solid #ddd}
-.btn-gcal{background:#4285F4;color:#fff}
+.btn-acal{background:#2a52a0;color:#fff;margin-bottom:6px}
 .hint{font-size:12px;color:#aaa;text-align:center;margin-top:4px;padding-bottom:16px}
 .loading-slots{font-size:13px;color:#5b80c4;text-align:center;padding:14px 0;display:none}
 .confirm-banner{background:#d1fae5;border:1.5px solid #6ee7b7;border-radius:12px;padding:.9rem 1rem;margin-bottom:.75rem;font-size:14px;color:#065f46;font-weight:600;text-align:center;display:none}
@@ -92,11 +91,11 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <div class="wrap">
   <div class="header">
     <h1>BolivarAutos-Renta</h1>
-    <p id="h2">Winnipeg, MB · Lun–Dom 9AM–3PM · (204)509-6153</p>
+    <p id="h2">Winnipeg, MB · Lun-Dom 9AM-3PM · (204)509-6153</p>
   </div>
   <div class="lang-row">
     <button class="lbtn off" id="btn-en" onclick="setLang('en')">English</button>
-    <button class="lbtn on" id="btn-es" onclick="setLang('es')">Español</button>
+    <button class="lbtn on"  id="btn-es" onclick="setLang('es')">Espanol</button>
   </div>
   <div class="steps" id="steps-bar"></div>
   <div class="card">
@@ -108,11 +107,11 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="45" oninput="updateDurOptions();upd()">
         <span class="rate-suffix" id="l-rate-cad">CAD</span>
       </div>
-      <span style="font-size:12px;color:#aaa" id="l-rate-note">sin impuestos</span>
+      <span style="font-size:11px;color:#aaa" id="l-rate-note">sin impuestos</span>
     </div>
   </div>
   <div class="card">
-    <div class="sec-label" id="l-z">1. Zona MPI / Tipo de sesión</div>
+    <div class="sec-label" id="l-z">1. Zona MPI / Tipo de sesion</div>
     <div class="zone-grid" id="zone-grid"></div>
   </div>
   <div class="card">
@@ -127,7 +126,7 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="card">
     <div class="sec-label" id="l-t">3. Hora de inicio</div>
     <div class="dur-row">
-      <label id="l-dur">Duración</label>
+      <label id="l-dur">Duracion</label>
       <select id="dur" onchange="renderTimes();upd()">
         <option value="1">1 hr</option>
         <option value="1.5">1.5 hrs</option>
@@ -145,257 +144,287 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div class="form-row">
       <div class="fg">
         <label id="l-nm">Nombre completo</label>
-        <input id="nm" type="text" placeholder="Juan Pérez" oninput="upd()">
+        <input id="nm" type="text" placeholder="Juan Perez" oninput="upd()">
       </div>
       <div class="fg">
-        <label id="l-ph">Teléfono (WhatsApp)</label>
+        <label id="l-ph">Telefono (WhatsApp)</label>
         <input id="ph" type="tel" placeholder="(___) ___-____" oninput="phoneMask(this);upd()" maxlength="14">
       </div>
     </div>
-    <div class="fg">
+    <div class="fg" style="margin-top:8px">
       <label id="l-no">Notas</label>
       <input id="no" type="text" placeholder="ej. primera vez manejando...">
     </div>
   </div>
   <div class="summary" id="summ" style="display:none">
-    <div class="sum-row"><span id="ls-z">Zona</span><span id="sv-z">—</span></div>
-    <div class="sum-row"><span id="ls-d">Fecha</span><span id="sv-d">—</span></div>
-    <div class="sum-row"><span id="ls-t">Hora</span><span id="sv-t">—</span></div>
-    <div class="sum-row"><span id="ls-c">Cliente</span><span id="sv-c">—</span></div>
-    <div class="sum-row"><span id="ls-p">Teléfono</span><span id="sv-p">—</span></div>
+    <div class="sum-row"><span id="ls-z">Zona</span><span id="sv-z">--</span></div>
+    <div class="sum-row"><span id="ls-d">Fecha</span><span id="sv-d">--</span></div>
+    <div class="sum-row"><span id="ls-t">Hora</span><span id="sv-t">--</span></div>
+    <div class="sum-row"><span id="ls-c">Cliente</span><span id="sv-c">--</span></div>
+    <div class="sum-row"><span id="ls-p">Telefono</span><span id="sv-p">--</span></div>
     <hr class="sum-divider">
-    <div class="sum-row"><span id="ls-sub">Subtotal</span><span id="sv-sub">—</span></div>
-    <div class="sum-tax"><span>GST (5%)</span><span id="sv-gst">—</span></div>
-    <div class="sum-tax"><span>PST (7%)</span><span id="sv-pst">—</span></div>
-    <div class="sum-total"><span>Total</span><span id="sv-tot">—</span></div>
+    <div class="sum-row"><span>Subtotal</span><span id="sv-sub">--</span></div>
+    <div class="sum-tax"><span>GST (5%)</span><span id="sv-gst">--</span></div>
+    <div class="sum-tax"><span>PST (7%)</span><span id="sv-pst">--</span></div>
+    <div class="sum-total"><span>Total</span><span id="sv-tot">--</span></div>
   </div>
-  <div class="confirm-banner" id="confirm-banner">✅ Cita guardada correctamente</div>
+  <div class="confirm-banner" id="confirm-banner">Cita guardada correctamente</div>
   <div class="msg-label" id="msg-label">Vista previa del mensaje</div>
   <div class="msgbox" id="msgbox"></div>
   <div class="btn-grid2">
-    <button class="btn btn-wa" id="bwa" onclick="confirmAndSend('wa')" disabled>WhatsApp</button>
-    <button class="btn btn-sms" id="bsm" onclick="confirmAndSend('sms')" disabled>SMS</button>
+    <button class="btn btn-wa"  id="bwa" onclick="sendWA()"   disabled>WhatsApp</button>
+    <button class="btn btn-sms" id="bsm" onclick="sendSMS()"  disabled>SMS</button>
   </div>
-  <div class="btn-grid2b">
-    <button class="btn btn-copy" id="bcp" onclick="confirmAndSend('copy')" disabled><span id="l-cp">Copiar mensaje</span></button>
-    <button class="btn btn-gcal" id="bgc" onclick="goGCal()" disabled>Google Calendar</button>
+  <div class="btn-grid2">
+    <button class="btn btn-copy" id="bcp" onclick="sendCopy()" disabled><span id="l-cp">Copiar mensaje</span></button>
+    <button class="btn btn-acal" id="bac" onclick="goAppleCal()" disabled><span id="l-acal">Calendario iPhone</span></button>
   </div>
   <div class="hint" id="l-hint">Completa los 4 pasos para activar los botones</div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-const firebaseConfig={
-  apiKey:"AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ",
-  authDomain:"bolivarautos-919e4.firebaseapp.com",
-  projectId:"bolivarautos-919e4",
-  storageBucket:"bolivarautos-919e4.firebasestorage.app",
-  messagingSenderId:"397354528937",
-  appId:"1:397354528397:web:52fd2ec53984af7aaa7cc4"
-};
-if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-let bookedSlots=[];
-
-const ZONES=[
-  {id:'bison',en:'Bison',es:'Bison',addr:'15 Barnes St'},
-  {id:'gateway',en:'Gateway',es:'Gateway',addr:'40 Lexington Park'},
+var ZONES=[
+  {id:'bison',  en:'Bison',    es:'Bison',    addr:'15 Barnes St'},
+  {id:'gateway',en:'Gateway',  es:'Gateway',  addr:'40 Lexington Park'},
   {id:'kingedward',en:'King Edward',es:'King Edward',addr:'125 King Edward St E'},
-  {id:'mainst',en:'Main St',es:'Main St',addr:'1284 Main St'},
+  {id:'mainst', en:'Main St',  es:'Main St',  addr:'1284 Main St'},
   {id:'stmarys',en:"St. Mary's",es:"St. Mary's",addr:"930 St Mary's Rd"},
-  {id:'any',en:'Any zone / Driving lessons',es:'Cualquier zona / Clases manejo',addr:'Winnipeg'}
+  {id:'any',    en:'Any zone / Driving lessons',es:'Cualquier zona / Clases manejo',addr:'Winnipeg'}
 ];
-const GST=0.05,PST=0.07;
-const DE=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-const DS=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-const ME=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-let lang='es',selZ=null,selD=null,selT=null;
-let cy=new Date().getFullYear(),cm=new Date().getMonth();
+var GST=0.05,PST=0.07;
+var DE=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],DS=['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+var ME=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var lang='es',selZ=null,selD=null,selT=null;
+var cy=new Date().getFullYear(),cm=new Date().getMonth();
+var bookedSlots=[],db=null;
 
-async function loadBookedSlots(dateStr){
+function pad(n){return String(n).padStart(2,'0');}
+function getRate(){return parseFloat(document.getElementById('rate-val').value)||45;}
+function calcTax(sub){var g=sub*GST,p=sub*PST;return{gst:g,pst:p,total:sub+g+p};}
+function getZone(){for(var i=0;i<ZONES.length;i++){if(ZONES[i].id===selZ)return ZONES[i];}return null;}
+function phoneMask(el){var v=el.value.replace(/\D/g,'').substring(0,10),o='';if(v.length>0)o='('+v.substring(0,3);if(v.length>=4)o+=') '+v.substring(3,6);if(v.length>=7)o+='-'+v.substring(6,10);el.value=o;}
+function fmtH(h){var hh=Math.floor(h),mm=h%1===0.5?'30':'00';if(hh<12)return hh+':'+mm+' AM';if(hh===12)return'12:'+mm+' PM';return(hh-12)+':'+mm+' PM';}
+function parseH(ts){var m=ts.match(/(\d+):(\d+)\s(AM|PM)/);var h=parseInt(m[1]);if(m[3]==='PM'&&h!==12)h+=12;if(m[3]==='AM'&&h===12)h=0;return h+(m[2]==='30'?0.5:0);}
+function todayStr(){var n=new Date();return n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate());}
+function isPastSlot(ds,h){if(ds!==todayStr())return false;var n=new Date(),now=n.getHours()+(n.getMinutes()/60);return h<=now+0.5;}
+function isBooked(s,d){var e=s+d;for(var i=0;i<bookedSlots.length;i++){var b=bookedSlots[i];if(s<b.start+b.dur&&e>b.start)return true;}return false;}
+
+function loadBookedSlots(dateStr){
   bookedSlots=[];
+  if(!db){renderTimes();return;}
   document.getElementById('loading-slots').style.display='block';
   document.getElementById('time-grid').innerHTML='';
-  try{
-    const snap=await db.collection('CITAS_RENTA').where('fecha','==',dateStr).where('cancelada','==',false).get();
-    snap.forEach(doc=>{const d=doc.data();bookedSlots.push({start:parseH(d.hora),dur:parseFloat(d.duracion)});});
-  }catch(e){console.error(e);}
-  document.getElementById('loading-slots').style.display='none';
-  renderTimes();
+  db.collection('CITAS_RENTA').where('fecha','==',dateStr).where('cancelada','==',false).get()
+  .then(function(snap){snap.forEach(function(doc){var d=doc.data();bookedSlots.push({start:parseH(d.hora),dur:parseFloat(d.duracion)});});document.getElementById('loading-slots').style.display='none';renderTimes();})
+  .catch(function(){document.getElementById('loading-slots').style.display='none';renderTimes();});
 }
-async function saveBooking(){
-  const nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
-  const dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate;
-  const{gst,pst,total}=calcTax(sub);
-  const zone=ZONES.find(z=>z.id===selZ);
-  try{
-    await db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(gst.toFixed(2)),pst:parseFloat(pst.toFixed(2)),total:parseFloat(total.toFixed(2)),cancelada:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-    return true;
-  }catch(e){console.error(e);return false;}
+
+function saveBookingBg(){
+  if(!db)return;
+  var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
+  var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
+  db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false})
+  .then(function(){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();var b=document.getElementById('confirm-banner');b.style.display='block';setTimeout(function(){b.style.display='none';},3000);})
+  .catch(function(e){console.error(e);});
 }
-function isBooked(startH,dur){const endH=startH+dur;for(const b of bookedSlots){if(startH<b.start+b.dur&&endH>b.start)return true;}return false;}
-function phoneMask(el){let v=el.value.replace(/\D/g,'').substring(0,10);let out='';if(v.length>0)out='('+v.substring(0,3);if(v.length>=4)out+=') '+v.substring(3,6);if(v.length>=7)out+='-'+v.substring(6,10);el.value=out;}
-function getRate(){return parseFloat(document.getElementById('rate-val').value)||45;}
-function calcTax(sub){const gst=sub*GST,pst=sub*PST;return{gst,pst,total:sub+gst+pst};}
+
 function updateDurOptions(){
-  const r=getRate(),e=lang==='en',sel=document.getElementById('dur'),cur=sel.value;
-  sel.innerHTML='';
-  [[1,1],[1.5,1.5],[2,2],[2.5,2.5],[3,3],[4,4]].forEach(([v,h])=>{
-    const o=document.createElement('option');o.value=v;
-    o.textContent=h+(h===1?' hr':' hrs')+' — $'+(v*r).toFixed(2)+(e?' (before tax)':' (sin imp.)');
-    if(String(v)===String(cur))o.selected=true;sel.appendChild(o);
-  });
+  var r=getRate(),e=lang==='en',sel=document.getElementById('dur'),cur=sel.value;sel.innerHTML='';
+  [[1,1],[1.5,1.5],[2,2],[2.5,2.5],[3,3],[4,4]].forEach(function(a){var o=document.createElement('option');o.value=a[0];o.textContent=a[1]+(a[1]===1?' hr':' hrs')+' -- $'+(a[0]*r).toFixed(2)+(e?' (before tax)':' (sin imp.)');if(String(a[0])===String(cur))o.selected=true;sel.appendChild(o);});
 }
-function fmtH(h){const hh=Math.floor(h),mm=h%1===0.5?'30':'00';if(hh<12)return hh+':'+mm+' AM';if(hh===12)return'12:'+mm+' PM';return(hh-12)+':'+mm+' PM';}
-function parseH(ts){const m=ts.match(/(\d+):(\d+)\s(AM|PM)/);let h=parseInt(m[1]);if(m[3]==='PM'&&h!==12)h+=12;if(m[3]==='AM'&&h===12)h=0;return h+(m[2]==='30'?0.5:0);}
-function todayStr(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
-function isPastSlot(dateStr,h){if(dateStr!==todayStr())return false;const n=new Date(),now=n.getHours()+(n.getMinutes()/60);return h<=now+0.5;}
 function setLang(l){lang=l;document.getElementById('btn-en').className='lbtn '+(l==='en'?'on':'off');document.getElementById('btn-es').className='lbtn '+(l==='es'?'on':'off');applyL();renderZones();renderCal();renderTimes();updateDurOptions();}
 function applyL(){
-  const e=lang==='en';
-  document.getElementById('h2').textContent='Winnipeg, MB · '+(e?'Mon–Sun':'Lun–Dom')+' 9AM–3PM · (204)509-6153';
+  var e=lang==='en';
+  document.getElementById('h2').textContent='Winnipeg, MB - '+(e?'Mon-Sun':'Lun-Dom')+' 9AM-3PM - (204)509-6153';
   document.getElementById('l-rate').textContent=e?'Hourly rate':'Tarifa por hora';
   document.getElementById('l-rate-lbl').textContent=e?'Price/hr:':'Precio/hr:';
   document.getElementById('l-rate-note').textContent=e?'before tax':'sin impuestos';
-  document.getElementById('l-z').textContent=e?'1. MPI Zone / Session type':'1. Zona MPI / Tipo de sesión';
+  document.getElementById('l-z').textContent=e?'1. MPI Zone / Session type':'1. Zona MPI / Tipo de sesion';
   document.getElementById('l-d').textContent=e?'2. Date':'2. Fecha';
   document.getElementById('l-t').textContent=e?'3. Start time':'3. Hora de inicio';
-  document.getElementById('l-dur').textContent=e?'Duration':'Duración';
+  document.getElementById('l-dur').textContent=e?'Duration':'Duracion';
   document.getElementById('l-c').textContent=e?'4. Client info':'4. Datos del cliente';
   document.getElementById('l-nm').textContent=e?'Full name':'Nombre completo';
-  document.getElementById('l-ph').textContent=e?'Phone (WhatsApp)':'Teléfono (WhatsApp)';
+  document.getElementById('l-ph').textContent=e?'Phone (WhatsApp)':'Telefono (WhatsApp)';
   document.getElementById('l-no').textContent=e?'Notes':'Notas';
   document.getElementById('ls-z').textContent=e?'Zone':'Zona';
   document.getElementById('ls-d').textContent=e?'Date':'Fecha';
   document.getElementById('ls-t').textContent=e?'Time':'Hora';
   document.getElementById('ls-c').textContent=e?'Client':'Cliente';
-  document.getElementById('ls-p').textContent=e?'Phone':'Teléfono';
-  document.getElementById('ls-sub').textContent='Subtotal';
+  document.getElementById('ls-p').textContent=e?'Phone':'Telefono';
   document.getElementById('l-cp').textContent=e?'Copy message':'Copiar mensaje';
+  document.getElementById('l-acal').textContent=e?'iPhone Calendar':'Calendario iPhone';
   document.getElementById('msg-label').textContent=e?'Message preview':'Vista previa del mensaje';
   document.getElementById('l-hint').textContent=e?'Complete all 4 steps to activate':'Completa los 4 pasos para activar los botones';
-  document.getElementById('nm').placeholder=e?'John Smith':'Juan Pérez';
-  document.getElementById('loading-slots').textContent=e?'Checking availability...':'Verificando disponibilidad...';
-  document.getElementById('confirm-banner').textContent=e?'✅ Appointment saved':'✅ Cita guardada correctamente';
+  document.getElementById('nm').placeholder=e?'John Smith':'Juan Perez';
+  document.getElementById('confirm-banner').textContent=e?'Appointment saved':'Cita guardada correctamente';
 }
 function renderZones(){
-  const g=document.getElementById('zone-grid');g.innerHTML='';
-  ZONES.forEach(z=>{
-    const d=document.createElement('div');d.className='zcard'+(selZ===z.id?' sel':'');
-    d.innerHTML='<div class="zn">'+z[lang]+'</div><div class="za">'+z.addr+'</div>';
-    d.onclick=()=>{selZ=z.id;renderZones();upSteps();upd();};g.appendChild(d);
-  });
+  var g=document.getElementById('zone-grid');g.innerHTML='';
+  ZONES.forEach(function(z){var d=document.createElement('div');d.className='zcard'+(selZ===z.id?' sel':'');d.innerHTML='<div class="zn">'+z[lang]+'</div><div class="za">'+z.addr+'</div>';(function(zone){d.onclick=function(){selZ=zone.id;renderZones();upSteps();upd();};})(z);g.appendChild(d);});
 }
 function renderCal(){
-  const days=lang==='en'?DE:DS,mons=lang==='en'?ME:MS;
+  var days=lang==='en'?DE:DS,mons=lang==='en'?ME:MS;
   document.getElementById('cal-month').textContent=mons[cm]+' '+cy;
-  const g=document.getElementById('cal');g.innerHTML='';
-  days.forEach(d=>{const h=document.createElement('div');h.className='cal-hdr';h.textContent=d;g.appendChild(h);});
-  const first=new Date(cy,cm,1).getDay(),dN=new Date(cy,cm+1,0).getDate();
-  const today=new Date();today.setHours(0,0,0,0);
-  for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cal-day empty';g.appendChild(e);}
-  for(let d=1;d<=dN;d++){
-    const dt=new Date(cy,cm,d),isPast=dt<today,isTod=dt.getTime()===today.getTime();
-    const ds=cy+'-'+String(cm+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const el=document.createElement('div');let cls='cal-day';
+  var g=document.getElementById('cal');g.innerHTML='';
+  days.forEach(function(d){var h=document.createElement('div');h.className='cal-hdr';h.textContent=d;g.appendChild(h);});
+  var first=new Date(cy,cm,1).getDay(),dN=new Date(cy,cm+1,0).getDate();
+  var today=new Date();today.setHours(0,0,0,0);
+  for(var i=0;i<first;i++){var emp=document.createElement('div');emp.className='cal-day empty';g.appendChild(emp);}
+  for(var d=1;d<=dN;d++){
+    var dt=new Date(cy,cm,d),isPast=dt<today,isTod=dt.getTime()===today.getTime();
+    var ds=cy+'-'+pad(cm+1)+'-'+pad(d);
+    var el=document.createElement('div');var cls='cal-day';
     if(isPast)cls+=' past';if(isTod)cls+=' today';if(selD===ds)cls+=' sel';
     el.className=cls;el.textContent=d;
-    if(!isPast)el.onclick=()=>{selD=ds;if(selT&&isPastSlot(ds,parseH(selT)))selT=null;renderCal();upSteps();upd();loadBookedSlots(ds);};
+    if(!isPast){(function(dateStr){el.onclick=function(){selD=dateStr;if(selT&&isPastSlot(dateStr,parseH(selT)))selT=null;renderCal();upSteps();upd();loadBookedSlots(dateStr);};})(ds);}
     g.appendChild(el);
   }
 }
 function renderTimes(){
-  const dur=parseFloat(document.getElementById('dur').value);
-  const g=document.getElementById('time-grid');g.innerHTML='';
-  for(let h=9;h<15;h+=0.5){
+  var dur=parseFloat(document.getElementById('dur').value);
+  var g=document.getElementById('time-grid');g.innerHTML='';
+  for(var h=9;h<15;h+=0.5){
     if(h+dur>15)break;
-    const past=selD?isPastSlot(selD,h):false;
-    const booked=isBooked(h,dur);
-    const ts=fmtH(h);
-    const el=document.createElement('div');
-    let cls='tslot';
-    if(selT===ts)cls+=' sel';
-    if(past)cls+=' unavail';
-    else if(booked)cls+=' booked';
+    var past=selD?isPastSlot(selD,h):false,booked=isBooked(h,dur),ts=fmtH(h);
+    var el=document.createElement('div');var cls='tslot';
+    if(selT===ts)cls+=' sel';if(past)cls+=' unavail';else if(booked)cls+=' booked';
     el.className=cls;
-    const endLabel=past?'—':booked?(lang==='en'?'Booked':'Ocupado'):'→ '+fmtH(h+dur);
+    var endLabel=past?'--':booked?(lang==='en'?'Booked':'Ocupado'):'-> '+fmtH(h+dur);
     el.innerHTML='<div class="tm">'+ts+'</div><div class="te">'+endLabel+'</div>';
-    if(!past&&!booked)el.onclick=()=>{selT=ts;renderTimes();upSteps();upd();};
+    if(!past&&!booked){(function(slot){el.onclick=function(){selT=slot;renderTimes();upSteps();upd();};})(ts);}
     g.appendChild(el);
   }
 }
 function pm(){if(cm===0){cm=11;cy--;}else cm--;renderCal();}
 function nm(){if(cm===11){cm=0;cy++;}else cm++;renderCal();}
 function upSteps(){
-  const cnt=[selZ,selD,selT,true].filter(Boolean).length;
-  const bar=document.getElementById('steps-bar');bar.innerHTML='';
-  for(let i=1;i<=4;i++){const s=document.createElement('div');s.className='step'+(i<cnt?' done':i===cnt?' active':'');bar.appendChild(s);}
+  var cnt=[selZ,selD,selT,true].filter(Boolean).length;
+  var bar=document.getElementById('steps-bar');bar.innerHTML='';
+  for(var i=1;i<=4;i++){var s=document.createElement('div');s.className='step'+(i<cnt?' done':i===cnt?' active':'');bar.appendChild(s);}
 }
 function buildMsg(){
-  const nm=document.getElementById('nm').value,dur=parseFloat(document.getElementById('dur').value);
-  const no=document.getElementById('no').value,zone=ZONES.find(z=>z.id===selZ);
-  const rate=getRate(),sub=dur*rate;const{gst,pst,total}=calcTax(sub);
-  const endT=fmtH(parseH(selT)+dur);
-  if(lang==='es')return '✅ Reserva confirmada — BolivarAutos-Renta\n\nHola '+nm+'! Tu sesión está lista.\n\n📍 Zona: '+zone.es+' ('+zone.addr+')\n📅 Fecha: '+selD+'\n⏰ Hora: '+selT+' → '+endT+'\n⏱ Duración: '+dur+'h\n\n💵 Subtotal: $'+sub.toFixed(2)+' CAD\n   GST (5%): $'+gst.toFixed(2)+'\n   PST (7%): $'+pst.toFixed(2)+'\n💰 Total: $'+total.toFixed(2)+' CAD\n'+(no?'📝 Notas: '+no+'\n':'')+'\nPlease bring your driver license.\n\nNos vemos pronto!\nBolivar — (204)509-6153';
-  return '✅ Booking confirmed — BolivarAutos-Renta\n\nHi '+nm+'! Your session is all set.\n\n📍 Zone: '+zone.en+' ('+zone.addr+')\n📅 Date: '+selD+'\n⏰ Time: '+selT+' → '+endT+'\n⏱ Duration: '+dur+'h\n\n💵 Subtotal: $'+sub.toFixed(2)+' CAD\n   GST (5%): $'+gst.toFixed(2)+'\n   PST (7%): $'+pst.toFixed(2)+'\n💰 Total: $'+total.toFixed(2)+' CAD\n'+(no?'📝 Notes: '+no+'\n':'')+'\nPlease bring your driver license.\n\nSee you soon!\nBolivar — (204)509-6153';
+  var nm=document.getElementById('nm').value,dur=parseFloat(document.getElementById('dur').value),no=document.getElementById('no').value;
+  var zone=getZone();
+  if(!zone||!selT||!selD)return '';
+  var rate=getRate(),sub=dur*rate,tx=calcTax(sub),endT=fmtH(parseH(selT)+dur);
+  var msg='';
+  if(lang==='es'){
+    msg='Reserva confirmada -- BolivarAutos-Renta\n\nHola '+nm+'! Tu sesion esta lista.\n\n';
+    msg+='Zona: '+zone.es+' ('+zone.addr+')\n';
+    msg+='Fecha: '+selD+'\n';
+    msg+='Hora: '+selT+' -> '+endT+'\n';
+    msg+='Duracion: '+dur+'h\n\n';
+    msg+='Subtotal: $'+sub.toFixed(2)+' CAD\n';
+    msg+='GST (5%): $'+tx.gst.toFixed(2)+'\n';
+    msg+='PST (7%): $'+tx.pst.toFixed(2)+'\n';
+    msg+='Total: $'+tx.total.toFixed(2)+' CAD\n';
+    if(no)msg+='\nNotas: '+no+'\n';
+    msg+='\nPlease bring your driver license.\n\nNos vemos pronto!\nBolivar -- (204)509-6153';
+  } else {
+    msg='Booking confirmed -- BolivarAutos-Renta\n\nHi '+nm+'! Your session is all set.\n\n';
+    msg+='Zone: '+zone.en+' ('+zone.addr+')\n';
+    msg+='Date: '+selD+'\n';
+    msg+='Time: '+selT+' -> '+endT+'\n';
+    msg+='Duration: '+dur+'h\n\n';
+    msg+='Subtotal: $'+sub.toFixed(2)+' CAD\n';
+    msg+='GST (5%): $'+tx.gst.toFixed(2)+'\n';
+    msg+='PST (7%): $'+tx.pst.toFixed(2)+'\n';
+    msg+='Total: $'+tx.total.toFixed(2)+' CAD\n';
+    if(no)msg+='\nNotes: '+no+'\n';
+    msg+='\nPlease bring your driver license.\n\nSee you soon!\nBolivar -- (204)509-6153';
+  }
+  return msg;
 }
-function gcalDate(dateStr,timeStr,durH){
-  const[y,mo,d]=dateStr.split('-').map(Number);
-  const startH=parseH(timeStr),sh=Math.floor(startH),sm=startH%1===0.5?30:0;
-  const start=new Date(y,mo-1,d,sh,sm),end=new Date(start.getTime()+durH*3600000);
-  const fmt=dt=>dt.getFullYear()+String(dt.getMonth()+1).padStart(2,'0')+String(dt.getDate()).padStart(2,'0')+'T'+String(dt.getHours()).padStart(2,'0')+String(dt.getMinutes()).padStart(2,'0')+'00';
-  return{start:fmt(start),end:fmt(end)};
-}
-function setBtn(id,on){document.getElementById(id).disabled=!on;}
+function setBtn(id,on){var el=document.getElementById(id);if(el)el.disabled=!on;}
 function upd(){
-  const nm=document.getElementById('nm').value,ph=document.getElementById('ph').value;
-  const dur=parseFloat(document.getElementById('dur').value),zone=ZONES.find(z=>z.id===selZ);
-  const rate=getRate(),sub=dur*rate;const{gst,pst,total}=calcTax(sub);
-  const show=selZ&&selD&&selT;
+  var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value;
+  var dur=parseFloat(document.getElementById('dur').value),zone=getZone();
+  var rate=getRate(),sub=dur*rate,tx=calcTax(sub);
+  var show=selZ&&selD&&selT;
   document.getElementById('summ').style.display=show?'block':'none';
-  if(show){
-    document.getElementById('sv-z').textContent=zone?zone[lang]:'';
-    document.getElementById('sv-d').textContent=selD||'';
-    document.getElementById('sv-t').textContent=selT||'';
-    document.getElementById('sv-c').textContent=nm||'—';
-    document.getElementById('sv-p').textContent=ph||'—';
+  if(show&&zone){
+    document.getElementById('sv-z').textContent=zone[lang];
+    document.getElementById('sv-d').textContent=selD;
+    document.getElementById('sv-t').textContent=selT;
+    document.getElementById('sv-c').textContent=nm||'--';
+    document.getElementById('sv-p').textContent=ph||'--';
     document.getElementById('sv-sub').textContent='$'+sub.toFixed(2);
-    document.getElementById('sv-gst').textContent='$'+gst.toFixed(2);
-    document.getElementById('sv-pst').textContent='$'+pst.toFixed(2);
-    document.getElementById('sv-tot').textContent='$'+total.toFixed(2)+' CAD';
+    document.getElementById('sv-gst').textContent='$'+tx.gst.toFixed(2);
+    document.getElementById('sv-pst').textContent='$'+tx.pst.toFixed(2);
+    document.getElementById('sv-tot').textContent='$'+tx.total.toFixed(2)+' CAD';
   }
-  const ready=!!(selZ&&selD&&selT&&nm&&ph&&ph.length>=14);
-  ['bwa','bsm','bcp','bgc'].forEach(id=>setBtn(id,ready));
-  const mb=document.getElementById('msgbox'),ml=document.getElementById('msg-label');
-  if(ready){mb.style.display='block';ml.style.display='block';mb.textContent=buildMsg();document.getElementById('l-hint').textContent=lang==='en'?'All set — tap a button to send':'Listo — toca un botón para enviar';}
-  else{mb.style.display='none';ml.style.display='none';document.getElementById('l-hint').textContent=lang==='en'?'Complete all 4 steps to activate':'Completa los 4 pasos para activar los botones';}
-}
-async function confirmAndSend(type){
-  const banner=document.getElementById('confirm-banner');
-  const saved=await saveBooking();
-  if(saved){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();banner.style.display='block';setTimeout(()=>banner.style.display='none',3000);}
-  const msg=buildMsg();
-  if(type==='wa'){const ph=document.getElementById('ph').value.replace(/\D/g,'');window.open('https://wa.me/1'+ph+'?text='+encodeURIComponent(msg));}
-  else if(type==='sms'){const ph=document.getElementById('ph').value.replace(/\D/g,'');window.open('sms:+1'+ph+'?body='+encodeURIComponent(msg));}
-  else if(type==='copy'){
-    const l=document.getElementById('l-cp');
-    if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>{l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(()=>{l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2000);});}
-    else{const t=document.createElement('textarea');t.value=msg;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(()=>{l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2000);}
+  var ready=!!(selZ&&selD&&selT&&nm&&ph&&ph.length>=14);
+  ['bwa','bsm','bcp','bac'].forEach(function(id){setBtn(id,ready);});
+  var mb=document.getElementById('msgbox'),ml=document.getElementById('msg-label');
+  if(ready){
+    mb.textContent=buildMsg();
+    mb.style.display='block';
+    ml.style.display='block';
+    document.getElementById('l-hint').textContent=lang==='en'?'All set -- tap a button to send':'Listo -- toca un boton para enviar';
+  } else {
+    mb.style.display='none';
+    ml.style.display='none';
+    document.getElementById('l-hint').textContent=lang==='en'?'Complete all 4 steps to activate':'Completa los 4 pasos para activar los botones';
   }
 }
-function goGCal(){
-  const nm=document.getElementById('nm').value,ph=document.getElementById('ph').value;
-  const dur=parseFloat(document.getElementById('dur').value),no=document.getElementById('no').value;
-  const rate=getRate(),sub=dur*rate;const{total}=calcTax(sub);
-  const zone=ZONES.find(z=>z.id===selZ),{start,end}=gcalDate(selD,selT,dur);
-  const title=encodeURIComponent('BolivarAutos-Renta — '+nm);
-  const details=encodeURIComponent('Cliente: '+nm+'\nTel: '+ph+'\nTotal: $'+total.toFixed(2)+' CAD'+(no?'\nNotas: '+no:'')+'\n\nBolivar: (204)509-6153');
-  const loc=encodeURIComponent(zone[lang]+' — '+zone.addr+', Winnipeg, MB');
-  window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+title+'&dates='+start+'/'+end+'&details='+details+'&location='+loc);
+function sendWA(){
+  var ph=document.getElementById('ph').value.replace(/\D/g,'');
+  var msg=buildMsg();
+  saveBookingBg();
+  window.location.href='https://wa.me/1'+ph+'?text='+encodeURIComponent(msg);
 }
+function sendSMS(){
+  var ph=document.getElementById('ph').value.replace(/\D/g,'');
+  var msg=buildMsg();
+  saveBookingBg();
+  window.location.href='sms:+1'+ph+'&body='+encodeURIComponent(msg);
+}
+function sendCopy(){
+  var msg=buildMsg(),l=document.getElementById('l-cp');
+  saveBookingBg();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(msg).then(function(){l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(function(){l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2500);});
+  } else {
+    var t=document.createElement('textarea');t.value=msg;t.style.cssText='position:fixed;opacity:0';document.body.appendChild(t);t.focus();t.select();document.execCommand('copy');document.body.removeChild(t);
+    l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(function(){l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2500);
+  }
+}
+function goAppleCal(){
+  var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
+  var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
+  var parts=selD.split('-'),yr=parseInt(parts[0]),mo=parseInt(parts[1]),dy=parseInt(parts[2]);
+  var sh=parseH(selT),shh=Math.floor(sh),smm=sh%1===0.5?30:0;
+  var eh=sh+dur,ehh=Math.floor(eh),emm=eh%1===0.5?30:0;
+  var start=yr+pad(mo)+pad(dy)+'T'+pad(shh)+pad(smm)+'00';
+  var end=yr+pad(mo)+pad(dy)+'T'+pad(ehh)+pad(emm)+'00';
+  var desc='Cliente: '+nm+'\\nTel: '+ph+'\\nTotal: $'+tx.total.toFixed(2)+' CAD'+(no?'\\nNotas: '+no:'')+'\\n\\nBolivar: (204)509-6153';
+  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:'+start+'\r\nDTEND:'+end+'\r\nSUMMARY:BolivarAutos-Renta - '+nm+'\r\nDESCRIPTION:'+desc+'\r\nLOCATION:'+zone[lang]+' - '+zone.addr+', Winnipeg MB\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='cita-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  saveBookingBg();
+}
+
 upSteps();renderZones();renderCal();renderTimes();updateDurOptions();applyL();
+
+(function(){
+  var s1=document.createElement('script');
+  s1.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
+  s1.onload=function(){
+    var s2=document.createElement('script');
+    s2.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js';
+    s2.onload=function(){
+      try{
+        if(!firebase.apps.length){firebase.initializeApp({apiKey:'AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ',authDomain:'bolivarautos-919e4.firebaseapp.com',projectId:'bolivarautos-919e4',storageBucket:'bolivarautos-919e4.firebasestorage.app',messagingSenderId:'397354528937',appId:'1:397354528397:web:52fd2ec53984af7aaa7cc4'});}
+        db=firebase.firestore();
+      }catch(e){console.error(e);}
+    };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+})();
 </script>
 </body>
 </html>
