@@ -9,206 +9,194 @@
 <title>BolivarAutos-Renta</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#d0ddf0;display:flex;justify-content:center;padding:20px 12px;min-height:100vh}
-.phone-frame{background:#1a1a2e;border-radius:36px;padding:14px;box-shadow:0 8px 32px rgba(0,0,0,0.35);max-width:390px;width:100%}
-.phone-screen{background:#f5f5f7;border-radius:24px;overflow:hidden;max-height:820px;overflow-y:auto}
-.wrap{padding:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-.header{background:#2a52a0;color:#fff;padding:1.1rem 1.3rem;border-radius:12px;margin-bottom:1rem}
-.header h1{font-size:19px;font-weight:700;letter-spacing:0.3px;margin-bottom:3px}
-.header p{font-size:11px;opacity:0.85}
-.lang-row{display:flex;gap:8px;margin-bottom:1rem}
-.lbtn{padding:5px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600}
+body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:12px;min-height:100vh}
+.wrap{max-width:560px;margin:0 auto}
+.header{background:#2a52a0;color:#fff;padding:1.2rem 1.4rem;border-radius:14px;margin-bottom:1.1rem}
+.header h1{font-size:22px;font-weight:700;letter-spacing:0.3px;margin-bottom:4px}
+.header p{font-size:13px;opacity:0.88}
+.lang-row{display:flex;gap:8px;margin-bottom:1.1rem}
+.lbtn{padding:7px 18px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600}
 .lbtn.on{background:#2a52a0;color:#fff;border:1.5px solid #2a52a0}
 .lbtn.off{background:#fff;color:#333;border:1.5px solid #ccc}
-.steps{display:flex;gap:5px;margin-bottom:1rem}
-.step{flex:1;height:4px;border-radius:2px;background:#e0e0e0}
+.steps{display:flex;gap:5px;margin-bottom:1.1rem}
+.step{flex:1;height:5px;border-radius:3px;background:#e0e0e0}
 .step.done{background:#2a52a0}
 .step.active{background:#5b80c4}
-.card{background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:.9rem 1rem;margin-bottom:.8rem;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
-.sec-label{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:9px}
-.rate-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.rate-row label{font-size:12px;color:#888;white-space:nowrap}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:1rem 1.1rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.sec-label{font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.rate-row{display:flex;align-items:center;gap:8px}
+.rate-row label{font-size:13px;color:#888;white-space:nowrap}
 .rate-box{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff}
-.rate-prefix{font-size:14px;font-weight:700;color:#2a52a0;padding:0 6px;background:#f0f4f9}
-.rate-input{font-size:14px;font-weight:700;color:#2a52a0;border:none;width:48px;outline:none;text-align:center;padding:6px 4px}
-.rate-suffix{font-size:12px;color:#5b80c4;font-weight:500;padding-right:8px}
-.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
-.zcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:8px 10px;cursor:pointer;background:#fff}
+.rate-prefix{font-size:15px;font-weight:700;color:#2a52a0;padding:0 7px;background:#f0f4f9}
+.rate-input{font-size:16px;font-weight:700;color:#2a52a0;border:none;width:54px;outline:none;text-align:center;padding:7px 4px}
+.rate-suffix{font-size:13px;color:#5b80c4;font-weight:500;padding-right:9px}
+.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px}
+.zcard{border:1.5px solid #e0e0e0;border-radius:10px;padding:10px 11px;cursor:pointer;background:#fff}
 .zcard.sel{border-color:#2a52a0;background:#eef2f8}
-.zcard .zn{font-size:12px;font-weight:600;color:#222;margin-bottom:1px}
+.zcard .zn{font-size:13px;font-weight:600;color:#222;margin-bottom:2px}
 .zcard.sel .zn{color:#2a52a0}
-.zcard .za{font-size:10px;color:#888}
-.cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.cal-nav button{background:#fff;border:1px solid #ddd;border-radius:8px;padding:4px 10px;cursor:pointer;font-size:13px;color:#333}
-.cal-nav span{font-size:13px;font-weight:600;color:#222}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.cal-hdr{text-align:center;font-size:10px;font-weight:600;color:#888;padding:2px 0}
-.cal-day{text-align:center;padding:7px 2px;border-radius:7px;font-size:13px;cursor:pointer;color:#222;border:1px solid transparent}
+.zcard .za{font-size:11px;color:#888}
+.cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cal-nav button{background:#fff;border:1px solid #ddd;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:15px;color:#333}
+.cal-nav span{font-size:15px;font-weight:600;color:#222}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-hdr{text-align:center;font-size:12px;font-weight:600;color:#888;padding:3px 0}
+.cal-day{text-align:center;padding:9px 3px;border-radius:8px;font-size:15px;cursor:pointer;color:#222;border:1px solid transparent}
 .cal-day:hover:not(.past):not(.empty){background:#f0f0f0}
 .cal-day.sel{background:#2a52a0;color:#fff}
 .cal-day.today{border-color:#2a52a0;font-weight:700}
 .cal-day.past{color:#ccc;cursor:default}
 .cal-day.empty{cursor:default}
-.dur-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
-.dur-row label{font-size:12px;color:#888;white-space:nowrap}
-.dur-row select{font-size:13px;padding:5px 7px;border:1px solid #ddd;border-radius:8px;flex:1}
-.time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:5px;max-height:200px;overflow-y:auto}
-.tslot{border:1.5px solid #e0e0e0;border-radius:10px;padding:7px 5px;text-align:center;cursor:pointer;background:#fff}
+.dur-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.dur-row label{font-size:13px;color:#888;white-space:nowrap}
+.dur-row select{font-size:14px;padding:7px 9px;border:1px solid #ddd;border-radius:8px;flex:1}
+.time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:7px;max-height:240px;overflow-y:auto}
+.tslot{border:1.5px solid #e0e0e0;border-radius:10px;padding:9px 6px;text-align:center;cursor:pointer;background:#fff}
 .tslot.sel{border-color:#2a52a0;background:#eef2f8}
 .tslot.unavail{opacity:0.3;cursor:default;background:#f5f5f5}
-.tslot.booked{opacity:0.35;cursor:not-allowed;background:#fee2e2;border-color:#fca5a5}
-.tslot .tm{font-size:12px;font-weight:600;color:#222}
+.tslot.booked{opacity:0.4;cursor:not-allowed;background:#fee2e2;border-color:#fca5a5}
+.tslot .tm{font-size:14px;font-weight:600;color:#222}
 .tslot.sel .tm{color:#2a52a0}
 .tslot.booked .tm{color:#dc2626}
-.tslot .te{font-size:10px;color:#888;margin-top:1px}
+.tslot .te{font-size:11px;color:#888;margin-top:2px}
 .tslot.booked .te{color:#dc2626}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.fg{display:flex;flex-direction:column;gap:3px}
-.fg label{font-size:11px;color:#888;font-weight:500}
-.fg input{font-size:13px;padding:7px 9px;border:1px solid #ddd;border-radius:8px;width:100%;-webkit-appearance:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:13px;color:#888;font-weight:500}
+.fg input{font-size:15px;padding:9px 11px;border:1px solid #ddd;border-radius:8px;width:100%;-webkit-appearance:none}
 .fg input:focus{outline:none;border-color:#2a52a0}
-.summary{background:#f0f4f9;border:1px solid #c8d8ea;border-radius:12px;padding:.9rem;margin-bottom:.65rem}
-.sum-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:#666}
+.summary{background:#f0f4f9;border:1px solid #c8d8ea;border-radius:12px;padding:1rem;margin-bottom:.75rem}
+.sum-row{display:flex;justify-content:space-between;font-size:14px;padding:4px 0;color:#666}
 .sum-row span:last-child{color:#2a52a0;font-weight:600}
-.sum-tax{display:flex;justify-content:space-between;font-size:12px;padding:2px 0;color:#888}
+.sum-tax{display:flex;justify-content:space-between;font-size:13px;padding:2px 0;color:#888}
 .sum-tax span:last-child{color:#5b80c4;font-weight:600}
-.sum-divider{border:none;border-top:1px dashed #c0cfe0;margin:7px 0}
-.sum-total{display:flex;justify-content:space-between;font-size:16px;font-weight:700;padding-top:8px;margin-top:8px;border-top:1.5px solid #c0cfe0;color:#2a52a0}
-.msg-label{font-size:11px;font-weight:600;color:#2e7d32;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;display:none}
-.msgbox{background:#f8fff8;border:1.5px solid #b2dfb2;border-radius:12px;padding:.9rem;font-size:12px;color:#1a3a1a;line-height:1.7;white-space:pre-wrap;margin-bottom:.65rem;display:none}
-.btn-grid2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:7px}
-.btn-grid2b{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:5px}
-.btn{padding:12px 8px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent}
+.sum-divider{border:none;border-top:1px dashed #c0cfe0;margin:8px 0}
+.sum-total{display:flex;justify-content:space-between;font-size:18px;font-weight:700;padding-top:10px;margin-top:8px;border-top:1.5px solid #c0cfe0;color:#2a52a0}
+.msg-label{font-size:12px;font-weight:600;color:#2e7d32;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:none}
+.msgbox{background:#f8fff8;border:1.5px solid #b2dfb2;border-radius:12px;padding:1rem;font-size:13px;color:#1a3a1a;line-height:1.8;white-space:pre-wrap;margin-bottom:.75rem;display:none}
+.btn-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.btn-grid2b{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.btn{padding:14px 8px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent}
 .btn:active{transform:scale(0.97)}
 .btn:disabled{opacity:0.35;cursor:default}
 .btn-wa{background:#25D366;color:#fff}
 .btn-sms{background:#2a52a0;color:#fff}
 .btn-copy{background:#f0f0f0;color:#333;border:1px solid #ddd}
 .btn-gcal{background:#4285F4;color:#fff}
-.hint{font-size:11px;color:#aaa;text-align:center;margin-top:2px;padding-bottom:10px}
-.loading-slots{font-size:12px;color:#5b80c4;text-align:center;padding:12px 0;display:none}
-.confirm-banner{background:#d1fae5;border:1.5px solid #6ee7b7;border-radius:12px;padding:.8rem 1rem;margin-bottom:.65rem;font-size:13px;color:#065f46;font-weight:600;text-align:center;display:none}
+.hint{font-size:12px;color:#aaa;text-align:center;margin-top:4px;padding-bottom:16px}
+.loading-slots{font-size:13px;color:#5b80c4;text-align:center;padding:14px 0;display:none}
+.confirm-banner{background:#d1fae5;border:1.5px solid #6ee7b7;border-radius:12px;padding:.9rem 1rem;margin-bottom:.75rem;font-size:14px;color:#065f46;font-weight:600;text-align:center;display:none}
 </style>
 </head>
 <body>
-<div class="phone-frame">
-  <div class="phone-screen">
-    <div class="wrap">
-      <div class="header">
-        <h1>BolivarAutos-Renta</h1>
-        <p id="h2">Winnipeg, MB · Lun–Dom 9AM–3PM · (204)509-6153</p>
+<div class="wrap">
+  <div class="header">
+    <h1>BolivarAutos-Renta</h1>
+    <p id="h2">Winnipeg, MB · Lun–Dom 9AM–3PM · (204)509-6153</p>
+  </div>
+  <div class="lang-row">
+    <button class="lbtn off" id="btn-en" onclick="setLang('en')">English</button>
+    <button class="lbtn on" id="btn-es" onclick="setLang('es')">Español</button>
+  </div>
+  <div class="steps" id="steps-bar"></div>
+  <div class="card">
+    <div class="sec-label" id="l-rate">Tarifa por hora</div>
+    <div class="rate-row">
+      <label id="l-rate-lbl">Precio/hr:</label>
+      <div class="rate-box">
+        <span class="rate-prefix">$</span>
+        <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="45" oninput="updateDurOptions();upd()">
+        <span class="rate-suffix" id="l-rate-cad">CAD</span>
       </div>
-      <div class="lang-row">
-        <button class="lbtn off" id="btn-en" onclick="setLang('en')">English</button>
-        <button class="lbtn on" id="btn-es" onclick="setLang('es')">Español</button>
-      </div>
-      <div class="steps" id="steps-bar"></div>
-      <div class="card">
-        <div class="sec-label" id="l-rate">Tarifa por hora</div>
-        <div class="rate-row">
-          <label id="l-rate-lbl">Precio/hr:</label>
-          <div class="rate-box">
-            <span class="rate-prefix">$</span>
-            <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="45" oninput="updateDurOptions();upd()">
-            <span class="rate-suffix" id="l-rate-cad">CAD</span>
-          </div>
-          <span style="font-size:11px;color:#aaa" id="l-rate-note">sin impuestos</span>
-        </div>
-      </div>
-      <div class="card">
-        <div class="sec-label" id="l-z">1. Zona MPI / Tipo de sesión</div>
-        <div class="zone-grid" id="zone-grid"></div>
-      </div>
-      <div class="card">
-        <div class="sec-label" id="l-d">2. Fecha</div>
-        <div class="cal-nav">
-          <button onclick="pm()">&#8592;</button>
-          <span id="cal-month"></span>
-          <button onclick="nm()">&#8594;</button>
-        </div>
-        <div class="cal-grid" id="cal"></div>
-      </div>
-      <div class="card">
-        <div class="sec-label" id="l-t">3. Hora de inicio</div>
-        <div class="dur-row">
-          <label id="l-dur">Duración</label>
-          <select id="dur" onchange="renderTimes();upd()">
-            <option value="1">1 hr</option>
-            <option value="1.5">1.5 hrs</option>
-            <option value="2" selected>2 hrs</option>
-            <option value="2.5">2.5 hrs</option>
-            <option value="3">3 hrs</option>
-            <option value="4">4 hrs</option>
-          </select>
-        </div>
-        <div class="loading-slots" id="loading-slots">Verificando disponibilidad...</div>
-        <div class="time-grid" id="time-grid"></div>
-      </div>
-      <div class="card">
-        <div class="sec-label" id="l-c">4. Datos del cliente</div>
-        <div class="form-row">
-          <div class="fg">
-            <label id="l-nm">Nombre completo</label>
-            <input id="nm" type="text" placeholder="Juan Pérez" oninput="upd()">
-          </div>
-          <div class="fg">
-            <label id="l-ph">Teléfono (WhatsApp)</label>
-            <input id="ph" type="tel" placeholder="(___) ___-____" oninput="phoneMask(this);upd()" maxlength="14">
-          </div>
-        </div>
-        <div class="fg">
-          <label id="l-no">Notas</label>
-          <input id="no" type="text" placeholder="ej. primera vez manejando...">
-        </div>
-      </div>
-      <div class="summary" id="summ" style="display:none">
-        <div class="sum-row"><span id="ls-z">Zona</span><span id="sv-z">—</span></div>
-        <div class="sum-row"><span id="ls-d">Fecha</span><span id="sv-d">—</span></div>
-        <div class="sum-row"><span id="ls-t">Hora</span><span id="sv-t">—</span></div>
-        <div class="sum-row"><span id="ls-c">Cliente</span><span id="sv-c">—</span></div>
-        <div class="sum-row"><span id="ls-p">Teléfono</span><span id="sv-p">—</span></div>
-        <hr class="sum-divider">
-        <div class="sum-row"><span id="ls-sub">Subtotal</span><span id="sv-sub">—</span></div>
-        <div class="sum-tax"><span>GST (5%)</span><span id="sv-gst">—</span></div>
-        <div class="sum-tax"><span>PST (7%)</span><span id="sv-pst">—</span></div>
-        <div class="sum-total"><span>Total</span><span id="sv-tot">—</span></div>
-      </div>
-      <div class="confirm-banner" id="confirm-banner">✅ Cita guardada correctamente</div>
-      <div class="msg-label" id="msg-label">Vista previa del mensaje</div>
-      <div class="msgbox" id="msgbox"></div>
-      <div class="btn-grid2">
-        <button class="btn btn-wa" id="bwa" onclick="confirmAndSend('wa')" disabled>WhatsApp</button>
-        <button class="btn btn-sms" id="bsm" onclick="confirmAndSend('sms')" disabled>SMS</button>
-      </div>
-      <div class="btn-grid2b">
-        <button class="btn btn-copy" id="bcp" onclick="confirmAndSend('copy')" disabled><span id="l-cp">Copiar mensaje</span></button>
-        <button class="btn btn-gcal" id="bgc" onclick="goGCal()" disabled>Google Calendar</button>
-      </div>
-      <div class="hint" id="l-hint">Completa los 4 pasos para activar los botones</div>
+      <span style="font-size:12px;color:#aaa" id="l-rate-note">sin impuestos</span>
     </div>
   </div>
+  <div class="card">
+    <div class="sec-label" id="l-z">1. Zona MPI / Tipo de sesión</div>
+    <div class="zone-grid" id="zone-grid"></div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-d">2. Fecha</div>
+    <div class="cal-nav">
+      <button onclick="pm()">&#8592;</button>
+      <span id="cal-month"></span>
+      <button onclick="nm()">&#8594;</button>
+    </div>
+    <div class="cal-grid" id="cal"></div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-t">3. Hora de inicio</div>
+    <div class="dur-row">
+      <label id="l-dur">Duración</label>
+      <select id="dur" onchange="renderTimes();upd()">
+        <option value="1">1 hr</option>
+        <option value="1.5">1.5 hrs</option>
+        <option value="2" selected>2 hrs</option>
+        <option value="2.5">2.5 hrs</option>
+        <option value="3">3 hrs</option>
+        <option value="4">4 hrs</option>
+      </select>
+    </div>
+    <div class="loading-slots" id="loading-slots">Verificando disponibilidad...</div>
+    <div class="time-grid" id="time-grid"></div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-c">4. Datos del cliente</div>
+    <div class="form-row">
+      <div class="fg">
+        <label id="l-nm">Nombre completo</label>
+        <input id="nm" type="text" placeholder="Juan Pérez" oninput="upd()">
+      </div>
+      <div class="fg">
+        <label id="l-ph">Teléfono (WhatsApp)</label>
+        <input id="ph" type="tel" placeholder="(___) ___-____" oninput="phoneMask(this);upd()" maxlength="14">
+      </div>
+    </div>
+    <div class="fg">
+      <label id="l-no">Notas</label>
+      <input id="no" type="text" placeholder="ej. primera vez manejando...">
+    </div>
+  </div>
+  <div class="summary" id="summ" style="display:none">
+    <div class="sum-row"><span id="ls-z">Zona</span><span id="sv-z">—</span></div>
+    <div class="sum-row"><span id="ls-d">Fecha</span><span id="sv-d">—</span></div>
+    <div class="sum-row"><span id="ls-t">Hora</span><span id="sv-t">—</span></div>
+    <div class="sum-row"><span id="ls-c">Cliente</span><span id="sv-c">—</span></div>
+    <div class="sum-row"><span id="ls-p">Teléfono</span><span id="sv-p">—</span></div>
+    <hr class="sum-divider">
+    <div class="sum-row"><span id="ls-sub">Subtotal</span><span id="sv-sub">—</span></div>
+    <div class="sum-tax"><span>GST (5%)</span><span id="sv-gst">—</span></div>
+    <div class="sum-tax"><span>PST (7%)</span><span id="sv-pst">—</span></div>
+    <div class="sum-total"><span>Total</span><span id="sv-tot">—</span></div>
+  </div>
+  <div class="confirm-banner" id="confirm-banner">✅ Cita guardada correctamente</div>
+  <div class="msg-label" id="msg-label">Vista previa del mensaje</div>
+  <div class="msgbox" id="msgbox"></div>
+  <div class="btn-grid2">
+    <button class="btn btn-wa" id="bwa" onclick="confirmAndSend('wa')" disabled>WhatsApp</button>
+    <button class="btn btn-sms" id="bsm" onclick="confirmAndSend('sms')" disabled>SMS</button>
+  </div>
+  <div class="btn-grid2b">
+    <button class="btn btn-copy" id="bcp" onclick="confirmAndSend('copy')" disabled><span id="l-cp">Copiar mensaje</span></button>
+    <button class="btn btn-gcal" id="bgc" onclick="goGCal()" disabled>Google Calendar</button>
+  </div>
+  <div class="hint" id="l-hint">Completa los 4 pasos para activar los botones</div>
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script>
-// Firebase config
-const firebaseConfig = {
-  apiKey: "AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ",
-  authDomain: "bolivarautos-919e4.firebaseapp.com",
-  projectId: "bolivarautos-919e4",
-  storageBucket: "bolivarautos-919e4.firebasestorage.app",
-  messagingSenderId: "397354528937",
-  appId: "1:397354528397:web:52fd2ec53984af7aaa7cc4"
+const firebaseConfig={
+  apiKey:"AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ",
+  authDomain:"bolivarautos-919e4.firebaseapp.com",
+  projectId:"bolivarautos-919e4",
+  storageBucket:"bolivarautos-919e4.firebasestorage.app",
+  messagingSenderId:"397354528937",
+  appId:"1:397354528397:web:52fd2ec53984af7aaa7cc4"
 };
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// Booked slots for selected date: array of {start, dur}
-let bookedSlots = [];
-let loadingSlots = false;
+if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+let bookedSlots=[];
 
 const ZONES=[
   {id:'bison',en:'Bison',es:'Bison',addr:'15 Barnes St'},
@@ -226,107 +214,50 @@ const MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Sep
 let lang='es',selZ=null,selD=null,selT=null;
 let cy=new Date().getFullYear(),cm=new Date().getMonth();
 
-// Load bookings from Firebase for a given date
-async function loadBookedSlots(dateStr) {
-  bookedSlots = [];
-  loadingSlots = true;
-  document.getElementById('loading-slots').style.display = 'block';
-  document.getElementById('time-grid').innerHTML = '';
-  try {
-    const snap = await db.collection('CITAS_RENTA')
-      .where('fecha', '==', dateStr)
-      .where('cancelada', '==', false)
-      .get();
-    snap.forEach(doc => {
-      const d = doc.data();
-      bookedSlots.push({ start: parseH(d.hora), dur: parseFloat(d.duracion) });
-    });
-  } catch(e) {
-    console.error('Error loading bookings:', e);
-  }
-  loadingSlots = false;
-  document.getElementById('loading-slots').style.display = 'none';
+async function loadBookedSlots(dateStr){
+  bookedSlots=[];
+  document.getElementById('loading-slots').style.display='block';
+  document.getElementById('time-grid').innerHTML='';
+  try{
+    const snap=await db.collection('CITAS_RENTA').where('fecha','==',dateStr).where('cancelada','==',false).get();
+    snap.forEach(doc=>{const d=doc.data();bookedSlots.push({start:parseH(d.hora),dur:parseFloat(d.duracion)});});
+  }catch(e){console.error(e);}
+  document.getElementById('loading-slots').style.display='none';
   renderTimes();
 }
-
-// Save booking to Firebase
-async function saveBooking() {
-  const nm = document.getElementById('nm').value;
-  const ph = document.getElementById('ph').value;
-  const no = document.getElementById('no').value;
-  const dur = parseFloat(document.getElementById('dur').value);
-  const rate = getRate();
-  const sub = dur * rate;
-  const { gst, pst, total } = calcTax(sub);
-  const zone = ZONES.find(z => z.id === selZ);
-  try {
-    await db.collection('CITAS_RENTA').add({
-      fecha: selD,
-      hora: selT,
-      duracion: dur,
-      zona_id: selZ,
-      zona_nombre: zone ? zone.es : '',
-      cliente: nm,
-      telefono: ph,
-      notas: no,
-      tarifa: rate,
-      subtotal: parseFloat(sub.toFixed(2)),
-      gst: parseFloat(gst.toFixed(2)),
-      pst: parseFloat(pst.toFixed(2)),
-      total: parseFloat(total.toFixed(2)),
-      cancelada: false,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+async function saveBooking(){
+  const nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
+  const dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate;
+  const{gst,pst,total}=calcTax(sub);
+  const zone=ZONES.find(z=>z.id===selZ);
+  try{
+    await db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(gst.toFixed(2)),pst:parseFloat(pst.toFixed(2)),total:parseFloat(total.toFixed(2)),cancelada:false,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
     return true;
-  } catch(e) {
-    console.error('Error saving booking:', e);
-    return false;
-  }
+  }catch(e){console.error(e);return false;}
 }
-
-// Check if a slot overlaps with booked slots
-function isBooked(startH, dur) {
-  const endH = startH + dur;
-  for (const b of bookedSlots) {
-    const bEnd = b.start + b.dur;
-    if (startH < bEnd && endH > b.start) return true;
-  }
-  return false;
-}
-
-function phoneMask(el) {
-  let v = el.value.replace(/\D/g, '').substring(0, 10);
-  let out = '';
-  if (v.length > 0) out = '(' + v.substring(0, 3);
-  if (v.length >= 4) out += ') ' + v.substring(3, 6);
-  if (v.length >= 7) out += '-' + v.substring(6, 10);
-  el.value = out;
-}
+function isBooked(startH,dur){const endH=startH+dur;for(const b of bookedSlots){if(startH<b.start+b.dur&&endH>b.start)return true;}return false;}
+function phoneMask(el){let v=el.value.replace(/\D/g,'').substring(0,10);let out='';if(v.length>0)out='('+v.substring(0,3);if(v.length>=4)out+=') '+v.substring(3,6);if(v.length>=7)out+='-'+v.substring(6,10);el.value=out;}
 function getRate(){return parseFloat(document.getElementById('rate-val').value)||45;}
 function calcTax(sub){const gst=sub*GST,pst=sub*PST;return{gst,pst,total:sub+gst+pst};}
 function updateDurOptions(){
   const r=getRate(),e=lang==='en',sel=document.getElementById('dur'),cur=sel.value;
   sel.innerHTML='';
   [[1,1],[1.5,1.5],[2,2],[2.5,2.5],[3,3],[4,4]].forEach(([v,h])=>{
-    const o=document.createElement('option');
-    o.value=v;
+    const o=document.createElement('option');o.value=v;
     o.textContent=h+(h===1?' hr':' hrs')+' — $'+(v*r).toFixed(2)+(e?' (before tax)':' (sin imp.)');
-    if(String(v)===String(cur))o.selected=true;
-    sel.appendChild(o);
+    if(String(v)===String(cur))o.selected=true;sel.appendChild(o);
   });
 }
 function fmtH(h){const hh=Math.floor(h),mm=h%1===0.5?'30':'00';if(hh<12)return hh+':'+mm+' AM';if(hh===12)return'12:'+mm+' PM';return(hh-12)+':'+mm+' PM';}
 function parseH(ts){const m=ts.match(/(\d+):(\d+)\s(AM|PM)/);let h=parseInt(m[1]);if(m[3]==='PM'&&h!==12)h+=12;if(m[3]==='AM'&&h===12)h=0;return h+(m[2]==='30'?0.5:0);}
 function todayStr(){const n=new Date();return n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');}
 function isPastSlot(dateStr,h){if(dateStr!==todayStr())return false;const n=new Date(),now=n.getHours()+(n.getMinutes()/60);return h<=now+0.5;}
-
 function setLang(l){lang=l;document.getElementById('btn-en').className='lbtn '+(l==='en'?'on':'off');document.getElementById('btn-es').className='lbtn '+(l==='es'?'on':'off');applyL();renderZones();renderCal();renderTimes();updateDurOptions();}
 function applyL(){
   const e=lang==='en';
   document.getElementById('h2').textContent='Winnipeg, MB · '+(e?'Mon–Sun':'Lun–Dom')+' 9AM–3PM · (204)509-6153';
   document.getElementById('l-rate').textContent=e?'Hourly rate':'Tarifa por hora';
   document.getElementById('l-rate-lbl').textContent=e?'Price/hr:':'Precio/hr:';
-  document.getElementById('l-rate-cad').textContent='CAD';
   document.getElementById('l-rate-note').textContent=e?'before tax':'sin impuestos';
   document.getElementById('l-z').textContent=e?'1. MPI Zone / Session type':'1. Zona MPI / Tipo de sesión';
   document.getElementById('l-d').textContent=e?'2. Date':'2. Fecha';
@@ -347,16 +278,14 @@ function applyL(){
   document.getElementById('l-hint').textContent=e?'Complete all 4 steps to activate':'Completa los 4 pasos para activar los botones';
   document.getElementById('nm').placeholder=e?'John Smith':'Juan Pérez';
   document.getElementById('loading-slots').textContent=e?'Checking availability...':'Verificando disponibilidad...';
-  document.getElementById('confirm-banner').textContent=e?'✅ Appointment saved successfully':'✅ Cita guardada correctamente';
+  document.getElementById('confirm-banner').textContent=e?'✅ Appointment saved':'✅ Cita guardada correctamente';
 }
 function renderZones(){
   const g=document.getElementById('zone-grid');g.innerHTML='';
   ZONES.forEach(z=>{
-    const d=document.createElement('div');
-    d.className='zcard'+(selZ===z.id?' sel':'');
+    const d=document.createElement('div');d.className='zcard'+(selZ===z.id?' sel':'');
     d.innerHTML='<div class="zn">'+z[lang]+'</div><div class="za">'+z.addr+'</div>';
-    d.onclick=()=>{selZ=z.id;renderZones();upSteps();upd();};
-    g.appendChild(d);
+    d.onclick=()=>{selZ=z.id;renderZones();upSteps();upd();};g.appendChild(d);
   });
 }
 function renderCal(){
@@ -370,16 +299,10 @@ function renderCal(){
   for(let d=1;d<=dN;d++){
     const dt=new Date(cy,cm,d),isPast=dt<today,isTod=dt.getTime()===today.getTime();
     const ds=cy+'-'+String(cm+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const el=document.createElement('div');
-    let cls='cal-day';
+    const el=document.createElement('div');let cls='cal-day';
     if(isPast)cls+=' past';if(isTod)cls+=' today';if(selD===ds)cls+=' sel';
     el.className=cls;el.textContent=d;
-    if(!isPast)el.onclick=()=>{
-      selD=ds;
-      if(selT&&isPastSlot(ds,parseH(selT)))selT=null;
-      renderCal();upSteps();upd();
-      loadBookedSlots(ds);
-    };
+    if(!isPast)el.onclick=()=>{selD=ds;if(selT&&isPastSlot(ds,parseH(selT)))selT=null;renderCal();upSteps();upd();loadBookedSlots(ds);};
     g.appendChild(el);
   }
 }
@@ -390,7 +313,6 @@ function renderTimes(){
     if(h+dur>15)break;
     const past=selD?isPastSlot(selD,h):false;
     const booked=isBooked(h,dur);
-    const unavail=past||booked;
     const ts=fmtH(h);
     const el=document.createElement('div');
     let cls='tslot';
@@ -398,9 +320,9 @@ function renderTimes(){
     if(past)cls+=' unavail';
     else if(booked)cls+=' booked';
     el.className=cls;
-    const endLabel=unavail?(booked?(lang==='en'?'Booked':'Ocupado'):'—'):'→ '+fmtH(h+dur);
+    const endLabel=past?'—':booked?(lang==='en'?'Booked':'Ocupado'):'→ '+fmtH(h+dur);
     el.innerHTML='<div class="tm">'+ts+'</div><div class="te">'+endLabel+'</div>';
-    if(!unavail)el.onclick=()=>{selT=ts;renderTimes();upSteps();upd();};
+    if(!past&&!booked)el.onclick=()=>{selT=ts;renderTimes();upSteps();upd();};
     g.appendChild(el);
   }
 }
@@ -414,11 +336,9 @@ function upSteps(){
 function buildMsg(){
   const nm=document.getElementById('nm').value,dur=parseFloat(document.getElementById('dur').value);
   const no=document.getElementById('no').value,zone=ZONES.find(z=>z.id===selZ);
-  const rate=getRate(),sub=dur*rate;
-  const{gst,pst,total}=calcTax(sub);
+  const rate=getRate(),sub=dur*rate;const{gst,pst,total}=calcTax(sub);
   const endT=fmtH(parseH(selT)+dur);
-  if(lang==='es')
-    return '✅ Reserva confirmada — BolivarAutos-Renta\n\nHola '+nm+'! Tu sesión está lista.\n\n📍 Zona: '+zone.es+' ('+zone.addr+')\n📅 Fecha: '+selD+'\n⏰ Hora: '+selT+' → '+endT+'\n⏱ Duración: '+dur+'h\n\n💵 Subtotal: $'+sub.toFixed(2)+' CAD\n   GST (5%): $'+gst.toFixed(2)+'\n   PST (7%): $'+pst.toFixed(2)+'\n💰 Total: $'+total.toFixed(2)+' CAD\n'+(no?'📝 Notas: '+no+'\n':'')+'\nPlease bring your driver license.\n\nNos vemos pronto!\nBolivar — (204)509-6153';
+  if(lang==='es')return '✅ Reserva confirmada — BolivarAutos-Renta\n\nHola '+nm+'! Tu sesión está lista.\n\n📍 Zona: '+zone.es+' ('+zone.addr+')\n📅 Fecha: '+selD+'\n⏰ Hora: '+selT+' → '+endT+'\n⏱ Duración: '+dur+'h\n\n💵 Subtotal: $'+sub.toFixed(2)+' CAD\n   GST (5%): $'+gst.toFixed(2)+'\n   PST (7%): $'+pst.toFixed(2)+'\n💰 Total: $'+total.toFixed(2)+' CAD\n'+(no?'📝 Notas: '+no+'\n':'')+'\nPlease bring your driver license.\n\nNos vemos pronto!\nBolivar — (204)509-6153';
   return '✅ Booking confirmed — BolivarAutos-Renta\n\nHi '+nm+'! Your session is all set.\n\n📍 Zone: '+zone.en+' ('+zone.addr+')\n📅 Date: '+selD+'\n⏰ Time: '+selT+' → '+endT+'\n⏱ Duration: '+dur+'h\n\n💵 Subtotal: $'+sub.toFixed(2)+' CAD\n   GST (5%): $'+gst.toFixed(2)+'\n   PST (7%): $'+pst.toFixed(2)+'\n💰 Total: $'+total.toFixed(2)+' CAD\n'+(no?'📝 Notes: '+no+'\n':'')+'\nPlease bring your driver license.\n\nSee you soon!\nBolivar — (204)509-6153';
 }
 function gcalDate(dateStr,timeStr,durH){
@@ -432,8 +352,7 @@ function setBtn(id,on){document.getElementById(id).disabled=!on;}
 function upd(){
   const nm=document.getElementById('nm').value,ph=document.getElementById('ph').value;
   const dur=parseFloat(document.getElementById('dur').value),zone=ZONES.find(z=>z.id===selZ);
-  const rate=getRate(),sub=dur*rate;
-  const{gst,pst,total}=calcTax(sub);
+  const rate=getRate(),sub=dur*rate;const{gst,pst,total}=calcTax(sub);
   const show=selZ&&selD&&selT;
   document.getElementById('summ').style.display=show?'block':'none';
   if(show){
@@ -453,48 +372,29 @@ function upd(){
   if(ready){mb.style.display='block';ml.style.display='block';mb.textContent=buildMsg();document.getElementById('l-hint').textContent=lang==='en'?'All set — tap a button to send':'Listo — toca un botón para enviar';}
   else{mb.style.display='none';ml.style.display='none';document.getElementById('l-hint').textContent=lang==='en'?'Complete all 4 steps to activate':'Completa los 4 pasos para activar los botones';}
 }
-
-// Save booking then send message
-async function confirmAndSend(type) {
-  const banner = document.getElementById('confirm-banner');
-  const saved = await saveBooking();
-  if (saved) {
-    // Add to local bookedSlots so it's immediately blocked
-    bookedSlots.push({ start: parseH(selT), dur: parseFloat(document.getElementById('dur').value) });
-    renderTimes();
-    banner.style.display = 'block';
-    setTimeout(() => banner.style.display = 'none', 3000);
-  }
-  const msg = buildMsg();
-  if (type === 'wa') {
-    const ph = document.getElementById('ph').value.replace(/\D/g,'');
-    window.open('https://wa.me/1'+ph+'?text='+encodeURIComponent(msg));
-  } else if (type === 'sms') {
-    const ph = document.getElementById('ph').value.replace(/\D/g,'');
-    window.open('sms:+1'+ph+'?body='+encodeURIComponent(msg));
-  } else if (type === 'copy') {
-    const l = document.getElementById('l-cp');
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(msg).then(()=>{l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(()=>{l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2000);});
-    } else {
-      const t=document.createElement('textarea');t.value=msg;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
-      l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(()=>{l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2000);
-    }
+async function confirmAndSend(type){
+  const banner=document.getElementById('confirm-banner');
+  const saved=await saveBooking();
+  if(saved){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();banner.style.display='block';setTimeout(()=>banner.style.display='none',3000);}
+  const msg=buildMsg();
+  if(type==='wa'){const ph=document.getElementById('ph').value.replace(/\D/g,'');window.open('https://wa.me/1'+ph+'?text='+encodeURIComponent(msg));}
+  else if(type==='sms'){const ph=document.getElementById('ph').value.replace(/\D/g,'');window.open('sms:+1'+ph+'?body='+encodeURIComponent(msg));}
+  else if(type==='copy'){
+    const l=document.getElementById('l-cp');
+    if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>{l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(()=>{l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2000);});}
+    else{const t=document.createElement('textarea');t.value=msg;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(()=>{l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2000);}
   }
 }
-
 function goGCal(){
   const nm=document.getElementById('nm').value,ph=document.getElementById('ph').value;
   const dur=parseFloat(document.getElementById('dur').value),no=document.getElementById('no').value;
-  const rate=getRate(),sub=dur*rate;
-  const{total}=calcTax(sub);
+  const rate=getRate(),sub=dur*rate;const{total}=calcTax(sub);
   const zone=ZONES.find(z=>z.id===selZ),{start,end}=gcalDate(selD,selT,dur);
   const title=encodeURIComponent('BolivarAutos-Renta — '+nm);
-  const details=encodeURIComponent('Cliente: '+nm+'\nTel: '+ph+'\nTotal (con impuestos): $'+total.toFixed(2)+' CAD'+(no?'\nNotas: '+no:'')+'\n\nBolivar: (204)509-6153');
+  const details=encodeURIComponent('Cliente: '+nm+'\nTel: '+ph+'\nTotal: $'+total.toFixed(2)+' CAD'+(no?'\nNotas: '+no:'')+'\n\nBolivar: (204)509-6153');
   const loc=encodeURIComponent(zone[lang]+' — '+zone.addr+', Winnipeg, MB');
   window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+title+'&dates='+start+'/'+end+'&details='+details+'&location='+loc);
 }
-
 upSteps();renderZones();renderCal();renderTimes();updateDurOptions();applyL();
 </script>
 </body>
