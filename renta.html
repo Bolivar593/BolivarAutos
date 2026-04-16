@@ -9,97 +9,115 @@
 <title>BolivarAutos-Renta</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:12px;min-height:100vh}
+body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:14px;min-height:100vh}
 .wrap{max-width:560px;margin:0 auto}
-.header{background:#2a52a0;color:#fff;padding:1.2rem 1.4rem;border-radius:14px;margin-bottom:1.1rem}
-.header h1{font-size:24px;font-weight:800;margin-bottom:4px}
-.header p{font-size:14px;font-weight:600;opacity:0.92}
-.lang-row{display:flex;gap:8px;margin-bottom:1.1rem}
-.lbtn{padding:8px 20px;border-radius:8px;font-size:15px;cursor:pointer;font-weight:700}
+.header{background:#2a52a0;color:#fff;padding:1.3rem 1.5rem;border-radius:16px;margin-bottom:1.2rem}
+.header h1{font-size:28px;font-weight:800;margin-bottom:5px}
+.header p{font-size:16px;font-weight:600;opacity:0.92}
+.lang-row{display:flex;gap:10px;margin-bottom:1.2rem}
+.lbtn{padding:10px 24px;border-radius:10px;font-size:17px;cursor:pointer;font-weight:800}
 .lbtn.on{background:#2a52a0;color:#fff;border:2px solid #2a52a0}
 .lbtn.off{background:#fff;color:#333;border:2px solid #ccc}
-.steps{display:flex;gap:5px;margin-bottom:1.1rem}
-.step{flex:1;height:5px;border-radius:2px;background:#e0e0e0}
-.step.done{background:#2a52a0}
-.step.active{background:#5b80c4}
-.card{background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:1rem 1.1rem;margin-bottom:.9rem;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
-.sec-label{font-size:13px;font-weight:800;color:#2a52a0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
-.rate-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.rate-row label{font-size:14px;color:#444;font-weight:700;white-space:nowrap}
-.rate-box{display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#fff}
-.rate-prefix{font-size:15px;font-weight:800;color:#2a52a0;padding:0 7px;background:#f0f4f9}
-.rate-input{font-size:16px;font-weight:800;color:#2a52a0;border:none;width:52px;outline:none;text-align:center;padding:7px 4px}
-.rate-suffix{font-size:13px;color:#5b80c4;font-weight:700;padding-right:9px}
-.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px}
-.zcard{border:2px solid #e0e0e0;border-radius:10px;padding:10px 11px;cursor:pointer;background:#fff}
+/* Progress steps */
+.progress{display:flex;flex-direction:column;gap:6px;margin-bottom:1.2rem;background:#fff;border-radius:14px;padding:14px 16px;border:1px solid #dde6f5;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.progress-title{font-size:13px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.prog-row{display:flex;align-items:center;gap:10px;padding:4px 0}
+.prog-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;flex-shrink:0}
+.prog-icon.done{background:#22c55e;color:#fff}
+.prog-icon.pending{background:#e5e7eb;color:#9ca3af}
+.prog-text{font-size:16px;font-weight:700;color:#333}
+.prog-text.done{color:#166534}
+.prog-text.pending{color:#9ca3af}
+/* Cards */
+.card{background:#fff;border:1.5px solid #dde6f5;border-radius:16px;padding:1.1rem 1.2rem;margin-bottom:1rem;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.sec-label{font-size:14px;font-weight:800;color:#2a52a0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.rate-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rate-row label{font-size:16px;color:#333;font-weight:700;white-space:nowrap}
+.rate-box{display:inline-flex;align-items:center;border:1.5px solid #c5d5ea;border-radius:10px;overflow:hidden}
+.rate-prefix{font-size:18px;font-weight:800;color:#2a52a0;padding:0 8px;background:#eef2f8}
+.rate-input{font-size:20px;font-weight:800;color:#2a52a0;border:none;width:60px;outline:none;text-align:center;padding:8px 4px}
+.rate-suffix{font-size:15px;color:#5b80c4;font-weight:700;padding-right:10px}
+.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.zcard{border:2px solid #dde6f5;border-radius:12px;padding:12px 12px;cursor:pointer;background:#fff}
 .zcard.sel{border-color:#2a52a0;background:#eef2f8}
-.zcard .zn{font-size:14px;font-weight:800;color:#111;margin-bottom:2px}
+.zcard .zn{font-size:16px;font-weight:800;color:#111;margin-bottom:2px}
 .zcard.sel .zn{color:#2a52a0}
-.zcard .za{font-size:12px;color:#666;font-weight:500}
-.cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.cal-nav button{background:#fff;border:1px solid #ddd;border-radius:8px;padding:6px 14px;cursor:pointer;font-size:16px;color:#333;font-weight:700}
-.cal-nav span{font-size:16px;font-weight:800;color:#111}
+.zcard .za{font-size:13px;color:#666;font-weight:500}
+.cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cal-nav button{background:#eef2f8;border:1.5px solid #c5d5ea;border-radius:10px;padding:8px 16px;cursor:pointer;font-size:20px;color:#2a52a0;font-weight:800}
+.cal-nav span{font-size:18px;font-weight:800;color:#111}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-hdr{text-align:center;font-size:13px;font-weight:800;color:#555;padding:3px 0}
-.cal-day{text-align:center;padding:9px 3px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;color:#111;border:1px solid transparent}
-.cal-day:hover:not(.past):not(.empty){background:#f0f0f0}
+.cal-hdr{text-align:center;font-size:14px;font-weight:800;color:#555;padding:4px 0}
+.cal-day{text-align:center;padding:11px 2px;border-radius:9px;font-size:17px;font-weight:700;cursor:pointer;color:#111;border:1.5px solid transparent}
+.cal-day:hover:not(.past):not(.empty){background:#eef2f8}
 .cal-day.sel{background:#2a52a0;color:#fff}
-.cal-day.today{border-color:#2a52a0;font-weight:800;color:#2a52a0}
+.cal-day.today{border-color:#2a52a0;color:#2a52a0}
 .cal-day.past{color:#ccc;cursor:default}
 .cal-day.empty{cursor:default}
-.dur-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.dur-row label{font-size:14px;color:#444;font-weight:700;white-space:nowrap}
-.dur-row select{font-size:14px;padding:8px 9px;border:1px solid #ddd;border-radius:8px;flex:1;font-weight:600;color:#111}
-.time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:7px;max-height:240px;overflow-y:auto}
-.tslot{border:2px solid #e0e0e0;border-radius:10px;padding:9px 6px;text-align:center;cursor:pointer;background:#fff}
+.dur-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.dur-row label{font-size:16px;color:#333;font-weight:700;white-space:nowrap}
+.dur-row select{font-size:16px;font-weight:700;padding:10px 10px;border:1.5px solid #dde6f5;border-radius:10px;flex:1;color:#111}
+.time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px;max-height:250px;overflow-y:auto}
+.tslot{border:2px solid #dde6f5;border-radius:12px;padding:11px 6px;text-align:center;cursor:pointer;background:#fff}
 .tslot.sel{border-color:#2a52a0;background:#eef2f8}
 .tslot.unavail{opacity:0.3;cursor:default;background:#f5f5f5}
-.tslot.booked{opacity:0.45;cursor:not-allowed;background:#fee2e2;border-color:#fca5a5}
-.tslot .tm{font-size:15px;font-weight:800;color:#111}
+.tslot.booked{cursor:not-allowed;background:#fee2e2;border-color:#fca5a5}
+.tslot .tm{font-size:16px;font-weight:800;color:#111}
 .tslot.sel .tm{color:#2a52a0}
 .tslot.booked .tm{color:#dc2626}
-.tslot .te{font-size:12px;font-weight:600;color:#666;margin-top:2px}
+.tslot .te{font-size:13px;font-weight:600;color:#555;margin-top:3px}
 .tslot.booked .te{color:#dc2626}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.fg{display:flex;flex-direction:column;gap:4px}
-.fg label{font-size:14px;color:#333;font-weight:700}
-.fg input{font-size:16px;font-weight:600;padding:10px 11px;border:1px solid #ddd;border-radius:8px;width:100%;-webkit-appearance:none;color:#111}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:15px;color:#222;font-weight:800}
+.fg input{font-size:17px;font-weight:600;padding:11px 12px;border:1.5px solid #dde6f5;border-radius:10px;width:100%;-webkit-appearance:none;color:#111}
 .fg input:focus{outline:none;border-color:#2a52a0}
-.summary{background:#f0f4f9;border:1px solid #c8d8ea;border-radius:12px;padding:1rem;margin-bottom:.75rem}
-.sum-row{display:flex;justify-content:space-between;font-size:15px;font-weight:600;padding:4px 0;color:#444}
+/* Confirm button */
+.btn-confirm{width:100%;padding:18px;border-radius:14px;font-size:20px;font-weight:800;cursor:pointer;text-align:center;border:none;background:#2a52a0;color:#fff;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
+.btn-confirm:active{opacity:0.85}
+.btn-confirm.ready{background:#22c55e}
+/* Error banner */
+.error-banner{background:#fef3c7;border:2px solid #f59e0b;border-radius:12px;padding:14px 16px;margin-bottom:12px;font-size:16px;font-weight:700;color:#92400e;display:none;line-height:1.6}
+/* Summary */
+.summary{background:#eef2f8;border:1.5px solid #c5d5ea;border-radius:14px;padding:1.1rem;margin-bottom:.85rem}
+.sum-row{display:flex;justify-content:space-between;font-size:16px;font-weight:700;padding:5px 0;color:#333}
 .sum-row span:last-child{color:#2a52a0;font-weight:800}
-.sum-tax{display:flex;justify-content:space-between;font-size:14px;font-weight:600;padding:2px 0;color:#666}
+.sum-tax{display:flex;justify-content:space-between;font-size:15px;font-weight:600;padding:3px 0;color:#555}
 .sum-tax span:last-child{color:#5b80c4;font-weight:700}
-.sum-divider{border:none;border-top:1px dashed #c0cfe0;margin:8px 0}
-.sum-total{display:flex;justify-content:space-between;font-size:20px;font-weight:800;padding-top:10px;margin-top:8px;border-top:2px solid #c0cfe0;color:#2a52a0}
-.msg-label{font-size:12px;font-weight:800;color:#2e7d32;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:none}
-.msgbox{background:#f8fff8;border:1.5px solid #b2dfb2;border-radius:12px;padding:1rem;font-size:14px;font-weight:500;color:#1a3a1a;line-height:1.8;white-space:pre-wrap;margin-bottom:.75rem;display:none}
-.btn-grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-.btn{padding:15px 8px;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent;width:100%;display:block}
-.btn:active{transform:scale(0.97)}
-.btn:disabled{opacity:0.35;cursor:default}
+.sum-divider{border:none;border-top:1.5px dashed #c5d5ea;margin:10px 0}
+.sum-total{display:flex;justify-content:space-between;font-size:22px;font-weight:800;padding-top:10px;margin-top:8px;border-top:2px solid #2a52a0;color:#2a52a0}
+/* Message */
+.msg-label{font-size:13px;font-weight:800;color:#166534;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:none}
+.msgbox{background:#f0fdf4;border:2px solid #86efac;border-radius:14px;padding:1.1rem;font-size:15px;font-weight:600;color:#14532d;line-height:1.8;white-space:pre-wrap;margin-bottom:.85rem;display:none}
+/* Action buttons */
+.btn-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.btn{padding:16px 8px;border-radius:14px;font-size:17px;font-weight:800;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent;width:100%;display:block}
+.btn:active{opacity:0.8}
+.btn:disabled{opacity:0.3;cursor:default}
 .btn-wa{background:#25D366;color:#fff}
 .btn-sms{background:#2a52a0;color:#fff}
-.btn-copy{background:#f0f0f0;color:#222;border:1px solid #ddd}
-.btn-acal{background:#2a52a0;color:#fff}
-.hint{font-size:13px;font-weight:600;color:#888;text-align:center;margin-top:4px;padding-bottom:16px}
-.loading-slots{font-size:14px;font-weight:700;color:#5b80c4;text-align:center;padding:14px 0;display:none}
-.confirm-banner{background:#d1fae5;border:1.5px solid #6ee7b7;border-radius:12px;padding:.9rem 1rem;margin-bottom:.75rem;font-size:15px;font-weight:800;color:#065f46;text-align:center;display:none}
-/* Admin panel */
+.btn-copy{background:#e5e7eb;color:#111;border:1.5px solid #c5d5ea}
+.btn-acal{background:#374151;color:#fff}
+.hint{font-size:14px;font-weight:600;color:#888;text-align:center;margin-top:4px;padding-bottom:16px}
+.confirm-banner{background:#dcfce7;border:2px solid #86efac;border-radius:14px;padding:1rem;margin-bottom:.85rem;font-size:17px;font-weight:800;color:#065f46;text-align:center;display:none}
+.loading-slots{font-size:15px;font-weight:700;color:#5b80c4;text-align:center;padding:16px 0;display:none}
+/* Admin */
 .admin-toggle{text-align:center;margin-bottom:.9rem}
-.admin-toggle button{background:none;border:none;font-size:13px;color:#aaa;cursor:pointer;font-weight:600;text-decoration:underline}
+.admin-toggle button{background:none;border:none;font-size:14px;color:#aaa;cursor:pointer;font-weight:700;text-decoration:underline}
 .admin-panel{background:#fff;border:2px solid #fca5a5;border-radius:14px;padding:1rem 1.1rem;margin-bottom:.9rem;display:none}
-.admin-title{font-size:14px;font-weight:800;color:#dc2626;margin-bottom:10px;text-transform:uppercase}
-.admin-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f3f3f3;font-size:14px;font-weight:600;color:#333}
+.admin-title{font-size:15px;font-weight:800;color:#dc2626;margin-bottom:10px;text-transform:uppercase}
+.admin-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f3f3f3;font-size:15px;font-weight:700;color:#333}
 .admin-row:last-child{border-bottom:none}
 .admin-row .info{flex:1}
-.admin-row .info span{display:block;font-size:12px;color:#888;font-weight:500}
-.btn-cancel{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:800;cursor:pointer}
-.btn-cancel:active{opacity:0.7}
-.admin-empty{font-size:14px;color:#888;font-weight:600;text-align:center;padding:10px 0}
+.admin-row .info span{display:block;font-size:13px;color:#666;font-weight:500;margin-top:2px}
+.btn-cancel{background:#fee2e2;color:#dc2626;border:1.5px solid #fca5a5;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:800;cursor:pointer}
+.admin-empty{font-size:15px;color:#888;font-weight:600;text-align:center;padding:10px 0}
 .admin-pw{display:flex;gap:8px;margin-bottom:10px}
-.admin-pw input{flex:1;font-size:15px;padding:8px 10px;border:1px solid #ddd;border-radius:8px}
-.admin-pw button{background:#2a52a0;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:14px;font-weight:700;cursor:pointer}
+.admin-pw input{flex:1;font-size:16px;padding:9px 11px;border:1.5px solid #ddd;border-radius:10px}
+.admin-pw button{background:#2a52a0;color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:15px;font-weight:800;cursor:pointer}
+.admin-date-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.admin-date-row label{font-size:15px;font-weight:700;color:#333;white-space:nowrap}
+.admin-date-row input{flex:1;font-size:15px;padding:8px 10px;border:1.5px solid #ddd;border-radius:10px}
 </style>
 </head>
 <body>
@@ -112,7 +130,16 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <button class="lbtn off" id="btn-en" onclick="setLang('en')">English</button>
     <button class="lbtn on"  id="btn-es" onclick="setLang('es')">Espanol</button>
   </div>
-  <div class="steps" id="steps-bar"></div>
+
+  <!-- Progress indicator -->
+  <div class="progress">
+    <div class="progress-title" id="prog-title">Progreso de la reserva</div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-1">1</div><div class="prog-text pending" id="pt-1">Zona MPI no seleccionada</div></div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-2">2</div><div class="prog-text pending" id="pt-2">Fecha no seleccionada</div></div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-3">3</div><div class="prog-text pending" id="pt-3">Hora no seleccionada</div></div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-4">4</div><div class="prog-text pending" id="pt-4">Nombre y telefono faltan</div></div>
+  </div>
+
   <div class="card">
     <div class="sec-label" id="l-rate">Tarifa por hora</div>
     <div class="rate-row">
@@ -122,13 +149,15 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="45" oninput="updateDurOptions();upd()">
         <span class="rate-suffix">CAD</span>
       </div>
-      <span style="font-size:12px;color:#aaa;font-weight:600" id="l-rate-note">sin impuestos</span>
+      <span style="font-size:13px;color:#aaa;font-weight:600" id="l-rate-note">sin impuestos</span>
     </div>
   </div>
+
   <div class="card">
     <div class="sec-label" id="l-z">1. Zona MPI / Tipo de sesion</div>
     <div class="zone-grid" id="zone-grid"></div>
   </div>
+
   <div class="card">
     <div class="sec-label" id="l-d">2. Fecha</div>
     <div class="cal-nav">
@@ -138,6 +167,7 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     </div>
     <div class="cal-grid" id="cal"></div>
   </div>
+
   <div class="card">
     <div class="sec-label" id="l-t">3. Hora de inicio</div>
     <div class="dur-row">
@@ -154,6 +184,7 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div class="loading-slots" id="loading-slots">Verificando disponibilidad...</div>
     <div class="time-grid" id="time-grid"></div>
   </div>
+
   <div class="card">
     <div class="sec-label" id="l-c">4. Datos del cliente</div>
     <div class="form-row">
@@ -171,6 +202,16 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <input id="no" type="text" placeholder="ej. primera vez manejando...">
     </div>
   </div>
+
+  <!-- Confirm button -->
+  <button class="btn-confirm" id="btn-confirm" onclick="handleConfirm()">
+    <span id="btn-confirm-text">VERIFICAR RESERVA</span>
+  </button>
+
+  <!-- Error banner -->
+  <div class="error-banner" id="error-banner"></div>
+
+  <!-- Summary -->
   <div class="summary" id="summ" style="display:none">
     <div class="sum-row"><span id="ls-z">Zona</span><span id="sv-z">--</span></div>
     <div class="sum-row"><span id="ls-d">Fecha</span><span id="sv-d">--</span></div>
@@ -183,20 +224,21 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div class="sum-tax"><span>PST (7%)</span><span id="sv-pst">--</span></div>
     <div class="sum-total"><span>Total</span><span id="sv-tot">--</span></div>
   </div>
+
   <div class="confirm-banner" id="confirm-banner">Cita guardada correctamente</div>
   <div class="msg-label" id="msg-label">Vista previa del mensaje</div>
   <div class="msgbox" id="msgbox"></div>
-  <div class="btn-grid2" style="margin-bottom:8px">
-    <button class="btn btn-wa"  id="bwa" onclick="sendWA()"    disabled>WhatsApp</button>
-    <button class="btn btn-sms" id="bsm" onclick="sendSMS()"   disabled>SMS</button>
-  </div>
-  <div class="btn-grid2" style="margin-bottom:16px">
-    <button class="btn btn-copy" id="bcp" onclick="sendCopy()"   disabled><span id="l-cp">Copiar mensaje</span></button>
-    <button class="btn btn-acal" id="bac" onclick="goAppleCal()" disabled><span id="l-acal">Calendario iPhone</span></button>
-  </div>
-  <div class="hint" id="l-hint">Completa los 4 pasos para activar los botones</div>
 
-  <!-- Admin panel -->
+  <div class="btn-grid2" id="action-btns" style="display:none">
+    <button class="btn btn-wa"  id="bwa" onclick="sendWA()">WhatsApp</button>
+    <button class="btn btn-sms" id="bsm" onclick="sendSMS()">SMS</button>
+  </div>
+  <div class="btn-grid2" id="action-btns2" style="display:none;margin-bottom:16px">
+    <button class="btn btn-copy" id="bcp" onclick="sendCopy()"><span id="l-cp">Copiar mensaje</span></button>
+    <button class="btn btn-acal" id="bac" onclick="goAppleCal()"><span id="l-acal">Calendario iPhone</span></button>
+  </div>
+
+  <!-- Admin -->
   <div class="admin-toggle">
     <button onclick="toggleAdmin()" id="admin-toggle-btn">Administrar citas</button>
   </div>
@@ -209,9 +251,9 @@ body{background:#f5f5f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       </div>
     </div>
     <div id="admin-content" style="display:none">
-      <div style="margin-bottom:10px;display:flex;gap:8px;align-items:center">
-        <label style="font-size:14px;font-weight:700;color:#333" id="admin-date-lbl">Fecha:</label>
-        <input type="date" id="admin-date" style="flex:1;font-size:14px;padding:7px 9px;border:1px solid #ddd;border-radius:8px" onchange="loadAdminBookings()">
+      <div class="admin-date-row">
+        <label id="admin-date-lbl">Fecha:</label>
+        <input type="date" id="admin-date" onchange="loadAdminBookings()">
       </div>
       <div id="admin-list"></div>
     </div>
@@ -233,7 +275,7 @@ var ME=['January','February','March','April','May','June','July','August','Septe
 var MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var lang='es',selZ=null,selD=null,selT=null;
 var cy=new Date().getFullYear(),cm=new Date().getMonth();
-var bookedSlots=[],db=null,adminUnlocked=false;
+var bookedSlots=[],db=null,adminUnlocked=false,bookingConfirmed=false;
 var ADMIN_PW='bolivar2025';
 
 function pad(n){return String(n).padStart(2,'0');}
@@ -262,71 +304,72 @@ function saveBookingBg(){
   var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
   var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
   db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false})
-  .then(function(){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();var b=document.getElementById('confirm-banner');b.style.display='block';setTimeout(function(){b.style.display='none';},3000);})
+  .then(function(){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();var b=document.getElementById('confirm-banner');b.style.display='block';setTimeout(function(){b.style.display='none';},4000);})
   .catch(function(e){console.error(e);});
 }
 
-// Admin functions
-function toggleAdmin(){
-  var panel=document.getElementById('admin-panel');
-  panel.style.display=panel.style.display==='none'?'block':'none';
-}
-function adminLogin(){
-  var pw=document.getElementById('admin-pw').value;
-  if(pw===ADMIN_PW){
-    adminUnlocked=true;
-    document.getElementById('admin-login-area').style.display='none';
-    document.getElementById('admin-content').style.display='block';
-    document.getElementById('admin-date').value=todayStr();
-    loadAdminBookings();
-  } else {
-    alert(lang==='en'?'Wrong password':'Contrasena incorrecta');
+function handleConfirm(){
+  var e=lang==='en';
+  var nm=document.getElementById('nm').value.trim();
+  var ph=document.getElementById('ph').value.trim();
+  var errors=[];
+  if(!selZ)errors.push(e?'Select an MPI zone':'Selecciona una zona MPI');
+  if(!selD)errors.push(e?'Select a date':'Selecciona una fecha');
+  if(!selT)errors.push(e?'Select a start time':'Selecciona una hora');
+  if(!nm)errors.push(e?'Enter the client name':'Ingresa el nombre del cliente');
+  if(!ph||ph.length<14)errors.push(e?'Enter a complete phone number':'Ingresa el telefono completo (10 digitos)');
+
+  var eb=document.getElementById('error-banner');
+  if(errors.length>0){
+    eb.style.display='block';
+    eb.innerHTML=(e?'<strong>Please complete:</strong>':'<strong>Falta completar:</strong>')+'<br>'+errors.map(function(x){return '• '+x;}).join('<br>');
+    eb.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
   }
+  eb.style.display='none';
+  bookingConfirmed=true;
+  upd();
+  // save and show buttons
+  saveBookingBg();
+  document.getElementById('action-btns').style.display='grid';
+  document.getElementById('action-btns2').style.display='grid';
+  document.getElementById('btn-confirm').style.display='none';
+  document.getElementById('msgbox').style.display='block';
+  document.getElementById('msg-label').style.display='block';
+  document.getElementById('msgbox').textContent=buildMsg();
+  document.getElementById('summ').style.display='block';
 }
-function loadAdminBookings(){
-  if(!db||!adminUnlocked)return;
-  var dateStr=document.getElementById('admin-date').value;
-  var list=document.getElementById('admin-list');
-  list.innerHTML='<div class="admin-empty">Cargando...</div>';
-  db.collection('CITAS_RENTA').where('fecha','==',dateStr).where('cancelada','==',false).get()
-  .then(function(snap){
-    if(snap.empty){list.innerHTML='<div class="admin-empty">'+(lang==='en'?'No bookings for this date':'No hay citas para esta fecha')+'</div>';return;}
-    list.innerHTML='';
-    snap.forEach(function(doc){
-      var d=doc.data();
-      var row=document.createElement('div');
-      row.className='admin-row';
-      row.innerHTML='<div class="info"><strong>'+d.hora+' ('+d.duracion+'h)</strong> - '+d.zona_nombre+'<span>'+d.cliente+' | '+d.telefono+'</span></div>';
-      var btn=document.createElement('button');
-      btn.className='btn-cancel';
-      btn.textContent=lang==='en'?'Cancel':'Cancelar';
-      (function(docId,dateStr){
-        btn.onclick=function(){
-          if(!confirm(lang==='en'?'Cancel this appointment?':'Cancelar esta cita?'))return;
-          db.collection('CITAS_RENTA').doc(docId).update({cancelada:true})
-          .then(function(){
-            loadAdminBookings();
-            if(selD===dateStr)loadBookedSlots(dateStr);
-          }).catch(function(e){alert('Error: '+e.message);});
-        };
-      })(doc.id,dateStr);
-      row.appendChild(btn);
-      list.appendChild(row);
-    });
-  }).catch(function(e){list.innerHTML='<div class="admin-empty">Error: '+e.message+'</div>';});
+
+function updateProgress(){
+  var e=lang==='en';
+  var nm=document.getElementById('nm').value.trim();
+  var ph=document.getElementById('ph').value.trim();
+  function setStep(n,done,text){
+    var ic=document.getElementById('pi-'+n),tx=document.getElementById('pt-'+n);
+    ic.className='prog-icon '+(done?'done':'pending');
+    ic.textContent=done?'✓':n;
+    tx.className='prog-text '+(done?'done':'pending');
+    tx.textContent=text;
+  }
+  setStep(1,!!selZ,selZ?((e?'Zone: ':'Zona: ')+getZone()[lang]):(e?'Select MPI zone':'Selecciona zona MPI'));
+  setStep(2,!!selD,selD?(e?'Date: ':'Fecha: ')+selD:(e?'Select a date':'Selecciona una fecha'));
+  setStep(3,!!selT,selT?(e?'Time: ':'Hora: ')+selT:(e?'Select a start time':'Selecciona una hora'));
+  var clientOk=!!(nm&&ph&&ph.length>=14);
+  setStep(4,clientOk,clientOk?(nm+' | '+ph):(e?'Enter name and phone':'Ingresa nombre y telefono'));
 }
 
 function updateDurOptions(){
   var r=getRate(),e=lang==='en',sel=document.getElementById('dur'),cur=sel.value;sel.innerHTML='';
   [[1,1],[1.5,1.5],[2,2],[2.5,2.5],[3,3],[4,4]].forEach(function(a){var o=document.createElement('option');o.value=a[0];o.textContent=a[1]+(a[1]===1?' hr':' hrs')+' -- $'+(a[0]*r).toFixed(2)+(e?' (before tax)':' (sin imp.)');if(String(a[0])===String(cur))o.selected=true;sel.appendChild(o);});
 }
-function setLang(l){lang=l;document.getElementById('btn-en').className='lbtn '+(l==='en'?'on':'off');document.getElementById('btn-es').className='lbtn '+(l==='es'?'on':'off');applyL();renderZones();renderCal();renderTimes();updateDurOptions();}
+function setLang(l){lang=l;document.getElementById('btn-en').className='lbtn '+(l==='en'?'on':'off');document.getElementById('btn-es').className='lbtn '+(l==='es'?'on':'off');applyL();renderZones();renderCal();renderTimes();updateDurOptions();updateProgress();}
 function applyL(){
   var e=lang==='en';
   document.getElementById('h2').textContent='Winnipeg, MB - '+(e?'Mon-Sun':'Lun-Dom')+' 9AM-3PM - (204)509-6153';
   document.getElementById('l-rate').textContent=e?'Hourly rate':'Tarifa por hora';
   document.getElementById('l-rate-lbl').textContent=e?'Price/hr:':'Precio/hr:';
   document.getElementById('l-rate-note').textContent=e?'before tax':'sin impuestos';
+  document.getElementById('prog-title').textContent=e?'Booking progress':'Progreso de la reserva';
   document.getElementById('l-z').textContent=e?'1. MPI Zone / Session type':'1. Zona MPI / Tipo de sesion';
   document.getElementById('l-d').textContent=e?'2. Date':'2. Fecha';
   document.getElementById('l-t').textContent=e?'3. Start time':'3. Hora de inicio';
@@ -343,7 +386,7 @@ function applyL(){
   document.getElementById('l-cp').textContent=e?'Copy message':'Copiar mensaje';
   document.getElementById('l-acal').textContent=e?'iPhone Calendar':'Calendario iPhone';
   document.getElementById('msg-label').textContent=e?'Message preview':'Vista previa del mensaje';
-  document.getElementById('l-hint').textContent=e?'Complete all 4 steps to activate':'Completa los 4 pasos para activar los botones';
+  document.getElementById('btn-confirm-text').textContent=e?'VERIFY BOOKING':'VERIFICAR RESERVA';
   document.getElementById('nm').placeholder=e?'John Smith':'Juan Perez';
   document.getElementById('confirm-banner').textContent=e?'Appointment saved':'Cita guardada correctamente';
   document.getElementById('admin-toggle-btn').textContent=e?'Manage bookings':'Administrar citas';
@@ -352,7 +395,7 @@ function applyL(){
 }
 function renderZones(){
   var g=document.getElementById('zone-grid');g.innerHTML='';
-  ZONES.forEach(function(z){var d=document.createElement('div');d.className='zcard'+(selZ===z.id?' sel':'');d.innerHTML='<div class="zn">'+z[lang]+'</div><div class="za">'+z.addr+'</div>';(function(zone){d.onclick=function(){selZ=zone.id;renderZones();upSteps();upd();};})(z);g.appendChild(d);});
+  ZONES.forEach(function(z){var d=document.createElement('div');d.className='zcard'+(selZ===z.id?' sel':'');d.innerHTML='<div class="zn">'+z[lang]+'</div><div class="za">'+z.addr+'</div>';(function(zone){d.onclick=function(){selZ=zone.id;renderZones();upd();updateProgress();};})(z);g.appendChild(d);});
 }
 function renderCal(){
   var days=lang==='en'?DE:DS,mons=lang==='en'?ME:MS;
@@ -368,7 +411,7 @@ function renderCal(){
     var el=document.createElement('div');var cls='cal-day';
     if(isPast)cls+=' past';if(isTod)cls+=' today';if(selD===ds)cls+=' sel';
     el.className=cls;el.textContent=d;
-    if(!isPast){(function(dateStr){el.onclick=function(){selD=dateStr;if(selT&&isPastSlot(dateStr,parseH(selT)))selT=null;renderCal();upSteps();upd();loadBookedSlots(dateStr);};})(ds);}
+    if(!isPast){(function(dateStr){el.onclick=function(){selD=dateStr;if(selT&&isPastSlot(dateStr,parseH(selT)))selT=null;renderCal();upd();updateProgress();loadBookedSlots(dateStr);};})(ds);}
     g.appendChild(el);
   }
 }
@@ -383,17 +426,13 @@ function renderTimes(){
     el.className=cls;
     var endLabel=past?'--':booked?(lang==='en'?'Booked':'Ocupado'):'-> '+fmtH(h+dur);
     el.innerHTML='<div class="tm">'+ts+'</div><div class="te">'+endLabel+'</div>';
-    if(!past&&!booked){(function(slot){el.onclick=function(){selT=slot;renderTimes();upSteps();upd();};})(ts);}
+    if(!past&&!booked){(function(slot){el.onclick=function(){selT=slot;renderTimes();upd();updateProgress();};})(ts);}
     g.appendChild(el);
   }
 }
 function pm(){if(cm===0){cm=11;cy--;}else cm--;renderCal();}
 function nm(){if(cm===11){cm=0;cy++;}else cm++;renderCal();}
-function upSteps(){
-  var cnt=[selZ,selD,selT,true].filter(Boolean).length;
-  var bar=document.getElementById('steps-bar');bar.innerHTML='';
-  for(var i=1;i<=4;i++){var s=document.createElement('div');s.className='step'+(i<cnt?' done':i===cnt?' active':'');bar.appendChild(s);}
-}
+
 function buildMsg(){
   var nm=document.getElementById('nm').value,dur=parseFloat(document.getElementById('dur').value),no=document.getElementById('no').value;
   var zone=getZone();if(!zone||!selT||!selD)return '';
@@ -414,30 +453,27 @@ function buildMsg(){
   }
   return msg;
 }
-function setBtn(id,on){var el=document.getElementById(id);if(el)el.disabled=!on;}
+
 function upd(){
   var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value;
   var dur=parseFloat(document.getElementById('dur').value),zone=getZone();
   var rate=getRate(),sub=dur*rate,tx=calcTax(sub);
-  var show=selZ&&selD&&selT;
-  document.getElementById('summ').style.display=show?'block':'none';
-  if(show&&zone){
+  var allDone=!!(selZ&&selD&&selT&&nm&&ph&&ph.length>=14);
+  var cb=document.getElementById('btn-confirm');
+  if(cb){cb.className='btn-confirm'+(allDone?' ready':'');cb.querySelector('span').textContent=allDone?(lang==='en'?'CONFIRM BOOKING':'CONFIRMAR RESERVA'):(lang==='en'?'VERIFY BOOKING':'VERIFICAR RESERVA');}
+  if(bookingConfirmed&&zone){
     document.getElementById('sv-z').textContent=zone[lang];document.getElementById('sv-d').textContent=selD;
     document.getElementById('sv-t').textContent=selT;document.getElementById('sv-c').textContent=nm||'--';
     document.getElementById('sv-p').textContent=ph||'--';document.getElementById('sv-sub').textContent='$'+sub.toFixed(2);
     document.getElementById('sv-gst').textContent='$'+tx.gst.toFixed(2);document.getElementById('sv-pst').textContent='$'+tx.pst.toFixed(2);
     document.getElementById('sv-tot').textContent='$'+tx.total.toFixed(2)+' CAD';
   }
-  var ready=!!(selZ&&selD&&selT&&nm&&ph&&ph.length>=14);
-  ['bwa','bsm','bcp','bac'].forEach(function(id){setBtn(id,ready);});
-  var mb=document.getElementById('msgbox'),ml=document.getElementById('msg-label');
-  if(ready){mb.textContent=buildMsg();mb.style.display='block';ml.style.display='block';document.getElementById('l-hint').textContent=lang==='en'?'All set -- tap a button to send':'Listo -- toca un boton para enviar';}
-  else{mb.style.display='none';ml.style.display='none';document.getElementById('l-hint').textContent=lang==='en'?'Complete all 4 steps to activate':'Completa los 4 pasos para activar los botones';}
 }
-function sendWA(){var ph=document.getElementById('ph').value.replace(/\D/g,''),msg=buildMsg();saveBookingBg();window.location.href='https://wa.me/1'+ph+'?text='+encodeURIComponent(msg);}
-function sendSMS(){var ph=document.getElementById('ph').value.replace(/\D/g,''),msg=buildMsg();saveBookingBg();window.location.href='sms:+1'+ph+'&body='+encodeURIComponent(msg);}
+
+function sendWA(){var ph=document.getElementById('ph').value.replace(/\D/g,''),msg=buildMsg();window.location.href='https://wa.me/1'+ph+'?text='+encodeURIComponent(msg);}
+function sendSMS(){var ph=document.getElementById('ph').value.replace(/\D/g,''),msg=buildMsg();window.location.href='sms:+1'+ph+'&body='+encodeURIComponent(msg);}
 function sendCopy(){
-  var msg=buildMsg(),l=document.getElementById('l-cp');saveBookingBg();
+  var msg=buildMsg(),l=document.getElementById('l-cp');
   if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(function(){l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2500);});}
   else{var t=document.createElement('textarea');t.value=msg;t.style.cssText='position:fixed;opacity:0';document.body.appendChild(t);t.focus();t.select();document.execCommand('copy');document.body.removeChild(t);l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(function(){l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2500);}
 }
@@ -453,10 +489,32 @@ function goAppleCal(){
   var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nDTSTART:'+start+'\r\nDTEND:'+end+'\r\nSUMMARY:BolivarAutos-Renta - '+nm+'\r\nDESCRIPTION:'+desc+'\r\nLOCATION:'+zone[lang]+' - '+zone.addr+', Winnipeg MB\r\nEND:VEVENT\r\nEND:VCALENDAR';
   var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
   var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cita-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-  saveBookingBg();
 }
 
-upSteps();renderZones();renderCal();renderTimes();updateDurOptions();applyL();
+// Admin
+function toggleAdmin(){var p=document.getElementById('admin-panel');p.style.display=p.style.display==='none'?'block':'none';}
+function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();loadAdminBookings();}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
+function loadAdminBookings(){
+  if(!db||!adminUnlocked)return;
+  var dateStr=document.getElementById('admin-date').value;
+  var list=document.getElementById('admin-list');
+  list.innerHTML='<div class="admin-empty">Cargando...</div>';
+  db.collection('CITAS_RENTA').where('fecha','==',dateStr).where('cancelada','==',false).get()
+  .then(function(snap){
+    if(snap.empty){list.innerHTML='<div class="admin-empty">'+(lang==='en'?'No bookings for this date':'No hay citas para esta fecha')+'</div>';return;}
+    list.innerHTML='';
+    snap.forEach(function(doc){
+      var d=doc.data();
+      var row=document.createElement('div');row.className='admin-row';
+      row.innerHTML='<div class="info"><strong>'+d.hora+' ('+d.duracion+'h) - '+d.zona_nombre+'</strong><span>'+d.cliente+' | '+d.telefono+'</span></div>';
+      var btn=document.createElement('button');btn.className='btn-cancel';btn.textContent=lang==='en'?'Cancel':'Cancelar';
+      (function(docId,ds){btn.onclick=function(){if(!confirm(lang==='en'?'Cancel this appointment?':'Cancelar esta cita?'))return;db.collection('CITAS_RENTA').doc(docId).update({cancelada:true}).then(function(){loadAdminBookings();if(selD===ds)loadBookedSlots(ds);}).catch(function(e){alert('Error: '+e.message);});};})(doc.id,dateStr);
+      row.appendChild(btn);list.appendChild(row);
+    });
+  }).catch(function(e){list.innerHTML='<div class="admin-empty">Error: '+e.message+'</div>';});
+}
+
+renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgress();upd();
 
 (function(){
   var s1=document.createElement('script');s1.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
