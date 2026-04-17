@@ -257,6 +257,7 @@ var lang='es',selZ=null,selD=null,selT=null;
 var cy=new Date().getFullYear(),cm=new Date().getMonth();
 var bookedSlots=[],db=null,adminUnlocked=false,bookingConfirmed=false;
 var ADMIN_PW='bolivar2025';
+var currentUID='';
 
 function pad(n){return String(n).padStart(2,'0');}
 function getRate(){return parseFloat(document.getElementById('rate-val').value)||45;}
@@ -292,7 +293,7 @@ function saveBookingBg(){
   if(!db)return;
   var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
   var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
-  db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false})
+  db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:currentUID})
   .then(function(){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();var b=document.getElementById('confirm-banner');b.style.display='block';setTimeout(function(){b.style.display='none';},4000);})
   .catch(function(e){console.error(e);});
 }
@@ -316,6 +317,7 @@ function handleConfirm(){
   }
   eb.style.display='none';
   bookingConfirmed=true;
+  currentUID=Date.now()+'@bolivarautos';
   upd();
   saveBookingBg();
   document.getElementById('action-btns').style.display='grid';
@@ -479,7 +481,7 @@ function goAppleCal(){
   var startDT=icsDateTime(selD,startH);
   var endDT=icsDateTime(selD,endH);
   var desc='Cliente: '+nm+'\\nTel: '+ph+'\\nTotal: $'+tx.total.toFixed(2)+' CAD'+(no?'\\nNotas: '+no:'')+'\\n\\nBolivar: (204)509-6153';
-  var uid=Date.now()+'@bolivarautos';
+  var uid=currentUID||Date.now()+'@bolivarautos';
   var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:BolivarAutos-Renta - '+nm+'\r\nDESCRIPTION:'+desc+'\r\nLOCATION:'+zone[lang]+' - '+zone.addr+', Winnipeg MB\r\nEND:VEVENT\r\nEND:VCALENDAR';
   var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
   var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cita-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
@@ -490,7 +492,7 @@ function goAppleCalCancel(d){
   var startH=parseH(d.hora),endH=startH+parseFloat(d.duracion);
   var startDT=icsDateTime(d.fecha,startH);
   var endDT=icsDateTime(d.fecha,endH);
-  var uid=d.uid||d.fecha+d.hora.replace(/[:\s]/g,'')+'@bolivarautos';
+  var uid=d.calUID||d.fecha.replace(/-/g,'')+d.hora.replace(/[:\s]/g,'')+'@bolivarautos';
   var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nMETHOD:CANCEL\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:CANCELLED - BolivarAutos-Renta - '+d.cliente+'\r\nSTATUS:CANCELLED\r\nSEQUENCE:1\r\nEND:VEVENT\r\nEND:VCALENDAR';
   var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
   var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cancelacion-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
