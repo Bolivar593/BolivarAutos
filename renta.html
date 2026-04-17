@@ -123,8 +123,8 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <p id="h2">Winnipeg, MB - Lun-Dom 9AM-3PM - (204)509-6153</p>
   </div>
   <div class="lang-row">
-    <button class="lbtn off" id="btn-en" onclick="setLang('en')">English</button>
-    <button class="lbtn on"  id="btn-es" onclick="setLang('es')">Espanol</button>
+    <button class="lbtn on"  id="btn-en" onclick="setLang('en')">English</button>
+    <button class="lbtn off" id="btn-es" onclick="setLang('es')">Espanol</button>
   </div>
   <div class="progress">
     <div class="progress-title" id="prog-title">Progreso de la reserva</div>
@@ -253,7 +253,7 @@ var WINNIPEG_OFFSET=-5; // UTC-5 (CDT), change to -6 in winter (CST)
 var DE=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],DS=['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
 var ME=['January','February','March','April','May','June','July','August','September','October','November','December'];
 var MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-var lang='es',selZ=null,selD=null,selT=null;
+var lang='en',selZ=null,selD=null,selT=null;
 var cy=new Date().getFullYear(),cm=new Date().getMonth();
 var bookedSlots=[],db=null,adminUnlocked=false,bookingConfirmed=false;
 var ADMIN_PW='bolivar2025';
@@ -522,7 +522,7 @@ function loadAdminBookings(){
       // Cancel + remove from calendar button
       var btnCancel=document.createElement('button');
       btnCancel.className='btn-cancel';
-      btnCancel.textContent=lang==='en'?'Cancel & remove cal':'Cancelar y borrar cal';
+      btnCancel.textContent=lang==='en'?'Cancel':'Cancelar';
       (function(docData,docId,dateStr){
         btnCancel.onclick=function(){
           if(!confirm(lang==='en'?'Cancel this appointment?':'Cancelar esta cita?'))return;
