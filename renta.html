@@ -298,12 +298,33 @@ function loadBookedSlots(dateStr){
   .catch(function(){document.getElementById('loading-slots').style.display='none';renderTimes();});
 }
 
+// ── GOOGLE SHEETS ─────────────────────────────────────────────
+// Pega aquí la URL de tu Apps Script (Paso 4 de las instrucciones)
+var GAS_URL = '';  // ← PEGA TU URL AQUÍ
+// ─────────────────────────────────────────────────────────────
+
+function saveToGoogleSheets(fecha, cliente, horas, tarifa){
+  if(!GAS_URL) return;
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({fecha:fecha, cliente:cliente, horas:horas, tarifa:tarifa})
+  }).catch(function(err){ console.warn('Sheets error:', err); });
+}
+
 function saveBookingBg(){
   if(!db)return;
   var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
   var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
   db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:currentUID})
-  .then(function(){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();var b=document.getElementById('confirm-banner');b.style.display='block';setTimeout(function(){b.style.display='none';},4000);})
+  .then(function(){
+    saveToGoogleSheets(selD, nm, dur, rate);
+    bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});
+    renderTimes();
+    var b=document.getElementById('confirm-banner');b.style.display='block';
+    setTimeout(function(){b.style.display='none';},4000);
+  })
   .catch(function(e){console.error(e);});
 }
 
