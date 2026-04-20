@@ -183,7 +183,7 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       </div>
       <div class="fg">
         <label id="l-ph">Telefono (WhatsApp)</label>
-        <input id="ph" type="tel" placeholder="(___) ___-____" oninput="phoneMask(this);upd()" maxlength="14">
+        <input id="ph" type="tel" placeholder="(___) ___-____" oninput="phoneMask(this);upd()" onpaste="setTimeout(function(){phoneMask(document.getElementById('ph'));upd();},10)" maxlength="14">
       </div>
     </div>
     <div class="fg" style="margin-top:8px">
@@ -210,13 +210,22 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="confirm-banner" id="confirm-banner">Cita guardada correctamente</div>
   <div class="msg-label" id="msg-label">Vista previa del mensaje</div>
   <div class="msgbox" id="msgbox"></div>
-  <div class="btn-grid2" id="action-btns" style="display:none">
-    <button class="btn btn-wa"  onclick="sendWA()">WhatsApp</button>
-    <button class="btn btn-sms" onclick="sendSMS()">SMS</button>
+  <!-- Step 1: Add to calendar FIRST -->
+  <div id="cal-step" style="display:none;margin-bottom:10px">
+    <button class="btn btn-acal" onclick="goAppleCal()" style="width:100%"><span id="l-acal">1. Agregar a Calendario iPhone</span></button>
+    <div id="cal-hint" style="font-size:14px;font-weight:700;color:#f59e0b;text-align:center;margin-top:8px;display:none" id="cal-warn"></div>
   </div>
-  <div class="btn-grid2" id="action-btns2" style="display:none;margin-bottom:16px">
+  <!-- Step 2: Send message (locked until calendar done) -->
+  <div class="btn-grid2" id="action-btns" style="display:none">
+    <button class="btn btn-wa"  id="bwa-msg" onclick="sendWA()">WhatsApp</button>
+    <button class="btn btn-sms" id="bsm-msg" onclick="sendSMS()">SMS</button>
+  </div>
+  <div class="btn-grid2" id="action-btns2" style="display:none;margin-bottom:10px">
     <button class="btn btn-copy" onclick="sendCopy()"><span id="l-cp">Copiar mensaje</span></button>
-    <button class="btn btn-acal" onclick="goAppleCal()"><span id="l-acal">Calendario iPhone</span></button>
+  </div>
+  <!-- New booking button -->
+  <div id="new-booking-btn" style="display:none;margin-bottom:16px">
+    <button class="btn" onclick="resetApp()" style="background:#1e3d8f;color:#fff;width:100%;font-size:18px;padding:18px"><span id="l-new">+ Nueva cita</span></button>
   </div>
   <div class="admin-toggle">
     <button onclick="toggleAdmin()" id="admin-toggle-btn">Administrar citas</button>
@@ -255,7 +264,7 @@ var ME=['January','February','March','April','May','June','July','August','Septe
 var MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var lang='en',selZ=null,selD=null,selT=null;
 var cy=new Date().getFullYear(),cm=new Date().getMonth();
-var bookedSlots=[],db=null,adminUnlocked=false,bookingConfirmed=false;
+var bookedSlots=[],db=null,adminUnlocked=false,bookingConfirmed=false,calendarDone=false;
 var ADMIN_PW='bolivar2025';
 var currentUID='';
 
@@ -263,7 +272,7 @@ function pad(n){return String(n).padStart(2,'0');}
 function getRate(){return parseFloat(document.getElementById('rate-val').value)||45;}
 function calcTax(sub){var g=sub*GST,p=sub*PST;return{gst:g,pst:p,total:sub+g+p};}
 function getZone(){for(var i=0;i<ZONES.length;i++){if(ZONES[i].id===selZ)return ZONES[i];}return null;}
-function phoneMask(el){var v=el.value.replace(/\D/g,'').substring(0,10),o='';if(v.length>0)o='('+v.substring(0,3);if(v.length>=4)o+=') '+v.substring(3,6);if(v.length>=7)o+='-'+v.substring(6,10);el.value=o;}
+function phoneMask(el){var raw=el.value.replace(/\D/g,"");if(raw.length===11&&raw.charAt(0)==="1")raw=raw.substring(1);var v=raw.substring(0,10),o="";if(v.length>0)o="("+v.substring(0,3);if(v.length>=4)o+=") "+v.substring(3,6);if(v.length>=7)o+="-"+v.substring(6,10);el.value=o;}
 function fmtH(h){var hh=Math.floor(h),mm=h%1===0.5?'30':'00';if(hh<12)return hh+':'+mm+' AM';if(hh===12)return'12:'+mm+' PM';return(hh-12)+':'+mm+' PM';}
 function parseH(ts){var m=ts.match(/(\d+):(\d+)\s(AM|PM)/);var h=parseInt(m[1]);if(m[3]==='PM'&&h!==12)h+=12;if(m[3]==='AM'&&h===12)h=0;return h+(m[2]==='30'?0.5:0);}
 function todayStr(){var n=new Date();return n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate());}
@@ -317,16 +326,23 @@ function handleConfirm(){
   }
   eb.style.display='none';
   bookingConfirmed=true;
+  calendarDone=false;
   currentUID=Date.now()+'@bolivarautos';
   upd();
   saveBookingBg();
-  document.getElementById('action-btns').style.display='grid';
-  document.getElementById('action-btns2').style.display='grid';
+  document.getElementById('cal-step').style.display='block';
+  document.getElementById('action-btns').style.display='none';
+  document.getElementById('action-btns2').style.display='none';
+  document.getElementById('new-booking-btn').style.display='none';
   document.getElementById('btn-confirm').style.display='none';
   document.getElementById('msgbox').style.display='block';
   document.getElementById('msg-label').style.display='block';
   document.getElementById('msgbox').textContent=buildMsg();
   document.getElementById('summ').style.display='block';
+  var e=lang==='en';
+  document.getElementById('cal-hint').style.display='block';
+  document.getElementById('cal-hint').textContent=e?'Step 1: Add to calendar, then send the message':'Paso 1: Agrega al calendario, luego envia el mensaje';
+  window.scrollTo({top:document.getElementById('summ').offsetTop-20,behavior:'smooth'});
 }
 
 function updateProgress(){
@@ -374,7 +390,8 @@ function applyL(){
   document.getElementById('ls-c').textContent=e?'Client':'Cliente';
   document.getElementById('ls-p').textContent=e?'Phone':'Telefono';
   document.getElementById('l-cp').textContent=e?'Copy message':'Copiar mensaje';
-  document.getElementById('l-acal').textContent=e?'iPhone Calendar':'Calendario iPhone';
+  document.getElementById('l-acal').textContent=e?'1. Add to iPhone Calendar':'1. Agregar a Calendario iPhone';
+  document.getElementById('l-new').textContent=e?'+ New booking':'+ Nueva cita';
   document.getElementById('msg-label').textContent=e?'Message preview':'Vista previa del mensaje';
   document.getElementById('btn-confirm-text').textContent=e?'VERIFY BOOKING':'VERIFICAR RESERVA';
   document.getElementById('nm').placeholder=e?'John Smith':'Juan Perez';
@@ -466,6 +483,27 @@ function upd(){
   }
 }
 
+function resetApp(){
+  selZ=null;selD=null;selT=null;
+  bookingConfirmed=false;calendarDone=false;currentUID='';
+  bookedSlots=[];
+  document.getElementById('nm').value='';
+  document.getElementById('ph').value='';
+  document.getElementById('no').value='';
+  document.getElementById('summ').style.display='none';
+  document.getElementById('msgbox').style.display='none';
+  document.getElementById('msg-label').style.display='none';
+  document.getElementById('action-btns').style.display='none';
+  document.getElementById('action-btns2').style.display='none';
+  document.getElementById('cal-step').style.display='none';
+  document.getElementById('new-booking-btn').style.display='none';
+  document.getElementById('btn-confirm').style.display='block';
+  document.getElementById('error-banner').style.display='none';
+  document.getElementById('confirm-banner').style.display='none';
+  renderZones();renderCal();renderTimes();updateProgress();upd();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 function sendWA(){var ph=document.getElementById('ph').value.replace(/\D/g,'');window.location.href='https://wa.me/1'+ph+'?text='+encodeURIComponent(buildMsg());}
 function sendSMS(){var ph=document.getElementById('ph').value.replace(/\D/g,'');window.location.href='sms:+1'+ph+'&body='+encodeURIComponent(buildMsg());}
 function sendCopy(){
@@ -485,6 +523,14 @@ function goAppleCal(){
   var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:BolivarAutos-Renta - '+nm+'\r\nDESCRIPTION:'+desc+'\r\nLOCATION:'+zone[lang]+' - '+zone.addr+', Winnipeg MB\r\nEND:VEVENT\r\nEND:VCALENDAR';
   var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
   var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cita-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  // Unlock message buttons
+  calendarDone=true;
+  var e=lang==='en';
+  document.getElementById('cal-hint').textContent=e?'Calendar added! Now send the confirmation message.':'Calendario agregado! Ahora envia el mensaje de confirmacion.';
+  document.getElementById('cal-hint').style.color='#166534';
+  document.getElementById('action-btns').style.display='grid';
+  document.getElementById('action-btns2').style.display='grid';
+  document.getElementById('new-booking-btn').style.display='block';
 }
 
 function goAppleCalCancel(d){
