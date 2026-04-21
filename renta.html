@@ -601,7 +601,7 @@ function loadAdminBookings(){
       btnCancel.textContent=lang==='en'?'Cancel':'Cancelar';
       (function(docData,docId,dateStr){
         btnCancel.onclick=function(){
-          if(!confirm(lang==='en'?'Cancel this appointment?':'Cancelar esta cita?'))return;
+          
           db.collection('CITAS_RENTA').doc(docId).update({cancelada:true})
           .then(function(){
             cancelToGoogleSheets(docData.fecha, docData.cliente);
