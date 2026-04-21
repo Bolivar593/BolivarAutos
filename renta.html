@@ -298,118 +298,12 @@ function loadBookedSlots(dateStr){
   .catch(function(){document.getElementById('loading-slots').style.display='none';renderTimes();});
 }
 
-// ── GOOGLE SHEETS ─────────────────────────────────────────────
-// Pega aquí la URL de tu Apps Script (Paso 4 de las instrucciones)
-var GAS_URL = '// ============================================================
-//  BolivarAutos-Renta → Google Sheets
-//  Escribe en la TABLA DE DATOS de "Calendario Rentas"
-//  Columnas que llena la app:
-//    J = Horas  |  K = Fecha  |  M = Cliente  |  N = Tarifa/Hora
-//  Las columnas L (Subtotal), O (GST 5%), P (RST 7%) son
-//  fórmulas que ya existen en la hoja y se calculan solas.
-//  Esto alimenta automáticamente: Renta por Horas, Cuenta
-//  Impuestos, P&L Corporativo — todo en cadena.
-// ============================================================
-
-function doPost(e) {
-  try {
-    var data = JSON.parse(e.postData.contents);
-
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var ws = ss.getSheetByName('Calendario Rentas');
-
-    if (!ws) {
-      return jsonResponse({ status: 'error', msg: 'Hoja "Calendario Rentas" no encontrada' });
-    }
-
-    // La tabla de datos empieza en fila 36
-    // Busca la primera fila vacía en columna K (Fecha) desde fila 36
-    var FILA_INICIO = 36;
-    var FILA_MAX    = 75;  // La hoja tiene espacio hasta fila 75 (40 rentas)
-    var filaDestino = -1;
-
-    for (var f = FILA_INICIO; f <= FILA_MAX; f++) {
-      var celdaK = ws.getRange(f, 11).getValue(); // col K = columna 11
-      if (celdaK === '' || celdaK === null || celdaK === 0) {
-        filaDestino = f;
-        break;
-      }
-    }
-
-    if (filaDestino === -1) {
-      return jsonResponse({ status: 'error', msg: 'Tabla llena (máx 40 rentas). Amplía las filas en la hoja.' });
-    }
-
-    // Convierte fecha "2026-04-20" a objeto Date para Google Sheets
-    var partes = data.fecha.split('-');
-    var fechaDate = new Date(
-      parseInt(partes[0]),   // año
-      parseInt(partes[1])-1, // mes (0-indexed)
-      parseInt(partes[2])    // día
-    );
-
-    // Escribe los 4 campos que necesita la tabla
-    ws.getRange(filaDestino, 10).setValue(data.horas);      // Col J = Horas
-    ws.getRange(filaDestino, 11).setValue(fechaDate);        // Col K = Fecha
-    ws.getRange(filaDestino, 11).setNumberFormat('dd/mm/yyyy');
-    ws.getRange(filaDestino, 13).setValue(data.cliente);    // Col M = Cliente
-    ws.getRange(filaDestino, 14).setValue(data.tarifa);     // Col N = Tarifa/Hora
-
-    // Las columnas L, O, P ya tienen fórmulas — se calculan solas
-    // Renta por Horas, Cuenta Impuestos y P&L se actualizan automáticamente
-
-    return jsonResponse({ status: 'ok', fila: filaDestino });
-
-  } catch(err) {
-    return jsonResponse({ status: 'error', msg: err.toString() });
-  }
-}
-
-// ── Prueba manual: ejecuta esto para verificar antes de publicar ──
-function testManual() {
-  var fakeEvent = {
-    postData: {
-      contents: JSON.stringify({
-        fecha:   '2026-04-20',
-        cliente: 'Juan Perez (PRUEBA)',
-        horas:   2,
-        tarifa:  45
-      })
-    }
-  };
-  var result = doPost(fakeEvent);
-  Logger.log(result.getContent());
-}
-
-function jsonResponse(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}';  // ← PEGA TU URL AQUÍ
-// ─────────────────────────────────────────────────────────────
-
-function saveToGoogleSheets(fecha, cliente, horas, tarifa){
-  if(!GAS_URL) return;
-  fetch(GAS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({fecha:fecha, cliente:cliente, horas:horas, tarifa:tarifa})
-  }).catch(function(err){ console.warn('Sheets error:', err); });
-}
-
 function saveBookingBg(){
   if(!db)return;
   var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
   var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
   db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:currentUID})
-  .then(function(){
-    saveToGoogleSheets(selD, nm, dur, rate);
-    bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});
-    renderTimes();
-    var b=document.getElementById('confirm-banner');b.style.display='block';
-    setTimeout(function(){b.style.display='none';},4000);
-  })
+  .then(function(){bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});renderTimes();var b=document.getElementById('confirm-banner');b.style.display='block';setTimeout(function(){b.style.display='none';},4000);})
   .catch(function(e){console.error(e);});
 }
 
