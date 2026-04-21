@@ -299,8 +299,7 @@ function loadBookedSlots(dateStr){
 }
 
 // ── GOOGLE SHEETS ─────────────────────────────────────────────
-// Pega aquí la URL de tu Apps Script
-var GAS_URL = 'https://script.google.com/macros/s/AKfycbwTYRPRfjQI1JMi4Iy_7mPMd6R2xL_oZdAESUcp_RFpuET4FsMmlURzL6qfXczCrXA_/exec';  // ← PEGA TU URL AQUÍ
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbzDiyH-RVFTt1SS-_oS4enaWkrWaAHAUJwuk5lRJUoysH1ldkynZEuvLAy-lL-M4nc/exec';  // ← PEGA TU URL AQUÍ
 // ─────────────────────────────────────────────────────────────
 
 function saveToGoogleSheets(fecha, cliente, horas, tarifa){
@@ -309,8 +308,18 @@ function saveToGoogleSheets(fecha, cliente, horas, tarifa){
     method: 'POST',
     mode: 'no-cors',
     headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({fecha:fecha, cliente:cliente, horas:horas, tarifa:tarifa})
+    body: JSON.stringify({accion:'guardar', fecha:fecha, cliente:cliente, horas:horas, tarifa:tarifa})
   }).catch(function(err){ console.warn('Sheets error:', err); });
+}
+
+function cancelToGoogleSheets(fecha, cliente){
+  if(!GAS_URL) return;
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({accion:'cancelar', fecha:fecha, cliente:cliente})
+  }).catch(function(err){ console.warn('Sheets cancel error:', err); });
 }
 
 function saveBookingBg(){
@@ -595,6 +604,7 @@ function loadAdminBookings(){
           if(!confirm(lang==='en'?'Cancel this appointment?':'Cancelar esta cita?'))return;
           db.collection('CITAS_RENTA').doc(docId).update({cancelada:true})
           .then(function(){
+            cancelToGoogleSheets(docData.fecha, docData.cliente);
             goAppleCalCancel(docData);
             loadAdminBookings();
             if(selD===dateStr)loadBookedSlots(dateStr);
