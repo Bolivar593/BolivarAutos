@@ -120,11 +120,11 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <div class="wrap">
   <div class="header">
     <h1>BolivarAutos-Renta</h1>
-    <p id="h2">Winnipeg, MB - Lun-Dom 9AM-3PM - (204)509-6153</p>
+    <p id="h2">Winnipeg, MB - Lun-Dom 9AM-8PM fin de semana - (204)509-6153</p>
   </div>
   <div class="lang-row">
     <button class="lbtn on"  id="btn-en" onclick="setLang('en')">English</button>
-    <button class="lbtn off" id="btn-es" onclick="setLang('es')">Espanol</button>
+    <button class="lbtn off" id="btn-es" onclick="setLang('es')">Español</button>
   </div>
   <div class="progress">
     <div class="progress-title" id="prog-title">Progreso de la reserva</div>
@@ -139,7 +139,7 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <label id="l-rate-lbl">Precio/hr:</label>
       <div class="rate-box">
         <span class="rate-prefix">$</span>
-        <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="45" oninput="updateDurOptions();upd()">
+        <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="47.5" oninput="updateDurOptions();upd()">
         <span class="rate-suffix">CAD</span>
       </div>
       <span style="font-size:13px;color:#aaa;font-weight:600" id="l-rate-note">sin impuestos</span>
@@ -255,7 +255,7 @@ var ZONES=[
   {id:'kingedward',en:'King Edward',es:'King Edward',addr:'125 King Edward St E'},
   {id:'mainst', en:'Main St',  es:'Main St',  addr:'1284 Main St'},
   {id:'stmarys',en:"St. Mary's",es:"St. Mary's",addr:"930 St Mary's Rd"},
-  {id:'any',    en:'Any zone / Driving lessons',es:'Cualquier zona / Clases manejo',addr:'Winnipeg'}
+  {id:'any',    en:'Any zone',es:'Cualquier zona',addr:'Winnipeg'}
 ];
 var GST=0.05,PST=0.07;
 var WINNIPEG_OFFSET=-5; // UTC-5 (CDT), change to -6 in winter (CST)
@@ -269,7 +269,7 @@ var ADMIN_PW='bolivar2025';
 var currentUID='';
 
 function pad(n){return String(n).padStart(2,'0');}
-function getRate(){return parseFloat(document.getElementById('rate-val').value)||45;}
+function getRate(){return parseFloat(document.getElementById('rate-val').value)||47.5;}
 function calcTax(sub){var g=sub*GST,p=sub*PST;return{gst:g,pst:p,total:sub+g+p};}
 function getZone(){for(var i=0;i<ZONES.length;i++){if(ZONES[i].id===selZ)return ZONES[i];}return null;}
 function phoneMask(el){var raw=el.value.replace(/\D/g,"");if(raw.length===11&&raw.charAt(0)==="1")raw=raw.substring(1);var v=raw.substring(0,10),o="";if(v.length>0)o="("+v.substring(0,3);if(v.length>=4)o+=") "+v.substring(3,6);if(v.length>=7)o+="-"+v.substring(6,10);el.value=o;}
@@ -299,7 +299,7 @@ function loadBookedSlots(dateStr){
 }
 
 // ── GOOGLE SHEETS ─────────────────────────────────────────────
-var GAS_URL = 'https://script.google.com/macros/s/AKfycbynUa_QYIuhbdrLgjnttCRbDxWdEHaByuway9enwvwlDAxwTBz4nxZNEOliBpDrr80W/exec';  // ← PEGA TU URL AQUÍ
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbzDiyH-RVFTt1SS-_oS4enaWkrWaAHAUJwuk5lRJUoysH1ldkynZEuvLAy-lL-M4nc/exec';  // ← PEGA TU URL AQUÍ
 // ─────────────────────────────────────────────────────────────
 
 function saveToGoogleSheets(fecha, cliente, horas, tarifa){
@@ -401,7 +401,7 @@ function updateDurOptions(){
 function setLang(l){lang=l;document.getElementById('btn-en').className='lbtn '+(l==='en'?'on':'off');document.getElementById('btn-es').className='lbtn '+(l==='es'?'on':'off');applyL();renderZones();renderCal();renderTimes();updateDurOptions();updateProgress();}
 function applyL(){
   var e=lang==='en';
-  document.getElementById('h2').textContent='Winnipeg, MB - '+(e?'Mon-Sun':'Lun-Dom')+' 9AM-3PM - (204)509-6153';
+  document.getElementById('h2').textContent='Winnipeg, MB - '+(e?'Mon-Sun':'Lun-Dom')+' 9AM-8PM fin de semana - (204)509-6153';
   document.getElementById('l-rate').textContent=e?'Hourly rate':'Tarifa por hora';
   document.getElementById('l-rate-lbl').textContent=e?'Price/hr:':'Precio/hr:';
   document.getElementById('l-rate-note').textContent=e?'before tax':'sin impuestos';
@@ -455,8 +455,10 @@ function renderCal(){
 function renderTimes(){
   var dur=parseFloat(document.getElementById('dur').value);
   var g=document.getElementById('time-grid');g.innerHTML='';
-  for(var h=9;h<15;h+=0.5){
-    if(h+dur>15)break;
+  var endH=15;
+  if(selD){var day=new Date(selD+'T12:00:00').getDay();if(day===0||day===6)endH=20;}
+  for(var h=9;h<endH;h+=0.5){
+    if(h+dur>endH)break;
     var past=selD?isPastSlot(selD,h):false,booked=isBooked(h,dur),ts=fmtH(h);
     var el=document.createElement('div');var cls='tslot';
     if(selT===ts)cls+=' sel';if(past)cls+=' unavail';else if(booked)cls+=' booked';
@@ -601,7 +603,7 @@ function loadAdminBookings(){
       btnCancel.textContent=lang==='en'?'Cancel':'Cancelar';
       (function(docData,docId,dateStr){
         btnCancel.onclick=function(){
-          
+          if(!confirm(lang==='en'?'Cancel this appointment?':'Cancelar esta cita?'))return;
           db.collection('CITAS_RENTA').doc(docId).update({cancelada:true})
           .then(function(){
             cancelToGoogleSheets(docData.fecha, docData.cliente);
