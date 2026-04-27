@@ -115,8 +115,11 @@ async function loadFirebaseVEHICULOS_BG() {
           <p style="color:#374151;font-size:0.9rem;margin-bottom:4px;">&#10003; Safety Inspection</p>
           <p style="color:#374151;font-size:0.9rem;margin-bottom:16px;">&#10003; Carfax disponible</p>
           <div class="flex gap-2">
-            <a href="https://wa.me/593998871836?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(nombre)}" target="_blank" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Consultar</a>
-            <a href="#" onclick="return false;" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Carfax</a>
+            <a href="https://wa.me/12045096153?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(nombre)}" target="_blank" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Consultar</a>
+            ${v.carfax
+  ? `<a href="${v.carfax}" target="_blank" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Carfax</a>`
+  : `<a href="https://wa.me/12045096153?text=Hola,%20necesito%20el%20Carfax%20del%20${encodeURIComponent(nombre)}" target="_blank" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Carfax</a>`
+}
           </div>
         </div>`;
 

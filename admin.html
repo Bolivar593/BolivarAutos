@@ -884,6 +884,11 @@
       </div>
 
       <div class="form-group">
+        <label class="form-label">Link Carfax (opcional)</label>
+        <input type="url" id="vCarfax" class="form-input" placeholder="https://www.carfax.ca/...">
+      </div>
+
+      <div class="form-group">
         <label class="form-label">Fotos del vehículo</label>
         <div class="photo-upload-area" id="uploadArea">
           <input type="file" id="photoInput" accept="image/*" multiple onchange="handlePhotoSelect(event)">
@@ -1044,6 +1049,7 @@
     document.getElementById('vNombre').value = '';
     document.getElementById('vPrecio').value = '';
     document.getElementById('vKm').value = '';
+  document.getElementById('vCarfax').value = '';
     document.getElementById('vCategoria').value = 'sedan';
     selectedFiles = [];
     existingPhotos = [];
