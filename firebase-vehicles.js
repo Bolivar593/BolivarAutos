@@ -80,6 +80,14 @@ function getExistingPhotoHeight() {
   return 230;
 }
 
+function abrirCarfax(link, nombre) {
+  if (link && link.startsWith('http')) {
+    window.open(link, '_blank');
+  } else {
+    window.open('https://wa.me/12045096153?text=Hola,%20necesito%20el%20Carfax%20del%20' + nombre, '_blank');
+  }
+}
+
 async function loadFirebaseVEHICULOS_BG() {
   try {
     const snapshot = await db.collection("VEHICULOS_BG").get();
@@ -116,10 +124,7 @@ async function loadFirebaseVEHICULOS_BG() {
           <p style="color:#374151;font-size:0.9rem;margin-bottom:16px;">&#10003; Carfax disponible</p>
           <div class="flex gap-2">
             <a href="https://wa.me/12045096153?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(nombre)}" target="_blank" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Consultar</a>
-            ${v.carfax
-  ? `<a href="${v.carfax}" target="_blank" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Carfax</a>`
-  : `<a href="https://wa.me/12045096153?text=Hola,%20necesito%20el%20Carfax%20del%20${encodeURIComponent(nombre)}" target="_blank" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Carfax</a>`
-}
+            <button onclick="abrirCarfax('${v.carfax || ''}', '${encodeURIComponent(nombre)}')" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="border:none;cursor:pointer;">Carfax</button>
           </div>
         </div>`;
 
