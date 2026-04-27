@@ -98,7 +98,7 @@ async function loadFirebaseVEHICULOS_BG() {
 
       const card = document.createElement("div");
       card.className = "bg-white rounded-2xl shadow-lg overflow-hidden card-hover";
-      card.dataset.category = (v.categoria || "sedan").toLowerCase();
+      card.dataset.category = (v.categoria || "sedan").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g,"");
 
       card.innerHTML = `
         <div style="position:relative;width:100%;height:${photoHeight}px;overflow:hidden;background:#f3f4f6;flex-shrink:0;">
