@@ -1066,6 +1066,7 @@
     document.getElementById('vPrecio').value = d.precio || '';
     document.getElementById('vKm').value = d.km || '';
     document.getElementById('vCategoria').value = d.categoria || 'sedan';
+    document.getElementById('vCarfax').value = d.carfax || '';
     selectedFiles = [];
     existingPhotos = d.fotos || [];
     renderPreviews();
@@ -1152,7 +1153,8 @@
         document.getElementById('progressText').textContent = '¡Fotos subidas!';
       }
 
-      const data = { nombre, precio, km, categoria, fotos: fotosUrls, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+      const carfax = document.getElementById('vCarfax').value.trim() || '';
+        const data = { nombre, precio, km, categoria, carfax, fotos: fotosUrls, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
       const editingId = document.getElementById('editingId').value;
 
       if (editingId) {
