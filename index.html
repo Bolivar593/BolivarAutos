@@ -196,10 +196,10 @@
   <h2 id="invTitle">Explore Our Inventory</h2>
   <p class="inv-sub" id="invSub">Find the perfect car for you</p>
   <div class="filter-bar">
-    <button class="fpill active" onclick="filterCars('all',this)">All</button>
-    <button class="fpill" onclick="filterCars('like new',this)">Like New</button>
-    <button class="fpill" onclick="filterCars('sedan',this)">Sedan</button>
-    <button class="fpill" onclick="filterCars('suv',this)">SUVs</button>
+    <button class="fpill active" onclick="filterCars('all', this)">All</button>
+    <button class="fpill" onclick="filterCars('likenew', this)">Like New</button>
+    <button class="fpill" onclick="filterCars('sedan', this)">Sedan</button>
+    <button class="fpill" onclick="filterCars('suv', this)">SUVs</button>
   </div>
   
   </div>
@@ -294,13 +294,15 @@ function setLang(lang) {
 
 // FILTER
 var allCards = [];
-function filterCars(type, btn) {
-  document.querySelectorAll('.fpill').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
+function filterCars(category, btn) {
+  document.querySelectorAll('.fpill').forEach(function(b){ b.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
   document.querySelectorAll('#carGrid .card-hover').forEach(function(card){
-    if(type==='all'){ card.style.display=''; return; }
-    var cat = (card.dataset.category || '').toLowerCase();
-    card.style.display = (cat === type) ? '' : 'none';
+    if(category === 'all' || card.dataset.category === category){
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
   });
 }
 
