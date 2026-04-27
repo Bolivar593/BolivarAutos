@@ -662,9 +662,90 @@
     }
 
     .vehicle-img-wrapper { position: relative; }
+
+    /* ── MOBILE / iPHONE ── */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+
+      .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100vh;
+        width: 240px;
+        z-index: 999;
+        transition: left 0.3s ease;
+      }
+      .sidebar.open { left: 0; }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 998;
+      }
+      .sidebar-overlay.open { display: block; }
+
+      .mobile-topbar {
+        display: flex !important;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 14px 20px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .hamburger {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 4px;
+      }
+
+      .main { padding: 20px 16px; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+      .vehicle-grid { grid-template-columns: 1fr; }
+
+      .form-grid { grid-template-columns: 1fr; }
+
+      .btn { padding: 12px 18px; font-size: 15px; }
+
+      .vehicle-card-actions .btn { padding: 10px 8px; font-size: 13px; }
+
+      .modal { border-radius: 16px 16px 0 0; max-height: 95vh; }
+      .modal-overlay { align-items: flex-end; padding: 0; }
+
+      .photo-upload-area { padding: 24px 16px; }
+
+      input, select { font-size: 16px !important; } /* prevent iOS zoom */
+    }
+
+    .mobile-topbar { display: none; }
+
   </style>
 </head>
 <body>
+
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar" id="mobileTopbar">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <div style="background:#1e293b;border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:4px;">
+      <span style="font-size:20px;font-weight:900;color:white;line-height:1;">B</span>
+      <span style="width:7px;height:7px;background:#2563eb;border-radius:50%;"></span>
+      <span style="font-size:12px;font-weight:800;color:white;">LIVAR</span>
+    </div>
+  </div>
+  <div style="width:36px;"></div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
@@ -707,10 +788,7 @@
         <div class="nav-item" onclick="showPage('vehiculos')">
           <span class="icon">🚗</span> Vehículos
         </div>
-        <div class="nav-section-title">BolivarAutos-Renta</div>
-        <div class="nav-item" onclick="showPage('reservas')">
-          <span class="icon">📅</span> Reservas
-        </div>
+
       </nav>
 
       <div class="sidebar-footer">
@@ -736,11 +814,7 @@
             <div class="stat-label">Vehículos en venta</div>
             <div class="stat-value blue" id="statVehiculos">—</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-label">Reservas hoy</div>
-            <div class="stat-value green" id="statReservas">0</div>
-          </div>
-          <div class="stat-card">
+<div class="stat-card">
             <div class="stat-label">Fotos subidas</div>
             <div class="stat-value" id="statFotos">—</div>
           </div>
@@ -768,20 +842,7 @@
         </div>
       </div>
 
-      <!-- RESERVAS -->
-      <div class="page" id="page-reservas">
-        <div class="page-header">
-          <div>
-            <div class="page-title">Reservas</div>
-            <div class="page-subtitle">BolivarAutos-Renta</div>
-          </div>
-        </div>
-        <div style="background:white; border-radius:14px; border:1px solid var(--gray-200); padding:48px; text-align:center; color:var(--gray-400);">
-          <div style="font-size:48px; margin-bottom:16px;">📅</div>
-          <div style="font-size:18px; font-weight:600; color:var(--gray-600); margin-bottom:8px;">Próximamente</div>
-          <div style="font-size:14px;">Las reservas de BolivarAutos-Renta aparecerán aquí.</div>
-        </div>
-      </div>
+
 
     </main>
   </div>
@@ -886,6 +947,7 @@
       document.getElementById('appScreen').style.display = 'block';
       loadVehiculos();
       loadStats();
+      startSessionTimer();
     } else {
       document.getElementById('loginError').style.display = 'block';
       document.getElementById('passwordInput').value = '';
@@ -1131,6 +1193,49 @@
   document.getElementById('vehiculoModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
+
+  // ── SESSION 10 MIN ──
+  const SESSION_DURATION = 10 * 60 * 1000; // 10 minutes
+  let sessionTimer = null;
+
+  function startSessionTimer() {
+    clearTimeout(sessionTimer);
+    sessionTimer = setTimeout(() => {
+      doLogout();
+      alert('Sesión cerrada por inactividad (10 minutos).');
+    }, SESSION_DURATION);
+  }
+
+  function resetSessionTimer() {
+    if (document.getElementById('appScreen').style.display !== 'none') {
+      startSessionTimer();
+    }
+  }
+
+  ['click','touchstart','keydown','scroll'].forEach(evt => {
+    document.addEventListener(evt, resetSessionTimer, { passive: true });
+  });
+
+  // ── MOBILE SIDEBAR ──
+  function toggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+  }
+
+  // Close sidebar when nav item is tapped on mobile
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.querySelector('.sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
+      }
+    });
+  });
+
+  // Start timer on login
+  const origDoLogin = doLogin;
+  // Patch doLogin to start timer
+
 </script>
 </body>
 </html>
