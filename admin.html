@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BolivarAutos | Panel de Administración</title>
+  <title>Admin | BolivarAutos</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -108,6 +108,10 @@
 
     .login-input:focus { border-color: var(--blue); }
     .login-input::placeholder { letter-spacing: 2px; color: rgba(255,255,255,0.3); font-size: 14px; }
+
+    .pw-wrapper { position: relative; width: 100%; }
+    .pw-eye { position: absolute; right: 14px; top: 50%; transform: translateY(-60%); background: none; border: none; cursor: pointer; font-size: 20px; color: rgba(255,255,255,0.45); padding: 4px; }
+    .pw-eye:hover { color: rgba(255,255,255,0.9); }
 
     .login-btn {
       width: 100%;
@@ -736,7 +740,8 @@
 <!-- MOBILE TOPBAR -->
 <div class="mobile-topbar" id="mobileTopbar">
   <button class="hamburger" onclick="toggleSidebar()">☰</button>
-  <div style="display:flex;align-items:center;gap:6px;">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-size:11px;font-weight:700;color:#2563eb;letter-spacing:1.5px;text-transform:uppercase;">Admin</span>
     <div style="background:#1e293b;border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:4px;">
       <span style="font-size:20px;font-weight:900;color:white;line-height:1;">B</span>
       <span style="width:7px;height:7px;background:#2563eb;border-radius:50%;"></span>
@@ -759,7 +764,12 @@
     </div>
     <div class="login-title">Panel de Administración</div>
     <div class="login-subtitle">BolivarAutos</div>
-    <input type="password" id="passwordInput" class="login-input" placeholder="Contraseña" onkeydown="if(event.key==='Enter') doLogin()">
+    <div class="pw-wrapper">
+      <input type="password" id="passwordInput" class="login-input" placeholder="Contraseña"
+        onkeydown="if(event.key==='Enter') doLogin()"
+        onfocus="setTimeout(()=>this.scrollIntoView({behavior:'smooth',block:'center'}),300)">
+      <button class="pw-eye" type="button" onclick="togglePwEye()" id="eyeBtn">👁</button>
+    </div>
     <button class="login-btn" onclick="doLogin()">Ingresar</button>
     <div class="login-error" id="loginError">Contraseña incorrecta. Intenta de nuevo.</div>
   </div>
@@ -916,6 +926,9 @@
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<!-- SORTABLE (reordenar fotos) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+
 <!-- FIREBASE SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -964,6 +977,13 @@
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('appScreen').style.display = 'none';
     document.getElementById('passwordInput').value = '';
+  }
+
+  function togglePwEye() {
+    const inp = document.getElementById('passwordInput');
+    const btn = document.getElementById('eyeBtn');
+    if (inp.type === 'password') { inp.type = 'text'; inp.style.letterSpacing = '2px'; btn.textContent = '🙈'; }
+    else { inp.type = 'password'; inp.style.letterSpacing = '4px'; btn.textContent = '👁'; }
   }
 
   // ── NAVIGATION ──
@@ -1091,7 +1111,7 @@
 
     existingPhotos.forEach((url, i) => {
       container.innerHTML += `
-        <div class="photo-preview">
+        <div class="photo-preview" data-source="existing" data-index="${i}">
           <img src="${url}" alt="foto">
           <button class="photo-preview-remove" onclick="removeExistingPhoto(${i})">✕</button>
         </div>`;
@@ -1100,10 +1120,33 @@
     selectedFiles.forEach((file, i) => {
       const url = URL.createObjectURL(file);
       container.innerHTML += `
-        <div class="photo-preview">
+        <div class="photo-preview" data-source="new" data-index="${i}">
           <img src="${url}" alt="foto">
           <button class="photo-preview-remove" onclick="removeNewPhoto(${i})">✕</button>
         </div>`;
+    });
+
+    // Init drag-to-reorder (long press on mobile, drag on desktop)
+    if (window._sortable) window._sortable.destroy();
+    window._sortable = new Sortable(container, {
+      animation: 150,
+      delay: 400,
+      delayOnTouchOnly: true,
+      touchStartThreshold: 4,
+      onEnd: function() {
+        // Rebuild arrays from new DOM order
+        const newExisting = [];
+        const newSelected = [];
+        container.querySelectorAll('.photo-preview').forEach(div => {
+          const src = div.dataset.source;
+          const idx = parseInt(div.dataset.index);
+          if (src === 'existing') newExisting.push(existingPhotos[idx]);
+          else newSelected.push(selectedFiles[idx]);
+        });
+        existingPhotos = newExisting;
+        selectedFiles = newSelected;
+        renderPreviews();
+      }
     });
   }
 
