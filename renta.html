@@ -114,6 +114,34 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .admin-date-row{display:flex;gap:8px;align-items:center;margin-bottom:12px}
 .admin-date-row label{font-size:15px;font-weight:700;color:#333;white-space:nowrap}
 .admin-date-row input{flex:1;font-size:15px;padding:8px 10px;border:1.5px solid #ddd;border-radius:10px}
+.hist-section{margin-top:16px;border-top:2px dashed #fca5a5;padding-top:14px}
+.hist-title{font-size:14px;font-weight:800;color:#2a52a0;text-transform:uppercase;margin-bottom:10px}
+.hist-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.hist-filters label{font-size:13px;font-weight:700;color:#333;white-space:nowrap}
+.hist-month-sel{font-size:14px;font-weight:700;padding:8px 10px;border:1.5px solid #c5d5ea;border-radius:10px;color:#2a52a0;background:#eef2f8;cursor:pointer}
+.btn-hist{background:#2a52a0;color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:14px;font-weight:800;cursor:pointer}
+.btn-export-xlsx{background:#166534;color:#fff;border:none;border-radius:10px;padding:9px 16px;font-size:14px;font-weight:800;cursor:pointer}
+.hist-summary{background:#eef2f8;border:1.5px solid #c5d5ea;border-radius:12px;padding:12px 14px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hist-sum-item{display:flex;flex-direction:column;gap:2px}
+.hist-sum-label{font-size:11px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:0.4px}
+.hist-sum-value{font-size:16px;font-weight:800;color:#2a52a0}
+.hist-sum-item.total .hist-sum-value{color:#166534;font-size:20px}
+.hist-sum-item.count .hist-sum-value{color:#111}
+.hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1.5px solid #dde6f5}
+.hist-table{width:100%;border-collapse:collapse;font-size:13px}
+.hist-table thead tr{background:#2a52a0}
+.hist-table th{color:#fff;padding:10px 10px;text-align:left;font-size:12px;font-weight:800;white-space:nowrap}
+.hist-table td{padding:9px 10px;border-bottom:1px solid #eef2f8;font-size:13px;font-weight:600;color:#222;white-space:nowrap}
+.hist-table tbody tr:last-child td{border-bottom:none}
+.hist-table tbody tr:nth-child(even) td{background:#f8faff}
+.hist-table tbody tr:hover td{background:#eef2f8}
+.hist-table tr.hist-cancelada td{color:#bbb;text-decoration:line-through}
+.hist-table .col-num{text-align:right}
+.hist-table .col-total{font-weight:800;color:#2a52a0;text-align:right}
+.hist-table tr.hist-cancelada .col-total{color:#bbb}
+.hist-table .badge-activa{background:#dcfce7;color:#166534;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800}
+.hist-table .badge-cancel{background:#fee2e2;color:#dc2626;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800}
+.hist-empty{font-size:14px;color:#888;font-weight:600;text-align:center;padding:20px 0}
 </style>
 </head>
 <body>
@@ -231,10 +259,13 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <button onclick="toggleAdmin()" id="admin-toggle-btn">Administrar citas</button>
   </div>
   <div class="admin-panel" id="admin-panel">
-    <div class="admin-title" id="admin-title">Gestion de citas</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="admin-title" id="admin-title" style="margin-bottom:0">Gestion de citas</div>
+      <button onclick="toggleAdmin()" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:800;color:#dc2626;cursor:pointer">✕ Cerrar</button>
+    </div>
     <div id="admin-login-area">
       <div class="admin-pw">
-        <input type="password" id="admin-pw" placeholder="Contrasena">
+        <input type="password" id="admin-pw" placeholder="Contrasena" onkeydown="if(event.key==='Enter')adminLogin()">
         <button onclick="adminLogin()">Entrar</button>
       </div>
     </div>
@@ -244,6 +275,29 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <input type="date" id="admin-date" onchange="loadAdminBookings()">
       </div>
       <div id="admin-list"></div>
+
+      <!-- HISTORIAL DE CITAS -->
+      <div class="hist-section">
+        <div class="hist-title">📋 Historial de citas</div>
+        <div class="hist-filters">
+          <label>Mes:</label>
+          <select class="hist-month-sel" id="hist-month-sel"></select>
+          <button class="btn-hist" onclick="loadHistorial()">Ver</button>
+          <button class="btn-export-xlsx" id="btn-export-xlsx" style="display:none" onclick="exportXLS()">⬇ Exportar Excel</button>
+        </div>
+        <div id="hist-summary" class="hist-summary" style="display:none"></div>
+        <div class="hist-wrap" id="hist-wrap" style="display:none">
+          <table class="hist-table">
+            <thead><tr>
+              <th>Fecha</th><th>Hora</th><th>Dur.</th><th>Zona</th><th>Cliente</th><th>Teléfono</th>
+              <th class="col-num">Subtotal</th><th class="col-num">GST</th><th class="col-num">PST</th>
+              <th class="col-num">Total</th><th>Estado</th>
+            </tr></thead>
+            <tbody id="hist-tbody"></tbody>
+          </table>
+        </div>
+        <div id="hist-empty" class="hist-empty" style="display:none">No hay citas para este período.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -577,8 +631,8 @@ function goAppleCalCancel(d){
 }
 
 // Admin
-function toggleAdmin(){var p=document.getElementById('admin-panel');p.style.display=p.style.display==='none'?'block':'none';}
-function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();loadAdminBookings();}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
+function toggleAdmin(){var p=document.getElementById('admin-panel');var open=p.style.display==='none'||p.style.display==='';p.style.display=open?'block':'none';if(open)setTimeout(function(){p.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();buildMonthSelector();loadAdminBookings();}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
 
 function loadAdminBookings(){
   if(!db||!adminUnlocked)return;
@@ -634,6 +688,132 @@ function loadAdminBookings(){
     });
   }).catch(function(e){list.innerHTML='<div class="admin-empty">Error: '+e.message+'</div>';});
 }
+
+
+// ── HISTORIAL DE CITAS ─────────────────────────────────────
+var historialData=[];
+
+function buildMonthSelector(){
+  var sel=document.getElementById('hist-month-sel');sel.innerHTML='';
+  var now=new Date();
+  var opt=document.createElement('option');opt.value='all';opt.textContent='Todos los meses';sel.appendChild(opt);
+  var ms=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  for(var i=0;i<18;i++){
+    var d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    var val=d.getFullYear()+'-'+pad(d.getMonth()+1);
+    var o=document.createElement('option');o.value=val;o.textContent=ms[d.getMonth()]+' '+d.getFullYear();
+    if(i===0)o.selected=true;
+    sel.appendChild(o);
+  }
+}
+
+function loadHistorial(){
+  if(!db||!adminUnlocked)return;
+  var selVal=document.getElementById('hist-month-sel').value;
+  var tbody=document.getElementById('hist-tbody');
+  var summary=document.getElementById('hist-summary');
+  var wrap=document.getElementById('hist-wrap');
+  var empty=document.getElementById('hist-empty');
+  tbody.innerHTML='<tr><td colspan="11" style="text-align:center;color:#888;padding:16px;font-weight:700">Cargando...</td></tr>';
+  wrap.style.display='block';empty.style.display='none';
+  summary.style.display='none';
+  document.getElementById('btn-export-xlsx').style.display='none';
+  historialData=[];
+
+  var query;
+  if(selVal==='all'){
+    query=db.collection('CITAS_RENTA').orderBy('fecha','desc');
+  } else {
+    var yr=parseInt(selVal.split('-')[0]),mo=parseInt(selVal.split('-')[1]);
+    var from=selVal+'-01';
+    var to=selVal+'-'+pad(new Date(yr,mo,0).getDate());
+    query=db.collection('CITAS_RENTA').where('fecha','>=',from).where('fecha','<=',to).orderBy('fecha','desc');
+  }
+  query.get().then(function(snap){
+    if(snap.empty){tbody.innerHTML='';wrap.style.display='none';empty.style.display='block';return;}
+    snap.forEach(function(doc){var d=doc.data();d.docId=doc.id;historialData.push(d);});
+    renderHistorial();
+  }).catch(function(e){tbody.innerHTML='<tr><td colspan="11" style="color:#dc2626;padding:12px;font-weight:700">Error: '+e.message+'</td></tr>';});
+}
+
+function renderHistorial(){
+  var tbody=document.getElementById('hist-tbody');
+  var summary=document.getElementById('hist-summary');
+  var wrap=document.getElementById('hist-wrap');
+  tbody.innerHTML='';wrap.style.display='block';
+
+  var activas=historialData.filter(function(d){return !d.cancelada;});
+  var totalSub=0,totalGST=0,totalPST=0,totalTot=0;
+  activas.forEach(function(d){
+    totalSub+=parseFloat(d.subtotal||0);
+    totalGST+=parseFloat(d.gst||0);
+    totalPST+=parseFloat(d.pst||0);
+    totalTot+=parseFloat(d.total||0);
+  });
+
+  summary.style.display='grid';
+  summary.innerHTML=
+    '<div class="hist-sum-item count"><div class="hist-sum-label">Citas activas</div><div class="hist-sum-value">'+activas.length+' de '+historialData.length+'</div></div>'
+   +'<div class="hist-sum-item total"><div class="hist-sum-label">Total cobrado</div><div class="hist-sum-value">$'+totalTot.toFixed(2)+' CAD</div></div>'
+   +'<div class="hist-sum-item"><div class="hist-sum-label">Subtotal</div><div class="hist-sum-value">$'+totalSub.toFixed(2)+'</div></div>'
+   +'<div class="hist-sum-item"><div class="hist-sum-label">GST / PST</div><div class="hist-sum-value">$'+totalGST.toFixed(2)+' / $'+totalPST.toFixed(2)+'</div></div>';
+
+  historialData.forEach(function(d){
+    var canc=!!d.cancelada;
+    var tr=document.createElement('tr');
+    if(canc)tr.className='hist-cancelada';
+    tr.innerHTML=
+      '<td>'+d.fecha+'</td>'
+     +'<td>'+d.hora+'</td>'
+     +'<td>'+d.duracion+'h</td>'
+     +'<td>'+(d.zona_nombre||'--')+'</td>'
+     +'<td>'+d.cliente+'</td>'
+     +'<td>'+d.telefono+'</td>'
+     +'<td class="col-num">$'+parseFloat(d.subtotal||0).toFixed(2)+'</td>'
+     +'<td class="col-num">$'+parseFloat(d.gst||0).toFixed(2)+'</td>'
+     +'<td class="col-num">$'+parseFloat(d.pst||0).toFixed(2)+'</td>'
+     +'<td class="col-total">$'+parseFloat(d.total||0).toFixed(2)+'</td>'
+     +'<td>'+(canc?'<span class="badge-cancel">Cancelada</span>':'<span class="badge-activa">Activa</span>')+'</td>';
+    tbody.appendChild(tr);
+  });
+  document.getElementById('btn-export-xlsx').style.display='inline-block';
+}
+
+function exportXLS(){
+  var activas=historialData.filter(function(d){return !d.cancelada;});
+  if(!activas.length){alert('No hay citas activas para exportar.');return;}
+  if(typeof XLSX!=='undefined'){doExport(activas);return;}
+  var s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  s.onload=function(){doExport(activas);};
+  document.head.appendChild(s);
+}
+
+function doExport(activas){
+  var sel=document.getElementById('hist-month-sel');
+  var label=sel.options[sel.selectedIndex].textContent.replace(/\s+/g,'-');
+  var rows=activas.map(function(d){
+    return {
+      'Fecha':d.fecha,'Hora':d.hora,'Duración (h)':parseFloat(d.duracion),
+      'Zona':d.zona_nombre||'','Cliente':d.cliente,'Teléfono':d.telefono,
+      'Subtotal ($)':parseFloat(parseFloat(d.subtotal||0).toFixed(2)),
+      'GST 5% ($)':parseFloat(parseFloat(d.gst||0).toFixed(2)),
+      'PST 7% ($)':parseFloat(parseFloat(d.pst||0).toFixed(2)),
+      'Total CAD ($)':parseFloat(parseFloat(d.total||0).toFixed(2))
+    };
+  });
+  var totalSub=0,totalGST=0,totalPST=0,totalTot=0;
+  activas.forEach(function(d){totalSub+=parseFloat(d.subtotal||0);totalGST+=parseFloat(d.gst||0);totalPST+=parseFloat(d.pst||0);totalTot+=parseFloat(d.total||0);});
+  rows.push({'Fecha':'TOTAL','Hora':'','Duración (h)':'','Zona':'','Cliente':activas.length+' citas','Teléfono':'',
+    'Subtotal ($)':parseFloat(totalSub.toFixed(2)),'GST 5% ($)':parseFloat(totalGST.toFixed(2)),
+    'PST 7% ($)':parseFloat(totalPST.toFixed(2)),'Total CAD ($)':parseFloat(totalTot.toFixed(2))});
+  var ws=XLSX.utils.json_to_sheet(rows);
+  ws['!cols']=[{wch:12},{wch:10},{wch:10},{wch:16},{wch:20},{wch:16},{wch:12},{wch:10},{wch:10},{wch:13}];
+  var wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'Citas BolivarAutos-Renta');
+  XLSX.writeFile(wb,'historial-bolivarautos-'+label+'.xlsx');
+}
+// ──────────────────────────────────────────────────────────
 
 renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgress();upd();
 
