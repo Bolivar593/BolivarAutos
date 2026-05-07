@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Admin">
+  <link rel="apple-touch-icon" href="data:image/png;base64,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">
   <title>Admin | BolivarAutos</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -1126,25 +1129,17 @@
         </div>`;
     });
 
-    // Init drag-to-reorder (long press on mobile, drag on desktop)
     if (window._sortable) window._sortable.destroy();
     window._sortable = new Sortable(container, {
-      animation: 150,
-      delay: 400,
-      delayOnTouchOnly: true,
-      touchStartThreshold: 4,
+      animation: 150, delay: 400, delayOnTouchOnly: true, touchStartThreshold: 4,
       onEnd: function() {
-        // Rebuild arrays from new DOM order
-        const newExisting = [];
-        const newSelected = [];
+        const newExisting = [], newSelected = [];
         container.querySelectorAll('.photo-preview').forEach(div => {
-          const src = div.dataset.source;
-          const idx = parseInt(div.dataset.index);
+          const src = div.dataset.source, idx = parseInt(div.dataset.index);
           if (src === 'existing') newExisting.push(existingPhotos[idx]);
           else newSelected.push(selectedFiles[idx]);
         });
-        existingPhotos = newExisting;
-        selectedFiles = newSelected;
+        existingPhotos = newExisting; selectedFiles = newSelected;
         renderPreviews();
       }
     });
