@@ -143,6 +143,16 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .hist-table .badge-activa{background:#dcfce7;color:#166534;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800}
 .hist-table .badge-cancel{background:#fee2e2;color:#dc2626;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:800}
 .hist-empty{font-size:14px;color:#888;font-weight:600;text-align:center;padding:20px 0}
+.past-toggle-btn{width:100%;margin-top:12px;padding:8px;border-radius:8px;font-size:13px;font-weight:700;background:#eef2f8;color:#2a52a0;border:1.5px solid #c5d5ea;cursor:pointer;text-align:center}
+.past-form{background:#f0f4f9;border:1.5px solid #c5d5ea;border-radius:10px;padding:10px 12px;margin-top:8px;display:none}
+.past-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.past-fg{display:flex;flex-direction:column;gap:3px}
+.past-fg label{font-size:12px;font-weight:700;color:#555}
+.past-fg input,.past-fg select{font-size:13px;padding:7px 8px;border:1px solid #c5d5ea;border-radius:8px;width:100%;color:#111;background:#fff}
+.past-row{display:flex;gap:6px;margin-bottom:4px;align-items:flex-end}
+.past-row .past-fg{flex:1}
+.btn-past-save{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:800;background:#2a52a0;color:#fff;border:none;cursor:pointer;white-space:nowrap}
+.past-success{background:#dcfce7;border:1.5px solid #86efac;border-radius:8px;padding:7px;font-size:13px;font-weight:700;color:#166534;text-align:center;display:none;margin-top:6px}
 </style>
 </head>
 <body>
@@ -297,6 +307,21 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
           </table>
         </div>
         <div id="hist-empty" class="hist-empty" style="display:none">No hay citas para este período.</div>
+      </div>
+      <!-- Agregar cita pasada - colapsable al final -->
+      <button class="past-toggle-btn" onclick="togglePastForm()" id="past-toggle-btn">+ Agregar cita de fecha pasada</button>
+      <div class="past-form" id="past-form-wrap">
+        <div class="past-form-grid">
+          <div class="past-fg"><label>Fecha</label><input type="date" id="past-fecha" max=""></div>
+          <div class="past-fg"><label>Hora</label><select id="past-hora"></select></div>
+          <div class="past-fg"><label>Duracion</label><select id="past-dur"><option value="1">1 hr</option><option value="1.5">1.5 hrs</option><option value="2" selected>2 hrs</option><option value="2.5">2.5 hrs</option><option value="3">3 hrs</option><option value="4">4 hrs</option></select></div>
+          <div class="past-fg"><label>Zona</label><select id="past-zona"><option value="bison">Bison</option><option value="gateway">Gateway</option><option value="kingedward">King Edward</option><option value="mainst">Main St</option><option value="stmarys">St. Marys</option><option value="any">Any zone / Driving</option></select></div>
+        </div>
+        <div class="past-row">
+          <div class="past-fg"><label>Nombre y Telefono</label><input type="text" id="past-cliente" placeholder="Ej: Juan (204)555-1234"></div>
+          <button class="btn-past-save" onclick="savePastBooking()">Guardar</button>
+        </div>
+        <div class="past-success" id="past-success">Cita guardada</div>
       </div>
     </div>
   </div>
@@ -631,8 +656,40 @@ function goAppleCalCancel(d){
 }
 
 // Admin
+function togglePastForm(){
+  var f=document.getElementById('past-form-wrap'),btn=document.getElementById('past-toggle-btn');
+  var open=f.style.display==='none'||f.style.display==='';
+  f.style.display=open?'block':'none';
+  btn.textContent=open?'▲ Cerrar cita pasada':'+ Agregar cita de fecha pasada';
+}
+function buildPastHoras(){
+  var sel=document.getElementById('past-hora');if(!sel)return;sel.innerHTML='';
+  for(var h=9;h<15;h+=0.5){var hh=Math.floor(h),mm=h%1===0.5?'30':'00',label;
+  if(hh<12)label=hh+':'+mm+' AM';else if(hh===12)label='12:'+mm+' PM';else label=(hh-12)+':'+mm+' PM';
+  var o=document.createElement('option');o.value=label;o.textContent=label;sel.appendChild(o);}
+}
+function savePastBooking(){
+  if(!db){alert('Firebase no conectado');return;}
+  var fecha=document.getElementById('past-fecha').value;
+  var hora=document.getElementById('past-hora').value;
+  var dur=parseFloat(document.getElementById('past-dur').value);
+  var zonaId=document.getElementById('past-zona').value;
+  var cliente=document.getElementById('past-cliente').value.trim();
+  if(!fecha||!hora||!cliente){alert('Falta: fecha, hora o nombre');return;}
+  var ZONE_NAMES={bison:'Bison',gateway:'Gateway',kingedward:'King Edward',mainst:'Main St',stmarys:"St. Mary's",any:'Any zone / Driving'};
+  var rate=getRate(),sub=dur*rate,tx=calcTax(sub),uid=Date.now()+'@bolivarautos';
+  db.collection('CITAS_RENTA').add({fecha:fecha,hora:hora,duracion:dur,zona_id:zonaId,zona_nombre:ZONE_NAMES[zonaId]||zonaId,cliente:cliente,telefono:'',notas:'',tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:uid})
+  .then(function(){
+    saveToGoogleSheets(fecha,cliente,dur,rate);
+    var s=document.getElementById('past-success');s.style.display='block';
+    document.getElementById('past-fecha').value='';
+    document.getElementById('past-cliente').value='';
+    setTimeout(function(){s.style.display='none';},3000);
+    if(document.getElementById('admin-date').value===fecha)loadAdminBookings();
+  }).catch(function(e){alert('Error: '+e.message);});
+}
 function toggleAdmin(){var p=document.getElementById('admin-panel');var open=p.style.display==='none'||p.style.display==='';p.style.display=open?'block':'none';if(open)setTimeout(function(){p.scrollIntoView({behavior:'smooth',block:'start'});},80);}
-function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();buildMonthSelector();loadAdminBookings();}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
+function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();buildMonthSelector();loadAdminBookings();buildPastHoras();var yd=new Date();yd.setDate(yd.getDate()-1);document.getElementById("past-fecha").max=yd.getFullYear()+"-"+String(yd.getMonth()+1).padStart(2,"0")+"-"+String(yd.getDate()).padStart(2,"0");}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
 
 function loadAdminBookings(){
   if(!db||!adminUnlocked)return;
