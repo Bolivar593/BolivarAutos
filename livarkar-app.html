@@ -1233,34 +1233,71 @@ body { padding-bottom: 75px; }
 <div class="tab-page" id="tab-dashboard">
 <div class="dash-wrap">
   <div class="dash-header"><h1>📊 Saldo en Tiempo Real</h1><p>LIVARKAR Services Management Ltd.</p></div>
+
+  <!-- Capital y saldo banco -->
   <div class="capital-edit-row">
     <label>💜 Capital préstamo:</label>
     <input type="number" id="dash-capital" value="3898.47" step="0.01" onchange="loadDashboard()">
   </div>
+  <div class="capital-edit-row" style="background:#fff8e1;border-color:#ffd54f">
+    <label style="color:#e65100">🏦 Saldo banco:</label>
+    <input type="number" id="dash-banco" value="4340.47" step="0.01" style="color:#e65100" onchange="loadDashboard()">
+  </div>
+  <div id="d-gastos-status" style="background:#fff3cd;border:1.5px solid #ffc107;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:13px;font-weight:700;color:#856404;display:none">
+    ⚠️ Gastos desde Google Sheets no disponibles — mostrando datos de Firebase
+  </div>
+
   <div id="dash-loading" class="dash-loading">⏳ Cargando datos...</div>
   <div id="dash-content" style="display:none">
+
+    <!-- Disponible real -->
     <div class="dash-main">
       <div class="dash-main-label">💵 Disponible Real</div>
       <div class="dash-main-amount" id="d-disponible">$0.00</div>
-      <div class="dash-main-sub">Saldo − Capital − Impuestos</div>
+      <div class="dash-main-sub">Saldo banco − Capital − Impuestos</div>
     </div>
+
+    <!-- Cards -->
     <div class="dash-grid">
-      <div class="dash-card"><div class="dash-card-label">🏦 Saldo Calculado</div><div class="dash-card-amount" id="d-saldo">$0.00</div><div class="dash-card-sub">Capital + Rentas − Gastos</div></div>
-      <div class="dash-card"><div class="dash-card-label">🚗 Total Rentas</div><div class="dash-card-amount" id="d-rentas">$0.00</div><div class="dash-card-sub" id="d-rentas-count">0 citas</div></div>
-      <div class="dash-card"><div class="dash-card-label">📤 Total Gastos</div><div class="dash-card-amount" style="color:#d97706" id="d-gastos">$0.00</div><div class="dash-card-sub" id="d-gastos-count">0 registros</div></div>
-      <div class="dash-card"><div class="dash-card-label">📅 Este mes</div><div class="dash-card-amount" id="d-mes">$0.00</div><div class="dash-card-sub" id="d-mes-count">0 citas</div></div>
+      <div class="dash-card">
+        <div class="dash-card-label">🚗 Total Rentas</div>
+        <div class="dash-card-amount" id="d-rentas">$0.00</div>
+        <div class="dash-card-sub" id="d-rentas-count">0 citas</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label">🗓 Rentas Este Mes</div>
+        <div class="dash-card-amount" id="d-mes">$0.00</div>
+        <div class="dash-card-sub" id="d-mes-count">0 citas</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label">📤 Total Gastos</div>
+        <div class="dash-card-amount" style="color:#d97706" id="d-gastos">$0.00</div>
+        <div class="dash-card-sub" id="d-gastos-count">0 registros</div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-label">📊 Saldo Calculado</div>
+        <div class="dash-card-amount" style="font-size:20px" id="d-saldo">$0.00</div>
+        <div class="dash-card-sub">Rentas − Gastos</div>
+      </div>
     </div>
+
+    <!-- Impuestos colapsable -->
     <div class="dash-impuestos">
-      <div class="dash-imp-title">⚠️ Impuestos a Apartar — No gastar</div>
-      <div class="dash-imp-row">
-        <div><div class="dash-imp-label">GST Neto → CRA</div><div style="font-size:12px;color:#888">Vence 31 Marzo 2027</div></div>
-        <div class="dash-imp-amount" id="d-gst">$0.00</div>
+      <div onclick="toggleImpuestos()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+        <div class="dash-imp-title" style="margin-bottom:0">⚠️ Impuestos a Apartar — No gastar</div>
+        <span id="imp-toggle-icon" style="font-size:18px;color:#dc2626">▼</span>
       </div>
-      <div class="dash-imp-row">
-        <div><div class="dash-imp-label">RST → Manitoba</div><div style="font-size:12px;color:#888">Vence 31 Julio 2026</div></div>
-        <div class="dash-imp-amount" id="d-rst">$0.00</div>
+      <div id="imp-detalle" style="display:none;margin-top:12px">
+        <div class="dash-imp-row">
+          <div><div class="dash-imp-label">GST Neto → CRA</div><div style="font-size:12px;color:#888">Vence 31 Marzo 2027</div></div>
+          <div class="dash-imp-amount" id="d-gst">$0.00</div>
+        </div>
+        <div class="dash-imp-row">
+          <div><div class="dash-imp-label">RST → Manitoba</div><div style="font-size:12px;color:#888">Vence 31 Julio 2026</div></div>
+          <div class="dash-imp-amount" id="d-rst">$0.00</div>
+        </div>
       </div>
-      <div class="dash-imp-total">
+      <div class="dash-imp-total" style="margin-top:12px">
         <div style="font-size:15px;font-weight:800;color:#dc2626">Total a apartar</div>
         <div style="font-size:22px;font-weight:900;color:#dc2626" id="d-imp-total">$0.00</div>
       </div>
@@ -2104,11 +2141,13 @@ function loadDashboard() {
       tITC     = parseFloat(sheetsData.totalITC     || 0);
       nGastos  = parseInt(sheetsData.countGastos    || 0);
     }
-    mostrarDashboard(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
+    var banco = parseFloat(document.getElementById("dash-banco").value)||capital;
+    mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
   })
   .catch(function(e) {
     // Si Sheets falla, intenta con Firebase GASTOS_EMPRESA como respaldo
     console.warn('Sheets gastos error, usando Firebase:', e.message);
+    var statusEl = document.getElementById('d-gastos-status'); if(statusEl) statusEl.style.display='block';
     db.collection('GASTOS_EMPRESA').get()
     .then(function(snap) {
       snap.forEach(function(doc) {
@@ -2117,34 +2156,44 @@ function loadDashboard() {
         if(g.gst_aplica) tITC += parseFloat(g.gst_amt||0);
         nGastos++;
       });
-      mostrarDashboard(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
+      var banco = parseFloat(document.getElementById("dash-banco").value)||capital;
+    mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
     }).catch(function(e2) {
       document.getElementById('dash-loading').innerHTML = '⚠️ Error: '+e2.message;
     });
   });
 }
 
-function mostrarDashboard(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
-  var totalCobrado = tRentas + tGST + tPST;
-  var saldo        = capital + totalCobrado - tGastos;
-  var gstNeto      = Math.max(0, tGST - tITC);
-  var impTotal     = gstNeto + tPST;
-  var disponible   = saldo - capital - impTotal;
+function mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
+  var gstNeto    = Math.max(0, tGST - tITC);
+  var impTotal   = gstNeto + tPST;
+  var saldoNeto  = tRentas - tGastos; // rentas cobradas (sin taxes) minus gastos
+  var disponible = banco - capital - impTotal;
 
-  document.getElementById('d-disponible').textContent    = '$'+disponible.toFixed(2);
-  document.getElementById('d-saldo').textContent         = '$'+saldo.toFixed(2);
-  document.getElementById('d-rentas').textContent        = '$'+tRentas.toFixed(2);
-  document.getElementById('d-rentas-count').textContent  = nRentas+' citas';
-  document.getElementById('d-gastos').textContent        = '$'+tGastos.toFixed(2);
-  document.getElementById('d-gastos-count').textContent  = nGastos+' gastos';
-  document.getElementById('d-mes').textContent           = '$'+tMes.toFixed(2);
-  document.getElementById('d-mes-count').textContent     = nMes+' citas';
-  document.getElementById('d-gst').textContent           = '$'+gstNeto.toFixed(2);
-  document.getElementById('d-rst').textContent           = '$'+tPST.toFixed(2);
-  document.getElementById('d-imp-total').textContent     = '$'+impTotal.toFixed(2);
+  document.getElementById('d-disponible').textContent   = '$'+disponible.toFixed(2);
+  document.getElementById('d-saldo').textContent        = '$'+saldoNeto.toFixed(2);
+  document.getElementById('d-rentas').textContent       = '$'+tRentas.toFixed(2);
+  document.getElementById('d-rentas-count').textContent = nRentas+' citas';
+  document.getElementById('d-gastos').textContent       = '$'+tGastos.toFixed(2);
+  document.getElementById('d-gastos-count').textContent = nGastos+' gastos';
+  document.getElementById('d-mes').textContent          = '$'+tMes.toFixed(2);
+  document.getElementById('d-mes-count').textContent    = nMes+' citas';
+  document.getElementById('d-gst').textContent          = '$'+gstNeto.toFixed(2);
+  document.getElementById('d-rst').textContent          = '$'+tPST.toFixed(2);
+  document.getElementById('d-imp-total').textContent    = '$'+impTotal.toFixed(2);
 
   document.getElementById('dash-loading').style.display = 'none';
   document.getElementById('dash-content').style.display = 'block';
+}
+
+function toggleImpuestos() {
+  var det = document.getElementById('imp-detalle');
+  var ico = document.getElementById('imp-toggle-icon');
+  if(det.style.display === 'none') {
+    det.style.display = 'block'; ico.textContent = '▲';
+  } else {
+    det.style.display = 'none'; ico.textContent = '▼';
+  }
 }
 
 // ===== ADMIN AUTOS JS =====
