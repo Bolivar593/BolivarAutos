@@ -2117,17 +2117,24 @@ function loadDashboard() {
   var tRentas=0, nRentas=0, tGST=0, tPST=0, tMes=0, nMes=0;
   var tGastos=0, tITC=0, nGastos=0;
 
-  // Paso 1: Leer rentas de Firebase
+  // Paso 1: Leer rentas de Firebase — calcular IGUAL que la hoja (horas × tarifa)
   db.collection('CITAS_RENTA').where('cancelada','==',false).get()
   .then(function(snap) {
     snap.forEach(function(doc) {
       var d = doc.data();
-      tRentas += parseFloat(d.subtotal||0);
-      tGST    += parseFloat(d.gst||0);
-      tPST    += parseFloat(d.pst||0);
+      // Calcular subtotal = duracion × tarifa (misma fórmula que "Renta por Horas")
+      var horas  = parseFloat(d.duracion||0);
+      var tarifa = parseFloat(d.tarifa||0);
+      var sub    = parseFloat((horas * tarifa).toFixed(2));
+      var gst    = parseFloat((sub * 0.05).toFixed(3));
+      var pst    = parseFloat((sub * 0.07).toFixed(3));
+      var tot    = parseFloat((sub + gst + pst).toFixed(2));
+      tRentas += sub;
+      tGST    += gst;
+      tPST    += pst;
       nRentas++;
       if(d.fecha && d.fecha.startsWith(mesActual)) {
-        tMes += parseFloat(d.total||0); nMes++;
+        tMes += tot; nMes++;
       }
     });
 
@@ -2148,16 +2155,11 @@ function loadDashboard() {
       delete window[cbName];
       var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
       if(sheetsData && sheetsData.ok) {
+        // Solo gastos vienen de Sheets (las rentas se calculan de Firebase con la fórmula de la hoja)
         if(sheetsData.totalGastos > 0) {
           tGastos = parseFloat(sheetsData.totalGastos || 0);
           tITC    = parseFloat(sheetsData.totalITC    || 0);
           nGastos = parseInt(sheetsData.countGastos   || 0);
-        }
-        if(sheetsData.totalRentas > 0) {
-          tRentas = parseFloat(sheetsData.totalRentas    || 0);
-          tGST    = parseFloat(sheetsData.totalGSTrentas || 0);
-          tPST    = parseFloat(sheetsData.totalRSTrentas || 0);
-          nRentas = parseInt(sheetsData.countRentas      || 0);
         }
       }
       mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
