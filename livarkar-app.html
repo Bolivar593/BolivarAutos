@@ -2131,37 +2131,49 @@ function loadDashboard() {
       }
     });
 
-    // Paso 2: Leer gastos de Google Sheets via XHR (más confiable)
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', GAS_URL, true);
-    xhr.timeout = 10000;
-    xhr.onload = function() {
+    // Paso 2: Leer de Google Sheets via JSONP (evita CORS)
+    var cbName = '_sc_' + Date.now();
+    var cbTimeout = setTimeout(function() {
+      if(window[cbName]) {
+        delete window[cbName];
+        var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
+        var statusEl = document.getElementById('d-gastos-status');
+        if(statusEl) statusEl.style.display='block';
+        mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
+      }
+    }, 10000);
+
+    window[cbName] = function(sheetsData) {
+      clearTimeout(cbTimeout);
+      delete window[cbName];
       var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
-      try {
-        var sheetsData = JSON.parse(xhr.responseText);
-        if(sheetsData && sheetsData.ok) {
-          if(sheetsData.totalGastos > 0) {
-            tGastos = parseFloat(sheetsData.totalGastos || 0);
-            tITC    = parseFloat(sheetsData.totalITC    || 0);
-            nGastos = parseInt(sheetsData.countGastos   || 0);
-          }
-          if(sheetsData.totalRentas > 0) {
-            tRentas = parseFloat(sheetsData.totalRentas    || 0);
-            tGST    = parseFloat(sheetsData.totalGSTrentas || 0);
-            tPST    = parseFloat(sheetsData.totalRSTrentas || 0);
-            nRentas = parseInt(sheetsData.countRentas      || 0);
-          }
+      if(sheetsData && sheetsData.ok) {
+        if(sheetsData.totalGastos > 0) {
+          tGastos = parseFloat(sheetsData.totalGastos || 0);
+          tITC    = parseFloat(sheetsData.totalITC    || 0);
+          nGastos = parseInt(sheetsData.countGastos   || 0);
         }
-      } catch(e) { console.warn('Sheets parse error:', e.message); }
+        if(sheetsData.totalRentas > 0) {
+          tRentas = parseFloat(sheetsData.totalRentas    || 0);
+          tGST    = parseFloat(sheetsData.totalGSTrentas || 0);
+          tPST    = parseFloat(sheetsData.totalRSTrentas || 0);
+          nRentas = parseInt(sheetsData.countRentas      || 0);
+        }
+      }
       mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
     };
-    xhr.onerror = xhr.ontimeout = function() {
+
+    var sc = document.createElement('script');
+    sc.src = GAS_URL + '?callback=' + cbName + '&t=' + Date.now();
+    sc.onerror = function() {
+      clearTimeout(cbTimeout);
+      if(window[cbName]) delete window[cbName];
       var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
       var statusEl = document.getElementById('d-gastos-status');
       if(statusEl) statusEl.style.display='block';
       mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
     };
-    xhr.send();
+    document.head.appendChild(sc);
   })
   .catch(function(e) {
     document.getElementById('dash-loading').innerHTML = '⚠️ Error Firebase: '+e.message;
