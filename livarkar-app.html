@@ -9,7 +9,7 @@
 <link rel="apple-touch-icon" href="logo-icon.png">
 <title>LIVARKAR Admin</title>
 <style>
-/* ===== RESET & BASE ===== */
+/* ===== RENTA CSS ===== */
 
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:14px;min-height:100vh}
@@ -157,10 +157,741 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .past-success{background:#dcfce7;border:1.5px solid #86efac;border-radius:8px;padding:7px;font-size:13px;font-weight:700;color:#166534;text-align:center;display:none;margin-top:6px}
 
 
+/* ===== ADMIN CSS (scoped) ===== */
+
+    :root {
+      --blue: #2563eb;
+      --blue-dark: #1d4ed8;
+      --blue-light: #eff6ff;
+      --navy: #1e293b;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-400: #94a3b8;
+      --gray-600: #475569;
+      --gray-800: #1e293b;
+      --green: #10b981;
+      --red: #ef4444;
+      --orange: #f59e0b;
+      --white: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+#tab-autos body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    #loginScreen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e293b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+#tab-autos .login-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      backdrop-filter: blur(20px);
+      text-align: center;
+    }
+
+#tab-autos .login-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+#tab-autos .login-logo-box {
+      background: var(--blue);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .login-logo-box .b { font-size: 32px; font-weight: 900; color: white; line-height: 1; }
+    .login-logo-box .dot { width: 8px; height: 8px; background: white; border-radius: 50%; }
+    .login-logo-box .livar { font-size: 18px; font-weight: 800; color: white; }
+
+#tab-autos .login-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+#tab-autos .login-subtitle {
+      font-size: 22px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 32px;
+    }
+
+#tab-autos .login-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 16px;
+      color: white;
+      letter-spacing: 4px;
+      text-align: center;
+      margin-bottom: 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .login-input:focus { border-color: var(--blue); }
+    .login-input::placeholder { letter-spacing: 2px; color: rgba(255,255,255,0.3); font-size: 14px; }
+
+    .pw-wrapper { position: relative; width: 100%; }
+    .pw-eye { position: absolute; right: 14px; top: 50%; transform: translateY(-60%); background: none; border: none; cursor: pointer; font-size: 20px; color: rgba(255,255,255,0.45); padding: 4px; }
+    .pw-eye:hover { color: rgba(255,255,255,0.9); }
+
+#tab-autos .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--blue);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .login-btn:hover { background: var(--blue-dark); }
+    .login-btn:active { transform: scale(0.98); }
+
+#tab-autos .login-error {
+      color: #fca5a5;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ── LAYOUT ── */
+    #appScreen { display: none; }
+
+#tab-autos .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+#tab-autos .sidebar {
+      background: var(--navy);
+      padding: 24px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+#tab-autos .sidebar-logo {
+      padding: 0 20px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+#tab-autos .sidebar-logo-box {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(37,99,235,0.15);
+      border: 1px solid rgba(37,99,235,0.3);
+      border-radius: 10px;
+      padding: 8px 14px;
+      width: fit-content;
+    }
+
+    .sidebar-logo-box .b { font-size: 28px; font-weight: 900; color: white; line-height: 1; }
+    .sidebar-logo-box .dot { width: 7px; height: 7px; background: var(--blue); border-radius: 50%; margin: 0 4px; }
+    .sidebar-logo-box .livar { font-size: 16px; font-weight: 800; color: white; }
+
+#tab-autos .sidebar-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-top: 6px;
+      padding-left: 2px;
+    }
+
+#tab-autos .sidebar-nav {
+      padding: 20px 12px;
+      flex: 1;
+    }
+
+#tab-autos .nav-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 0 8px;
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+
+#tab-autos .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      color: rgba(255,255,255,0.55);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85); }
+    .nav-item.active { background: var(--blue); color: white; }
+
+    .nav-item .icon { font-size: 18px; width: 22px; text-align: center; }
+
+#tab-autos .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+#tab-autos .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.4);
+      font-size: 13px;
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .logout-btn:hover { color: rgba(255,255,255,0.8); }
+
+    /* ── MAIN CONTENT ── */
+#tab-autos .main {
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── PAGE HEADER ── */
+#tab-autos .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+    }
+
+#tab-autos .page-title {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+#tab-autos .page-subtitle {
+      font-size: 14px;
+      color: var(--gray-400);
+      margin-top: 2px;
+    }
+
+    /* ── BUTTONS ── */
+#tab-autos .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: var(--blue); color: white; }
+    .btn-primary:hover { background: var(--blue-dark); }
+    .btn-danger { background: #fef2f2; color: var(--red); }
+    .btn-danger:hover { background: #fee2e2; }
+    .btn-ghost { background: var(--gray-100); color: var(--gray-600); }
+    .btn-ghost:hover { background: var(--gray-200); }
+
+    /* ── STATS ── */
+#tab-autos .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+#tab-autos .stat-card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px 24px;
+      border: 1px solid var(--gray-200);
+    }
+
+#tab-autos .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gray-400);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+#tab-autos .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--gray-800);
+      line-height: 1;
+    }
+
+    .stat-value.blue { color: var(--blue); }
+    .stat-value.green { color: var(--green); }
+
+    /* ── VEHICLE GRID ── */
+#tab-autos .vehicle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+#tab-autos .vehicle-card {
+      background: white;
+      border-radius: 14px;
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+
+    .vehicle-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+#tab-autos .vehicle-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-400);
+      font-size: 40px;
+    }
+
+#tab-autos .vehicle-card-img img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .vehicle-card-body { padding: 16px; }
+
+#tab-autos .vehicle-card-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-800);
+      margin-bottom: 4px;
+    }
+
+#tab-autos .vehicle-card-price {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+#tab-autos .vehicle-card-meta {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+#tab-autos .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .badge.gray { background: var(--gray-100); color: var(--gray-600); }
+
+#tab-autos .vehicle-card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+#tab-autos .vehicle-card-actions .btn {
+      flex: 1;
+      justify-content: center;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    /* ── EMPTY STATE ── */
+#tab-autos .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray-400);
+    }
+
+    .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 18px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; margin-bottom: 24px; }
+
+    /* ── MODAL ── */
+#tab-autos .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+#tab-autos .modal {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+#tab-autos .modal-header {
+      padding: 24px 28px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+#tab-autos .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+#tab-autos .modal-close {
+      background: var(--gray-100);
+      border: none;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-600);
+    }
+
+    .modal-body { padding: 24px 28px 28px; }
+
+    /* ── FORM ── */
+    .form-group { margin-bottom: 18px; }
+
+#tab-autos .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-600);
+      margin-bottom: 6px;
+    }
+
+#tab-autos .form-input, #tab-autos .form-select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--gray-800);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus { border-color: var(--blue); }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* ── PHOTO UPLOAD ── */
+#tab-autos .photo-upload-area {
+      border: 2px dashed var(--gray-200);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .photo-upload-area:hover { border-color: var(--blue); background: var(--blue-light); }
+    .photo-upload-area.dragover { border-color: var(--blue); background: var(--blue-light); }
+
+#tab-autos .photo-upload-area input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .photo-upload-icon { font-size: 32px; margin-bottom: 8px; }
+
+#tab-autos .photo-upload-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-600);
+    }
+
+#tab-autos .photo-upload-hint {
+      font-size: 12px;
+      color: var(--gray-400);
+      margin-top: 4px;
+    }
+
+#tab-autos .photo-previews {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+#tab-autos .photo-preview {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+#tab-autos .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+#tab-autos .photo-preview-remove {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── PROGRESS ── */
+#tab-autos .upload-progress {
+      display: none;
+      margin-top: 12px;
+    }
+
+#tab-autos .progress-bar-container {
+      background: var(--gray-100);
+      border-radius: 999px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+#tab-autos .progress-bar {
+      height: 100%;
+      background: var(--blue);
+      border-radius: 999px;
+      transition: width 0.3s;
+      width: 0%;
+    }
+
+#tab-autos .progress-text {
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    /* ── TOAST ── */
+#tab-autos .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--gray-800);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 9999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s;
+      max-width: 300px;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #064e3b; border-left: 4px solid var(--green); }
+    .toast.error { background: #7f1d1d; border-left: 4px solid var(--red); }
+
+    /* ── LOADING ── */
+#tab-autos .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: var(--gray-400);
+      gap: 10px;
+    }
+
+#tab-autos .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--gray-200);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+#tab-autos .form-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    /* ── PHOTO GALLERY in card ── */
+#tab-autos .photo-count-badge {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0,0,0,0.65);
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .vehicle-img-wrapper { position: relative; }
+
+    /* ── MOBILE / iPHONE ── */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+
+#tab-autos .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        height: 100vh;
+        width: 240px;
+        z-index: 999;
+        transition: left 0.3s ease;
+      }
+      .sidebar.open { left: 0; }
+
+#tab-autos .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 998;
+      }
+      .sidebar-overlay.open { display: block; }
+
+#tab-autos .mobile-topbar {
+        display: flex !important;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: white;
+        border-bottom: 1px solid var(--gray-200);
+        padding: 14px 20px;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+#tab-autos .hamburger {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 4px;
+      }
+
+      .main { padding: 20px 16px; }
+
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+      .vehicle-grid { grid-template-columns: 1fr; }
+
+      .form-grid { grid-template-columns: 1fr; }
+
+      .btn { padding: 12px 18px; font-size: 15px; }
+
+      .vehicle-card-actions .btn { padding: 10px 8px; font-size: 13px; }
+
+      .modal { border-radius: 16px 16px 0 0; max-height: 95vh; }
+      .modal-overlay { align-items: flex-end; padding: 0; }
+
+      .photo-upload-area { padding: 24px 16px; }
+
+      input, select { font-size: 16px !important; } /* prevent iOS zoom */
+    }
+
+    .mobile-topbar { display: none; }
+
+  
+
 /* ===== BOTTOM NAV ===== */
 body { padding-bottom: 75px; }
 .bottom-nav {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
   background: #fff; border-top: 2px solid #dde6f5;
   display: flex; justify-content: space-around; align-items: center;
   padding: 8px 0 12px; box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
@@ -178,6 +909,7 @@ body { padding-bottom: 75px; }
 /* ===== TAB PAGES ===== */
 .tab-page { display: none; }
 .tab-page.active { display: block; }
+#tab-autos { padding-bottom: 0; }
 
 /* ===== GASTOS ===== */
 .gastos-wrap { max-width: 560px; margin: 0 auto; padding: 14px; }
@@ -188,7 +920,7 @@ body { padding-bottom: 75px; }
 .gcard .sec-label { font-size: 14px; font-weight: 800; color: #1e8449; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
 .gfg { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 .gfg label { font-size: 15px; color: #222; font-weight: 800; }
-.gfg input, .gfg select, .gfg textarea {
+.gfg input, .gfg select {
   font-size: 17px; font-weight: 600; padding: 11px 12px;
   border: 1.5px solid #dde6f5; border-radius: 10px; width: 100%;
   -webkit-appearance: none; color: #111; background: #fff;
@@ -212,114 +944,48 @@ body { padding-bottom: 75px; }
 .gasto-error { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 14px;
   padding: 14px; font-size: 15px; font-weight: 700; color: #92400e;
   display: none; margin-bottom: 12px; }
-.gastos-recientes { margin-top: 6px; }
 .gasto-item { background: #f8faff; border: 1.5px solid #dde6f5; border-radius: 12px;
   padding: 12px 14px; margin-bottom: 8px; }
 .gi-top { display: flex; justify-content: space-between; align-items: center; }
 .gi-cat { font-size: 15px; font-weight: 800; color: #1e3d8f; }
 .gi-monto { font-size: 18px; font-weight: 800; color: #1e8449; }
-.gi-desc { font-size: 13px; color: #666; font-weight: 600; margin-top: 3px; }
-.gi-fecha { font-size: 12px; color: #aaa; font-weight: 600; margin-top: 2px; }
+.gi-sub { font-size: 13px; color: #888; font-weight: 600; margin-top: 2px; }
+.gi-desc { font-size: 13px; color: #555; font-weight: 700; margin-top: 3px; }
 
 /* ===== DASHBOARD ===== */
 .dash-wrap { max-width: 560px; margin: 0 auto; padding: 14px; }
 .dash-header { background: #1a5276; color: #fff; padding: 1.3rem 1.5rem; border-radius: 16px; margin-bottom: 1.2rem; }
 .dash-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
-.dash-header p { font-size: 15px; opacity: 0.9; font-weight: 600; }
 .dash-main { background: linear-gradient(135deg, #1e8449, #27ae60); border-radius: 20px;
   padding: 24px; margin-bottom: 1rem; text-align: center; box-shadow: 0 4px 16px rgba(30,132,73,0.3); }
 .dash-main-label { font-size: 14px; font-weight: 800; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
 .dash-main-amount { font-size: 48px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 6px; }
 .dash-main-sub { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 600; }
 .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1rem; }
-.dash-card { background: #fff; border: 1.5px solid #dde6f5; border-radius: 16px; padding: 16px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.dash-card { background: #fff; border: 1.5px solid #dde6f5; border-radius: 16px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
 .dash-card-label { font-size: 12px; font-weight: 800; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
 .dash-card-amount { font-size: 24px; font-weight: 900; color: #1a5276; }
 .dash-card-sub { font-size: 12px; color: #aaa; font-weight: 600; margin-top: 3px; }
-.dash-card.danger .dash-card-amount { color: #dc2626; }
-.dash-card.warning .dash-card-amount { color: #d97706; }
 .dash-impuestos { background: #fff; border: 2px solid #fca5a5; border-radius: 16px; padding: 16px; margin-bottom: 1rem; }
 .dash-imp-title { font-size: 14px; font-weight: 800; color: #dc2626; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
 .dash-imp-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #fde8e8; }
-.dash-imp-row:last-child { border-bottom: none; padding-bottom: 0; }
+.dash-imp-row:last-child { border-bottom: none; }
 .dash-imp-label { font-size: 15px; font-weight: 700; color: #333; }
 .dash-imp-amount { font-size: 18px; font-weight: 900; color: #dc2626; }
 .dash-imp-total { display: flex; justify-content: space-between; align-items: center;
   background: #fee2e2; border-radius: 10px; padding: 12px 14px; margin-top: 8px; }
 .dash-refresh { width: 100%; padding: 14px; border-radius: 12px; font-size: 16px; font-weight: 800;
-  background: #eef2f8; color: #2a52a0; border: 1.5px solid #c5d5ea; cursor: pointer; margin-bottom: 10px;
-  -webkit-tap-highlight-color: transparent; }
-.dash-loading { text-align: center; padding: 40px 0; color: #888; font-size: 16px; font-weight: 700; }
-.capital-edit-row { display: flex; align-items: center; gap: 8px; background: #f8f0ff; border: 1.5px solid #d8b4fe; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
+  background: #eef2f8; color: #2a52a0; border: 1.5px solid #c5d5ea; cursor: pointer; margin-bottom: 10px; }
+.capital-edit-row { display: flex; align-items: center; gap: 8px; background: #f8f0ff;
+  border: 1.5px solid #d8b4fe; border-radius: 12px; padding: 12px 14px; margin-bottom: 12px; }
 .capital-edit-row label { font-size: 14px; font-weight: 800; color: #7c3aed; white-space: nowrap; }
 .capital-edit-row input { font-size: 18px; font-weight: 800; color: #7c3aed; border: none; background: transparent; width: 120px; text-align: right; }
-
-/* ===== ADMIN AUTOS ===== */
-.autos-wrap { max-width: 560px; margin: 0 auto; padding: 14px; }
-.autos-header { background: #2a52a0; color: #fff; padding: 1.3rem 1.5rem; border-radius: 16px; margin-bottom: 1.2rem; }
-.autos-header h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; }
-.autos-header p { font-size: 15px; opacity: 0.9; font-weight: 600; }
-.autos-login { background: #fff; border: 1.5px solid #dde6f5; border-radius: 16px; padding: 1.5rem; margin-bottom: 1rem; }
-.autos-pw-row { display: flex; gap: 8px; }
-.autos-pw-row input { flex: 1; font-size: 17px; padding: 12px; border: 1.5px solid #dde6f5; border-radius: 10px; }
-.autos-pw-row button { background: #2a52a0; color: #fff; border: none; border-radius: 10px; padding: 12px 18px; font-size: 15px; font-weight: 800; cursor: pointer; }
-.autos-content { display: none; }
-.btn-add-auto { width: 100%; padding: 16px; border-radius: 14px; font-size: 18px; font-weight: 800;
-  background: #2a52a0; color: #fff; border: none; margin-bottom: 1rem; cursor: pointer;
-  -webkit-tap-highlight-color: transparent; }
-.vcard { background: #fff; border: 1.5px solid #dde6f5; border-radius: 16px; overflow: hidden;
-  margin-bottom: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.vcard-img { width: 100%; height: 180px; object-fit: cover; background: #f0f4f9;
-  display: flex; align-items: center; justify-content: center; font-size: 60px; }
-.vcard-img img { width: 100%; height: 180px; object-fit: cover; }
-.vcard-body { padding: 14px; }
-.vcard-name { font-size: 18px; font-weight: 800; color: #111; margin-bottom: 4px; }
-.vcard-price { font-size: 24px; font-weight: 900; color: #2a52a0; margin-bottom: 8px; }
-.vcard-meta { display: flex; gap: 8px; margin-bottom: 12px; }
-.vbadge { background: #eef2f8; color: #2a52a0; border-radius: 6px; padding: 4px 10px; font-size: 13px; font-weight: 800; }
-.vcard-btns { display: flex; gap: 8px; }
-.vbtn { flex: 1; padding: 12px 8px; border-radius: 10px; font-size: 15px; font-weight: 800;
-  cursor: pointer; border: none; -webkit-tap-highlight-color: transparent; }
-.vbtn-edit { background: #eef2f8; color: #2a52a0; }
-.vbtn-del { background: #fee2e2; color: #dc2626; }
-/* Vehicle Modal */
-.vmodal { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.5); overflow-y: auto; padding: 20px 14px; }
-.vmodal.active { display: block; }
-.vmodal-content { background: #fff; border-radius: 20px; max-width: 520px; margin: 0 auto; overflow: hidden; }
-.vmodal-header { background: #2a52a0; color: #fff; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; }
-.vmodal-header h2 { font-size: 20px; font-weight: 800; }
-.vmodal-close { background: rgba(255,255,255,0.2); border: none; color: #fff; border-radius: 8px; padding: 8px 12px; font-size: 16px; font-weight: 800; cursor: pointer; }
-.vmodal-body { padding: 20px; }
-.vfg { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-.vfg label { font-size: 15px; font-weight: 800; color: #333; }
-.vfg input, .vfg select { font-size: 17px; padding: 12px; border: 1.5px solid #dde6f5; border-radius: 10px; width: 100%; -webkit-appearance: none; color: #111; }
-.vfg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.photo-area { border: 2px dashed #c5d5ea; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 12px; }
-.photo-area input[type=file] { display: none; }
-.photo-area p { font-size: 15px; font-weight: 700; color: #5b80c4; margin-top: 8px; }
-.photo-previews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-.photo-thumb { position: relative; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; }
-.photo-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.photo-thumb-del { position: absolute; top: 4px; right: 4px; background: #dc2626; color: #fff;
-  border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 14px; font-weight: 800;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.vbtn-save { width: 100%; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: 800;
-  background: #2a52a0; color: #fff; border: none; cursor: pointer; margin-top: 8px; }
-.upload-prog { display: none; background: #eef2f8; border-radius: 10px; padding: 12px; margin-bottom: 12px; }
-.upload-bar { height: 8px; background: #dde6f5; border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
-.upload-bar-fill { height: 100%; background: #2a52a0; border-radius: 4px; transition: width 0.3s; }
-.upload-prog-text { font-size: 13px; font-weight: 700; color: #2a52a0; }
-.toast-msg { display: none; position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-  background: #1e3d8f; color: #fff; padding: 12px 24px; border-radius: 12px; font-size: 15px;
-  font-weight: 800; z-index: 3000; box-shadow: 0 4px 12px rgba(0,0,0,0.2); white-space: nowrap; }
-.autos-empty { text-align: center; padding: 40px 20px; color: #888; }
-.autos-empty-icon { font-size: 60px; margin-bottom: 12px; }
+.dash-loading { text-align: center; padding: 40px 0; color: #888; font-size: 16px; font-weight: 700; }
 </style>
 </head>
 <body>
 
-<!-- ===== TAB: RENTAS ===== -->
+<!-- TAB: RENTAS -->
 <div class="tab-page active" id="tab-rentas">
 <div class="wrap">
   <div class="header">
@@ -493,20 +1159,16 @@ body { padding-bottom: 75px; }
 </div>
 </div>
 
-<!-- ===== TAB: GASTOS ===== -->
+<!-- TAB: GASTOS -->
 <div class="tab-page" id="tab-gastos">
 <div class="gastos-wrap">
   <div class="gastos-header">
     <h1>💰 Registrar Gasto</h1>
     <p>LIVARKAR Services Management Ltd.</p>
   </div>
-
   <div class="gcard">
     <div class="sec-label">Datos del gasto</div>
-    <div class="gfg">
-      <label>Fecha</label>
-      <input type="date" id="g-fecha">
-    </div>
+    <div class="gfg"><label>Fecha</label><input type="date" id="g-fecha"></div>
     <div class="gfg">
       <label>Categoría</label>
       <select id="g-categoria">
@@ -523,22 +1185,12 @@ body { padding-bottom: 75px; }
         <option value="Otros">Otros</option>
       </select>
     </div>
-    <div class="gfg">
-      <label>Descripción</label>
-      <input type="text" id="g-descripcion" placeholder="Ej: Renta Mayo local dealer">
-    </div>
-    <div class="gfg">
-      <label>Proveedor</label>
-      <input type="text" id="g-proveedor" placeholder="Ej: Wilkes AutoCenter">
-    </div>
+    <div class="gfg"><label>Descripción</label><input type="text" id="g-descripcion" placeholder="Ej: Renta Mayo local dealer"></div>
+    <div class="gfg"><label>Proveedor</label><input type="text" id="g-proveedor" placeholder="Ej: Wilkes AutoCenter"></div>
   </div>
-
   <div class="gcard">
     <div class="sec-label">Monto e impuestos</div>
-    <div class="gfg">
-      <label>Monto Neto (sin impuestos) $CAD</label>
-      <input type="number" id="g-monto" placeholder="0.00" min="0" step="0.01">
-    </div>
+    <div class="gfg"><label>Monto Neto $CAD (SIN impuestos)</label><input type="number" id="g-monto" placeholder="0.00" min="0" step="0.01"></div>
     <div class="gtoggle-row">
       <button class="gtoggle on" id="g-gst-btn" onclick="toggleGasto('gst')">
         <span>GST 5%</span><span id="g-gst-val">✅ Aplica</span>
@@ -546,6 +1198,13 @@ body { padding-bottom: 75px; }
       <button class="gtoggle" id="g-rst-btn" onclick="toggleGasto('rst')">
         <span>RST 7%</span><span id="g-rst-val">❌ No aplica</span>
       </button>
+    </div>
+    <div id="g-preview" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px;margin-bottom:12px;display:none">
+      <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:6px">RESUMEN DEL GASTO:</div>
+      <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:#333;font-weight:700">Monto neto:</span><span id="g-prev-monto" style="font-weight:800">$0.00</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:#333;font-weight:700">GST 5%:</span><span id="g-prev-gst" style="font-weight:800">$0.00</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:#333;font-weight:700">RST 7%:</span><span id="g-prev-rst" style="font-weight:800">$0.00</span></div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid #86efac;margin-top:6px;padding-top:6px"><span style="font-size:15px;font-weight:900;color:#1e8449">TOTAL A PAGAR:</span><span id="g-prev-total" style="font-size:18px;font-weight:900;color:#1e8449">$0.00</span></div>
     </div>
     <div class="gfg">
       <label>Método de pago</label>
@@ -558,85 +1217,47 @@ body { padding-bottom: 75px; }
         <option value="Autopac">Autopac</option>
       </select>
     </div>
-    <div class="gfg">
-      <label># Recibo (opcional)</label>
-      <input type="text" id="g-recibo" placeholder="Ej: INV-003">
-    </div>
+    <div class="gfg"><label># Recibo (opcional)</label><input type="text" id="g-recibo" placeholder="Ej: INV-003"></div>
   </div>
-
-  <div id="g-success" class="gasto-success">✅ Gasto guardado correctamente</div>
+  <div id="g-success" class="gasto-success">✅ Gasto guardado correctamente en Firebase y Google Sheets</div>
   <div id="g-error" class="gasto-error"></div>
-
   <button class="btn-guardar-gasto" onclick="guardarGasto()">💾 GUARDAR GASTO</button>
-
-  <div class="gcard gastos-recientes">
-    <div class="sec-label">Gastos recientes</div>
-    <div id="gastos-lista">
-      <div style="text-align:center;color:#aaa;padding:16px;font-weight:700">Cargando...</div>
-    </div>
+  <div class="gcard">
+    <div class="sec-label">Últimos gastos registrados</div>
+    <div id="gastos-lista"><div style="text-align:center;color:#aaa;padding:16px;font-weight:700">Cargando...</div></div>
   </div>
 </div>
 </div>
 
-<!-- ===== TAB: DASHBOARD ===== -->
+<!-- TAB: DASHBOARD -->
 <div class="tab-page" id="tab-dashboard">
 <div class="dash-wrap">
-  <div class="dash-header">
-    <h1>📊 Saldo en Tiempo Real</h1>
-    <p>LIVARKAR Services Management Ltd.</p>
-  </div>
-
+  <div class="dash-header"><h1>📊 Saldo en Tiempo Real</h1><p>LIVARKAR Services Management Ltd.</p></div>
   <div class="capital-edit-row">
     <label>💜 Capital préstamo:</label>
-    <input type="number" id="dash-capital" value="3898.47" step="0.01" onchange="calcDash()">
+    <input type="number" id="dash-capital" value="3898.47" step="0.01" onchange="loadDashboard()">
   </div>
-
   <div id="dash-loading" class="dash-loading">⏳ Cargando datos...</div>
-
   <div id="dash-content" style="display:none">
     <div class="dash-main">
       <div class="dash-main-label">💵 Disponible Real</div>
       <div class="dash-main-amount" id="d-disponible">$0.00</div>
-      <div class="dash-main-sub">Saldo calculado − Capital − Impuestos</div>
+      <div class="dash-main-sub">Saldo − Capital − Impuestos</div>
     </div>
-
     <div class="dash-grid">
-      <div class="dash-card">
-        <div class="dash-card-label">🏦 Saldo Calculado</div>
-        <div class="dash-card-amount" id="d-saldo">$0.00</div>
-        <div class="dash-card-sub">Capital + Rentas − Gastos</div>
-      </div>
-      <div class="dash-card">
-        <div class="dash-card-label">🚗 Rentas cobradas</div>
-        <div class="dash-card-amount" id="d-rentas">$0.00</div>
-        <div class="dash-card-sub" id="d-rentas-count">0 citas</div>
-      </div>
-      <div class="dash-card">
-        <div class="dash-card-label">📤 Gastos pagados</div>
-        <div class="dash-card-amount warning" id="d-gastos">$0.00</div>
-        <div class="dash-card-sub" id="d-gastos-count">0 gastos</div>
-      </div>
-      <div class="dash-card">
-        <div class="dash-card-label">📅 Rentas este mes</div>
-        <div class="dash-card-amount" id="d-mes-total">$0.00</div>
-        <div class="dash-card-sub" id="d-mes-count">0 citas</div>
-      </div>
+      <div class="dash-card"><div class="dash-card-label">🏦 Saldo Calculado</div><div class="dash-card-amount" id="d-saldo">$0.00</div><div class="dash-card-sub">Capital + Rentas − Gastos</div></div>
+      <div class="dash-card"><div class="dash-card-label">🚗 Total Rentas</div><div class="dash-card-amount" id="d-rentas">$0.00</div><div class="dash-card-sub" id="d-rentas-count">0 citas</div></div>
+      <div class="dash-card"><div class="dash-card-label">📤 Total Gastos</div><div class="dash-card-amount" style="color:#d97706" id="d-gastos">$0.00</div><div class="dash-card-sub" id="d-gastos-count">0 registros</div></div>
+      <div class="dash-card"><div class="dash-card-label">📅 Este mes</div><div class="dash-card-amount" id="d-mes">$0.00</div><div class="dash-card-sub" id="d-mes-count">0 citas</div></div>
     </div>
-
     <div class="dash-impuestos">
       <div class="dash-imp-title">⚠️ Impuestos a Apartar — No gastar</div>
       <div class="dash-imp-row">
-        <div>
-          <div class="dash-imp-label">GST Neto → CRA</div>
-          <div style="font-size:12px;color:#888;font-weight:600">Vence 31 Marzo 2027</div>
-        </div>
+        <div><div class="dash-imp-label">GST Neto → CRA</div><div style="font-size:12px;color:#888">Vence 31 Marzo 2027</div></div>
         <div class="dash-imp-amount" id="d-gst">$0.00</div>
       </div>
       <div class="dash-imp-row">
-        <div>
-          <div class="dash-imp-label">RST → Manitoba</div>
-          <div style="font-size:12px;color:#888;font-weight:600">Vence 31 Julio 2026</div>
-        </div>
+        <div><div class="dash-imp-label">RST → Manitoba</div><div style="font-size:12px;color:#888">Vence 31 Julio 2026</div></div>
         <div class="dash-imp-amount" id="d-rst">$0.00</div>
       </div>
       <div class="dash-imp-total">
@@ -645,115 +1266,219 @@ body { padding-bottom: 75px; }
       </div>
     </div>
   </div>
-
   <button class="dash-refresh" onclick="loadDashboard()">🔄 Actualizar datos</button>
 </div>
 </div>
 
-<!-- ===== TAB: AUTOS ===== -->
+<!-- TAB: AUTOS (admin.html exact) -->
 <div class="tab-page" id="tab-autos">
-<div class="autos-wrap">
-  <div class="autos-header">
-    <h1>🚗 Inventario Autos</h1>
-    <p>BolivarAutos — bolivarautos.ca</p>
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar" id="mobileTopbar">
+  <button class="hamburger" onclick="admToggleSidebar()">☰</button>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-size:11px;font-weight:700;color:#2563eb;letter-spacing:1.5px;text-transform:uppercase;">Admin</span>
+    <div style="background:#1e293b;border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:4px;">
+      <span style="font-size:20px;font-weight:900;color:white;line-height:1;">B</span>
+      <span style="width:7px;height:7px;background:#2563eb;border-radius:50%;"></span>
+      <span style="font-size:12px;font-weight:800;color:white;">LIVAR</span>
+    </div>
   </div>
+  <div style="width:36px;"></div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="admToggleSidebar()"></div>
 
-  <div id="autos-login-area">
-    <div class="gcard">
-      <div class="sec-label">Acceso Admin</div>
-      <div class="autos-pw-row">
-        <input type="password" id="autos-pw" placeholder="Contraseña" onkeydown="if(event.key==='Enter')autosLogin()">
-        <button onclick="autosLogin()">Entrar</button>
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-box">
+        <span class="b">B</span>
+        <span class="dot"></span>
+        <span class="livar">LIVAR</span>
       </div>
-      <div id="autos-login-err" style="display:none;color:#dc2626;font-size:14px;font-weight:700;margin-top:8px">Contraseña incorrecta</div>
     </div>
-  </div>
-
-  <div class="autos-content" id="autos-content">
-    <button class="btn-add-auto" onclick="openAutoModal()">➕ Agregar vehículo</button>
-    <div id="autos-lista">
-      <div class="autos-empty"><div class="autos-empty-icon">🚗</div><div>Cargando...</div></div>
+    <div class="login-title">Panel de Administración</div>
+    <div class="login-subtitle">BolivarAutos</div>
+    <div class="pw-wrapper">
+      <input type="password" id="passwordInput" class="login-input" placeholder="Contraseña"
+        onkeydown="if(event.key==='Enter') admLogin()"
+        onfocus="setTimeout(()=>this.scrollIntoView({behavior:'smooth',block:'center'}),300)">
+      <button class="pw-eye" type="button" onclick="admTogglePwEye()" id="eyeBtn">👁</button>
     </div>
-    <div style="text-align:center;margin-top:12px">
-      <a href="https://bolivarautos.ca" target="_blank" style="color:#2a52a0;font-size:15px;font-weight:800;text-decoration:none">Ver sitio web →</a>
-    </div>
+    <button class="login-btn" onclick="admLogin()">Ingresar</button>
+    <div class="login-error" id="loginError">Contraseña incorrecta. Intenta de nuevo.</div>
   </div>
 </div>
 
-<!-- Vehicle Modal -->
-<div class="vmodal" id="auto-modal">
-  <div class="vmodal-content">
-    <div class="vmodal-header">
-      <h2 id="auto-modal-title">Agregar vehículo</h2>
-      <button class="vmodal-close" onclick="closeAutoModal()">✕</button>
+<!-- APP SCREEN -->
+<div id="appScreen">
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-box">
+          <span class="b">B</span>
+          <span class="dot"></span>
+          <span class="livar">LIVAR</span>
+        </div>
+        <div class="sidebar-label">Admin Panel</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item active" onclick="admShowPage('dashboard')">
+          <span class="icon">📊</span> Dashboard
+        </div>
+        <div class="nav-section-title">BolivarAutos</div>
+        <div class="nav-item" onclick="admShowPage('vehiculos')">
+          <span class="icon">🚗</span> Vehículos
+        </div>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="admLogout()">
+          <span>🚪</span> Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Dashboard</div>
+            <div class="page-subtitle">Bienvenido, Bolivar</div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Vehículos en venta</div>
+            <div class="stat-value blue" id="statVehiculos">—</div>
+          </div>
+<div class="stat-card">
+            <div class="stat-label">Fotos subidas</div>
+            <div class="stat-value" id="statFotos">—</div>
+          </div>
+        </div>
+        <div style="background:white; border-radius:14px; border:1px solid var(--gray-200); padding:24px;">
+          <div style="font-weight:700; font-size:16px; margin-bottom:16px;">Accesos rápidos</div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="admShowPage('vehiculos'); admOpenAddModal()">➕ Agregar vehículo</button>
+            <a href="https://bolivarautos.ca" target="_blank" class="btn btn-ghost">🌐 Ver sitio web</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VEHÍCULOS -->
+      <div class="page" id="page-vehiculos">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Vehículos</div>
+            <div class="page-subtitle">Gestiona tu inventario de venta</div>
+          </div>
+          <button class="btn btn-primary" onclick="admOpenAddModal()">➕ Agregar vehículo</button>
+        </div>
+        <div id="vehiculosList">
+          <div class="loading"><div class="spinner"></div> Cargando vehículos...</div>
+        </div>
+      </div>
+
+
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL AGREGAR/EDITAR VEHÍCULO -->
+<div class="modal-overlay" id="vehiculoModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Agregar vehículo</div>
+      <button class="modal-close" onclick="admCloseModal()">✕</button>
     </div>
-    <div class="vmodal-body">
-      <input type="hidden" id="auto-editing-id">
-      <div class="vfg">
-        <label>Nombre del vehículo</label>
-        <input type="text" id="a-nombre" placeholder="Ej: Honda Civic 2019">
+    <div class="modal-body">
+      <input type="hidden" id="editingId">
+
+      <div class="form-group">
+        <label class="form-label">Nombre del vehículo</label>
+        <input type="text" id="vNombre" class="form-input" placeholder="Ej: Honda Civic 2019">
       </div>
-      <div class="vfg-grid">
-        <div class="vfg">
-          <label>Precio ($CAD)</label>
-          <input type="number" id="a-precio" placeholder="18500">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Precio (CAD)</label>
+          <input type="number" id="vPrecio" class="form-input" placeholder="18500">
         </div>
-        <div class="vfg">
-          <label>Kilometraje</label>
-          <input type="number" id="a-km" placeholder="65000">
+        <div class="form-group">
+          <label class="form-label">Kilometraje</label>
+          <input type="number" id="vKm" class="form-input" placeholder="65000">
         </div>
       </div>
-      <div class="vfg">
-        <label>Categoría</label>
-        <select id="a-categoria">
+
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select id="vCategoria" class="form-select">
           <option value="sedan">Sedán</option>
           <option value="suv">SUV</option>
           <option value="likenew">Like New</option>
         </select>
       </div>
-      <div class="vfg">
-        <label>Link Carfax (opcional)</label>
-        <input type="url" id="a-carfax" placeholder="https://carfax.ca/...">
+
+      <div class="form-group">
+        <label class="form-label">Link Carfax (opcional)</label>
+        <input type="url" id="vCarfax" class="form-input" placeholder="https://www.carfax.ca/...">
       </div>
-      <div class="vfg">
-        <label>Fotos</label>
-        <div class="photo-area" onclick="document.getElementById('a-fotos').click()">
-          <div style="font-size:40px">📷</div>
-          <p>Toca para seleccionar fotos</p>
-          <input type="file" id="a-fotos" accept="image/*" multiple onchange="handleAutoPhotos(event)">
+
+      <div class="form-group">
+        <label class="form-label">Fotos del vehículo</label>
+        <div class="photo-upload-area" id="uploadArea">
+          <input type="file" id="photoInput" accept="image/*" multiple onchange="admHandlePhotoSelect(event)">
+          <div class="photo-upload-icon">📷</div>
+          <div class="photo-upload-text">Selecciona o arrastra las fotos aquí</div>
+          <div class="photo-upload-hint">Puedes seleccionar varias fotos a la vez</div>
         </div>
-        <div class="photo-previews-grid" id="a-previews"></div>
-        <div class="upload-prog" id="a-upload-prog">
-          <div class="upload-bar"><div class="upload-bar-fill" id="a-upload-bar" style="width:0%"></div></div>
-          <div class="upload-prog-text" id="a-upload-text">Subiendo...</div>
+        <div class="photo-previews" id="photoPreviews"></div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="progress-text" id="progressText">Subiendo fotos...</div>
         </div>
       </div>
-      <button class="vbtn-save" onclick="saveAuto()">💾 Guardar vehículo</button>
+
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="admCloseModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="admSaveVehiculo()">💾 Guardar</button>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- TOAST -->
+<div class="toast" id="adm-toast"></div>
+
+<!-- SORTABLE (reordenar fotos) -->
+<!-- ADM TOAST -->
+<div class="toast" id="adm-toast"></div>
 </div>
 
-<!-- Toast -->
-<div class="toast-msg" id="toast-msg"></div>
-
-<!-- ===== BOTTOM NAV ===== -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <button class="bnav-btn active" id="bnav-rentas" onclick="showTab('rentas')">
-    <span class="bnav-icon">🗓</span>
-    <span class="bnav-label">Rentas</span>
+    <span class="bnav-icon">🗓</span><span class="bnav-label">Rentas</span>
   </button>
   <button class="bnav-btn" id="bnav-gastos" onclick="showTab('gastos')">
-    <span class="bnav-icon">💰</span>
-    <span class="bnav-label">Gastos</span>
+    <span class="bnav-icon">💰</span><span class="bnav-label">Gastos</span>
   </button>
   <button class="bnav-btn" id="bnav-dashboard" onclick="showTab('dashboard')">
-    <span class="bnav-icon">📊</span>
-    <span class="bnav-label">Saldo</span>
+    <span class="bnav-icon">📊</span><span class="bnav-label">Saldo</span>
   </button>
   <button class="bnav-btn" id="bnav-autos" onclick="showTab('autos')">
-    <span class="bnav-icon">🚗</span>
-    <span class="bnav-label">Autos</span>
+    <span class="bnav-icon">🚗</span><span class="bnav-label">Autos</span>
   </button>
 </nav>
 
@@ -766,11 +1491,10 @@ function showTab(name) {
   document.getElementById('bnav-'+name).classList.add('active');
   window.scrollTo(0,0);
   if(name==='dashboard') loadDashboard();
-  if(name==='autos' && autosUnlocked) loadAutos();
   if(name==='gastos') { setGastoFecha(); loadGastosRecientes(); }
 }
 
-// ===== RENTAS JS (from renta.html) =====
+// ===== RENTAS JS =====
 var ZONES=[
   {id:'bison',  en:'Bison',    es:'Bison',    addr:'15 Barnes St'},
   {id:'gateway',en:'Gateway',  es:'Gateway',  addr:'40 Lexington Park'},
@@ -821,7 +1545,7 @@ function loadBookedSlots(dateStr){
 }
 
 // ── GOOGLE SHEETS ─────────────────────────────────────────────
-var GAS_URL = 'https://script.google.com/macros/s/AKfycbz29DGXn4UlPRYt_cgxmjeSAK419yjO1lzQ1VDBH6JBsrjkSqrql8rLa1Goyl7v-YfK/exec';
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbz29DGXn4UlPRYt_cgxmjeSAK419yjO1lzQ1VDBH6JBsrjkSqrql8rLa1Goyl7v-YfK/exec';  // ← PEGA TU URL AQUÍ
 // ─────────────────────────────────────────────────────────────
 
 function saveToGoogleSheets(fecha, cliente, horas, tarifa){
@@ -1227,26 +1951,45 @@ renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgre
 
 // ===== GASTOS =====
 var gastoGST = true, gastoRST = false;
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbz29DGXn4UlPRYt_cgxmjeSAK419yjO1lzQ1VDBH6JBsrjkSqrql8rLa1Goyl7v-YfK/exec';
 
 function setGastoFecha() {
-  var today = new Date();
-  var ds = today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
-  if(!document.getElementById('g-fecha').value) document.getElementById('g-fecha').value = ds;
+  var d = new Date();
+  var s = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  if(!document.getElementById('g-fecha').value) document.getElementById('g-fecha').value = s;
 }
 
 function toggleGasto(tipo) {
   if(tipo==='gst') {
     gastoGST = !gastoGST;
-    var btn = document.getElementById('g-gst-btn');
-    btn.className = 'gtoggle' + (gastoGST?' on':'');
+    document.getElementById('g-gst-btn').className = 'gtoggle'+(gastoGST?' on':'');
     document.getElementById('g-gst-val').textContent = gastoGST ? '✅ Aplica' : '❌ No aplica';
   } else {
     gastoRST = !gastoRST;
-    var btn = document.getElementById('g-rst-btn');
-    btn.className = 'gtoggle' + (gastoRST?' on':'');
+    document.getElementById('g-rst-btn').className = 'gtoggle'+(gastoRST?' on':'');
     document.getElementById('g-rst-val').textContent = gastoRST ? '✅ Aplica' : '❌ No aplica';
   }
+  updateGastoPreview();
 }
+
+function updateGastoPreview() {
+  var monto = parseFloat(document.getElementById('g-monto').value) || 0;
+  var prev = document.getElementById('g-preview');
+  if(monto <= 0) { prev.style.display='none'; return; }
+  var gstAmt = gastoGST ? parseFloat((monto*0.05).toFixed(2)) : 0;
+  var rstAmt = gastoRST ? parseFloat((monto*0.07).toFixed(2)) : 0;
+  var totalAmt = parseFloat((monto+gstAmt+rstAmt).toFixed(2));
+  prev.style.display='block';
+  document.getElementById('g-prev-monto').textContent = '$'+monto.toFixed(2);
+  document.getElementById('g-prev-gst').textContent = '$'+gstAmt.toFixed(2);
+  document.getElementById('g-prev-rst').textContent = '$'+rstAmt.toFixed(2);
+  document.getElementById('g-prev-total').textContent = '$'+totalAmt.toFixed(2);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var montoInput = document.getElementById('g-monto');
+  if(montoInput) montoInput.addEventListener('input', updateGastoPreview);
+});
 
 function guardarGasto() {
   var fecha = document.getElementById('g-fecha').value;
@@ -1256,360 +1999,519 @@ function guardarGasto() {
   var monto = parseFloat(document.getElementById('g-monto').value);
   var metodo = document.getElementById('g-metodo').value;
   var recibo = document.getElementById('g-recibo').value.trim();
-
   var errEl = document.getElementById('g-error');
   var sucEl = document.getElementById('g-success');
   errEl.style.display='none'; sucEl.style.display='none';
-
   if(!fecha || !cat || isNaN(monto) || monto <= 0) {
     errEl.textContent = '⚠️ Completa: fecha, categoría y monto.';
-    errEl.style.display = 'block';
-    return;
+    errEl.style.display = 'block'; return;
   }
-
-  var gstAmt = gastoGST ? parseFloat((monto * 0.05).toFixed(2)) : 0;
-  var rstAmt = gastoRST ? parseFloat((monto * 0.07).toFixed(2)) : 0;
-  var totalAmt = parseFloat((monto + gstAmt + rstAmt).toFixed(2));
-
+  var gstAmt = gastoGST ? parseFloat((monto*0.05).toFixed(2)) : 0;
+  var rstAmt = gastoRST ? parseFloat((monto*0.07).toFixed(2)) : 0;
+  var totalAmt = parseFloat((monto+gstAmt+rstAmt).toFixed(2));
   var gasto = {
-    fecha: fecha, categoria: cat, descripcion: desc || cat,
-    proveedor: prov || '-', monto: monto, gst_aplica: gastoGST,
-    rst_aplica: gastoRST, gst_amt: gstAmt, rst_amt: rstAmt,
-    total: totalAmt, metodo_pago: metodo, recibo: recibo,
-    createdAt: new Date().toISOString()
+    fecha:fecha, categoria:cat, descripcion:desc||cat, proveedor:prov||'-',
+    monto:monto, gst_aplica:gastoGST, rst_aplica:gastoRST,
+    gst_amt:gstAmt, rst_amt:rstAmt, total:totalAmt,
+    metodo_pago:metodo, recibo:recibo, createdAt:new Date().toISOString()
   };
-
-  // Save to Firebase
   if(db) {
-    db.collection('GASTOS_EMPRESA').add(gasto)
-    .then(function() {
-      // Also send to Google Sheets
+    db.collection('GASTOS_EMPRESA').add(gasto).then(function() {
       enviarGastoSheets(gasto);
-      sucEl.style.display = 'block';
-      setTimeout(function(){ sucEl.style.display='none'; }, 3000);
-      // Reset form
-      document.getElementById('g-monto').value = '';
-      document.getElementById('g-descripcion').value = '';
-      document.getElementById('g-proveedor').value = '';
-      document.getElementById('g-recibo').value = '';
+      sucEl.style.display='block';
+      setTimeout(function(){ sucEl.style.display='none'; }, 4000);
+      document.getElementById('g-monto').value='';
+      document.getElementById('g-descripcion').value='';
+      document.getElementById('g-proveedor').value='';
+      document.getElementById('g-recibo').value='';
+      document.getElementById('g-preview').style.display='none';
       loadGastosRecientes();
-    })
-    .catch(function(e) {
-      errEl.textContent = 'Error Firebase: ' + e.message;
-      errEl.style.display = 'block';
-    });
+    }).catch(function(e){ errEl.textContent='Error: '+e.message; errEl.style.display='block'; });
   } else {
-    // Fallback: just send to Sheets
     enviarGastoSheets(gasto);
-    sucEl.style.display = 'block';
-    setTimeout(function(){ sucEl.style.display='none'; }, 3000);
+    sucEl.style.display='block';
+    setTimeout(function(){ sucEl.style.display='none'; },4000);
   }
 }
 
 function enviarGastoSheets(g) {
   if(!GAS_URL) return;
-  fetch(GAS_URL, {
-    method: 'POST', mode: 'no-cors',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      accion: 'gasto',
-      fecha: g.fecha, categoria: g.categoria, descripcion: g.descripcion,
-      proveedor: g.proveedor, monto: g.monto,
-      gst_aplica: g.gst_aplica ? 'S' : 'N',
-      rst_aplica: g.rst_aplica ? 'S' : 'N',
-      metodo_pago: g.metodo_pago, recibo: g.recibo
-    })
-  }).catch(function(e){ console.warn('Sheets gasto error:', e); });
+  fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({accion:'gasto',fecha:g.fecha,categoria:g.categoria,
+      descripcion:g.descripcion,proveedor:g.proveedor,monto:g.monto,
+      gst_aplica:g.gst_aplica?'S':'N',rst_aplica:g.rst_aplica?'S':'N',
+      metodo_pago:g.metodo_pago,recibo:g.recibo})
+  }).catch(function(e){console.warn('Sheets error:',e);});
 }
 
 function loadGastosRecientes() {
   var lista = document.getElementById('gastos-lista');
-  if(!db){ lista.innerHTML='<div style="text-align:center;color:#aaa;padding:16px">Firebase no conectado</div>'; return; }
+  if(!db){lista.innerHTML='<div style="text-align:center;color:#aaa;padding:16px">Firebase no conectado</div>';return;}
   db.collection('GASTOS_EMPRESA').orderBy('fecha','desc').limit(10).get()
-  .then(function(snap) {
-    if(snap.empty){ lista.innerHTML='<div style="text-align:center;color:#aaa;padding:16px;font-weight:700">No hay gastos registrados aún</div>'; return; }
-    var html = '';
-    snap.forEach(function(doc) {
-      var g = doc.data();
-      html += '<div class="gasto-item">';
-      html += '<div class="gi-top"><div class="gi-cat">'+g.categoria+'</div><div class="gi-monto">$'+parseFloat(g.total||g.monto).toFixed(2)+'</div></div>';
-      html += '<div class="gi-desc">'+(g.descripcion||'-')+' | '+(g.proveedor||'-')+'</div>';
-      html += '<div class="gi-fecha">'+g.fecha+' | '+g.metodo_pago+'</div>';
-      html += '</div>';
+  .then(function(snap){
+    if(snap.empty){lista.innerHTML='<div style="text-align:center;color:#aaa;padding:16px;font-weight:700">No hay gastos registrados aún</div>';return;}
+    var html='';
+    snap.forEach(function(doc){
+      var g=doc.data();
+      var total=parseFloat(g.total||g.monto||0).toFixed(2);
+      var monto=parseFloat(g.monto||0).toFixed(2);
+      var gst=parseFloat(g.gst_amt||0).toFixed(2);
+      var rst=parseFloat(g.rst_amt||0).toFixed(2);
+      html+='<div class="gasto-item">';
+      html+='<div class="gi-top"><div class="gi-cat">'+g.categoria+'</div><div class="gi-monto">$'+total+'</div></div>';
+      html+='<div class="gi-desc">'+(g.descripcion||'-')+' | '+(g.proveedor||'-')+'</div>';
+      html+='<div class="gi-sub">Neto: $'+monto+' | GST: $'+gst+' | RST: $'+rst+' | '+g.metodo_pago+'</div>';
+      html+='<div class="gi-sub" style="color:#aaa">'+g.fecha+'</div>';
+      html+='</div>';
     });
-    lista.innerHTML = html;
-  })
-  .catch(function(e){ lista.innerHTML='<div style="color:#dc2626;padding:12px;font-weight:700">Error: '+e.message+'</div>'; });
+    lista.innerHTML=html;
+  }).catch(function(e){lista.innerHTML='<div style="color:#dc2626;padding:12px">Error: '+e.message+'</div>';});
 }
 
 // ===== DASHBOARD =====
+// Lee rentas de Firebase + gastos de Google Sheets para coincidir con Flujo de Caja
 function loadDashboard() {
-  if(!db) { return; }
+  if(!db){ return; }
   document.getElementById('dash-loading').style.display='block';
   document.getElementById('dash-content').style.display='none';
-
   var capital = parseFloat(document.getElementById('dash-capital').value) || 3898.47;
   var now = new Date();
   var mesActual = now.getFullYear()+'-'+pad(now.getMonth()+1);
-  var tRentas=0, nRentas=0, tGST=0, tPST=0, tGastos=0, nGastos=0;
-  var tMes=0, nMes=0, tITC=0;
+  var tRentas=0, nRentas=0, tGST=0, tPST=0, tMes=0, nMes=0;
+  var tGastos=0, tITC=0, nGastos=0;
 
-  // Load rentas
+  // Paso 1: Leer rentas de Firebase
   db.collection('CITAS_RENTA').where('cancelada','==',false).get()
   .then(function(snap) {
     snap.forEach(function(doc) {
       var d = doc.data();
       tRentas += parseFloat(d.subtotal||0);
-      tGST += parseFloat(d.gst||0);
-      tPST += parseFloat(d.pst||0);
+      tGST    += parseFloat(d.gst||0);
+      tPST    += parseFloat(d.pst||0);
       nRentas++;
-      if(d.fecha && d.fecha.startsWith(mesActual)) { tMes += parseFloat(d.total||0); nMes++; }
+      if(d.fecha && d.fecha.startsWith(mesActual)) {
+        tMes += parseFloat(d.total||0); nMes++;
+      }
     });
-    // Load gastos
-    return db.collection('GASTOS_EMPRESA').get();
+
+    // Paso 2: Leer gastos de Google Sheets (fuente de verdad)
+    return fetch(GAS_URL, { redirect: 'follow' });
   })
-  .then(function(snap) {
-    snap.forEach(function(doc) {
-      var g = doc.data();
-      tGastos += parseFloat(g.total||g.monto||0);
-      if(g.gst_aplica) tITC += parseFloat(g.gst_amt||0);
-      nGastos++;
-    });
-    calcDashValues(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
+  .then(function(resp) { return resp.json(); })
+  .then(function(sheetsData) {
+    if(sheetsData && sheetsData.ok) {
+      tGastos  = parseFloat(sheetsData.totalGastos  || 0);
+      tITC     = parseFloat(sheetsData.totalITC     || 0);
+      nGastos  = parseInt(sheetsData.countGastos    || 0);
+    }
+    mostrarDashboard(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
   })
   .catch(function(e) {
-    console.error(e);
-    // Show with just rentas if gastos fails
-    calcDashValues(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
+    // Si Sheets falla, intenta con Firebase GASTOS_EMPRESA como respaldo
+    console.warn('Sheets gastos error, usando Firebase:', e.message);
+    db.collection('GASTOS_EMPRESA').get()
+    .then(function(snap) {
+      snap.forEach(function(doc) {
+        var g = doc.data();
+        tGastos += parseFloat(g.total||g.monto||0);
+        if(g.gst_aplica) tITC += parseFloat(g.gst_amt||0);
+        nGastos++;
+      });
+      mostrarDashboard(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
+    }).catch(function(e2) {
+      document.getElementById('dash-loading').innerHTML = '⚠️ Error: '+e2.message;
+    });
   });
 }
 
-function calcDashValues(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
-  var totalCobrado = tRentas + tGST + tPST; // total with taxes
-  var saldo = capital + totalCobrado - tGastos;
-  var gstNeto = Math.max(0, tGST - tITC);
-  var impTotal = gstNeto + tPST;
-  var disponible = saldo - capital - impTotal;
+function mostrarDashboard(capital, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
+  var totalCobrado = tRentas + tGST + tPST;
+  var saldo        = capital + totalCobrado - tGastos;
+  var gstNeto      = Math.max(0, tGST - tITC);
+  var impTotal     = gstNeto + tPST;
+  var disponible   = saldo - capital - impTotal;
 
-  document.getElementById('d-disponible').textContent = '$'+disponible.toFixed(2);
-  document.getElementById('d-saldo').textContent = '$'+saldo.toFixed(2);
-  document.getElementById('d-rentas').textContent = '$'+tRentas.toFixed(2);
-  document.getElementById('d-rentas-count').textContent = nRentas+' citas';
-  document.getElementById('d-gastos').textContent = '$'+tGastos.toFixed(2);
-  document.getElementById('d-gastos-count').textContent = nGastos+' gastos';
-  document.getElementById('d-mes-total').textContent = '$'+tMes.toFixed(2);
-  document.getElementById('d-mes-count').textContent = nMes+' citas';
-  document.getElementById('d-gst').textContent = '$'+gstNeto.toFixed(2);
-  document.getElementById('d-rst').textContent = '$'+tPST.toFixed(2);
-  document.getElementById('d-imp-total').textContent = '$'+impTotal.toFixed(2);
+  document.getElementById('d-disponible').textContent    = '$'+disponible.toFixed(2);
+  document.getElementById('d-saldo').textContent         = '$'+saldo.toFixed(2);
+  document.getElementById('d-rentas').textContent        = '$'+tRentas.toFixed(2);
+  document.getElementById('d-rentas-count').textContent  = nRentas+' citas';
+  document.getElementById('d-gastos').textContent        = '$'+tGastos.toFixed(2);
+  document.getElementById('d-gastos-count').textContent  = nGastos+' gastos';
+  document.getElementById('d-mes').textContent           = '$'+tMes.toFixed(2);
+  document.getElementById('d-mes-count').textContent     = nMes+' citas';
+  document.getElementById('d-gst').textContent           = '$'+gstNeto.toFixed(2);
+  document.getElementById('d-rst').textContent           = '$'+tPST.toFixed(2);
+  document.getElementById('d-imp-total').textContent     = '$'+impTotal.toFixed(2);
 
-  document.getElementById('dash-loading').style.display='none';
-  document.getElementById('dash-content').style.display='block';
+  document.getElementById('dash-loading').style.display = 'none';
+  document.getElementById('dash-content').style.display = 'block';
 }
 
-function calcDash() { loadDashboard(); }
+// ===== ADMIN AUTOS JS =====
 
-// ===== ADMIN AUTOS =====
-var autosUnlocked = false;
-var autoEditingId = null;
-var autoSelectedFiles = [];
-var autoExistingPhotos = [];
-var storage = null;
+  // ── FIREBASE CONFIG ──
 
-function autosLogin() {
-  var pw = document.getElementById('autos-pw').value;
-  if(pw === 'bolivar2025') {
-    autosUnlocked = true;
-    document.getElementById('autos-login-area').style.display = 'none';
-    document.getElementById('autos-content').style.display = 'block';
-    loadAutos();
-  } else {
-    document.getElementById('autos-login-err').style.display = 'block';
-    document.getElementById('autos-pw').value = '';
+  // ── PASSWORD ── (puedes cambiar esta contraseña)
+  var ADMIN_PASSWORD = "bolivar2025";
+
+  // ── STATE ──
+  let admSelectedFiles = [];
+  let admExistingPhotos = [];
+
+  // ── LOGIN ──
+  function admLogin() {
+    const pw = document.getElementById('passwordInput').value;
+    if (pw === ADMIN_PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('appScreen').style.display = 'block';
+      admLoadVehiculos();
+      admLoadStats();
+      admStartSessionTimer();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('passwordInput').value = '';
+      document.getElementById('passwordInput').focus();
+    }
   }
-}
 
-function loadAutos() {
-  var lista = document.getElementById('autos-lista');
-  if(!db){ lista.innerHTML='<div class="autos-empty"><div class="autos-empty-icon">⚠️</div><div>Firebase no conectado</div></div>'; return; }
-  db.collection('VEHICULOS_BG').onSnapshot(function(snap) {
-    if(snap.empty) {
-      lista.innerHTML='<div class="autos-empty"><div class="autos-empty-icon">🚗</div><div style="font-size:17px;font-weight:800;margin-bottom:8px">No hay vehículos todavía</div><div>Agrega el primero arriba</div></div>';
+  function admLogout() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('passwordInput').value = '';
+  }
+
+  function admTogglePwEye() {
+    const inp = document.getElementById('passwordInput');
+    const btn = document.getElementById('eyeBtn');
+    if (inp.type === 'password') { inp.type = 'text'; inp.style.letterSpacing = '2px'; btn.textContent = '🙈'; }
+    else { inp.type = 'password'; inp.style.letterSpacing = '4px'; btn.textContent = '👁'; }
+  }
+
+  // ── NAVIGATION ──
+  function admShowPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // ── STATS ──
+  async function admLoadStats() {
+    try {
+      const snap = await db.collection('VEHICULOS_BG').get();
+      document.getElementById('statVehiculos').textContent = snap.size;
+      let totalFotos = 0;
+      snap.forEach(doc => {
+        const data = doc.data();
+        if (data.fotos) totalFotos += data.fotos.length;
+      });
+      document.getElementById('statFotos').textContent = totalFotos;
+    } catch(e) { console.error(e); }
+  }
+
+  // ── LOAD VEHICULOS ──
+  function admLoadVehiculos() {
+    const container = document.getElementById('vehiculosList');
+    db.collection('VEHICULOS_BG').onSnapshot(snap => {
+      admLoadStats();
+      if (snap.empty) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🚗</div>
+            <h3>No hay vehículos todavía</h3>
+            <p>Agrega tu primer vehículo al inventario</p>
+            <button class="btn btn-primary" onclick="admOpenAddModal()">➕ Agregar primer vehículo</button>
+          </div>`;
+        return;
+      }
+
+      let html = '<div class="vehicle-grid">';
+      snap.forEach(doc => {
+        const d = doc.data();
+        const id = doc.id;
+        const fotos = d.fotos || [];
+        const firstPhoto = fotos.length > 0 ? fotos[0] : null;
+        const catLabel = d.categoria === 'suv' ? 'SUV' : d.categoria === 'likenew' ? 'Like New' : 'Sedán';
+
+        html += `
+          <div class="vehicle-card">
+            <div class="vehicle-img-wrapper">
+              ${firstPhoto
+                ? `<img src="${firstPhoto}" alt="${d.nombre}" style="width:100%;height:180px;object-fit:cover;">`
+                : `<div class="vehicle-card-img">🚗</div>`}
+              ${fotos.length > 1 ? `<div class="photo-count-badge">📸 ${fotos.length} fotos</div>` : ''}
+            </div>
+            <div class="vehicle-card-body">
+              <div class="vehicle-card-name">${d.nombre || '—'}</div>
+              <div class="vehicle-card-price">CAD $${(d.precio || 0).toLocaleString()}</div>
+              <div class="vehicle-card-meta">
+                <span class="badge">${catLabel}</span>
+                <span class="badge gray">${(d.km || 0).toLocaleString()} km</span>
+              </div>
+              <div class="vehicle-card-actions">
+                <button class="btn btn-ghost" onclick="admOpenEditModal('${id}')">✏️ Editar</button>
+                <button class="btn btn-danger" onclick="admDeleteVehiculo('${id}', '${(d.nombre||'').replace(/'/g,"\\'")}')">🗑️ Eliminar</button>
+              </div>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }, err => {
+      console.error(err);
+      container.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><h3>Error al cargar</h3><p>' + err.message + '</p></div>';
+    });
+  }
+
+  // ── MODAL ──
+  function admOpenAddModal() {
+    document.getElementById('modalTitle').textContent = 'Agregar vehículo';
+    document.getElementById('editingId').value = '';
+    document.getElementById('vNombre').value = '';
+    document.getElementById('vPrecio').value = '';
+    document.getElementById('vKm').value = '';
+  document.getElementById('vCarfax').value = '';
+    document.getElementById('vCategoria').value = 'sedan';
+    admSelectedFiles = [];
+    admExistingPhotos = [];
+    document.getElementById('photoPreviews').innerHTML = '';
+    document.getElementById('vehiculoModal').classList.add('active');
+  }
+
+  async function admOpenEditModal(id) {
+    const doc = await db.collection('VEHICULOS_BG').doc(id).get();
+    const d = doc.data();
+    document.getElementById('modalTitle').textContent = 'Editar vehículo';
+    document.getElementById('editingId').value = id;
+    document.getElementById('vNombre').value = d.nombre || '';
+    document.getElementById('vPrecio').value = d.precio || '';
+    document.getElementById('vKm').value = d.km || '';
+    document.getElementById('vCategoria').value = d.categoria || 'sedan';
+    document.getElementById('vCarfax').value = d.carfax || '';
+    admSelectedFiles = [];
+    admExistingPhotos = d.fotos || [];
+    admRenderPreviews();
+    document.getElementById('vehiculoModal').classList.add('active');
+  }
+
+  function admCloseModal() {
+    document.getElementById('vehiculoModal').classList.remove('active');
+  }
+
+  // ── PHOTO HANDLING ──
+  function admHandlePhotoSelect(event) {
+    const files = Array.from(event.target.files);
+    admSelectedFiles = [...admSelectedFiles, ...files];
+    admRenderPreviews();
+    event.target.value = '';
+  }
+
+  function admRenderPreviews() {
+    const container = document.getElementById('photoPreviews');
+    container.innerHTML = '';
+
+    admExistingPhotos.forEach((url, i) => {
+      container.innerHTML += `
+        <div class="photo-preview" data-source="existing" data-index="${i}">
+          <img src="${url}" alt="foto">
+          <button class="photo-preview-remove" onclick="admRemoveExistingPhoto(${i})">✕</button>
+        </div>`;
+    });
+
+    admSelectedFiles.forEach((file, i) => {
+      const url = URL.createObjectURL(file);
+      container.innerHTML += `
+        <div class="photo-preview" data-source="new" data-index="${i}">
+          <img src="${url}" alt="foto">
+          <button class="photo-preview-remove" onclick="admRemoveNewPhoto(${i})">✕</button>
+        </div>`;
+    });
+
+    if (window._sortable) window._sortable.destroy();
+    window._sortable = new Sortable(container, {
+      animation: 150, delay: 400, delayOnTouchOnly: true, touchStartThreshold: 4,
+      onEnd: function() {
+        const newExisting = [], newSelected = [];
+        container.querySelectorAll('.photo-preview').forEach(div => {
+          const src = div.dataset.source, idx = parseInt(div.dataset.index);
+          if (src === 'existing') newExisting.push(admExistingPhotos[idx]);
+          else newSelected.push(admSelectedFiles[idx]);
+        });
+        admExistingPhotos = newExisting; admSelectedFiles = newSelected;
+        admRenderPreviews();
+      }
+    });
+  }
+
+  function admRemoveExistingPhoto(index) {
+    admExistingPhotos.splice(index, 1);
+    admRenderPreviews();
+  }
+
+  function admRemoveNewPhoto(index) {
+    admSelectedFiles.splice(index, 1);
+    admRenderPreviews();
+  }
+
+  // ── SAVE ──
+  async function admSaveVehiculo() {
+    const nombre = document.getElementById('vNombre').value.trim();
+    const precio = parseFloat(document.getElementById('vPrecio').value);
+    const km = parseInt(document.getElementById('vKm').value);
+    const categoria = document.getElementById('vCategoria').value;
+
+    if (!nombre || !precio || !km) {
+      admShowToast('Por favor completa todos los campos', 'error');
       return;
     }
-    var html = '';
-    snap.forEach(function(doc) {
-      var d = doc.data(); var id = doc.id;
-      var fotos = d.fotos || [];
-      var firstPhoto = fotos.length > 0 ? fotos[0] : null;
-      var catLabel = d.categoria==='suv'?'SUV':d.categoria==='likenew'?'Like New':'Sedán';
-      var km = (d.km||0).toLocaleString();
-      var precio = (d.precio||0).toLocaleString();
-      html += '<div class="vcard">';
-      if(firstPhoto) {
-        html += '<div style="width:100%;height:180px;overflow:hidden"><img src="'+firstPhoto+'" style="width:100%;height:180px;object-fit:cover" alt="'+d.nombre+'"></div>';
-      } else {
-        html += '<div style="width:100%;height:120px;background:#f0f4f9;display:flex;align-items:center;justify-content:center;font-size:50px">🚗</div>';
+
+    const saveBtn = document.querySelector('.form-actions .btn-primary');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Guardando...';
+
+    try {
+      let fotosUrls = [...admExistingPhotos];
+
+      if (admSelectedFiles.length > 0) {
+        document.getElementById('uploadProgress').style.display = 'block';
+        for (let i = 0; i < admSelectedFiles.length; i++) {
+          const file = admSelectedFiles[i];
+          const percent = Math.round(((i) / admSelectedFiles.length) * 100);
+          document.getElementById('progressBar').style.width = percent + '%';
+          document.getElementById('progressText').textContent = `Subiendo foto ${i+1} de ${admSelectedFiles.length}...`;
+
+          const ref = storage.ref(`vehiculos/${Date.now()}_${file.name}`);
+          await ref.put(file);
+          const url = await ref.getDownloadURL();
+          fotosUrls.push(url);
+        }
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('progressText').textContent = '¡Fotos subidas!';
       }
-      html += '<div class="vcard-body">';
-      html += '<div class="vcard-name">'+(d.nombre||'Sin nombre')+'</div>';
-      html += '<div class="vcard-price">CAD $'+precio+'</div>';
-      html += '<div class="vcard-meta"><span class="vbadge">'+catLabel+'</span><span class="vbadge">'+km+' km</span>';
-      if(fotos.length>1) html += '<span class="vbadge">📸 '+fotos.length+'</span>';
-      html += '</div>';
-      html += '<div class="vcard-btns">';
-      html += '<button class="vbtn vbtn-edit" data-vid="'+id+'" onclick="openAutoModal(this.dataset.vid)">✏️ Editar</button>';
-      html += '<button class="vbtn vbtn-del" data-vid="'+id+'" data-vnm="'+(d.nombre||'')+'" onclick="deleteAuto(this.dataset.vid,this.dataset.vnm)">🗑️ Borrar</button>';
-      html += '</div></div></div>';
-    });
-    lista.innerHTML = html;
-  });
-}
 
-function openAutoModal(id) {
-  autoEditingId = id || null;
-  autoSelectedFiles = [];
-  autoExistingPhotos = [];
-  document.getElementById('a-previews').innerHTML = '';
-  document.getElementById('a-fotos').value = '';
-  document.getElementById('auto-modal-title').textContent = id ? 'Editar vehículo' : 'Agregar vehículo';
+      const carfax = document.getElementById('vCarfax').value.trim() || '';
+        const data = { nombre, precio, km, categoria, carfax, fotos: fotosUrls, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+      const editingId = document.getElementById('editingId').value;
 
-  if(id) {
-    db.collection('VEHICULOS_BG').doc(id).get().then(function(doc) {
-      if(!doc.exists) return;
-      var d = doc.data();
-      document.getElementById('a-nombre').value = d.nombre || '';
-      document.getElementById('a-precio').value = d.precio || '';
-      document.getElementById('a-km').value = d.km || '';
-      document.getElementById('a-categoria').value = d.categoria || 'sedan';
-      document.getElementById('a-carfax').value = d.carfax || '';
-      autoExistingPhotos = d.fotos || [];
-      renderAutoPreviews();
-    });
-  } else {
-    document.getElementById('a-nombre').value='';
-    document.getElementById('a-precio').value='';
-    document.getElementById('a-km').value='';
-    document.getElementById('a-categoria').value='sedan';
-    document.getElementById('a-carfax').value='';
-  }
-  document.getElementById('auto-modal').classList.add('active');
-}
+      if (editingId) {
+        await db.collection('VEHICULOS_BG').doc(editingId).update(data);
+        admShowToast('✅ Vehículo actualizado', 'success');
+      } else {
+        data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        await db.collection('VEHICULOS_BG').add(data);
+        admShowToast('✅ Vehículo agregado', 'success');
+      }
 
-function closeAutoModal() { document.getElementById('auto-modal').classList.remove('active'); }
-
-function handleAutoPhotos(event) {
-  var files = Array.from(event.target.files);
-  autoSelectedFiles = autoSelectedFiles.concat(files);
-  renderAutoPreviews();
-}
-
-function renderAutoPreviews() {
-  var grid = document.getElementById('a-previews');
-  var html = '';
-  autoExistingPhotos.forEach(function(url, i) {
-    html += '<div class="photo-thumb"><img src="'+url+'" alt="foto"><button class="photo-thumb-del" onclick="removeExistingPhoto('+i+')">×</button></div>';
-  });
-  autoSelectedFiles.forEach(function(file, i) {
-    var objUrl = URL.createObjectURL(file);
-    html += '<div class="photo-thumb"><img src="'+objUrl+'" alt="foto"><button class="photo-thumb-del" onclick="removeNewPhoto('+i+')">×</button></div>';
-  });
-  grid.innerHTML = html;
-}
-
-function removeExistingPhoto(i) { autoExistingPhotos.splice(i,1); renderAutoPreviews(); }
-function removeNewPhoto(i) { autoSelectedFiles.splice(i,1); renderAutoPreviews(); }
-
-async function saveAuto() {
-  var nombre = document.getElementById('a-nombre').value.trim();
-  var precio = parseFloat(document.getElementById('a-precio').value) || 0;
-  var km = parseInt(document.getElementById('a-km').value) || 0;
-  var categoria = document.getElementById('a-categoria').value;
-  var carfax = document.getElementById('a-carfax').value.trim();
-
-  if(!nombre) { showToast('⚠️ Ingresa el nombre del vehículo','error'); return; }
-
-  var progEl = document.getElementById('a-upload-prog');
-  var barEl = document.getElementById('a-upload-bar');
-  var textEl = document.getElementById('a-upload-text');
-
-  var fotosUrls = [...autoExistingPhotos];
-
-  if(autoSelectedFiles.length > 0 && storage) {
-    progEl.style.display = 'block';
-    for(var i=0; i<autoSelectedFiles.length; i++) {
-      var file = autoSelectedFiles[i];
-      var ref = storage.ref('vehiculos/'+Date.now()+'_'+file.name);
-      textEl.textContent = 'Subiendo foto '+(i+1)+' de '+autoSelectedFiles.length+'...';
-      barEl.style.width = ((i/autoSelectedFiles.length)*100)+'%';
-      try {
-        var snap = await ref.put(file);
-        var url = await snap.ref.getDownloadURL();
-        fotosUrls.push(url);
-      } catch(e) { console.error('Photo upload error:', e); }
+      admCloseModal();
+    } catch (e) {
+      console.error(e);
+      admShowToast('Error: ' + e.message, 'error');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = '💾 Guardar';
+      document.getElementById('uploadProgress').style.display = 'none';
+      document.getElementById('progressBar').style.width = '0%';
     }
-    barEl.style.width = '100%';
-    textEl.textContent = '✅ Fotos subidas';
-    setTimeout(function(){ progEl.style.display='none'; }, 1500);
-  } else if(autoSelectedFiles.length > 0 && !storage) {
-    showToast('⚠️ Firebase Storage no disponible','error');
   }
 
-  var data = { nombre: nombre, precio: precio, km: km, categoria: categoria, carfax: carfax, fotos: fotosUrls, updatedAt: new Date().toISOString() };
-
-  try {
-    if(autoEditingId) {
-      await db.collection('VEHICULOS_BG').doc(autoEditingId).update(data);
-      showToast('✅ Vehículo actualizado');
-    } else {
-      data.createdAt = new Date().toISOString();
-      await db.collection('VEHICULOS_BG').add(data);
-      showToast('✅ Vehículo agregado');
+  // ── DELETE ──
+  async function admDeleteVehiculo(id, nombre) {
+    if (!confirm(`¿Eliminar "${nombre}"? Esta acción no se puede deshacer.`)) return;
+    try {
+      await db.collection('VEHICULOS_BG').doc(id).delete();
+      admShowToast('🗑️ Vehículo eliminado', 'success');
+    } catch(e) {
+      admShowToast('Error al eliminar: ' + e.message, 'error');
     }
-    closeAutoModal();
-    autoSelectedFiles = [];
-  } catch(e) {
-    showToast('Error: '+e.message, 'error');
   }
-}
 
-function deleteAuto(id, nombre) {
-  if(!confirm('¿Borrar "'+nombre+'"? Esta acción no se puede deshacer.')) return;
-  db.collection('VEHICULOS_BG').doc(id).delete()
-  .then(function(){ showToast('🗑️ Vehículo eliminado'); })
-  .catch(function(e){ showToast('Error: '+e.message,'error'); });
-}
+  // ── TOAST ──
+  function admShowToast(msg, type = '') {
+    const t = document.getElementById('adm-toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type + ' show';
+    setTimeout(() => t.className = 'toast', 3000);
+  }
 
-function showToast(msg, type) {
-  var t = document.getElementById('toast-msg');
-  t.textContent = msg;
-  t.style.background = type==='error' ? '#dc2626' : '#1e3d8f';
-  t.style.display = 'block';
-  setTimeout(function(){ t.style.display='none'; }, 3000);
-}
+  // ── CLOSE MODAL ON OUTSIDE CLICK ──
+  document.getElementById('vehiculoModal').addEventListener('click', function(e) {
+    if (e.target === this) admCloseModal();
+  });
+
+  // ── SESSION 10 MIN ──
+  const SESSION_DURATION = 10 * 60 * 1000; // 10 minutes
+  let sessionTimer = null;
+
+  function admStartSessionTimer() {
+    clearTimeout(sessionTimer);
+    sessionTimer = setTimeout(() => {
+      admLogout();
+      alert('Sesión cerrada por inactividad (10 minutos).');
+    }, SESSION_DURATION);
+  }
+
+  function admResetSessionTimer() {
+    if (document.getElementById('appScreen').style.display !== 'none') {
+      admStartSessionTimer();
+    }
+  }
+
+  ['click','touchstart','keydown','scroll'].forEach(evt => {
+    document.addEventListener(evt, admResetSessionTimer, { passive: true });
+  });
+
+  // ── MOBILE SIDEBAR ──
+  function admToggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+  }
+
+  // Close sidebar when nav item is tapped on mobile
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.querySelector('.sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
+      }
+    });
+  });
+
+  // Start timer on login
+  const origDoLogin = admLogin;
+  // Patch admLogin to start timer
+
+
 
 // ===== FIREBASE INIT (shared) =====
 (function(){
-  var s1=document.createElement('script');s1.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js';
+  var s1=document.createElement('script');
+  s1.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js';
   s1.onload=function(){
-    var s2=document.createElement('script');s2.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js';
+    var s2=document.createElement('script');
+    s2.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js';
     s2.onload=function(){
-      var s3=document.createElement('script');s3.src='https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js';
+      var s3=document.createElement('script');
+      s3.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js';
       s3.onload=function(){
-        try{
-          if(!firebase.apps.length){
-            firebase.initializeApp({
-              apiKey:'AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ',
-              authDomain:'bolivarautos-919e4.firebaseapp.com',
-              projectId:'bolivarautos-919e4',
-              storageBucket:'bolivarautos-919e4.firebasestorage.app',
-              messagingSenderId:'397354528937',
-              appId:'1:397354528397:web:52fd2ec53984af7aaa7cc4'
-            });
-          }
-          db=firebase.firestore();
-          storage=firebase.storage();
-        }catch(e){console.error(e);}
+        var s4=document.createElement('script');
+        s4.src='https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js';
+        s4.onload=function(){
+          try{
+            if(!firebase.apps.length){
+              firebase.initializeApp({
+                apiKey:'AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ',
+                authDomain:'bolivarautos-919e4.firebaseapp.com',
+                projectId:'bolivarautos-919e4',
+                storageBucket:'bolivarautos-919e4.firebasestorage.app',
+                messagingSenderId:'397354528937',
+                appId:'1:397354528397:web:52fd2ec53984af7aaa7cc4'
+              });
+            }
+            db=firebase.firestore();
+            storage=firebase.storage();
+          }catch(e){console.error(e);}
+        };
+        document.head.appendChild(s4);
       };
       document.head.appendChild(s3);
     };
@@ -1618,9 +2520,8 @@ function showToast(msg, type) {
   document.head.appendChild(s1);
 })();
 
-// Init rentas tab
+// Init rentas
 renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgress();upd();
-// Init gastos date
 setGastoFecha();
 </script>
 </body>
