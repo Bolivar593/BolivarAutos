@@ -2127,14 +2127,17 @@ function loadCitasProximas() {
   var now = new Date();
   var todayStr = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
   db.collection('CITAS_RENTA')
-    .where('fecha','>=',todayStr)
     .where('cancelada','==',false)
-    .orderBy('fecha','asc')
     .get()
     .then(function(snap){
       var total = 0;
       var rows = [];
-      snap.forEach(function(doc){ var d=doc.data(); total+=parseFloat(d.total||0); rows.push(d); });
+      snap.forEach(function(doc){
+        var d=doc.data();
+        // Filtrar fecha >= hoy en JavaScript (evita índice compuesto en Firebase)
+        if(d.fecha && d.fecha >= todayStr){ total+=parseFloat(d.total||0); rows.push(d); }
+      });
+      rows.sort(function(a,b){ return a.fecha>b.fecha?1:-1; });
       var n = rows.length;
       document.getElementById('citas-prox-total').textContent = '$'+total.toFixed(2)+' CAD ('+n+' cita'+(n!==1?'s':'')+')';
       if(n===0){
