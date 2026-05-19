@@ -2170,14 +2170,6 @@ function loadDashboard() {
 
     var sc = document.createElement('script');
     sc.src = GAS_URL + '?callback=' + cbName + '&t=' + Date.now();
-    sc.onerror = function() {
-      clearTimeout(cbTimeout);
-      if(window[cbName]) delete window[cbName];
-      var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
-      var statusEl = document.getElementById('d-gastos-status');
-      if(statusEl) statusEl.style.display='block';
-      mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
-    };
     document.head.appendChild(sc);
   })
   .catch(function(e) {
