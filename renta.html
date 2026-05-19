@@ -249,10 +249,12 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="confirm-banner" id="confirm-banner">Cita guardada correctamente</div>
   <div class="msg-label" id="msg-label">Vista previa del mensaje</div>
   <div class="msgbox" id="msgbox"></div>
+  <!-- Step 1: Add to calendar FIRST -->
   <div id="cal-step" style="display:none;margin-bottom:10px">
     <button class="btn btn-acal" onclick="goAppleCal()" style="width:100%"><span id="l-acal">1. Agregar a Calendario iPhone</span></button>
-    <div id="cal-hint" style="font-size:14px;font-weight:700;color:#f59e0b;text-align:center;margin-top:8px;display:none"></div>
+    <div id="cal-hint" style="font-size:14px;font-weight:700;color:#f59e0b;text-align:center;margin-top:8px;display:none" id="cal-warn"></div>
   </div>
+  <!-- Step 2: Send message (locked until calendar done) -->
   <div class="btn-grid2" id="action-btns" style="display:none">
     <button class="btn btn-wa"  id="bwa-msg" onclick="sendWA()">WhatsApp</button>
     <button class="btn btn-sms" id="bsm-msg" onclick="sendSMS()">SMS</button>
@@ -260,6 +262,7 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   <div class="btn-grid2" id="action-btns2" style="display:none;margin-bottom:10px">
     <button class="btn btn-copy" onclick="sendCopy()"><span id="l-cp">Copiar mensaje</span></button>
   </div>
+  <!-- New booking button -->
   <div id="new-booking-btn" style="display:none;margin-bottom:16px">
     <button class="btn" onclick="resetApp()" style="background:#1e3d8f;color:#fff;width:100%;font-size:18px;padding:18px"><span id="l-new">+ Nueva cita</span></button>
   </div>
@@ -295,14 +298,17 @@ body{background:#f0f4f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <div id="hist-summary" class="hist-summary" style="display:none"></div>
         <div class="hist-wrap" id="hist-wrap" style="display:none">
           <table class="hist-table">
-            <thead><tr><th>Fecha</th><th>Hora</th><th>Dur.</th><th>Zona</th><th>Cliente</th><th>Teléfono</th><th class="col-num">Subtotal</th><th class="col-num">GST</th><th class="col-num">PST</th><th class="col-num">Total</th><th>Estado</th></tr>
-            </thead>
+            <thead><tr>
+              <th>Fecha</th><th>Hora</th><th>Dur.</th><th>Zona</th><th>Cliente</th><th>Teléfono</th>
+              <th class="col-num">Subtotal</th><th class="col-num">GST</th><th class="col-num">PST</th>
+              <th class="col-num">Total</th><th>Estado</th>
+            </tr></thead>
             <tbody id="hist-tbody"></tbody>
           </table>
         </div>
         <div id="hist-empty" class="hist-empty" style="display:none">No hay citas para este período.</div>
       </div>
-      <!-- Agregar cita pasada con tarifa editable -->
+      <!-- Agregar cita pasada - con tarifa editable -->
       <button class="past-toggle-btn" onclick="togglePastForm()" id="past-toggle-btn">+ Agregar cita de fecha pasada</button>
       <div class="past-form" id="past-form-wrap">
         <div class="past-form-grid">
@@ -333,6 +339,4 @@ var ZONES=[
 ];
 var GST=0.05,PST=0.07;
 var WINNIPEG_OFFSET=-5;
-var DE=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],DS=['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
-var ME=['January','February','March','April','May','June','July','August','September','October','November','December'];
-var MS=['Enero','Febrero','Marzo','Abril','
+var DE=['Sun','Mon','Tue','Wed','Thu','Fri','
