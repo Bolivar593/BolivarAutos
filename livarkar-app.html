@@ -2106,7 +2106,7 @@ function loadGastosRecientes() {
 }
 
 // ===== DASHBOARD =====
-// Lee rentas de Firebase + gastos de Google Sheets para coincidir con Flujo de Caja
+// Lee rentas+gastos de Google Sheets (JSONP) y rentas de Firebase EN PARALELO
 function loadDashboard() {
   if(!db){ return; }
   document.getElementById('dash-loading').style.display='block';
@@ -2114,65 +2114,88 @@ function loadDashboard() {
   var capital = parseFloat(document.getElementById('dash-capital').value) || 3898.47;
   var now = new Date();
   var mesActual = now.getFullYear()+'-'+pad(now.getMonth()+1);
-  var tRentas=0, nRentas=0, tGST=0, tPST=0, tMes=0, nMes=0;
-  var tGastos=0, tITC=0, nGastos=0;
 
-  // Paso 1: Leer rentas de Firebase usando el subtotal GUARDADO (igual que la hoja)
+  // Estado compartido
+  var st = {
+    fbReady:false, shReady:false, finished:false,
+    tRentas:0, nRentas:0, tGST:0, tPST:0, tMes:0, nMes:0,
+    tGastos:0, tITC:0, nGastos:0, sheetsOK:false
+  };
+
+  function finalizar() {
+    if(st.finished) return;
+    // Esperar a que Firebase esté listo Y (Sheets listo O timeout)
+    if(!st.fbReady || !st.shReady) return;
+    st.finished = true;
+    var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
+    var statusEl = document.getElementById('d-gastos-status');
+    if(statusEl) statusEl.style.display = st.sheetsOK ? 'none' : 'block';
+    mostrarDashboard(capital, banco, st.tRentas, st.tGST, st.tPST,
+                     st.tGastos, st.tITC, st.nRentas, st.nGastos, st.tMes, st.nMes);
+  }
+
+  // ── A) JSONP a Google Sheets — se dispara YA (en paralelo) ──
+  var cbName = '_sc_' + Date.now();
+  var cbTimeout = setTimeout(function() {
+    if(!st.shReady) {
+      st.shReady = true;          // se rinde, usará datos de Firebase
+      st.sheetsOK = false;
+      if(window[cbName]) { try{ delete window[cbName]; }catch(e){ window[cbName]=null; } }
+      finalizar();
+    }
+  }, 25000);  // 25s — Apps Script puede tardar en despertar
+
+  window[cbName] = function(sheetsData) {
+    clearTimeout(cbTimeout);
+    try{ delete window[cbName]; }catch(e){ window[cbName]=null; }
+    if(st.shReady) return;        // ya se rindió por timeout
+    if(sheetsData && sheetsData.ok) {
+      if(sheetsData.totalGastos > 0) {
+        st.tGastos = parseFloat(sheetsData.totalGastos || 0);
+        st.tITC    = parseFloat(sheetsData.totalITC    || 0);
+        st.nGastos = parseInt(sheetsData.countGastos   || 0);
+      }
+      if(sheetsData.totalRentas > 0) {
+        st.tRentas = parseFloat(sheetsData.totalRentas    || 0);
+        st.tGST    = parseFloat(sheetsData.totalGSTrentas || 0);
+        st.tPST    = parseFloat(sheetsData.totalRSTrentas || 0);
+        st.nRentas = parseInt(sheetsData.countRentas      || 0);
+      }
+      st.sheetsOK = true;
+    }
+    st.shReady = true;
+    finalizar();
+  };
+
+  var sc = document.createElement('script');
+  sc.src = GAS_URL + '?callback=' + cbName + '&t=' + Date.now();
+  document.head.appendChild(sc);
+
+  // ── B) Firebase rentas (de respaldo + datos del mes) — en paralelo ──
   db.collection('CITAS_RENTA').where('cancelada','==',false).get()
   .then(function(snap) {
+    var fbRentas=0, fbN=0, fbGST=0, fbPST=0, fbMes=0, fbNMes=0;
     snap.forEach(function(doc) {
       var d = doc.data();
-      var sub = parseFloat(d.subtotal||0);
-      var gst = parseFloat(d.gst||0);
-      var pst = parseFloat(d.pst||0);
-      var tot = parseFloat(d.total||0);
-      tRentas += sub;
-      tGST    += gst;
-      tPST    += pst;
-      nRentas++;
+      fbRentas += parseFloat(d.subtotal||0);
+      fbGST    += parseFloat(d.gst||0);
+      fbPST    += parseFloat(d.pst||0);
+      fbN++;
       if(d.fecha && d.fecha.startsWith(mesActual)) {
-        tMes += tot; nMes++;
+        fbMes += parseFloat(d.total||0); fbNMes++;
       }
     });
-
-    // Paso 2: Leer de Google Sheets via JSONP (evita CORS)
-    var cbName = '_sc_' + Date.now();
-    var cbTimeout = setTimeout(function() {
-      if(window[cbName]) {
-        delete window[cbName];
-        var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
-        var statusEl = document.getElementById('d-gastos-status');
-        if(statusEl) statusEl.style.display='block';
-        mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
-      }
-    }, 10000);
-
-    window[cbName] = function(sheetsData) {
-      clearTimeout(cbTimeout);
-      delete window[cbName];
-      var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
-      if(sheetsData && sheetsData.ok) {
-        if(sheetsData.totalGastos > 0) {
-          tGastos = parseFloat(sheetsData.totalGastos || 0);
-          tITC    = parseFloat(sheetsData.totalITC    || 0);
-          nGastos = parseInt(sheetsData.countGastos   || 0);
-        }
-        // Rentas: usar valores EXACTOS de la hoja "Renta por Horas"
-        if(sheetsData.totalRentas > 0) {
-          tRentas = parseFloat(sheetsData.totalRentas    || 0);
-          tGST    = parseFloat(sheetsData.totalGSTrentas || 0);
-          tPST    = parseFloat(sheetsData.totalRSTrentas || 0);
-          nRentas = parseInt(sheetsData.countRentas      || 0);
-        }
-      }
-      mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes);
-    };
-
-    var sc = document.createElement('script');
-    sc.src = GAS_URL + '?callback=' + cbName + '&t=' + Date.now();
-    document.head.appendChild(sc);
+    // Datos de respaldo (solo se usan si Sheets falla)
+    if(!st.sheetsOK) {
+      st.tRentas=fbRentas; st.tGST=fbGST; st.tPST=fbPST; st.nRentas=fbN;
+    }
+    // Mes siempre de Firebase (es lo más actualizado)
+    st.tMes=fbMes; st.nMes=fbNMes;
+    st.fbReady = true;
+    finalizar();
   })
   .catch(function(e) {
+    st.fbReady = true;
     document.getElementById('dash-loading').innerHTML = '⚠️ Error Firebase: '+e.message;
   });
 }
