@@ -32,13 +32,13 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .prog-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
 .prog-icon.done{background:#1565C0;color:#fff}
 .prog-icon.pending{background:#eeeeee;color:#aaa}
-.prog-text{font-size:14px;font-weight:400;color:#333}
+.prog-text{font-size:15px;font-weight:600;color:#333}
 .prog-text.done{color:#1565C0}
 .prog-text.pending{color:#aaa}
 
 /* --- CARDS --- */
 .card,.gcard{background:#fff;border:0.5px solid #e0e0e0;border-left:4px solid #3D9EFF;border-radius:0 10px 10px 0;padding:1rem 1.1rem;margin-bottom:.9rem}
-.sec-label,.gcard .sec-label{font-size:13px;font-weight:600;color:#1565C0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.sec-label,.gcard .sec-label{font-size:14px;font-weight:700;color:#1565C0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
 
 /* --- RATE ROW --- */
 .rate-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
@@ -52,17 +52,17 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:7px}
 .zcard{border:0.5px solid #e0e0e0;border-radius:8px;padding:10px 10px;cursor:pointer;background:#fff}
 .zcard.sel{border-color:#1565C0;background:#f5f8ff}
-.zcard .zn{font-size:16px;font-weight:500;color:#111;margin-bottom:2px}
+.zcard .zn{font-size:17px;font-weight:700;color:#111;margin-bottom:2px}
 .zcard.sel .zn{color:#1565C0}
-.zcard .za{font-size:12px;color:#999;font-weight:400}
+.zcard .za{font-size:13px;color:#777;font-weight:500}
 
 /* --- CALENDAR --- */
 .cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .cal-nav button{background:#f5f5f5;border:0.5px solid #e0e0e0;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:18px;color:#1565C0}
-.cal-nav span{font-size:16px;font-weight:500;color:#111}
+.cal-nav span{font-size:18px;font-weight:700;color:#111}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-hdr{text-align:center;font-size:12px;font-weight:500;color:#999;padding:4px 0}
-.cal-day{text-align:center;padding:10px 2px;border-radius:8px;font-size:15px;font-weight:400;cursor:pointer;color:#111;border:0.5px solid transparent}
+.cal-hdr{text-align:center;font-size:13px;font-weight:700;color:#777;padding:4px 0}
+.cal-day{text-align:center;padding:10px 2px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;color:#111;border:0.5px solid transparent}
 .cal-day:hover:not(.past):not(.empty){background:#f5f8ff}
 .cal-day.sel{background:#1565C0;color:#fff}
 .cal-day.today{border-color:#1565C0;color:#1565C0}
@@ -71,23 +71,23 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 /* --- DURATION / TIME --- */
 .dur-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.dur-row label{font-size:14px;color:#555;font-weight:500;white-space:nowrap}
+.dur-row label{font-size:16px;color:#333;font-weight:700;white-space:nowrap}
 .dur-row select{font-size:15px;font-weight:400;padding:9px 10px;border:0.5px solid #e0e0e0;border-radius:8px;flex:1;color:#111;background:#fff}
 .time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:7px;max-height:250px;overflow-y:auto}
 .tslot{border:0.5px solid #e0e0e0;border-radius:8px;padding:10px 4px;text-align:center;cursor:pointer;background:#fff}
 .tslot.sel{border-color:#1565C0;background:#f5f8ff}
 .tslot.unavail{opacity:0.3;cursor:default;background:#f5f5f5}
 .tslot.booked{cursor:not-allowed;background:#fff5f5;border-color:#ffcdd2}
-.tslot .tm{font-size:14px;font-weight:500;color:#111}
+.tslot .tm{font-size:16px;font-weight:700;color:#111}
 .tslot.sel .tm{color:#1565C0}
 .tslot.booked .tm{color:#e53935}
-.tslot .te{font-size:12px;font-weight:400;color:#999;margin-top:2px}
+.tslot .te{font-size:13px;font-weight:500;color:#777;margin-top:2px}
 .tslot.booked .te{color:#e53935}
 
 /* --- FORM --- */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:15px;color:#444;font-weight:500}
+.fg label{font-size:16px;color:#333;font-weight:700}
 .fg input{font-size:16px;font-weight:400;padding:12px 13px;border:0.5px solid #e0e0e0;border-radius:8px;width:100%;-webkit-appearance:none;color:#111;background:#fff}
 .fg input:focus{outline:none;border-color:#1565C0}
 
@@ -111,7 +111,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 /* --- SUMMARY --- */
 .summary{background:#f5f8ff;border:0.5px solid #bbdefb;border-radius:10px;padding:1rem;margin-bottom:.8rem}
-.sum-row{display:flex;justify-content:space-between;font-size:16px;font-weight:400;padding:6px 0;color:#333}
+.sum-row{display:flex;justify-content:space-between;font-size:16px;font-weight:600;padding:6px 0;color:#333}
 .sum-row span:last-child{color:#1565C0;font-weight:500}
 .sum-tax{display:flex;justify-content:space-between;font-size:13px;font-weight:400;padding:3px 0;color:#888}
 .sum-tax span:last-child{color:#1565C0}
