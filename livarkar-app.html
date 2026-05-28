@@ -399,9 +399,14 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <h1 style="font-size:20px;font-weight:500;letter-spacing:-0.3px">BolivarAutos<span style="color:#2B7FE1">·</span>Renta</h1>
     <p id="h2" style="font-size:12px;opacity:0.75;margin-top:3px">Winnipeg, MB &nbsp;·&nbsp; Lun-Dom 9AM-8PM &nbsp;·&nbsp; (204)509-6153</p>
   </div>
-  <div class="lang-row">
-    <button class="lbtn on"  id="btn-en" onclick="setLang('en')">English</button>
-    <button class="lbtn off" id="btn-es" onclick="setLang('es')">Español</button>
+  <div class="lang-row" style="justify-content:space-between;align-items:center">
+    <div style="display:flex;gap:8px">
+      <button class="lbtn on"  id="btn-en" onclick="setLang('en')">English</button>
+      <button class="lbtn off" id="btn-es" onclick="setLang('es')">Español</button>
+    </div>
+    <button onclick="resetForm()" title="Nueva reserva" style="background:transparent;border:2px solid #3D9EFF;border-radius:8px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D9EFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </button>
   </div>
   <div class="progress">
     <div class="progress-title" id="prog-title">Progreso de la reserva</div>
@@ -1106,6 +1111,26 @@ function updateDurOptions(){
   var r=getRate(),e=lang==='en',sel=document.getElementById('dur'),cur=sel.value;sel.innerHTML='';
   [[1,1],[1.5,1.5],[2,2],[2.5,2.5],[3,3],[4,4]].forEach(function(a){var o=document.createElement('option');o.value=a[0];o.textContent=a[1]+(a[1]===1?' hr':' hrs')+' -- $'+(a[0]*r).toFixed(2)+(e?' (before tax)':' (sin imp.)');if(String(a[0])===String(cur))o.selected=true;sel.appendChild(o);});
 }
+function resetForm(){
+  // Reset state variables
+  selZ=null; selD=null; selT=null;
+  bookingConfirmed=false;
+  cy=new Date().getFullYear(); cm=new Date().getMonth();
+  // Clear form fields
+  var n=document.getElementById('nm'); if(n) n.value='';
+  var t=document.getElementById('ph'); if(t) t.value='';
+  var no=document.getElementById('no'); if(no) no.value='';
+  var dur=document.getElementById('sel-duracion'); if(dur) dur.value='2';
+  // Hide banners
+  var ids=['error-banner','confirm-banner','msgbox','msg-label'];
+  ids.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  // Hide confirm button
+  var cb=document.getElementById('btn-confirm'); if(cb) cb.style.display='none';
+  // Re-render everything
+  renderZones(); renderCal(); renderTimes(); updateDurOptions(); updateProgress();
+  window.scrollTo(0,0);
+}
+
 function setLang(l){lang=l;document.getElementById('btn-en').className='lbtn '+(l==='en'?'on':'off');document.getElementById('btn-es').className='lbtn '+(l==='es'?'on':'off');applyL();renderZones();renderCal();renderTimes();updateDurOptions();updateProgress();}
 function applyL(){
   var e=lang==='en';
