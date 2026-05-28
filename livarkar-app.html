@@ -37,7 +37,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .prog-text.pending{color:#aaa}
 
 /* --- CARDS --- */
-.card,.gcard{background:#fff;border:0.5px solid #e0e0e0;border-left:3px solid #2B7FE1;border-radius:0 10px 10px 0;padding:1rem 1.1rem;margin-bottom:.9rem}
+.card,.gcard{background:#fff;border:0.5px solid #e0e0e0;border-left:4px solid #3D9EFF;border-radius:0 10px 10px 0;padding:1rem 1.1rem;margin-bottom:.9rem}
 .sec-label,.gcard .sec-label{font-size:13px;font-weight:600;color:#1565C0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
 
 /* --- RATE ROW --- */
@@ -92,7 +92,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .fg input:focus{outline:none;border-color:#1565C0}
 
 /* --- BUTTONS --- */
-.btn-confirm{width:100%;padding:16px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;text-align:center;border:none;background:#1565C0;color:#fff;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
+.btn-confirm{width:100%;padding:16px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;text-align:center;border:3px solid #3D9EFF;background:#1565C0;color:#fff;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
 .btn-confirm:active{opacity:0.85}
 .btn-confirm.ready{background:#0F6E56}
 .btn{padding:14px 8px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent;width:100%;display:block}
@@ -185,7 +185,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 #tab-autos :root{--blue:#2563eb;--blue-dark:#1d4ed8;--blue-light:#eff6ff;--navy:#1e293b;--gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-400:#94a3b8;--gray-600:#475569;--gray-800:#1e293b;--green:#10b981;--red:#ef4444;--orange:#f59e0b;--white:#ffffff}
 #tab-autos{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray-800);min-height:100vh}
 #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#1e293b 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
-.login-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:48px 40px;width:100%;max-width:400px;backdrop-filter:blur(20px);text-align:center}
+.login-card{background:rgba(255,255,255,0.05);border:3px solid #3D9EFF;border-radius:20px;padding:48px 40px;width:100%;max-width:400px;backdrop-filter:blur(20px);text-align:center}
 .login-logo{display:inline-flex;align-items:center;gap:12px;margin-bottom:32px}
 .login-logo-box{background:var(--blue);border-radius:12px;padding:10px 16px;display:flex;align-items:center;gap:6px}
 .login-logo-box .b{font-size:32px;font-weight:900;color:white;line-height:1}
@@ -301,7 +301,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .gtoggle-row{display:flex;gap:10px;margin-bottom:10px}
 .gtoggle{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:9px;border:0.5px solid #e0e0e0;cursor:pointer;font-size:14px;font-weight:500;color:#888;background:#fff;-webkit-tap-highlight-color:transparent}
 .gtoggle.on{border-color:#1565C0;background:#f5f8ff;color:#1565C0}
-.btn-guardar-gasto{width:100%;padding:16px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;background:#0F6E56;color:#fff;border:none;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
+.btn-guardar-gasto{width:100%;padding:16px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;background:#0F6E56;color:#fff;border:3px solid #3D9EFF;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
 .btn-guardar-gasto:active{opacity:0.85}
 .gasto-success{background:#e8f5e9;border:0.5px solid #a5d6a7;border-radius:10px;padding:12px;font-size:15px;font-weight:500;color:#1b5e20;text-align:center;display:none;margin-bottom:10px}
 .gasto-error{background:#fff8e1;border:0.5px solid #ffd54f;border-radius:10px;padding:12px;font-size:13px;font-weight:500;color:#5d4037;display:none;margin-bottom:10px}
@@ -338,21 +338,64 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 
 /* ===== NAV BAR ===== */
-.bottom-nav{position:sticky;top:0;z-index:100;display:flex;background:#1A2035;padding:0;border-bottom:3px solid #2B7FE1;margin-bottom:14px;box-shadow:0 3px 10px rgba(0,0,0,0.3)}
+.bottom-nav{position:sticky;top:0;z-index:100;display:flex;background:#1A2035;padding:0;border-bottom:3px solid #3D9EFF;margin-bottom:14px;box-shadow:0 3px 10px rgba(0,0,0,0.3)}
 .bnav-btn{flex:1;padding:16px 4px;background:transparent;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;-webkit-tap-highlight-color:transparent;border-bottom:3px solid transparent}
 .bnav-label{font-size:16px;font-weight:500;color:rgba(255,255,255,0.75);letter-spacing:0.2px}
 .bnav-btn.active .bnav-label{color:#ffffff;font-weight:700;font-size:16px}
-.bnav-btn.active{border-bottom:3px solid #2B7FE1;background:rgba(43,127,225,0.18)}
+.bnav-btn.active{border-bottom:3px solid #3D9EFF;background:rgba(43,127,225,0.18)}
 .tab-page{display:none}
 .tab-page.active{display:block}
 </style>
 </head>
 <body>
 
+<!-- NAV BAR TOP -->
+<nav class="bottom-nav" id="main-nav" style="display:none">
+  <button class="bnav-btn" id="bnav-rentas" onclick="showTab('rentas')">
+    <span class="bnav-label">Alquiler</span>
+  </button>
+  <button class="bnav-btn" id="bnav-gastos" onclick="showTab('gastos')">
+    <span class="bnav-label">Gastos</span>
+  </button>
+  <button class="bnav-btn" id="bnav-dashboard" onclick="showTab('dashboard')">
+    <span class="bnav-label">Saldo</span>
+  </button>
+  <button class="bnav-btn" id="bnav-autos" onclick="showTab('autos')">
+    <span class="bnav-label">Autos</span>
+  </button>
+</nav>
+
+<!-- PANTALLA DE INICIO -->
+<div id="home-screen" style="min-height:100vh;background:#f5f5f5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
+  <div style="text-align:center;margin-bottom:36px">
+    <div style="font-size:28px;font-weight:700;color:#1A2035;letter-spacing:3px;margin-bottom:6px">LIVARKAR</div>
+    <div style="font-size:13px;color:#888;font-weight:400">Services Management Ltd.</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:360px">
+    <button onclick="goTab('rentas')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Alquiler</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Agendar citas →</div>
+    </button>
+    <button onclick="goTab('gastos')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Gastos</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Registrar →</div>
+    </button>
+    <button onclick="goTab('dashboard')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Saldo</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Ver finanzas →</div>
+    </button>
+    <button onclick="goTab('autos')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Autos</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Inventario →</div>
+    </button>
+  </div>
+  <div style="margin-top:32px;font-size:12px;color:#bbb">BolivarAutos · Winnipeg, MB</div>
+</div>
+
 <!-- TAB: RENTAS -->
 <div class="tab-page active" id="tab-rentas">
 <div class="wrap">
-  <div class="header" style="background:#1A2035;border-left:4px solid #2B7FE1;border-radius:12px">
+  <div class="header" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px">
     <h1 style="font-size:20px;font-weight:500;letter-spacing:-0.3px">BolivarAutos<span style="color:#2B7FE1">·</span>Renta</h1>
     <p id="h2" style="font-size:12px;opacity:0.75;margin-top:3px">Winnipeg, MB &nbsp;·&nbsp; Lun-Dom 9AM-8PM &nbsp;·&nbsp; (204)509-6153</p>
   </div>
@@ -526,7 +569,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <!-- TAB: GASTOS -->
 <div class="tab-page" id="tab-gastos">
 <div class="gastos-wrap">
-  <div class="gastos-header" style="background:#1A2035;border-left:4px solid #2B7FE1;border-radius:12px">
+  <div class="gastos-header" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px">
     <h1 style="font-size:20px;font-weight:500;letter-spacing:-0.3px">LIVARKAR<span style="color:#2B7FE1">·</span>Gastos</h1>
     <p style="font-size:12px;opacity:0.75;margin-top:3px">LIVARKAR Services Management Ltd.</p>
   </div>
@@ -681,7 +724,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
   </div>
 
   <!-- Botón actualizar -->
-  <button onclick="loadDashboard()" style="width:100%;padding:13px;border-radius:10px;font-size:14px;font-weight:500;background:#1565C0;color:#fff;border:none;cursor:pointer">
+  <button onclick="loadDashboard()" style="width:100%;padding:13px;border-radius:10px;font-size:15px;font-weight:500;background:#1565C0;color:#fff;border:3px solid #3D9EFF;cursor:pointer">
     Actualizar datos
   </button>
 
@@ -701,9 +744,14 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <span style="font-size:12px;font-weight:800;color:white;">LIVAR</span>
     </div>
   </div>
-  <div style="width:36px;"></div>
+  <button onclick="volverInicio()" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;color:#fff;cursor:pointer">← Inicio</button>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="admToggleSidebar()"></div>
+
+<!-- INICIO BTN AUTOS -->
+<div style="padding:12px 16px;background:#1A2035;border-bottom:3px solid #3D9EFF">
+  <button onclick="volverInicio()" style="background:transparent;border:2px solid #3D9EFF;border-radius:8px;padding:9px 18px;font-size:15px;font-weight:600;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent">← Inicio</button>
+</div>
 
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
@@ -884,24 +932,23 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <div class="toast" id="adm-toast"></div>
 </div>
 
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <button class="bnav-btn active" id="bnav-rentas" onclick="showTab('rentas')">
-    <span class="bnav-label">Rentas</span>
-  </button>
-  <button class="bnav-btn" id="bnav-gastos" onclick="showTab('gastos')">
-    <span class="bnav-label">Gastos</span>
-  </button>
-  <button class="bnav-btn" id="bnav-dashboard" onclick="showTab('dashboard')">
-    <span class="bnav-label">Saldo</span>
-  </button>
-  <button class="bnav-btn" id="bnav-autos" onclick="showTab('autos')">
-    <span class="bnav-label">Autos</span>
-  </button>
+<!-- nav moved to top -->
 </nav>
 
 <script>
 // ===== NAVIGATION =====
+function volverInicio() {
+  document.getElementById('home-screen').style.display = 'flex';
+  document.getElementById('main-nav').style.display = 'none';
+  document.querySelectorAll('.tab-page').forEach(function(p){ p.classList.remove('active'); });
+}
+
+function goTab(name) {
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('main-nav').style.display = 'flex';
+  showTab(name);
+}
+
 function showTab(name) {
   document.querySelectorAll('.tab-page').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('.bnav-btn').forEach(function(b){ b.classList.remove('active'); });
