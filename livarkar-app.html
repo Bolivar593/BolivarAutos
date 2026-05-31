@@ -848,7 +848,10 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
             <div class="page-title">Vehículos</div>
             <div class="page-subtitle">Gestiona tu inventario de venta</div>
           </div>
-          <button class="btn btn-primary" onclick="admOpenAddModal()">➕ Agregar vehículo</button>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="admOpenAddModal()">➕ Agregar vehículo</button>
+            <button class="btn" onclick="admOpenNotifyModal()" style="background:#2563eb;color:#fff;border-color:#2563eb;">📣 Notificar suscriptores</button>
+          </div>
         </div>
         <div id="vehiculosList">
           <div class="loading"><div class="spinner"></div> Cargando vehículos...</div>
@@ -923,6 +926,54 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <button class="btn btn-primary" onclick="admSaveVehiculo()">💾 Guardar</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL NOTIFICAR SUSCRIPTORES -->
+<div id="admNotifyModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:24px;max-width:420px;width:92%;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <button onclick="admCloseNotifyModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;">✕</button>
+    <h3 style="color:#0f172a;font-size:17px;font-weight:700;margin-bottom:4px;">📣 Notificar suscriptores</h3>
+    <p style="color:#64748b;font-size:12px;margin-bottom:14px;" id="admNotifyCount">Cargando...</p>
+    <label style="display:block;font-size:12px;font-weight:600;color:#334155;margin-bottom:5px;">Mensaje (opcional)</label>
+    <textarea id="admNotifyMsg" rows="3" placeholder="¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;resize:vertical;outline:none;margin-bottom:14px;"></textarea>
+    <div style="display:flex;gap:8px;">
+      <button onclick="admSendNotifications()" style="background:#1e293b;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;flex:1;">📨 Enviar a todos</button>
+      <button onclick="admCloseNotifyModal()" style="background:#f1f5f9;color:#334155;border:none;padding:10px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Cancelar</button>
+    </div>
+    <div id="admNotifyResult" style="margin-top:10px;font-size:12px;display:none;"></div>
+  </div>
+</div>
+
+<!-- MODAL CONTRATO DIGITAL -->
+<div id="admContratoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:24px;max-width:400px;width:92%;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <button onclick="admCloseContratoModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;">✕</button>
+    <h3 style="color:#0f172a;font-size:17px;font-weight:700;margin-bottom:4px;">📋 Enviar contrato digital</h3>
+    <p id="admContratoInfo" style="color:#64748b;font-size:12px;margin-bottom:6px;"></p>
+
+    <!-- Signed status -->
+    <div id="admContratoSigned" style="display:none;background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#15803d;font-weight:600;">
+      ✅ <span id="admContratoSignedText"></span>
+    </div>
+
+    <label style="display:block;font-size:12px;font-weight:600;color:#334155;margin-bottom:8px;">Versión del contrato:</label>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button id="btnVerA" onclick="admSelectVersion('A')" style="flex:1;padding:10px;border-radius:8px;border:2px solid #2563eb;background:#eff6ff;color:#1e40af;font-weight:600;font-size:13px;cursor:pointer;">
+        ✅ Versión A<br><span style="font-size:11px;font-weight:400;">Licencia completa</span>
+      </button>
+      <button id="btnVerB" onclick="admSelectVersion('B')" style="flex:1;padding:10px;border-radius:8px;border:2px solid #e2e8f0;background:#f8fafc;color:#64748b;font-weight:600;font-size:13px;cursor:pointer;">
+        Versión B<br><span style="font-size:11px;font-weight:400;">GDL / Principiante</span>
+      </button>
+    </div>
+
+    <button onclick="admEnviarContrato()" style="width:100%;background:#25D366;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+      📲 Enviar por WhatsApp
+    </button>
+    <button onclick="admRefreshFirma()" style="width:100%;background:#f1f5f9;color:#334155;border:none;padding:10px;border-radius:8px;font-size:13px;cursor:pointer;">
+      🔄 Verificar si ya firmó
+    </button>
+    <div id="admContratoResult" style="margin-top:10px;font-size:12px;display:none;"></div>
   </div>
 </div>
 
@@ -1361,10 +1412,44 @@ function loadAdminBookings(){
       var row=document.createElement('div');row.className='admin-row';
       var top=document.createElement('div');top.className='admin-row-top';
       var info=document.createElement('div');info.className='admin-info';
-      info.innerHTML='<strong>'+d.hora+' ('+d.duracion+'h) - '+d.zona_nombre+'</strong><span>'+d.cliente+' | '+d.telefono+'</span>';
+
+      // Signed badge placeholder
+      var signedBadge=document.createElement('span');
+      signedBadge.id='badge-'+doc.id;
+      signedBadge.style.cssText='display:none;background:#dcfce7;color:#16a34a;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:6px;';
+      signedBadge.textContent='✅ Contrato firmado';
+
+      var infoTop=document.createElement('div');
+      infoTop.innerHTML='<strong>'+d.hora+' ('+d.duracion+'h) - '+d.zona_nombre+'</strong>';
+      infoTop.appendChild(signedBadge);
+      var infoSub=document.createElement('span');
+      infoSub.textContent=d.cliente+' | '+d.telefono;
+      info.appendChild(infoTop);
+      info.appendChild(infoSub);
+
+      // Check Firebase if already signed
+      db.collection('CONTRATOS').doc(doc.id).get().then(function(cDoc){
+        if(cDoc.exists && cDoc.data().aceptado){
+          var badge=document.getElementById('badge-'+doc.id);
+          if(badge){
+            badge.style.display='inline-block';
+            var ts=cDoc.data().timestamp||'';
+            badge.title='Firmado: '+ts+' | Versión: '+( cDoc.data().version||'A');
+          }
+        }
+      }).catch(function(){});
+
       var btns=document.createElement('div');btns.className='admin-btns';
 
-      // Cancel + remove from calendar button
+      // 📋 Contrato button
+      var btnContrato=document.createElement('button');
+      btnContrato.style.cssText='background:#1e293b;color:#fff;border:none;border-radius:7px;padding:10px 14px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;';
+      btnContrato.textContent='📋 Contrato';
+      (function(docData,docId){
+        btnContrato.onclick=function(){ admOpenContratoModal(docData,docId); };
+      })(d,doc.id);
+
+      // Cancel button
       var btnCancel=document.createElement('button');
       btnCancel.className='btn-cancel';
       btnCancel.textContent=lang==='en'?'Cancel':'Cancelar';
@@ -1381,10 +1466,10 @@ function loadAdminBookings(){
         };
       })(d,doc.id,dateStr);
 
-      // WhatsApp cancel message button
+      // WhatsApp button
       var btnWA=document.createElement('button');
       btnWA.className='btn-cancel-wa';
-      btnWA.textContent='WhatsApp cliente';
+      btnWA.textContent='WhatsApp';
       (function(docData){
         btnWA.onclick=function(){
           var ph=docData.telefono.replace(/\D/g,'');
@@ -1394,6 +1479,7 @@ function loadAdminBookings(){
         };
       })(d);
 
+      btns.appendChild(btnContrato);
       btns.appendChild(btnCancel);
       btns.appendChild(btnWA);
       top.appendChild(info);top.appendChild(btns);
@@ -2102,3 +2188,192 @@ setGastoFecha();
 </script>
 </body>
 </html>
+<script>
+// ── CONTRATO DIGITAL ─────────────────────────────────────────────────────────
+var _contratoData   = null;
+var _contratoDocId  = null;
+var _contratoVersion = 'A';
+
+function admOpenContratoModal(docData, docId) {
+  _contratoData   = docData;
+  _contratoDocId  = docId;
+  _contratoVersion = 'A';
+  admSelectVersion('A');
+
+  document.getElementById('admContratoInfo').textContent =
+    docData.cliente + ' | ' + docData.fecha + ' ' + docData.hora + ' | $' + parseFloat(docData.total||0).toFixed(2) + ' CAD';
+  document.getElementById('admContratoResult').style.display = 'none';
+  document.getElementById('admContratoSigned').style.display = 'none';
+  document.getElementById('admContratoModal').style.display  = 'flex';
+
+  // Check immediately if already signed
+  admCheckFirma();
+}
+
+function admCloseContratoModal() {
+  document.getElementById('admContratoModal').style.display = 'none';
+}
+
+function admSelectVersion(v) {
+  _contratoVersion = v;
+  var a = document.getElementById('btnVerA');
+  var b = document.getElementById('btnVerB');
+  if(v === 'A') {
+    a.style.border = '2px solid #2563eb'; a.style.background = '#eff6ff'; a.style.color = '#1e40af';
+    b.style.border = '2px solid #e2e8f0'; b.style.background = '#f8fafc'; b.style.color = '#64748b';
+  } else {
+    b.style.border = '2px solid #2563eb'; b.style.background = '#eff6ff'; b.style.color = '#1e40af';
+    a.style.border = '2px solid #e2e8f0'; a.style.background = '#f8fafc'; a.style.color = '#64748b';
+  }
+}
+
+function admCheckFirma() {
+  if(!_contratoDocId) return;
+  var signedDiv  = document.getElementById('admContratoSigned');
+  var signedText = document.getElementById('admContratoSignedText');
+  db.collection('CONTRATOS').doc(_contratoDocId).get().then(function(cDoc){
+    if(cDoc.exists && cDoc.data().aceptado) {
+      var ts  = cDoc.data().timestamp || '';
+      var ver = cDoc.data().version   || 'A';
+      signedText.textContent = 'Firmado el ' + ts + ' — Versión ' + ver;
+      signedDiv.style.display = 'block';
+      // Also refresh badge in list
+      var badge = document.getElementById('badge-' + _contratoDocId);
+      if(badge) badge.style.display = 'inline-block';
+    } else {
+      signedDiv.style.display = 'none';
+    }
+  }).catch(function(){});
+}
+
+function admRefreshFirma() {
+  var resultEl = document.getElementById('admContratoResult');
+  resultEl.style.color   = '#64748b';
+  resultEl.textContent   = '🔄 Verificando...';
+  resultEl.style.display = 'block';
+  admCheckFirma();
+  setTimeout(function(){
+    var signedDiv = document.getElementById('admContratoSigned');
+    if(signedDiv.style.display === 'block') {
+      resultEl.style.display = 'none';
+    } else {
+      resultEl.style.color   = '#f59e0b';
+      resultEl.textContent   = '⏳ El cliente aún no ha firmado.';
+    }
+  }, 1500);
+}
+
+function admEnviarContrato() {
+  if(!_contratoData) return;
+  var d  = _contratoData;
+  var ph = d.telefono.replace(/\D/g,'');
+  if(ph.length === 10) ph = '1' + ph;
+
+  var base   = 'https://bolivarautos.ca/contrato.html';
+  var params = new URLSearchParams({
+    id:    _contratoDocId,
+    v:     _contratoVersion,
+    nom:   d.cliente,
+    tel:   d.telefono,
+    fecha: d.fecha,
+    hora:  d.hora,
+    zona:  d.zona_nombre || '',
+    hrs:   d.duracion    || '',
+    sub:   d.subtotal    || '',
+    gst:   d.gst         || '',
+    pst:   d.pst         || '',
+    tot:   d.total       || ''
+  });
+  var link = base + '?' + params.toString();
+  var verLabel = _contratoVersion === 'A' ? 'Full Licence' : 'GDL/Beginner';
+
+  var msg = 'Hi ' + d.cliente + '! Your BolivarAutos-Renta booking is confirmed ✅\n\n' +
+    '📅 ' + d.fecha + ' at ' + d.hora + '\n' +
+    '📍 Zone: ' + (d.zona_nombre || '') + '\n' +
+    '💵 Total: $' + parseFloat(d.total || 0).toFixed(2) + ' CAD\n\n' +
+    '📋 Please read and sign your rental agreement (' + verLabel + '):\n' + link + '\n\n' +
+    'Questions? Call/text: (204) 509-6153';
+
+  var resultEl = document.getElementById('admContratoResult');
+  resultEl.style.color   = '#16a34a';
+  resultEl.textContent   = '✅ Abriendo WhatsApp...';
+  resultEl.style.display = 'block';
+
+  setTimeout(function(){
+    window.open('https://wa.me/' + ph + '?text=' + encodeURIComponent(msg), '_blank');
+  }, 300);
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ── NOTIFICAR SUSCRIPTORES ───────────────────────────────────────────────────
+function admOpenNotifyModal() {
+  var modal = document.getElementById('admNotifyModal');
+  modal.style.display = 'flex';
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  firebase.firestore().collection('SUSCRIPTORES').where('activo','==',true).get().then(function(snap){
+    var emails = 0;
+    snap.forEach(function(d){ if(d.data().tipo==='email') emails++; });
+    document.getElementById('admNotifyCount').textContent = 'Suscriptores: ' + emails + ' email' + (emails!==1?'s':'');
+  }).catch(function(){
+    document.getElementById('admNotifyCount').textContent = 'No se pudo cargar el conteo.';
+  });
+}
+
+function admCloseNotifyModal() {
+  document.getElementById('admNotifyModal').style.display = 'none';
+  document.getElementById('admNotifyResult').style.display = 'none';
+}
+
+function admSendNotifications() {
+  var msg = document.getElementById('admNotifyMsg').value.trim() ||
+    '¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗';
+  var resultEl = document.getElementById('admNotifyResult');
+  resultEl.style.display = 'none';
+
+  firebase.firestore().collection('SUSCRIPTORES').where('activo','==',true).get().then(function(snap){
+    var emails = [];
+    var pushTokens = [];
+    snap.forEach(function(d){
+      if(d.data().tipo==='email') emails.push(d.data().email);
+      if(d.data().tipo==='push' && d.data().token) pushTokens.push(d.data().token);
+    });
+
+    if(emails.length === 0 && pushTokens.length === 0) {
+      resultEl.style.color = '#64748b';
+      resultEl.textContent = 'No hay suscriptores aún.';
+      resultEl.style.display = 'block';
+      return;
+    }
+
+    var promises = [];
+
+    // Send emails via EmailJS
+    if(emails.length > 0) {
+      emailjs.init('2W_g_q0eqTdn1Haxh');
+      emails.forEach(function(email){
+        promises.push(emailjs.send('service_zh2gldt','template_jyes3kc',{
+          to_email: email,
+          message: msg,
+          site_url: 'https://bolivarautos.ca'
+        }));
+      });
+    }
+
+    Promise.allSettled(promises).then(function(results){
+      var sent = results.filter(function(r){ return r.status==='fulfilled'; }).length;
+      var total = emails.length;
+      var pushInfo = pushTokens.length > 0 ? ' + ' + pushTokens.length + ' push (Android)' : '';
+      resultEl.style.color = '#16a34a';
+      resultEl.textContent = '✅ Email enviado a ' + sent + '/' + total + pushInfo;
+      resultEl.style.display = 'block';
+    });
+  }).catch(function(err){
+    resultEl.style.color = '#dc2626';
+    resultEl.textContent = 'Error: ' + err.message;
+    resultEl.style.display = 'block';
+  });
+}
+</script>
