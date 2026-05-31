@@ -299,6 +299,30 @@
   <a href="https://wa.me/12045096153" target="_blank" class="btn-blue" id="moreBtn">Check Availability</a>
 </div>
 
+<!-- NOTIFY SECTION -->
+<div id="notifySection" style="background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:36px 20px;text-align:center;">
+  <div style="max-width:500px;margin:0 auto;">
+    <div style="font-size:32px;margin-bottom:10px;">🔔</div>
+    <h3 id="notifyTitle" style="color:#0f172a;font-size:20px;font-weight:700;margin-bottom:6px;">Get notified of new cars</h3>
+    <p id="notifySub" style="color:#64748b;font-size:14px;margin-bottom:18px;">Be the first to know when we add new vehicles to our inventory.</p>
+
+    <!-- Email subscription -->
+    <div id="notifyEmailBox" style="margin-bottom:14px;">
+      <div style="display:flex;gap:8px;max-width:420px;margin:0 auto;">
+        <input type="email" id="notifyEmail" placeholder="your@email.com" style="flex:1;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;outline:none;">
+        <button onclick="subscribeEmail()" style="background:#1e293b;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">✉️ <span id="btnEmailText">Subscribe</span></button>
+      </div>
+      <div id="notifyEmailMsg" style="margin-top:8px;font-size:13px;color:#16a34a;display:none;"></div>
+    </div>
+
+    <!-- Push notification (Android / PWA) -->
+    <div id="notifyPushBox">
+      <button id="btnPush" onclick="subscribePush()" style="background:#2563eb;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:none;">🔔 <span id="btnPushText">Enable push notifications</span></button>
+      <div id="notifyPushMsg" style="margin-top:8px;font-size:13px;color:#64748b;display:none;"></div>
+    </div>
+  </div>
+</div>
+
 <!-- CONTACT -->
 <section class="contact-sec">
   <h2 id="contactTitle">Contact Us</h2>
@@ -394,5 +418,159 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 });
 </script>
 <script src="firebase-vehicles.js?v=7"></script>
+
+<!-- FIREBASE MESSAGING for push -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+// ── Firebase config (same project) ──────────────────────────────────────────
+var firebaseConfigNotify = {
+  apiKey: "AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ",
+  authDomain: "bolivarautos-919e4.firebaseapp.com",
+  projectId: "bolivarautos-919e4",
+  storageBucket: "bolivarautos-919e4.firebasestorage.app",
+  messagingSenderId: "397354528397",
+  appId: "1:397354528397:web:PLACEHOLDER"   // ← se actualiza en paso 2
+};
+
+// Reuse existing app if already initialized
+var notifyApp;
+try { notifyApp = firebase.app('notify'); } catch(e) {
+  notifyApp = firebase.initializeApp(firebaseConfigNotify, 'notify');
+}
+var dbNotify = notifyApp.firestore();
+
+// ── Multilingual texts ───────────────────────────────────────────────────────
+var notifyTexts = {
+  en: {
+    title:'Get notified of new cars',
+    sub:'Be the first to know when we add new vehicles to our inventory.',
+    placeholder:'your@email.com',
+    btnEmail:'Subscribe',
+    btnPush:'Enable push notifications',
+    successEmail:'✅ Subscribed! We\'ll email you when new cars arrive.',
+    alreadyEmail:'You\'re already subscribed with this email.',
+    errorEmail:'Please enter a valid email.',
+    pushSuccess:'✅ Push notifications enabled!',
+    pushDenied:'Notifications blocked. Please enable them in your browser settings.',
+    pushInfo:'(Android / desktop only — use email for iPhone)'
+  },
+  es: {
+    title:'Recibe avisos de nuevos autos',
+    sub:'Sé el primero en saber cuando agreguemos vehículos nuevos.',
+    placeholder:'tu@correo.com',
+    btnEmail:'Suscribirse',
+    btnPush:'Activar notificaciones push',
+    successEmail:'✅ ¡Suscrito! Te avisaremos por email cuando lleguen nuevos autos.',
+    alreadyEmail:'Ya estás suscrito con este email.',
+    errorEmail:'Por favor ingresa un email válido.',
+    pushSuccess:'✅ ¡Notificaciones push activadas!',
+    pushDenied:'Notificaciones bloqueadas. Actívalas en la configuración del navegador.',
+    pushInfo:'(Solo Android / escritorio — usa email en iPhone)'
+  }
+};
+
+function updateNotifyLang(lang) {
+  var t = notifyTexts[lang] || notifyTexts['en'];
+  var el;
+  if((el=document.getElementById('notifyTitle'))) el.textContent = t.title;
+  if((el=document.getElementById('notifySub'))) el.textContent = t.sub;
+  if((el=document.getElementById('notifyEmail'))) el.placeholder = t.placeholder;
+  if((el=document.getElementById('btnEmailText'))) el.textContent = t.btnEmail;
+  if((el=document.getElementById('btnPushText'))) el.textContent = t.btnPush;
+  if((el=document.getElementById('notifyPushMsg'))) {
+    el.style.display = 'block';
+    el.textContent = t.pushInfo;
+  }
+}
+
+// Hook into existing setLang
+var _origSetLang = window.setLang;
+window.setLang = function(lang) {
+  if(_origSetLang) _origSetLang(lang);
+  updateNotifyLang(lang);
+};
+
+// ── Show push button only on Android / non-iOS ──────────────────────────────
+(function(){
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var supported = 'Notification' in window && 'serviceWorker' in navigator;
+  if(!isIOS && supported) {
+    var btn = document.getElementById('btnPush');
+    if(btn) btn.style.display = 'inline-block';
+  }
+  updateNotifyLang('en');
+})();
+
+// ── Email subscription ───────────────────────────────────────────────────────
+function subscribeEmail() {
+  var emailEl = document.getElementById('notifyEmail');
+  var msgEl   = document.getElementById('notifyEmailMsg');
+  var email   = emailEl.value.trim().toLowerCase();
+  var t = notifyTexts[window.currentLang] || notifyTexts['en'];
+
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msgEl.style.color = '#dc2626';
+    msgEl.textContent = t.errorEmail;
+    msgEl.style.display = 'block';
+    return;
+  }
+
+  dbNotify.collection('SUSCRIPTORES').doc(email).set({
+    email: email,
+    tipo: 'email',
+    fecha: new Date().toISOString(),
+    activo: true
+  }).then(function(){
+    msgEl.style.color = '#16a34a';
+    msgEl.textContent = t.successEmail;
+    msgEl.style.display = 'block';
+    emailEl.value = '';
+  }).catch(function(){
+    msgEl.style.color = '#dc2626';
+    msgEl.textContent = 'Error saving. Please try again.';
+    msgEl.style.display = 'block';
+  });
+}
+
+// ── Push subscription (Android / desktop) ───────────────────────────────────
+var VAPID_KEY = 'BF6AYOvzTBLA3XCTE_XbOQw4rCilfOYt23yzUsyPxjzmMQ3hnV_onLcyCJfzzEz9ifmwCJfGkd_sJ24hZqsH978';
+
+function subscribePush() {
+  var t = notifyTexts[window.currentLang] || notifyTexts['en'];
+  var msgEl = document.getElementById('notifyPushMsg');
+
+  Notification.requestPermission().then(function(permission){
+    if(permission !== 'granted'){
+      msgEl.style.color = '#dc2626';
+      msgEl.textContent = t.pushDenied;
+      msgEl.style.display = 'block';
+      return;
+    }
+    var messaging = firebase.messaging(notifyApp);
+    messaging.getToken({ vapidKey: VAPID_KEY }).then(function(token){
+      if(!token) return;
+      dbNotify.collection('SUSCRIPTORES').add({
+        token: token,
+        tipo: 'push',
+        fecha: new Date().toISOString(),
+        activo: true
+      }).then(function(){
+        msgEl.style.color = '#16a34a';
+        msgEl.textContent = t.pushSuccess;
+        msgEl.style.display = 'block';
+        document.getElementById('btnPush').style.display = 'none';
+      });
+    }).catch(function(err){
+      console.error('FCM token error', err);
+      msgEl.style.color = '#dc2626';
+      msgEl.textContent = 'Push setup error. Try email instead.';
+      msgEl.style.display = 'block';
+    });
+  });
+}
+</script>
 </body>
 </html>
