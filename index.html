@@ -82,8 +82,8 @@
     .more-cars h3 { font-size: 1.4rem; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
     .more-cars p { color: #64748b; margin-bottom: 24px; }
 
-    .contact-sec { background: #0f172a; padding: 72px 40px; text-align: center; }
-    .contact-sec h2 { font-size: 2rem; font-weight: 800; color: white; margin-bottom: 44px; }
+    .contact-sec { background: #f8fafc; padding: 72px 40px; text-align: center; border-top: 4px solid #e2e8f0; }
+    .contact-sec h2 { font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 44px; }
     .contact-cols { display: flex; justify-content: center; gap: 80px; flex-wrap: wrap; margin-bottom: 28px; }
     .contact-col h4 { font-size: 14px; font-weight: 600; color: white; margin-bottom: 10px; }
     .contact-col p { font-size: 16px; color: #94a3b8; }
@@ -299,42 +299,106 @@
   <a href="https://wa.me/12045096153" target="_blank" class="btn-blue" id="moreBtn">Check Availability</a>
 </div>
 
-<!-- NOTIFY SECTION -->
-<div id="notifySection" style="background:#f8fafc;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:36px 20px;text-align:center;">
-  <div style="max-width:500px;margin:0 auto;">
-    <div style="font-size:32px;margin-bottom:10px;">🔔</div>
-    <h3 id="notifyTitle" style="color:#0f172a;font-size:20px;font-weight:700;margin-bottom:6px;">Get notified of new cars</h3>
-    <p id="notifySub" style="color:#64748b;font-size:14px;margin-bottom:18px;">Be the first to know when we add new vehicles to our inventory.</p>
+<!-- STICKY BAR — always visible, hides when notifySection is visible -->
+<!-- STICKY PILL BAR -->
+<div id="stickyBar" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(0);z-index:9999;transition:transform 0.35s ease,opacity 0.35s ease;opacity:1;">
 
-    <!-- Email subscription -->
-    <div id="notifyEmailBox" style="margin-bottom:14px;">
-      <div style="display:flex;gap:8px;max-width:420px;margin:0 auto;">
-        <input type="email" id="notifyEmail" placeholder="your@email.com" style="flex:1;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;outline:none;">
-        <button onclick="subscribeEmail()" style="background:#1e293b;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">✉️ <span id="btnEmailText">Subscribe</span></button>
-      </div>
-      <div id="notifyEmailMsg" style="margin-top:8px;font-size:13px;color:#16a34a;display:none;"></div>
+  <!-- Email panel above pill -->
+  <div id="barEmailPanel" style="display:none;background:#0f172a;border-radius:14px;padding:16px;margin-bottom:8px;min-width:300px;box-shadow:0 4px 20px rgba(0,0,0,0.4);">
+    <p style="font-size:11px;color:#94a3b8;margin:0 0 10px;">Enter your email to receive new car alerts:</p>
+    <div style="display:flex;gap:8px;">
+      <input type="email" id="barEmailInput" placeholder="your@email.com" style="flex:1;padding:9px 12px;border:none;border-radius:8px;font-size:13px;outline:none;background:#1e293b;color:#fff;min-width:0;">
+      <button onclick="barSubscribeEmail()" style="background:#3b82f6;color:#fff;border:none;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">✓</button>
     </div>
+    <div id="barEmailResult" style="margin-top:8px;font-size:11px;color:#4ade80;display:none;"></div>
+  </div>
 
-    <!-- Push notification (Android / PWA) -->
-    <div id="notifyPushBox">
-      <button id="btnPush" onclick="subscribePush()" style="background:#2563eb;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;display:none;">🔔 <span id="btnPushText">Enable push notifications</span></button>
-      <div id="notifyPushMsg" style="margin-top:8px;font-size:13px;color:#64748b;display:none;"></div>
+  <!-- Pill -->
+  <div style="background:#0f172a;border-radius:50px;padding:10px 12px 10px 20px;display:inline-flex;align-items:center;gap:12px;box-shadow:0 6px 28px rgba(0,0,0,0.45);white-space:nowrap;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <span style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#3b82f6;">Stay updated</span>
+    <div style="width:1px;height:18px;background:#334155;"></div>
+    <span style="font-size:13px;font-weight:600;color:#ffffff;">New cars alert</span>
+    <div style="display:flex;gap:6px;">
+      <button onclick="document.getElementById('barEmailPanel').style.display=document.getElementById('barEmailPanel').style.display==='none'?'block':'none';if(document.getElementById('barEmailPanel').style.display==='block')document.getElementById('barEmailInput').focus();" style="background:#1e293b;color:#ffffff;border:1px solid #475569;border-radius:50px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#3b82f6"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <span style="color:#ffffff;">iPhone</span>
+      </button>
+      <button onclick="barSubscribePush()" style="background:#2563eb;color:#ffffff;border:none;border-radius:50px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span style="color:#ffffff;">Android</span>
+      </button>
+    </div>
+    <div id="barPushResult" style="font-size:11px;color:#4ade80;display:none;padding-right:8px;"></div>
+  </div>
+</div>
+
+<!-- NOTIFY SECTION — Opción 1 -->
+<div id="notifySection" style="background:#0f172a;padding:64px 20px;text-align:center;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:260px;background:radial-gradient(ellipse,rgba(37,99,235,0.18) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:560px;margin:0 auto;position:relative;">
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3b82f6;">Stay updated</span></div>
+    <h2 id="notifyTitle" style="font-size:clamp(28px,5vw,42px);font-weight:900;color:#fff;line-height:1.15;margin-bottom:12px;font-family:'Inter',sans-serif;">Never miss a <span style="color:#3b82f6;">new car</span> again</h2>
+    <p id="notifySub" style="font-size:15px;color:#64748b;margin-bottom:36px;line-height:1.6;">Subscribe and be the first to know when new vehicles arrive to our inventory.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;">
+      <div>
+        <div id="notifyEmailPanel" style="display:none;background:#1e293b;border-radius:12px;padding:16px;margin-bottom:10px;width:280px;text-align:left;">
+          <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;">Enter your email to receive alerts:</p>
+          <div style="display:flex;gap:8px;">
+            <input type="email" id="notifyEmail" placeholder="your@email.com" style="flex:1;padding:10px 12px;border:none;border-radius:8px;font-size:13px;outline:none;background:#0f172a;color:#fff;min-width:0;">
+            <button onclick="subscribeEmail()" style="background:#3b82f6;color:#fff;border:none;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">✓</button>
+          </div>
+          <div id="notifyEmailMsg" style="margin-top:8px;font-size:12px;color:#4ade80;display:none;"></div>
+        </div>
+        <button onclick="document.getElementById('notifyEmailPanel').style.display=document.getElementById('notifyEmailPanel').style.display==='none'?'block':'none'" style="background:#1e293b;color:#fff;border:1px solid #334155;border-radius:12px;padding:15px 28px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <span style="color:#fff;">iPhone alert</span>
+        </button>
+      </div>
+      <div style="color:#475569;font-size:24px;font-weight:200;padding-bottom:10px;">|</div>
+      <div>
+        <div id="notifyPushResult" style="display:none;background:#1e293b;border-radius:12px;padding:12px 16px;margin-bottom:10px;font-size:12px;color:#4ade80;text-align:center;"></div>
+        <button onclick="subscribePush()" style="background:#2563eb;color:#fff;border:2px solid #60a5fa;border-radius:12px;padding:15px 28px;font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:10px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span style="color:#fff;">Android alert</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- CONTACT -->
 <section class="contact-sec">
-  <h2 id="contactTitle">Contact Us</h2>
-  <div class="contact-cols" style="justify-content:center;">
-    <div class="contact-col" style="text-align:center;">
-      <h4 id="phoneLabel">Local Phone</h4>
-      <p>🇨🇦 +1 204 509 6153</p>
-      <p style="margin-top:8px;">✉️ info@bolivarautos.ca</p>
+  <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2563eb;margin-bottom:10px;" id="contactTag">Get in touch</div>
+  <h2 id="contactTitle" style="margin-bottom:32px;">Contact Us</h2>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;">
+
+    <!-- Phone card -->
+    <div style="border:2px solid #2563eb;border-radius:14px;padding:22px 28px;display:flex;align-items:center;gap:16px;min-width:220px;background:#fff;">
+      <div style="width:44px;height:44px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.64 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 5.5 5.5l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;" id="phoneLabel">Phone</div>
+        <div style="font-size:16px;font-weight:700;color:#0f172a;">+1 204 509 6153</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:2px;">Winnipeg, Canada 🇨🇦</div>
+      </div>
     </div>
+
+    <!-- Email card -->
+    <div style="border:2px solid #2563eb;border-radius:14px;padding:22px 28px;display:flex;align-items:center;gap:16px;min-width:220px;background:#fff;">
+      <div style="width:44px;height:44px;background:#eff6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:11px;color:#64748b;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;">Email</div>
+        <div style="font-size:16px;font-weight:700;color:#0f172a;">info@bolivarautos.ca</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:2px;">We reply within 24h</div>
+      </div>
+    </div>
+
   </div>
-  <p class="contact-loc">Winnipeg, Manitoba, Canada</p>
-  <a href="https://wa.me/12045096153" target="_blank" class="btn-wa" id="contactBtn">Contact via WhatsApp</a>
+  <p class="contact-loc" style="color:#94a3b8;font-size:13px;">Winnipeg, Manitoba, Canada</p>
 </section>
 
 <!-- FOOTER -->
@@ -568,6 +632,92 @@ function subscribePush() {
       msgEl.style.color = '#dc2626';
       msgEl.textContent = 'Push setup error. Try email instead.';
       msgEl.style.display = 'block';
+    });
+  });
+}
+</script>
+
+<script>
+// ── STICKY PILL — show on scroll, hide when stopped ──────────────────────────
+var stickyBar = document.getElementById('stickyBar');
+var notifySection = document.getElementById('notifySection');
+var scrollTimer = null;
+var lastScrollY = window.scrollY;
+
+function checkStickyVisibility() {
+  if(!notifySection || !stickyBar) return;
+  var rect = notifySection.getBoundingClientRect();
+  var notifyVisible = rect.top < window.innerHeight && rect.bottom > 0;
+  if(notifyVisible) {
+    stickyBar.style.opacity = '0';
+    stickyBar.style.pointerEvents = 'none';
+    return;
+  }
+  // Show pill while scrolling
+  stickyBar.style.opacity = '1';
+  stickyBar.style.pointerEvents = 'auto';
+  // Hide after 2.5 seconds of no scroll
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(function(){
+    // Only hide if email panel is not open
+    if(document.getElementById('barEmailPanel').style.display === 'none' || 
+       document.getElementById('barEmailPanel').style.display === '') {
+      stickyBar.style.opacity = '0';
+      stickyBar.style.pointerEvents = 'none';
+    }
+  }, 2500);
+}
+
+window.addEventListener('scroll', checkStickyVisibility);
+// Start hidden
+stickyBar.style.opacity = '0';
+stickyBar.style.pointerEvents = 'none';
+
+function barSubscribeEmail() {
+  var emailEl  = document.getElementById('barEmailInput');
+  var resultEl = document.getElementById('barEmailResult');
+  var email    = emailEl.value.trim().toLowerCase();
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Please enter a valid email.';
+    resultEl.style.display = 'block';
+    return;
+  }
+  dbNotify.collection('SUSCRIPTORES').doc(email).set({
+    email: email, tipo: 'email', fecha: new Date().toISOString(), activo: true
+  }).then(function(){
+    resultEl.style.color = '#4ade80';
+    resultEl.textContent = '✅ Subscribed!';
+    resultEl.style.display = 'block';
+    emailEl.value = '';
+    setTimeout(function(){ document.getElementById('barEmailPanel').style.display='none'; }, 3000);
+  }).catch(function(){
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Error. Try again.';
+    resultEl.style.display = 'block';
+  });
+}
+
+function barSubscribePush() {
+  var resultEl = document.getElementById('barPushResult');
+  Notification.requestPermission().then(function(permission){
+    if(permission !== 'granted'){
+      resultEl.textContent = 'Blocked in settings.';
+      resultEl.style.display = 'block';
+      return;
+    }
+    var messaging = firebase.messaging(notifyApp);
+    messaging.getToken({ vapidKey:'BF6AYOvzTBLA3XCTE_XbOQw4rCilfOYt23yzUsyPxjzmMQ3hnV_onLcyCJfzzEz9ifmwCJfGkd_sJ24hZqsH978' }).then(function(token){
+      if(!token) return;
+      dbNotify.collection('SUSCRIPTORES').add({
+        token: token, tipo: 'push', fecha: new Date().toISOString(), activo: true
+      }).then(function(){
+        resultEl.textContent = '✅ On!';
+        resultEl.style.display = 'block';
+      });
+    }).catch(function(){
+      resultEl.textContent = 'Error.';
+      resultEl.style.display = 'block';
     });
   });
 }
