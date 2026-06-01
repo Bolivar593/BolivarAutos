@@ -320,14 +320,14 @@
   <div id="stickyBar" style="display:flex;justify-content:center;padding:0 16px 20px;transition:opacity 0.35s ease;opacity:0;">
     <div style="background:#0f172a;border-radius:50px;padding:11px 12px 11px 18px;display:inline-flex;align-items:center;gap:10px;box-shadow:0 6px 28px rgba(0,0,0,0.5);pointer-events:auto;max-width:calc(100vw - 32px);">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-      <span class="pill-text-label" style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3b82f6;white-space:nowrap;flex-shrink:0;">Stay updated</span>
-      <span class="pill-text-label pill-text-secondary" style="font-size:13px;font-weight:600;color:#ffffff;white-space:nowrap;flex-shrink:0;">New cars alert</span>
+      <span class="pill-text-label" style="font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#3b82f6;white-space:nowrap;flex-shrink:0;">Never miss a new car</span>
+      <span class="pill-text-label pill-text-secondary" style="font-size:13px;font-weight:600;color:#ffffff;white-space:nowrap;flex-shrink:0;"
       <div style="display:flex;gap:6px;flex-shrink:0;">
-        <button onclick="toggleBarEmail()" style="background:#1e293b;color:#fff;border:1px solid #475569;border-radius:50px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;">
+        <button onclick="toggleBarEmail()" style="background:#1e293b;color:#fff;border:1px solid #475569;border-radius:50px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;min-width:90px;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="#3b82f6" style="flex-shrink:0;"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
           <span style="color:#fff;">iPhone</span>
         </button>
-        <button onclick="handleAndroidBtn()" style="background:#2563eb;color:#fff;border:none;border-radius:50px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;">
+        <button onclick="handleAndroidBtn()" style="background:#2563eb;color:#fff;border:none;border-radius:50px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;-webkit-tap-highlight-color:transparent;min-width:90px;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
           <span style="color:#fff;">Android</span>
         </button>
@@ -341,14 +341,14 @@
 <div id="notifySection" style="background:#0f172a;padding:64px 20px;text-align:center;position:relative;overflow:hidden;">
   <div style="position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:260px;background:radial-gradient(ellipse,rgba(37,99,235,0.18) 0%,transparent 70%);pointer-events:none;"></div>
   <div style="max-width:560px;margin:0 auto;position:relative;">
-    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3b82f6;">Stay updated</span></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3b82f6;">Never miss a new car</span></div>
     <h2 id="notifyTitle" style="font-size:clamp(28px,5vw,42px);font-weight:900;color:#fff;line-height:1.15;margin-bottom:12px;font-family:'Inter',sans-serif;">Never miss a <span style="color:#3b82f6;">new car</span> again</h2>
     <p id="notifySub" style="font-size:15px;color:#64748b;margin-bottom:36px;line-height:1.6;">Subscribe and be the first to know when new vehicles arrive to our inventory.</p>
     <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;">
       <div>
         <div id="notifyEmailPanel" style="display:none;background:#1e293b;border-radius:12px;padding:16px;margin-bottom:10px;width:280px;text-align:left;position:relative;">
           <button onclick="document.getElementById('notifyEmailPanel').style.display='none'" style="position:absolute;top:8px;right:8px;background:none;border:none;color:#64748b;font-size:18px;cursor:pointer;line-height:1;padding:2px 6px;">✕</button>
-          <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;padding-right:20px;">Enter your email to receive alerts:</p>
+          <p style="font-size:12px;color:#94a3b8;margin:0 0 10px;padding-right:20px;">Be first to know when a new car arrives:</p>
           <div style="display:flex;gap:8px;">
             <input type="email" id="notifyEmail" placeholder="your@email.com" style="flex:1;padding:10px 12px;border:none;border-radius:8px;font-size:13px;outline:none;background:#0f172a;color:#fff;min-width:0;">
             <button onclick="subscribeEmail()" style="background:#3b82f6;color:#fff;border:none;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">✓</button>
