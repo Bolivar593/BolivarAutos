@@ -307,7 +307,7 @@
 
   <!-- Email panel: slides up above pill, never affects page layout -->
   <div id="barEmailPanel" style="display:none;pointer-events:auto;margin:0 16px 8px;background:#0f172a;border-radius:14px;padding:18px 16px 14px;box-shadow:0 -2px 24px rgba(0,0,0,0.5);">
-    <button onclick="toggleBarEmail()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;-webkit-tap-highlight-color:transparent;">✕</button>
+    <button onclick="closeBarEmail()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:#94a3b8;font-size:22px;cursor:pointer;line-height:1;padding:4px 8px;-webkit-tap-highlight-color:transparent;">✕</button>
     <p style="font-size:13px;color:#94a3b8;margin:0 0 12px;padding-right:28px;">Enter your email to receive new car alerts:</p>
     <div style="display:flex;gap:8px;">
       <input type="email" id="barEmailInput" placeholder="your@email.com" autocomplete="email" style="flex:1;padding:12px;border:none;border-radius:8px;font-size:16px;outline:none;background:#1e293b;color:#fff;min-width:0;-webkit-appearance:none;">
@@ -690,7 +690,39 @@ function toggleBarEmail() {
   var panel = document.getElementById('barEmailPanel');
   var isOpen = panel.style.display === 'block';
   panel.style.display = isOpen ? 'none' : 'block';
-  if(!isOpen) document.getElementById('barEmailInput').focus();
+  if(!isOpen) {
+    setTimeout(function() {
+      document.getElementById('barEmailInput').focus();
+    }, 100);
+  }
+}
+
+// iOS Safari keyboard fix — reposition panel using visualViewport
+if(window.visualViewport) {
+  window.visualViewport.addEventListener('resize', function() {
+    var panel = document.getElementById('barEmailPanel');
+    var wrapper = document.getElementById('stickyWrapper');
+    if(!panel || panel.style.display === 'none') return;
+    var vv = window.visualViewport;
+    var offsetBottom = window.innerHeight - vv.height - vv.offsetTop;
+    wrapper.style.bottom = Math.max(offsetBottom, 0) + 'px';
+  });
+  window.visualViewport.addEventListener('scroll', function() {
+    var panel = document.getElementById('barEmailPanel');
+    var wrapper = document.getElementById('stickyWrapper');
+    if(!panel || panel.style.display === 'none') return;
+    var vv = window.visualViewport;
+    var offsetBottom = window.innerHeight - vv.height - vv.offsetTop;
+    wrapper.style.bottom = Math.max(offsetBottom, 0) + 'px';
+  });
+}
+
+// Reset wrapper position when panel closes
+function closeBarEmail() {
+  document.getElementById('barEmailPanel').style.display = 'none';
+  document.getElementById('stickyWrapper').style.bottom = '0';
+  // Blur input to close keyboard
+  document.getElementById('barEmailInput').blur();
 }
 
 function handleAndroidBtn() {
@@ -721,7 +753,9 @@ function barSubscribeEmail() {
     resultEl.textContent = '✅ Subscribed!';
     resultEl.style.display = 'block';
     emailEl.value = '';
-    setTimeout(function(){ document.getElementById('barEmailPanel').style.display='none'; }, 3000);
+    document.getElementById('barEmailInput').blur();
+  document.getElementById('stickyWrapper').style.bottom = '0';
+  setTimeout(function(){ document.getElementById('barEmailPanel').style.display='none'; }, 3000);
   }).catch(function(){
     resultEl.style.color = '#f87171';
     resultEl.textContent = 'Error. Try again.';
