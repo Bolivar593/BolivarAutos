@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Subscribe — BolivarAutos</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:#0f172a;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+
+.card{background:#1e293b;border-radius:20px;padding:32px 24px;max-width:420px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.4);}
+
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center;}
+.logo-box{background:#0f172a;border-radius:10px;padding:8px 12px;font-size:18px;font-weight:900;color:#fff;letter-spacing:-0.5px;}
+.logo-box span{color:#3b82f6;}
+.logo-sub{font-size:12px;color:#64748b;text-align:center;}
+
+.bell-icon{display:flex;justify-content:center;margin-bottom:16px;}
+.tag{text-align:center;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3b82f6;margin-bottom:10px;}
+h1{text-align:center;font-size:30px;font-weight:900;color:#fff;line-height:1.2;margin-bottom:8px;}
+h1 span{color:#3b82f6;}
+.sub{text-align:center;font-size:16px;color:#64748b;line-height:1.6;margin-bottom:28px;}
+
+.divider{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.divider-line{flex:1;height:1px;background:#334155;}
+.divider-text{font-size:11px;color:#64748b;white-space:nowrap;}
+
+/* Email */
+.label{font-size:12px;font-weight:600;color:#94a3b8;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.input-row{display:flex;gap:8px;margin-bottom:8px;}
+.input-row input{flex:1;padding:13px 14px;border:none;border-radius:10px;font-size:16px;outline:none;background:#0f172a;color:#fff;-webkit-appearance:none;}
+.input-row input::placeholder{color:#475569;}
+.btn-check{background:#3b82f6;color:#fff;border:none;padding:13px 18px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;}
+.result{font-size:13px;color:#4ade80;margin-bottom:16px;text-align:center;display:none;}
+.result.err{color:#f87171;}
+
+/* Android push */
+.btn-push{width:100%;background:#2563eb;color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;-webkit-tap-highlight-color:transparent;}
+.push-result{margin-top:10px;font-size:13px;color:#4ade80;text-align:center;display:none;}
+
+.back{display:block;text-align:center;margin-top:24px;color:#475569;font-size:13px;text-decoration:none;}
+.back:hover{color:#94a3b8;}
+
+footer{margin-top:32px;text-align:center;font-size:12px;color:#334155;}
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo">
+    <div>
+      <div class="logo-box">B<span>·</span>LIVAR <span style="font-size:12px;font-weight:500;color:#64748b;">AUTOS</span></div>
+      
+    </div>
+  </div>
+
+  <div class="bell-icon">
+    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+  </div>
+
+  <div class="tag">New inventory alerts</div>
+  <h1>Never miss a <span>new car</span></h1>
+  <p class="sub">Subscribe and be the first to know when we add new vehicles to our inventory.</p>
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+  <!-- iPhone Button -->
+  <button onclick="toggleEmailPanel()" style="background:#1e293b;color:#fff;border:1px solid #334155;border-radius:12px;padding:10px 22px;font-size:16px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:10px;margin-bottom:12px;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    <span style="color:#fff;">iPhone alert</span>
+  </button>
+
+  <!-- Email panel -->
+  <div id="emailPanel" style="display:none;background:#0f172a;border-radius:12px;padding:14px;margin-bottom:14px;">
+    <div style="display:flex;gap:8px;">
+      <input type="email" id="emailInput" placeholder="your@email.com" autocomplete="email" style="flex:1;padding:13px 14px;border:none;border-radius:10px;font-size:16px;outline:none;background:#1e293b;color:#fff;-webkit-appearance:none;">
+      <button onclick="subscribeEmail()" style="background:#3b82f6;color:#fff;border:none;padding:13px 18px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;">✓</button>
+    </div>
+    <div class="result" id="emailResult"></div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">or / o</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- Android Button -->
+  <button onclick="subscribePush()" style="background:#2563eb;color:#fff;border:2px solid #60a5fa;border-radius:12px;padding:10px 22px;font-size:16px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:10px;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0 0 12 1.5c-.96 0-1.86.23-2.66.63L7.88.65c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.96 5.96 0 0 0 6 7h12a5.96 5.96 0 0 0-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/></svg>
+    <span style="color:#fff;">Android alert</span>
+  </button>
+  <div class="push-result" id="pushResult"></div>
+  </div>
+
+  <a href="/" class="back" style="font-size:15px;">← Back to BolivarAutos</a>
+
+</div>
+
+<footer>bolivarautos.ca</footer>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ",
+  authDomain:"bolivarautos-919e4.firebaseapp.com",
+  projectId:"bolivarautos-919e4",
+  storageBucket:"bolivarautos-919e4.firebasestorage.app",
+  messagingSenderId:"397354528397",
+  appId:"1:397354528397:web:52fd2ec53984af7aaa7cc4"
+});
+var db = firebase.firestore();
+
+
+// iOS keyboard fix
+if(window.visualViewport) {
+  window.visualViewport.addEventListener('resize', function() {
+    var panel = document.getElementById('emailPanel');
+    if(!panel || panel.style.display === 'none') return;
+    document.getElementById('emailPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
+  });
+}
+
+function toggleEmailPanel() {
+  var panel = document.getElementById('emailPanel');
+  var isOpen = panel.style.display === 'block';
+  panel.style.display = isOpen ? 'none' : 'block';
+  if(!isOpen) setTimeout(function(){ document.getElementById('emailInput').focus(); }, 100);
+}
+
+function subscribeEmail() {
+  var emailEl = document.getElementById('emailInput');
+  var resultEl = document.getElementById('emailResult');
+  var email = emailEl.value.trim().toLowerCase();
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    resultEl.className = 'result err';
+    resultEl.textContent = 'Please enter a valid email.';
+    resultEl.style.display = 'block';
+    return;
+  }
+  db.collection('SUSCRIPTORES').doc(email).set({
+    email:email, tipo:'email', fecha:new Date().toISOString(), activo:true
+  }).then(function(){
+    resultEl.className = 'result';
+    resultEl.textContent = '✅ Subscribed! You\'ll be notified when new cars arrive.';
+    resultEl.style.display = 'block';
+    emailEl.value = '';
+  }).catch(function(){
+    resultEl.className = 'result err';
+    resultEl.textContent = 'Error. Please try again.';
+    resultEl.style.display = 'block';
+  });
+}
+
+function subscribePush() {
+  var resultEl = document.getElementById('pushResult');
+  var isAndroid = /android/i.test(navigator.userAgent);
+  var supportsPush = 'Notification' in window && 'serviceWorker' in navigator && 'PushManager' in window;
+  if(!isAndroid || !supportsPush){
+    resultEl.style.color = '#f87171';
+    resultEl.textContent = 'Push notifications work on Android. Please use email above.';
+    resultEl.style.display = 'block';
+    return;
+  }
+  Notification.requestPermission().then(function(permission){
+    if(permission !== 'granted'){
+      resultEl.style.color = '#f87171';
+      resultEl.textContent = 'Notifications blocked. Please enable in browser settings.';
+      resultEl.style.display = 'block';
+      return;
+    }
+    var messaging = firebase.messaging();
+    messaging.getToken({ vapidKey:'BF6AYOvzTBLA3XCTE_XbOQw4rCilfOYt23yzUsyPxjzmMQ3hnV_onLcyCJfzzEz9ifmwCJfGkd_sJ24hZqsH978' }).then(function(token){
+      if(!token) return;
+      db.collection('SUSCRIPTORES').add({
+        token:token, tipo:'push', fecha:new Date().toISOString(), activo:true
+      }).then(function(){
+        resultEl.style.color = '#4ade80';
+        resultEl.textContent = '✅ Android notifications enabled!';
+        resultEl.style.display = 'block';
+      });
+    }).catch(function(){
+      resultEl.style.color = '#f87171';
+      resultEl.textContent = 'Error setting up push. Please use email.';
+      resultEl.style.display = 'block';
+    });
+  });
+}
+
+// Allow Enter key on email input
+document.getElementById('emailInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') subscribeEmail();
+});
+</script>
+</body>
+</html>
