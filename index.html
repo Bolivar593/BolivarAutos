@@ -399,9 +399,10 @@ var texts = {
     loadingText:'Loading vehicles...',
     emptyTitle:'No vehicles found', emptyText:'Contact us via WhatsApp to see available vehicles.',
     moreTitle:'More Cars Coming Soon', moreSub:'We are constantly updating our inventory', moreBtn:'Check Availability',
-    contactTitle:'Contact Us', waLabel:'WhatsApp', phoneLabel:'Local Phone', contactBtn:'Contact via WhatsApp',
+    contactTitle:'Contact Us', waLabel:'WhatsApp', phoneLabel:'Phone', contactBtn:'Contact via WhatsApp',
     consultar:'Consult', carfax:'Carfax', verFotos:'📷 View Photos',
-    garantia:'✓ Warranty', safety:'✓ Safety Inspection', carfaxDisp:'✓ Carfax available'
+    garantia:'✓ Warranty', safety:'✓ Safety Inspection', carfaxDisp:'✓ Carfax available',
+    subscribeBtn:'Subscribe', contactTag:'Get in touch'
   },
   es: {
     heroTitle:'Tu Próximo Auto Está Aquí',
@@ -411,9 +412,10 @@ var texts = {
     loadingText:'Cargando vehículos...',
     emptyTitle:'No se encontraron vehículos', emptyText:'Contáctanos por WhatsApp para ver los vehículos disponibles.',
     moreTitle:'Más Autos Próximamente', moreSub:'Actualizamos nuestro inventario constantemente', moreBtn:'Verificar Disponibilidad',
-    contactTitle:'Contáctanos', waLabel:'WhatsApp', phoneLabel:'Teléfono Local', contactBtn:'Contactar por WhatsApp',
+    contactTitle:'Contáctanos', waLabel:'WhatsApp', phoneLabel:'Teléfono', contactBtn:'Contactar por WhatsApp',
     consultar:'Consultar', carfax:'Carfax', verFotos:'📷 Ver Fotos',
-    garantia:'✓ Garantía', safety:'✓ Safety Inspection', carfaxDisp:'✓ Carfax disponible'
+    garantia:'✓ Garantía', safety:'✓ Inspección de seguridad', carfaxDisp:'✓ Carfax disponible',
+    subscribeBtn:'Suscríbete', contactTag:'Contáctanos'
   }
 };
 var currentLang = 'en';
@@ -431,6 +433,10 @@ function setLang(lang) {
   document.querySelectorAll('.txt-garantia').forEach(function(el){el.textContent=t.garantia;});
   document.querySelectorAll('.txt-safety').forEach(function(el){el.textContent=t.safety;});
   document.querySelectorAll('.txt-carfaxdisp').forEach(function(el){el.textContent=t.carfaxDisp;});
+  var subBtn = document.getElementById('floatSubBtn');
+  if(subBtn) { var span = subBtn.querySelector('span'); if(span) span.textContent = t.subscribeBtn; }
+  var contactTag = document.getElementById('contactTag');
+  if(contactTag) contactTag.textContent = t.contactTag;
   document.documentElement.lang = lang;
 }
 
