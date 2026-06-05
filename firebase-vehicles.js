@@ -111,7 +111,7 @@ async function loadFirebaseVEHICULOS_BG() {
       card.innerHTML = `
         <div style="position:relative;width:100%;height:${photoHeight}px;overflow:hidden;background:#f3f4f6;flex-shrink:0;">
           ${img1 ? `<img src="${img1}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">` : ''}
-          <button onclick="fbOpenGallery('${fotosParam}')" style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;">&#128247; Ver Fotos</button>
+          <button onclick="fbOpenGallery('${fotosParam}')" class="btn-ver-fotos" style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;">&#128247; Ver Fotos</button>
         </div>
         <div class="p-5">
           <h3 class="font-bold text-xl text-gray-900 mb-2">${nombre}</h3>
@@ -119,18 +119,23 @@ async function loadFirebaseVEHICULOS_BG() {
             <span style="color:#2563eb;font-weight:bold;font-size:1.4rem;">CAD $${precio}</span>
             <span style="color:#6b7280;font-size:0.9rem;">${km} km</span>
           </div>
-          <p style="color:#374151;font-size:0.9rem;margin-bottom:4px;">&#10003; Garantia</p>
-          <p style="color:#374151;font-size:0.9rem;margin-bottom:4px;">&#10003; Safety Inspection</p>
-          <p style="color:#374151;font-size:0.9rem;margin-bottom:16px;">&#10003; Carfax disponible</p>
+          <p style="color:#374151;font-size:0.9rem;margin-bottom:4px;"><span class="txt-garantia">&#10003; Garantia</span></p>
+          <p style="color:#374151;font-size:0.9rem;margin-bottom:4px;"><span class="txt-safety">&#10003; Safety Inspection</span></p>
+          <p style="color:#374151;font-size:0.9rem;margin-bottom:16px;"><span class="txt-carfaxdisp">&#10003; Carfax disponible</span></p>
           <div class="flex gap-2">
-            <a href="https://wa.me/12045096153?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(nombre)}" target="_blank" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;">Consultar</a>
-            <button onclick="abrirCarfax('${v.carfax || ''}', '${encodeURIComponent(nombre)}')" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="border:none;cursor:pointer;">Carfax</button>
+            <a href="https://wa.me/12045096153?text=Hola,%20me%20interesa%20el%20${encodeURIComponent(nombre)}" target="_blank" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl text-sm font-semibold" style="text-decoration:none;"><span class="txt-consultar">Consultar</span></a>
+            <button onclick="abrirCarfax('${v.carfax || ''}', '${encodeURIComponent(nombre)}')" class="flex-1 bg-gray-700 hover:bg-gray-900 text-white text-center py-3 rounded-xl text-sm font-semibold" style="border:none;cursor:pointer;"><span class="txt-carfax">Carfax</span></button>
           </div>
         </div>`;
 
       const grid = document.getElementById("carGrid");
       if (grid) grid.appendChild(card);
     });
+
+    // Aplicar el idioma actual a las tarjetas recien creadas
+    if (typeof setLang === 'function') {
+      setLang(typeof currentLang !== 'undefined' ? currentLang : 'en');
+    }
   } catch (err) {
     console.error("Firebase error:", err);
   }
