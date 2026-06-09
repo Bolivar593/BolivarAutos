@@ -652,10 +652,12 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div style="font-size:12px;color:#888;background:#f5f5f5;border-radius:8px;padding:4px 10px" id="dash-fecha">—</div>
   </div>
 
-  <!-- Campos ocultos capital/banco (funcionalidad intacta) -->
+  <!-- Campos ocultos capital/banco/remesa (funcionalidad intacta) -->
   <div style="display:none">
     <input type="number" id="dash-capital" value="3898.47" step="0.01" onchange="loadDashboard()">
-    <input type="number" id="dash-banco" value="4559.09" step="0.01" onchange="loadDashboard()">
+    <input type="number" id="dash-banco" value="4748.98" step="0.01" onchange="loadDashboard()">
+    <input type="number" id="dash-remesa" value="210.51" step="0.01" onchange="loadDashboard()">
+    <input type="number" id="dash-imp" value="313.69" step="0.01" onchange="loadDashboard()">
   </div>
 
   <!-- Status gastos -->
@@ -702,7 +704,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <div style="font-size:16px;color:#aaa;margin-bottom:6px">⚠️</div>
         <div style="font-size:12px;color:#888;margin-bottom:3px">Impuestos a apartar</div>
         <div style="font-size:22px;font-weight:500;color:#A32D2D" id="d-imp-total">$0.00</div>
-        <div style="font-size:11px;color:#bbb;margin-top:2px">GST + RST</div>
+        <div style="font-size:11px;color:#bbb;margin-top:2px">GST + RST + remesa CRA</div>
       </div>
     </div>
 
@@ -1671,10 +1673,18 @@ function loadGastosRecientes() {
       html+='<div class="gi-desc">'+(g.descripcion||'-')+' | '+(g.proveedor||'-')+'</div>';
       html+='<div class="gi-sub">Neto: $'+monto+' | GST: $'+gst+' | RST: $'+rst+' | '+g.metodo_pago+'</div>';
       html+='<div class="gi-sub" style="color:#aaa">'+g.fecha+'</div>';
+      html+='<div style="text-align:right;margin-top:6px"><button onclick="borrarGasto(\''+doc.id+'\')" style="background:none;border:none;color:#ef4444;font-size:12px;cursor:pointer;padding:2px 4px;-webkit-tap-highlight-color:transparent">🗑 borrar</button></div>';
       html+='</div>';
     });
     lista.innerHTML=html;
   }).catch(function(e){lista.innerHTML='<div style="color:#dc2626;padding:12px">Error: '+e.message+'</div>';});
+}
+
+function borrarGasto(docId) {
+  if(!confirm('¿Borrar este gasto?\n\nSe elimina de Firebase. Si ya se registró en la hoja de Google Sheets, bórralo allá también manualmente.')) return;
+  db.collection('GASTOS_EMPRESA').doc(docId).delete()
+  .then(function(){ loadGastosRecientes(); })
+  .catch(function(e){ alert('Error al borrar: '+e.message); });
 }
 
 // ===== DASHBOARD =====
@@ -1752,10 +1762,11 @@ function loadDashboard() {
   function finalizar() {
     if(st.finished || !st.fbReady || !st.totReady) return;
     st.finished = true;
-    var banco = parseFloat(document.getElementById('dash-banco').value)||capital;
+    var capitalF = parseFloat(document.getElementById('dash-capital').value)||capital;
+    var banco = parseFloat(document.getElementById('dash-banco').value)||capitalF;
     var statusEl = document.getElementById('d-gastos-status');
     if(statusEl) statusEl.style.display = st.totalesOK ? 'none' : 'block';
-    mostrarDashboard(capital, banco, st.tRentas, st.tGST, st.tPST,
+    mostrarDashboard(capitalF, banco, st.tRentas, st.tGST, st.tPST,
                      st.tGastos, st.tITC, st.nRentas, st.nGastos, st.tMes, st.nMes);
   }
 
@@ -1764,6 +1775,11 @@ function loadDashboard() {
   .then(function(doc) {
     if(doc.exists) {
       var t = doc.data();
+      // Auto-poblar desde la hoja (fuente única de verdad — escrito por el script)
+      if(t.saldoBanco       !== undefined) document.getElementById('dash-banco').value   = parseFloat(t.saldoBanco);
+      if(t.capital          !== undefined) document.getElementById('dash-capital').value = parseFloat(t.capital);
+      if(t.impuestosApartar !== undefined) document.getElementById('dash-imp').value      = parseFloat(t.impuestosApartar);
+      if(t.remesaNomina     !== undefined) document.getElementById('dash-remesa').value   = parseFloat(t.remesaNomina);
       if(parseFloat(t.totalRentas||0) > 0) {
         st.tRentas = parseFloat(t.totalRentas    || 0);
         st.tGST    = parseFloat(t.totalGSTrentas || 0);
@@ -1815,7 +1831,10 @@ function loadDashboard() {
 
 function mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
   var gstNeto    = Math.max(0, tGST - tITC);
-  var impTotal   = gstNeto + tPST;
+  var remesa     = parseFloat(document.getElementById('dash-remesa').value) || 0;
+  var impFijo    = parseFloat(document.getElementById('dash-imp').value);   // GST+RST fijo, sincronizado con la hoja
+  var impSales   = isNaN(impFijo) ? (gstNeto + tPST) : impFijo;             // usa el fijo; si está vacío, calcula de Firebase
+  var impTotal   = impSales + remesa;     // total a apartar = GST + RST + remesa nómina CRA
   var saldoNeto  = tRentas - tGastos; // rentas cobradas (sin taxes) minus gastos
   var disponible = banco - capital - impTotal;
 
