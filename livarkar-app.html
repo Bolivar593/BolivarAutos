@@ -820,6 +820,22 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <div class="nav-item" onclick="admShowPage('suscriptores')">
           <span class="icon">🔔</span> Suscriptores
         </div>
+        <!-- Auto de Renta -->
+        <div class="nav-section-title">Renta</div>
+        <div class="nav-item" onclick="toggleVrPanel()">
+          <span class="icon">📋</span> Auto de Renta
+        </div>
+        <div id="vr-panel" style="display:none;margin:4px 8px 8px;background:rgba(255,255,255,0.06);border:1.5px solid #2563eb;border-radius:10px;padding:12px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div><div style="font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px">Marca</div><input id="vr-marca" type="text" placeholder="Toyota" style="width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:13px;background:rgba(255,255,255,0.08);color:#fff"></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px">Modelo</div><input id="vr-modelo" type="text" placeholder="Corolla" style="width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:13px;background:rgba(255,255,255,0.08);color:#fff"></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px">Año</div><input id="vr-ano" type="text" placeholder="2020" style="width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:13px;background:rgba(255,255,255,0.08);color:#fff"></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px">Placa</div><input id="vr-placa" type="text" placeholder="ABC 123" style="width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:13px;background:rgba(255,255,255,0.08);color:#fff"></div>
+            <div><div style="font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:3px">VIN</div><input id="vr-vin" type="text" placeholder="1HGBH41JXMN109186" style="width:100%;padding:7px 9px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:13px;background:rgba(255,255,255,0.08);color:#fff"></div>
+          </div>
+          <button onclick="saveVehicleRenta()" style="margin-top:10px;width:100%;background:#2563eb;color:#fff;border:none;border-radius:6px;padding:8px;font-size:13px;font-weight:700;cursor:pointer">💾 Guardar</button>
+          <div id="vr-saved" style="display:none;text-align:center;color:#4ade80;font-size:12px;font-weight:700;margin-top:6px">✅ Guardado</div>
+        </div>
 
       </nav>
 
@@ -870,24 +886,6 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <button class="btn btn-primary" onclick="admOpenAddModal()">➕ Agregar vehículo</button>
             <button class="btn" onclick="admOpenNotifyModal()" style="background:#2563eb;color:#fff;border-color:#2563eb;">📣 Notificar suscriptores</button>
-          </div>
-        </div>
-        <!-- Auto de renta -->
-        <div style="background:#fff;border:2px solid #0a7c3e;border-radius:12px;margin-bottom:24px;overflow:hidden">
-          <div onclick="document.getElementById('vr-body').style.display=document.getElementById('vr-body').style.display==='none'?'block':'none';this.querySelector('.vr-arrow').textContent=document.getElementById('vr-body').style.display==='none'?'▼':'▲'" style="padding:14px 20px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none">
-            <span style="font-size:15px;font-weight:700;color:#0a7c3e">🚗 Auto de Renta — Datos para Contrato</span>
-            <span class="vr-arrow" style="color:#0a7c3e;font-size:13px">▼</span>
-          </div>
-          <div id="vr-body" style="display:none;padding:0 20px 20px">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Marca</label><input id="vr-marca" type="text" placeholder="Toyota" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px"></div>
-              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Modelo</label><input id="vr-modelo" type="text" placeholder="Corolla" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px"></div>
-              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Año</label><input id="vr-ano" type="text" placeholder="2020" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px"></div>
-              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Placa</label><input id="vr-placa" type="text" placeholder="ABC 123" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px"></div>
-              <div style="grid-column:1/-1"><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">VIN</label><input id="vr-vin" type="text" placeholder="1HGBH41JXMN109186" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px"></div>
-            </div>
-            <button onclick="saveVehicleRenta()" style="margin-top:12px;background:#0a7c3e;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer">💾 Guardar datos del auto</button>
-            <span id="vr-saved" style="display:none;margin-left:12px;color:#0a7c3e;font-size:13px;font-weight:700">✅ Guardado</span>
           </div>
         </div>
         <div id="vehiculosList">
@@ -1098,14 +1096,31 @@ var MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septi
 var lang='en',selZ=null,selD=null,selT=null;
 var cy=new Date().getFullYear(),cm=new Date().getMonth();
 var bookedSlots=[],db=null,adminUnlocked=false,bookingConfirmed=false,calendarDone=false;
-var ADMIN_PW='bolivar2025';
+var bookedDates=new Set();
+var ADMIN_PW='8334';
 var currentUID='';
 
 function pad(n){return String(n).padStart(2,'0');}
 function getRate(){return parseFloat(document.getElementById('rate-val').value)||47.5;}
 function calcTax(sub){var g=sub*GST,p=sub*PST;return{gst:g,pst:p,total:sub+g+p};}
 function getZone(){for(var i=0;i<ZONES.length;i++){if(ZONES[i].id===selZ)return ZONES[i];}return null;}
-function phoneMask(el){var d=el.value.replace(/\D/g,'');if(d.length>10&&d.charAt(0)==='1')d=d.substring(1);d=d.substring(0,10);var o='';if(d.length>0)o+=d.substring(0,3);if(d.length>=4)o+='-'+d.substring(3,6);if(d.length>=7)o+='-'+d.substring(6,10);el.value=o;}
+function phoneMask(el){
+  var raw=el.value;
+  // International number (starts with +) or pasted number with > 10 digits — don't mask
+  if(raw.charAt(0)==='+')return;
+  var digits=raw.replace(/\D/g,'');
+  if(digits.length>10)return;
+  // Canadian format xxx-xxx-xxxx
+  var pos=el.selectionStart;
+  if(digits.charAt(0)==='1')digits=digits.substring(1);
+  digits=digits.substring(0,10);
+  var o='';
+  if(digits.length>0)o+=digits.substring(0,3);
+  if(digits.length>=4)o+='-'+digits.substring(3,6);
+  if(digits.length>=7)o+='-'+digits.substring(6,10);
+  el.value=o;
+  try{el.setSelectionRange(pos,pos);}catch(e){}
+}
 function fmtH(h){var hh=Math.floor(h),mm=h%1===0.5?'30':'00';if(hh<12)return hh+':'+mm+' AM';if(hh===12)return'12:'+mm+' PM';return(hh-12)+':'+mm+' PM';}
 function parseH(ts){var m=ts.match(/(\d+):(\d+)\s(AM|PM)/);var h=parseInt(m[1]);if(m[3]==='PM'&&h!==12)h+=12;if(m[3]==='AM'&&h===12)h=0;return h+(m[2]==='30'?0.5:0);}
 function todayStr(){var n=new Date();return n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate());}
@@ -1315,10 +1330,20 @@ function renderCal(){
     var ds=cy+'-'+pad(cm+1)+'-'+pad(d);
     var el=document.createElement('div');var cls='cal-day';
     if(isPast)cls+=' past';if(isTod)cls+=' today';if(selD===ds)cls+=' sel';
-    el.className=cls;el.textContent=d;
+    el.className=cls;
+    var dot=bookedDates.has(ds)?'<div style="width:5px;height:5px;background:#2563eb;border-radius:50%;margin:2px auto 0;opacity:0.85"></div>':'<div style="width:5px;height:5px;margin:2px auto 0"></div>';
+    el.innerHTML='<div>'+d+'</div>'+dot;
     if(!isPast){(function(dateStr){el.onclick=function(){selD=dateStr;if(selT&&isPastSlot(dateStr,parseH(selT)))selT=null;renderCal();upd();updateProgress();loadBookedSlots(dateStr);};})(ds);}
     g.appendChild(el);
   }
+}
+function loadBookedDates(){
+  if(!db)return;
+  var from=cy+'-'+pad(cm+1)+'-01';
+  var to=cy+'-'+pad(cm+1)+'-'+pad(new Date(cy,cm+1,0).getDate());
+  db.collection('CITAS_RENTA').where('fecha','>=',from).where('fecha','<=',to).where('cancelada','==',false).get()
+  .then(function(snap){bookedDates=new Set();snap.forEach(function(doc){bookedDates.add(doc.data().fecha);});renderCal();})
+  .catch(function(e){console.warn(e);});
 }
 function renderTimes(){
   var dur=parseFloat(document.getElementById('dur').value);
@@ -1337,8 +1362,8 @@ function renderTimes(){
     g.appendChild(el);
   }
 }
-function pm(){if(cm===0){cm=11;cy--;}else cm--;renderCal();}
-function nm(){if(cm===11){cm=0;cy++;}else cm++;renderCal();}
+function pm(){if(cm===0){cm=11;cy--;}else cm--;bookedDates=new Set();renderCal();loadBookedDates();}
+function nm(){if(cm===11){cm=0;cy++;}else cm++;bookedDates=new Set();renderCal();loadBookedDates();}
 
 function buildMsg(){
   var nm=document.getElementById('nm').value,dur=parseFloat(document.getElementById('dur').value),no=document.getElementById('no').value;
@@ -1585,7 +1610,20 @@ var contratosPanelOpen=false;
 function toggleContratos(){contratosPanelOpen=!contratosPanelOpen;var panel=document.getElementById('contratos-panel');panel.style.display=contratosPanelOpen?'block':'none';if(contratosPanelOpen)loadContratosList();}
 function loadContratosList(){var list=document.getElementById('contratos-list');list.innerHTML='Cargando...';db.collection('CONTRATOS').orderBy('signedAt','desc').limit(50).get().then(function(snap){if(snap.empty){list.innerHTML='<p style="color:#aaa;text-align:center;padding:8px">No hay contratos firmados aun.</p>';return;}var html='';snap.forEach(function(doc){var d=doc.data();var fecha=d.signedAtStr||'—';var tipo=d.licenceType==='B'?'GDL/Principiante':'Licencia completa';var signed=d.signedName||(d.client&&d.client.name)||'—';html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #f0f0f0"><span style="font-size:20px">✅</span><div style="flex:1"><div style="font-weight:700;font-size:13px">'+signed+'</div><div style="font-size:11px;color:#888">'+fecha+' · '+tipo+'</div></div></div>';});list.innerHTML=html;}).catch(function(e){list.innerHTML='<p style="color:red">Error: '+e.message+'</p>';});}
 
-function saveVehicleRenta(){if(!db)return;var data={marca:document.getElementById('vr-marca').value.trim(),modelo:document.getElementById('vr-modelo').value.trim(),año:document.getElementById('vr-ano').value.trim(),placa:document.getElementById('vr-placa').value.trim().toUpperCase(),vin:document.getElementById('vr-vin').value.trim().toUpperCase(),renta:true};if(!data.marca||!data.modelo){alert('Ingresa al menos marca y modelo.');return;}db.collection('CONFIG').doc('vehiculo_renta').set(data).then(function(){document.getElementById('vr-saved').style.display='block';setTimeout(function(){document.getElementById('vr-saved').style.display='none';},3000);}).catch(function(e){alert('Error: '+e.message);});}
+var _vrTimer=null;
+function toggleVrPanel(){
+  var p=document.getElementById('vr-panel');
+  if(p.style.display==='none'){
+    p.style.display='block';
+    loadVehicleRenta();
+    clearTimeout(_vrTimer);
+    _vrTimer=setTimeout(function(){p.style.display='none';},5000);
+  } else {
+    p.style.display='none';
+    clearTimeout(_vrTimer);
+  }
+}
+function saveVehicleRenta(){if(!db)return;var data={marca:document.getElementById('vr-marca').value.trim(),modelo:document.getElementById('vr-modelo').value.trim(),año:document.getElementById('vr-ano').value.trim(),placa:document.getElementById('vr-placa').value.trim().toUpperCase(),vin:document.getElementById('vr-vin').value.trim().toUpperCase(),renta:true};if(!data.marca||!data.modelo){alert('Ingresa al menos marca y modelo.');return;}db.collection('CONFIG').doc('vehiculo_renta').set(data).then(function(){var s=document.getElementById('vr-saved');s.style.display='block';clearTimeout(_vrTimer);_vrTimer=setTimeout(function(){s.style.display='none';document.getElementById('vr-panel').style.display='none';},3000);}).catch(function(e){alert('Error: '+e.message);});}
 function loadVehicleRenta(){if(!db)return;db.collection('CONFIG').doc('vehiculo_renta').get().then(function(doc){if(!doc.exists)return;var d=doc.data();document.getElementById('vr-marca').value=d.marca||'';document.getElementById('vr-modelo').value=d.modelo||'';document.getElementById('vr-ano').value=d.año||'';document.getElementById('vr-placa').value=d.placa||'';document.getElementById('vr-vin').value=d.vin||'';});}
 function deleteCanceladas(){
   var canceladas=historialData.filter(function(d){return !!d.cancelada;});
@@ -1921,7 +1959,7 @@ function toggleImpuestos() {
   // ── FIREBASE CONFIG ──
 
   // ── PASSWORD ── (puedes cambiar esta contraseña)
-  var ADMIN_PASSWORD = "bolivar2025";
+  var ADMIN_PASSWORD = "8334";
 
   // ── STATE ──
   let admSelectedFiles = [];
@@ -1963,7 +2001,6 @@ function toggleImpuestos() {
     document.getElementById('page-' + name).classList.add('active');
     event.currentTarget.classList.add('active');
     if (name === 'suscriptores') admCargarSuscriptores();
-    if (name === 'vehiculos') loadVehicleRenta();
   }
 
   // ── SUSCRIPTORES ──
@@ -2352,7 +2389,7 @@ function toggleImpuestos() {
 })();
 
 // Init rentas
-renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgress();upd();
+renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgress();upd();setTimeout(function(){loadBookedDates();},800);
 setGastoFecha();
 </script>
 </body>
