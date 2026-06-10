@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vehicle Rental Agreement — BolivarAutos</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:       #1F4E79;
+    --blue-mid:   #2E75B6;
+    --blue-light: #D6E4F0;
+    --yellow:     #FFF2CC;
+    --red:        #C00000;
+    --gray:       #F5F5F5;
+    --border:     #CCCCCC;
+    --text:       #1A1A1A;
+    --sub:        #555555;
+    --radius:     8px;
+  }
+
+  body { font-family: Arial, sans-serif; font-size: 15px; color: var(--text); background: #f0f4f8; min-height: 100vh; }
+
+  /* ── Loading ─────────────────────────────────────────────────────────────── */
+  #screen-loading {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; gap: 16px; background: #f0f4f8;
+  }
+  .spinner {
+    width: 44px; height: 44px; border: 4px solid var(--blue-light);
+    border-top-color: var(--blue); border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Modal ───────────────────────────────────────────────────────────────── */
+  #screen-modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.55); z-index: 100;
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  #screen-modal.active { display: flex; }
+  .modal-box {
+    background: #fff; border-radius: var(--radius); max-width: 420px; width: 100%;
+    padding: 32px 24px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,.25);
+  }
+  .modal-box h2 { color: var(--blue); font-size: 1.1rem; margin-bottom: 8px; }
+  .modal-box p  { color: var(--sub); font-size: .9rem; margin-bottom: 24px; }
+  .modal-btns   { display: flex; gap: 12px; justify-content: center; }
+  .btn-licence  {
+    flex: 1; padding: 14px; border: 2px solid var(--blue); border-radius: var(--radius);
+    font-size: .95rem; font-weight: bold; cursor: pointer; background: #fff; color: var(--blue);
+    transition: all .2s;
+  }
+  .btn-licence:hover, .btn-licence.active { background: var(--blue); color: #fff; }
+
+  /* ── Contract page ───────────────────────────────────────────────────────── */
+  #screen-contract { display: none; }
+  #screen-contract.active { display: block; }
+
+  .page-header {
+    background: var(--blue); color: #fff; padding: 20px 16px 16px;
+    text-align: center;
+  }
+  .page-header h1 { font-size: 1.05rem; letter-spacing: .5px; }
+  .page-header p  { font-size: .8rem; opacity: .8; margin-top: 4px; }
+
+  .lang-bar {
+    background: #fff; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; position: sticky; top: 0; z-index: 10;
+  }
+  .lang-bar span { font-size: .8rem; color: var(--sub); }
+  .lang-toggle-btn {
+    display: flex; background: var(--gray); border-radius: 20px;
+    padding: 3px; gap: 2px;
+  }
+  .lang-btn {
+    padding: 5px 14px; border-radius: 16px; border: none; font-size: .8rem;
+    font-weight: bold; cursor: pointer; background: transparent; color: var(--sub); transition: all .2s;
+  }
+  .lang-btn.active { background: var(--blue); color: #fff; }
+
+  .contract-wrap { max-width: 780px; margin: 0 auto; padding: 16px; }
+
+  /* ── Contract layout ─────────────────────────────────────────────────────── */
+  .doc-header {
+    background: #fff; border-radius: var(--radius); padding: 24px 20px;
+    text-align: center; margin-bottom: 12px; border: 1px solid var(--border);
+  }
+  .doc-header .co-name { font-size: 1.2rem; font-weight: bold; color: var(--blue); }
+  .doc-header .co-sub  { font-size: .85rem; color: var(--sub); margin: 4px 0; }
+  .doc-header hr       { border: none; border-top: 2px solid var(--blue-mid); margin: 12px 0; }
+  .doc-header .doc-title    { font-size: 1.05rem; font-weight: bold; letter-spacing: .5px; }
+  .doc-header .doc-title-es { font-size: .9rem; color: var(--sub); font-style: italic; margin-top: 4px; }
+
+  .version-banner {
+    background: var(--red); color: #fff; text-align: center;
+    padding: 10px 16px; font-weight: bold; font-size: .9rem;
+    border-radius: var(--radius); margin-bottom: 12px;
+  }
+
+  .clause-card {
+    background: #fff; border-radius: var(--radius); margin-bottom: 10px;
+    border: 1px solid var(--border); overflow: hidden;
+  }
+  .clause-hdr {
+    background: var(--blue); color: #fff; padding: 10px 16px;
+  }
+  .clause-hdr .hdr-en { font-weight: bold; font-size: .9rem; }
+  .clause-hdr .hdr-es { font-size: .8rem; opacity: .75; font-style: italic; margin-top: 2px; }
+  .clause-body { padding: 14px 16px; }
+
+  /* Data rows */
+  .data-table { width: 100%; border-collapse: collapse; margin: 6px 0; }
+  .data-table td { padding: 8px 10px; font-size: .88rem; border: 1px solid var(--border); vertical-align: middle; }
+  .data-table td:first-child {
+    background: var(--blue-light); font-weight: bold; width: 45%;
+    font-size: .82rem; color: var(--blue);
+  }
+  .data-table td.fixed { background: var(--gray); color: #333; font-style: italic; }
+  .field-value { font-size: .92rem; color: var(--text); }
+
+  /* Info box (arrendador) */
+  .info-box {
+    background: var(--blue-light); border: 1px solid var(--border);
+    border-radius: 6px; padding: 12px 14px; margin: 8px 0; font-size: .88rem;
+  }
+  .info-box .co-bold { font-weight: bold; font-size: .95rem; color: var(--blue); }
+  .info-box p { margin: 3px 0; color: #333; }
+
+  /* Warning box */
+  .warn-box {
+    border: 1px solid #FF8C00; border-left: 5px solid #FF8C00;
+    background: var(--yellow); padding: 14px 14px; border-radius: 6px;
+    margin: 10px 0; font-size: .88rem;
+  }
+  .warn-box .warn-title { font-weight: bold; font-size: .9rem; margin-bottom: 8px; }
+
+  /* Body text */
+  .body-text    { font-size: .88rem; line-height: 1.6; margin: 8px 0; }
+  .body-text-es { font-size: .84rem; color: var(--sub); font-style: italic; margin: 4px 0 8px; }
+  .note-text    { font-size: .82rem; font-style: italic; color: #444; margin: 8px 0; }
+
+  /* Bullet list */
+  .clause-list { padding-left: 20px; margin: 8px 0; }
+  .clause-list li { font-size: .87rem; line-height: 1.6; margin-bottom: 6px; }
+
+  /* Declaration */
+  .declaration { font-size: .87rem; font-style: italic; color: #333; line-height: 1.6; margin-top: 10px; border-top: 1px dashed var(--border); padding-top: 10px; }
+
+  /* ── Sign section ────────────────────────────────────────────────────────── */
+  .sign-card {
+    background: #fff; border-radius: var(--radius); border: 2px solid var(--blue);
+    padding: 24px 20px; margin-top: 16px; margin-bottom: 24px;
+  }
+  .sign-card h3 { color: var(--blue); font-size: 1rem; margin-bottom: 16px; }
+  .sign-card label { font-size: .85rem; font-weight: bold; display: block; margin-bottom: 6px; color: var(--text); }
+  .sign-card input[type=text] {
+    width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 6px;
+    font-size: .95rem; margin-bottom: 14px; outline: none;
+    transition: border-color .2s;
+  }
+  .sign-card input[type=text]:focus { border-color: var(--blue); }
+  .check-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px; }
+  .check-row input[type=checkbox] { margin-top: 3px; width: 18px; height: 18px; flex-shrink: 0; cursor: pointer; accent-color: var(--blue); }
+  .check-row span { font-size: .85rem; line-height: 1.5; color: #333; }
+  .btn-sign {
+    width: 100%; padding: 16px; background: var(--blue); color: #fff;
+    border: none; border-radius: var(--radius); font-size: 1rem; font-weight: bold;
+    cursor: pointer; transition: background .2s; letter-spacing: .5px;
+  }
+  .btn-sign:hover   { background: var(--blue-mid); }
+  .btn-sign:disabled { background: var(--border); color: #999; cursor: not-allowed; }
+
+  /* ── Done screen ─────────────────────────────────────────────────────────── */
+  #screen-done {
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 32px 20px; text-align: center; background: #f0f4f8;
+  }
+  #screen-done.active { display: flex; }
+  .done-icon { font-size: 64px; margin-bottom: 16px; }
+  .done-title { font-size: 1.3rem; font-weight: bold; color: var(--blue); margin-bottom: 8px; }
+  .done-sub   { font-size: .9rem; color: var(--sub); line-height: 1.6; max-width: 340px; }
+  .done-ref   { margin-top: 16px; background: var(--blue-light); border-radius: 8px; padding: 12px 20px; font-size: .85rem; }
+  .done-ref strong { color: var(--blue); }
+
+  /* ── Error ───────────────────────────────────────────────────────────────── */
+  #screen-error {
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 32px 20px; text-align: center;
+  }
+  #screen-error.active { display: flex; }
+  #screen-error h2 { color: var(--red); margin-bottom: 8px; }
+  #screen-error p  { color: var(--sub); font-size: .9rem; }
+
+  /* hide / show language content */
+  .es { display: none; }
+  body.lang-es .en { display: none; }
+  body.lang-es .es { display: block; }
+  body.lang-es td.en { display: none; }
+  body.lang-es td.es { display: table-cell; }
+  td.es { display: none; }
+
+  @media(min-width: 600px) {
+    .contract-wrap { padding: 24px; }
+    .data-table td:first-child { width: 40%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Loading ──────────────────────────────────────────────────────────────── -->
+<div id="screen-loading">
+  <div class="spinner"></div>
+  <p style="color:#555;font-size:.9rem;">Loading agreement...</p>
+</div>
+
+<!-- ── Licence type modal ─────────────────────────────────────────────────── -->
+<div id="screen-modal">
+  <div class="modal-box">
+    <h2 class="en">What type of driver's licence do you have?</h2>
+    <h2 class="es">¿Qué tipo de licencia de conducir tienes?</h2>
+    <p class="en">Select the option that matches your current licence.</p>
+    <p class="es">Selecciona la opción que corresponde a tu licencia actual.</p>
+    <div class="modal-btns">
+      <button class="btn-licence" onclick="selectLicence('A')">
+        <div style="font-size:1.1rem">🪪</div>
+        <div class="en">Full Licence<br><small style="font-weight:normal">Class 5F</small></div>
+        <div class="es">Licencia Completa<br><small style="font-weight:normal">Clase 5F</small></div>
+      </button>
+      <button class="btn-licence" onclick="selectLicence('B')">
+        <div style="font-size:1.1rem">🟡</div>
+        <div class="en">GDL / Beginner<br><small style="font-weight:normal">Learner's</small></div>
+        <div class="es">GDL / Principiante<br><small style="font-weight:normal">Aprendiz</small></div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Contract page ─────────────────────────────────────────────────────────── -->
+<div id="screen-contract">
+
+  <div class="page-header">
+    <h1>BOLIVARAUTOS-RENTA</h1>
+    <p>Vehicle Rental Agreement — Contrato de Arrendamiento</p>
+  </div>
+
+  <div class="lang-bar">
+    <span class="en">Read in:</span>
+    <span class="es">Leer en:</span>
+    <div class="lang-toggle-btn">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">English</button>
+      <button class="lang-btn"        id="btn-es" onclick="setLang('es')">Español</button>
+    </div>
+  </div>
+
+  <div class="contract-wrap">
+
+    <!-- Doc header -->
+    <div class="doc-header">
+      <div class="co-name">LIVARKAR Services Management Ltd.</div>
+      <div class="co-sub">BolivarAutos-Renta &nbsp;|&nbsp; Winnipeg, Manitoba, Canada</div>
+      <div class="co-sub">(204) 509-6153 &nbsp;|&nbsp; info@bolivarautos.ca &nbsp;|&nbsp; bolivarautos.ca</div>
+      <hr>
+      <div class="doc-title en">VEHICLE RENTAL AGREEMENT</div>
+      <div class="doc-title es">CONTRATO DE ARRENDAMIENTO DE VEHÍCULO</div>
+    </div>
+
+    <!-- Version B banner (hidden for A) -->
+    <div id="version-banner" class="version-banner" style="display:none">
+      <span class="en">VERSION B — GDL / BEGINNER LICENCE</span>
+      <span class="es">VERSIÓN B — LICENCIA GDL / PRINCIPIANTE</span>
+    </div>
+
+    <!-- CLAUSE 1 — PARTIES -->
+    <div class="clause-card">
+      <div class="clause-hdr">
+        <div class="hdr-en en">CLAUSE 1 — IDENTIFICATION OF PARTIES</div>
+        <div class="hdr-en es">CLÁUSULA 1 — IDENTIFICACIÓN DE LAS PARTES</div>
+      </div>
+      <div class="clause-body">
+        <p style="font-weight:bold;font-size:.85rem;margin-bottom:8px;color:var(--blue)">
+          <span class="en">LESSOR (Rental Operator)</span>
+          <span class="es">ARRENDADOR (Operador)</span>
+        </p>
+        <div class="info-box">
+          <p class="co-bold">LIVARKAR Services Management Ltd.</p>
+          <p><span class="en">Operated by:</span><span class="es">Operado por:</span> LIVARKAR Services Management Ltd.</p>
+          <p><span class="en">Blue Drive Commercial Insurance — Manitoba</span><span class="es">Seguro Comercial Blue Drive — Manitoba</span></p>
+          <p style="color:#555;font-size:.82rem">Tel: (204) 509-6153 &nbsp;|&nbsp; info@bolivarautos.ca</p>
+        </div>
+
+        <p style="font-weight:bold;font-size:.85rem;margin:12px 0 8px;color:var(--blue)">
+          <span class="en">RENTER (Client)</span>
+          <span class="es">ARRENDATARIO (Cliente)</span>
+        </p>
+        <table class="data-table">
+          <tr>
+            <td><span class="en">Full Name</span><span class="es">Nombre completo</span></td>
+            <td class="field-value" id="f-name">—</td>
+          </tr>
+          <tr>
+            <td><span class="en">Driver's Licence #</span><span class="es">No. Licencia de Conducir</span></td>
+            <td class="field-value" id="f-licence">—</td>
+          </tr>
+          <tr>
+            <td><span class="en">Phone</span><span class="es">Teléfono</span></td>
+            <td class="field-value" id="f-phone">—</td>
+          </tr>
+          <tr>
+            <td><span class="en">Email</span><span class="es">Email</span></td>
+            <td class="field-value" id="f-email">—</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- CLAUSE 2 — VEHICLE -->
+    <div class="clause-card">
+      <div class="clause-hdr">
+        <div class="hdr-en en">CLAUSE 2 — VEHICLE IDENTIFICATION</div>
+        <div class="hdr-en es">CLÁUSULA 2 — IDENTIFICACIÓN DEL VEHÍCULO</div>
+      </div>
+      <div class="clause-body">
+        <p class="body-text en">The Operator grants the Renter temporary use of the following vehicle:</p>
+        <p class="body-text es">El Arrendador cede al Arrendatario el uso temporal del siguiente vehículo:</p>
+        <table class="data-table">
+          <tr>
+            <td><span class="en">Make / Model / Year</span><span class="es">Marca / Modelo / Año</span></td>
+            <td class="field-value" id="f-vehicle">—</td>
+          </tr>
+          <tr>
+            <td><span class="en">Plate #</span><span class="es">Placa</span></td>
+            <td class="field-value" id="f-plate">—</td>
+          </tr>
+          <tr>
+            <td>VIN</td>
+            <td class="field-value" id="f-vin">—</td>
+          </tr>
+          <tr>
+            <td><span class="en">Insurance</span><span class="es">Seguro</span></td>
+            <td class="fixed">Blue Drive Commercial — Manitoba</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- CLAUSE 3 — PERIOD -->
+    <div class="clause-card">
+      <div class="clause-hdr">
+        <div class="hdr-en en">CLAUSE 3 — RENTAL PERIOD</div>
+        <div class="hdr-en es">CLÁUSULA 3 — PERÍODO DE ARRENDAMIENTO</div>
+      </div>
+      <div class="clause-body">
+        <table class="data-table">
+          <tr>
+            <td><span class="en">Date</span><span class="es">Fecha</span></td>
+            <td class="field-value" id="f-fecha">—</td>
+          </tr>
+          <tr>
+            <td><span class="en">Hours rented</span><span class="es">Horas rentadas</span></td>
+            <td class="field-value" id="f-horas">—</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- CLAUSE 4 — INSURANCE -->
+    <div class="clause-card">
+      <div class="clause-hdr">
+        <div class="hdr-en en">CLAUSE 4 — INSURANCE AND DEDUCTIBLE LIABILITY</div>
+        <div class="hdr-en es">CLÁUSULA 4 — SEGURO Y RESPONSABILIDAD POR DEDUCIBLE</div>
+      </div>
+      <div class="clause-body">
+        <p class="body-text en">The vehicle is insured under Blue Drive commercial insurance (Manitoba). When the Renter drives with the operator's permission and holds a valid Manitoba driver's licence, the vehicle's Basic Autopac coverage applies to the Renter.</p>
+        <p class="body-text es">El vehículo está asegurado bajo el seguro comercial Blue Drive (Manitoba). Cuando el Arrendatario conduce con permiso del operador y posee una licencia de conducir válida de Manitoba, la cobertura Basic Autopac aplica al Arrendatario.</p>
+        <div class="warn-box">
+          <div class="warn-title en">⚠️ UNCONDITIONAL DEDUCTIBLE RESPONSIBILITY</div>
+          <div class="warn-title es">⚠️ RESPONSABILIDAD INCONDICIONAL POR EL DEDUCIBLE</div>
+          <p class="en">The Renter accepts full and unconditional responsibility for the Basic Autopac deductible of <strong>$1,000 CAD</strong> (or the amount in effect per MPI at the time of the incident) in the event of any accident, collision, damage, theft, or loss — <strong>regardless of fault.</strong></p>
+          <p class="es">El Arrendatario acepta plena e incondicional responsabilidad por el deducible básico de Autopac de <strong>$1,000 CAD</strong> (o el monto vigente según la póliza MPI al momento del incidente), en caso de cualquier accidente, colisión, daño, robo o pérdida del vehículo durante el período de renta, <strong>sin importar quién tenga la culpa.</strong></p>
+        </div>
+        <p class="body-text en" style="font-weight:bold;margin-top:10px">The Renter shall be responsible for:</p>
+        <p class="body-text es" style="font-weight:bold;margin-top:10px">El Arrendatario será responsable de:</p>
+        <ul class="clause-list">
+          <li><span class="en">Loss of rental income ('downtime') during the period the vehicle is out of service due to repairs caused by the Renter.</span><span class="es">Pérdida de ingresos de renta ('downtime') durante el período en que el vehículo esté fuera de servicio por reparaciones causadas por el Arrendatario.</span></li>
+          <li><span class="en">Third-party claims for property damage or bodily injury exceeding Basic Autopac liability limits ($500,000 CAD).</span><span class="es">Reclamaciones de terceros por daños a propiedad o lesiones corporales que excedan los límites de responsabilidad del Basic Autopac ($500,000 CAD).</span></li>
+        </ul>
+        <p class="note-text en"><strong>NOTE:</strong> MPI Rental Vehicle Insurance (reduces deductible to $200) is available at any Autopac agent and is NOT included in this rental. It is the Renter's sole decision and responsibility to purchase it.</p>
+        <p class="note-text es"><strong>NOTA:</strong> El Seguro de Vehículo Rentado de MPI (reduce el deducible a $200) está disponible en cualquier agente Autopac y NO está incluido en esta renta. Es decisión y responsabilidad exclusiva del Arrendatario adquirirlo.</p>
+      </div>
+    </div>
+
+    <!-- CLAUSE 5B — SUPERVISOR (Version B only) -->
+    <div class="clause-card" id="cl5b-card" style="display:none">
+      <div class="clause-hdr">
+        <div class="hdr-en en">CLAUSE 5 — GDL / BEGINNER LICENCE — MANDATORY SUPERVISOR</div>
+        <div class="hdr-en es">CLÁUSULA 5 — LICENCIA GDL / PRINCIPIANTE — SUPERVISOR OBLIGATORIO</div>
+      </div>
+      <div class="clause-body">
+        <p class="body-text en">The Renter holds a Manitoba GDL/Beginner's licence. A fully licensed supervisor (Class 5F or equivalent, minimum 18 years of age, free from alcohol and drugs) must be present in the front passenger seat at all times while the vehicle is in motion.</p>
+        <p class="body-text es">El Arrendatario posee una licencia GDL/Principiante de Manitoba. Un supervisor con licencia completa (Clase 5F o equivalente, mínimo 18 años, sin influencia de alcohol ni drogas) debe estar presente en el asiento del copiloto en todo momento mientras el vehículo esté en movimiento.</p>
+        <p class="body-text en">Driving without a qualified supervisor constitutes a material breach of this Agreement, may void Basic Autopac coverage, and may result in full liability for all damages.</p>
+        <p class="body-text es">Conducir sin supervisor calificado constituye un incumplimiento material de este Contrato, puede invalidar la cobertura de Basic Autopac y puede resultar en responsabilidad total por todos los daños.</p>
+      </div>
+    </div>
+
+    <!-- CLAUSE 5A / 6B — CONDITIONS OF USE -->
+    <div class="clause-card" id="cl-conditions">
+      <div class="clause-hdr">
+        <div class="hdr-en en" id="conditions-hdr-en">CLAUSE 5 — CONDITIONS OF VEHICLE USE</div>
+        <div class="hdr-en es" id="conditions-hdr-es">CLÁUSULA 5 — CONDICIONES DE USO DEL VEHÍCULO</div>
+      </div>
+      <div class="clause-body">
+        <p class="body-text en">The Renter agrees to comply with the following conditions:</p>
+        <p class="body-text es">El Arrendatario acepta y se obliga a cumplir las siguientes condiciones:</p>
+        <ul class="clause-list">
+          <li><span class="en">The vehicle shall be used for driving within the city, within the Province of Manitoba. Use for paid transportation, ridesharing, deliveries, towing, or any commercial activity is expressly prohibited.</span><span class="es">El vehículo será utilizado para manejar en la ciudad dentro de la Provincia de Manitoba. Queda expresamente prohibido su uso para transporte remunerado, ridesharing, entregas, remolque o cualquier actividad comercial.</span></li>
+          <li><span class="en">The Renter must hold a valid Manitoba driver's licence for the entire rental period and carry it while operating the vehicle.</span><span class="es">El Arrendatario debe poseer una licencia de conducir válida de Manitoba durante toda la duración de la renta y portarla mientras opere el vehículo.</span></li>
+          <li id="li-supervisor-b" style="display:none"><span class="en">A fully licensed supervisor must be present in the front passenger seat at all times. The Renter is the only authorized driver.</span><span class="es">Un supervisor con licencia completa debe estar presente en el asiento del copiloto en todo momento. El Arrendatario es el único conductor autorizado.</span></li>
+          <li id="li-only-driver" style="display:block"><span class="en">The Renter is the only authorized driver. The vehicle may NOT be operated by any other person without prior written authorization from LIVARKAR. Non-compliance constitutes a material breach of this Agreement.</span><span class="es">El Arrendatario es el único conductor autorizado. El vehículo NO puede ser operado por ninguna otra persona sin autorización escrita previa de LIVARKAR. El incumplimiento constituye una violación material del contrato.</span></li>
+          <li><span class="en">The Renter must not drive under the influence of alcohol, cannabis, drugs, or any substances that impair driving ability. This violation voids insurance coverage. The Renter shall equally be responsible in the event of an accident.</span><span class="es">El Arrendatario no debe conducir bajo la influencia de alcohol, cannabis, drogas, medicamentos que deterioren la capacidad de conducción u otras sustancias. Esta violación invalida la cobertura del seguro. Igualmente será responsable en caso de accidente.</span></li>
+          <li><span class="en">If the Renter uses the vehicle for a road test, the same terms and conditions of this Agreement shall apply.</span><span class="es">En caso de que el cliente rente el vehículo para prueba de road test, se acogerá a los mismos términos y condiciones del presente Contrato.</span></li>
+          <li><span class="en">The vehicle may NOT be taken outside the Province of Manitoba without prior written consent from LIVARKAR.</span><span class="es">El vehículo NO puede sacarse fuera de la Provincia de Manitoba sin consentimiento previo y por escrito de LIVARKAR.</span></li>
+          <li><span class="en">The vehicle may not be used for towing, off-road driving, or racing.</span><span class="es">El vehículo no puede utilizarse para remolque, conducción fuera de carretera ni competencias.</span></li>
+          <li><span class="en">The Renter shall return the vehicle on time, clean, and with the same fuel level as at the time of delivery.</span><span class="es">El Arrendatario devolverá el vehículo puntualmente en la hora pactada, limpio y con el mismo nivel de combustible que al momento de la entrega.</span></li>
+          <li><span class="en">All traffic violations, parking tickets, toll charges, or administrative fines incurred during the rental are the Renter's sole responsibility.</span><span class="es">Toda infracción de tránsito, multa de parquímetro, cargo de peaje o sanción administrativa incurrida durante la renta es responsabilidad exclusiva del Arrendatario.</span></li>
+          <li><span class="en">The Renter accepts full responsibility for the Basic Autopac deductible of $1,000 CAD (or current MPI amount) for any accident or damage during the rental, regardless of fault.</span><span class="es">El Arrendatario acepta plena responsabilidad por el deducible básico de Autopac de $1,000 CAD (o el monto vigente según MPI) ante cualquier accidente o daño durante la renta, independientemente de la culpa.</span></li>
+          <li><span class="en">LIVARKAR reserves the right to claim compensation for lost rental income ('downtime') while the vehicle is under repair as a result of an incident caused by the Renter.</span><span class="es">LIVARKAR se reserva el derecho de reclamar compensación por ingresos de renta perdidos ('downtime') mientras el vehículo esté en reparación como consecuencia de un incidente causado por el Arrendatario.</span></li>
+        </ul>
+        <p class="declaration en">The Renter declares that they are renting the vehicle for their own personal use by the hour and that they operate it under their own judgment and responsibility. This agreement does not include any additional service other than the hourly vehicle rental.</p>
+        <p class="declaration es">El Arrendatario declara que alquila el vehículo para su uso personal por horas y que opera el mismo bajo su propio criterio y responsabilidad. El presente contrato no incluye ningún servicio adicional que no sea el de alquiler por horas.</p>
+      </div>
+    </div>
+
+    <!-- CLAUSE 6A / 7B — LIMITATION OF LIABILITY -->
+    <div class="clause-card">
+      <div class="clause-hdr">
+        <div class="hdr-en en" id="limit-hdr-en">CLAUSE 6 — LIMITATION OF LESSOR'S LIABILITY</div>
+        <div class="hdr-en es" id="limit-hdr-es">CLÁUSULA 6 — LIMITACIÓN DE RESPONSABILIDAD DEL ARRENDADOR</div>
+      </div>
+      <div class="clause-body">
+        <p class="body-text en">LIVARKAR Services Management Ltd. shall not be liable for:</p>
+        <p class="body-text es">LIVARKAR Services Management Ltd. no será responsable de:</p>
+        <ul class="clause-list">
+          <li><span class="en">Personal injury, death, or illness of the Renter or passengers during the rental.</span><span class="es">Lesiones personales, muerte o enfermedades del Arrendatario o de sus pasajeros durante la renta.</span></li>
+          <li><span class="en">Loss, theft, or damage to personal belongings or objects inside the vehicle.</span><span class="es">Pérdida, robo o daño de bienes personales u objetos dentro del vehículo.</span></li>
+          <li><span class="en">Indirect, consequential, incidental, or punitive damages arising from the use or operation of the vehicle.</span><span class="es">Daños indirectos, consecuentes, incidentales o punitivos derivados del uso u operación del vehículo.</span></li>
+          <li><span class="en">Fines, penalties, or legal consequences resulting from the Renter's non-compliance with Manitoba traffic laws.</span><span class="es">Multas, sanciones o consecuencias legales derivadas del incumplimiento por parte del Arrendatario de las leyes de tránsito de Manitoba.</span></li>
+        </ul>
+        <p class="body-text en">The Renter assumes full responsibility for the vehicle and its operation from delivery until return to the Lessor.</p>
+        <p class="body-text es">El Arrendatario asume plena responsabilidad por el vehículo y su operación desde la entrega hasta la devolución al Arrendador.</p>
+        <p class="note-text en">This Agreement is governed by the laws of the Province of Manitoba, Canada. Any dispute shall be resolved before the competent courts of Winnipeg, Manitoba.</p>
+        <p class="note-text es">Este Contrato se rige e interpreta conforme a las leyes de la Provincia de Manitoba, Canadá. Cualquier disputa será resuelta ante los tribunales competentes de Winnipeg, Manitoba.</p>
+      </div>
+    </div>
+
+    <!-- CLAUSE 7A / 8B — DECLARATION -->
+    <div class="clause-card">
+      <div class="clause-hdr">
+        <div class="hdr-en en" id="decl-hdr-en">CLAUSE 7 — DECLARATION AND ACCEPTANCE</div>
+        <div class="hdr-en es" id="decl-hdr-es">CLÁUSULA 7 — DECLARACIÓN Y ACEPTACIÓN</div>
+      </div>
+      <div class="clause-body">
+        <p class="body-text en">The Renter declares having read, understood, and agreed to all terms of this Vehicle Rental Agreement. Electronic acceptance has the same legal validity as a handwritten signature under Manitoba's Electronic Commerce Act.</p>
+        <p class="body-text es">El Arrendatario declara haber leído, comprendido y aceptado en su totalidad los términos y condiciones del presente Contrato. La aceptación electrónica tiene la misma validez jurídica que una firma manuscrita, conforme a la Electronic Commerce Act de Manitoba.</p>
+      </div>
+    </div>
+
+    <!-- ── SIGNATURE SECTION ───────────────────────────────────────────────── -->
+    <div class="sign-card" id="sign-section">
+      <h3>
+        <span class="en">✍️ Electronic Signature</span>
+        <span class="es">✍️ Firma Electrónica</span>
+      </h3>
+      <label for="sig-name">
+        <span class="en">Enter your full name as your electronic signature:</span>
+        <span class="es">Escribe tu nombre completo como firma electrónica:</span>
+      </label>
+      <input type="text" id="sig-name" autocomplete="name"
+        placeholder="Full name / Nombre completo" oninput="validateSign()">
+
+      <div class="check-row">
+        <input type="checkbox" id="sig-check" onchange="validateSign()">
+        <span>
+          <span class="en">I confirm that I have read and understood this Vehicle Rental Agreement and accept all its terms and conditions.</span>
+          <span class="es">Confirmo que he leído y comprendido este Contrato de Arrendamiento de Vehículo y acepto todos sus términos y condiciones.</span>
+        </span>
+      </div>
+
+      <button class="btn-sign" id="btn-sign" disabled onclick="signContract()">
+        <span class="en">Sign &amp; Accept Agreement</span>
+        <span class="es">Firmar y Aceptar Contrato</span>
+      </button>
+    </div>
+
+  </div><!-- /contract-wrap -->
+</div><!-- /screen-contract -->
+
+<!-- ── Done screen ─────────────────────────────────────────────────────────── -->
+<div id="screen-done">
+  <div class="done-icon">✅</div>
+  <div class="done-title en">Agreement Signed Successfully</div>
+  <div class="done-title es">Contrato Firmado Exitosamente</div>
+  <div class="done-sub en">Your agreement has been recorded. LIVARKAR has been notified. Please keep this confirmation for your records.</div>
+  <div class="done-sub es">Tu contrato ha sido registrado. LIVARKAR ha sido notificado. Guarda esta confirmación para tus registros.</div>
+  <div class="done-ref">
+    <span class="en"><strong>Signed by:</strong> <span id="done-name"></span><br><strong>Date & Time:</strong> <span id="done-ts"></span></span>
+    <span class="es"><strong>Firmado por:</strong> <span id="done-name-es"></span><br><strong>Fecha y hora:</strong> <span id="done-ts-es"></span></span>
+  </div>
+</div>
+
+<!-- ── Error screen ────────────────────────────────────────────────────────── -->
+<div id="screen-error">
+  <h2>⚠️ Link not valid</h2>
+  <p>This contract link is missing a booking reference.<br>Please contact BolivarAutos at (204) 509-6153.</p>
+</div>
+
+<!-- ── Firebase SDK ────────────────────────────────────────────────────────── -->
+<script type="module">
+import { initializeApp }                  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc,
+         collection, addDoc, serverTimestamp }
+                                          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+// ── Firebase config (copy from renta.html if needed) ──────────────────────
+const firebaseConfig = {
+  apiKey:            "AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ",
+  authDomain:        "bolivarautos-919e4.firebaseapp.com",
+  projectId:         "bolivarautos-919e4",
+  storageBucket:     "bolivarautos-919e4.firebasestorage.app",
+  messagingSenderId: "397354528937",
+  appId:             "1:397354528397:web:52fd2ec53984af7aaa7cc4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// ── EmailJS (notification to Bolivar) ─────────────────────────────────────
+const EMAILJS_SERVICE  = "service_zh2gldt";
+const EMAILJS_TEMPLATE = "template_jyes3kc";
+const EMAILJS_KEY      = "2W_g_q0eqTdn1Haxh";
+
+// ── State ──────────────────────────────────────────────────────────────────
+let citaId      = null;
+let licenceType = null;
+let bookingData = {};
+let vehicleData = {};
+let currentLang = "en";
+
+// ── Init ───────────────────────────────────────────────────────────────────
+window.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  citaId = params.get("cita");
+
+  if (!citaId) {
+    show("screen-error");
+    return;
+  }
+
+  try {
+    await Promise.all([loadBooking(), loadVehicle()]);
+    show("screen-modal");
+  } catch(e) {
+    console.error(e);
+    show("screen-error");
+  }
+});
+
+// ── Load booking from CITAS_RENTA ──────────────────────────────────────────
+async function loadBooking() {
+  const snap = await getDoc(doc(db, "CITAS_RENTA", citaId));
+  if (!snap.exists()) throw new Error("Booking not found");
+  const d = snap.data();
+  bookingData = {
+    name:    d.nombre    || d.name    || "",
+    licence: d.licencia  || d.licence || "",
+    phone:   d.telefono  || d.phone   || "",
+    email:   d.email     || "",
+    fecha:   d.fecha     || d.date    || "",
+    horas:   d.horas     || d.hours   || ""
+  };
+}
+
+// ── Load rental vehicle from CONFIG/vehiculo_renta ───────────────────────
+async function loadVehicle() {
+  const snap = await getDoc(doc(db, "CONFIG", "vehiculo_renta"));
+  if (snap.exists()) {
+    const d = snap.data();
+    vehicleData = {
+      make:  d.marca  || "",
+      model: d.modelo || "",
+      year:  d.año    || "",
+      plate: d.placa  || "",
+      vin:   d.vin    || ""
+    };
+  }
+}
+
+// ── Populate contract fields ───────────────────────────────────────────────
+function populateFields() {
+  set("f-name",    bookingData.name);
+  set("f-licence", bookingData.licence);
+  set("f-phone",   bookingData.phone);
+  set("f-email",   bookingData.email);
+  set("f-fecha",   bookingData.fecha);
+  set("f-horas",   bookingData.horas ? `${bookingData.horas} hrs` : "—");
+  const veh = [vehicleData.make, vehicleData.model, vehicleData.year].filter(Boolean).join(" ");
+  set("f-vehicle", veh || "—");
+  set("f-plate",   vehicleData.plate || "—");
+  set("f-vin",     vehicleData.vin   || "—");
+}
+
+function set(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val || "—";
+}
+
+// ── Licence type selection ─────────────────────────────────────────────────
+window.selectLicence = function(type) {
+  licenceType = type;
+  document.getElementById("screen-modal").classList.remove("active");
+
+  if (type === "B") {
+    document.getElementById("version-banner").style.display  = "block";
+    document.getElementById("cl5b-card").style.display       = "block";
+    document.getElementById("li-supervisor-b").style.display = "list-item";
+    document.getElementById("li-only-driver").style.display  = "none";
+    // renumber: conditions → 6, limit → 7, decl → 8
+    document.getElementById("conditions-hdr-en").textContent = "CLAUSE 6 — CONDITIONS OF VEHICLE USE";
+    document.getElementById("conditions-hdr-es").textContent = "CLÁUSULA 6 — CONDICIONES DE USO DEL VEHÍCULO";
+    document.getElementById("limit-hdr-en").textContent      = "CLAUSE 7 — LIMITATION OF LESSOR'S LIABILITY";
+    document.getElementById("limit-hdr-es").textContent      = "CLÁUSULA 7 — LIMITACIÓN DE RESPONSABILIDAD DEL ARRENDADOR";
+    document.getElementById("decl-hdr-en").textContent       = "CLAUSE 8 — DECLARATION AND ACCEPTANCE";
+    document.getElementById("decl-hdr-es").textContent       = "CLÁUSULA 8 — DECLARACIÓN Y ACEPTACIÓN";
+  }
+
+  populateFields();
+  show("screen-contract");
+};
+
+// ── Language toggle ────────────────────────────────────────────────────────
+window.setLang = function(lang) {
+  currentLang = lang;
+  document.body.className = lang === "es" ? "lang-es" : "";
+  document.getElementById("btn-en").classList.toggle("active", lang === "en");
+  document.getElementById("btn-es").classList.toggle("active", lang === "es");
+};
+
+// ── Sign validation ────────────────────────────────────────────────────────
+window.validateSign = function() {
+  const name  = document.getElementById("sig-name").value.trim();
+  const check = document.getElementById("sig-check").checked;
+  document.getElementById("btn-sign").disabled = !(name.length > 2 && check);
+};
+
+// ── Sign & save ────────────────────────────────────────────────────────────
+window.signContract = async function() {
+  const btn = document.getElementById("btn-sign");
+  btn.disabled = true;
+  btn.textContent = "Saving...";
+
+  const sigName = document.getElementById("sig-name").value.trim();
+  const now     = new Date();
+  const tsStr   = now.toLocaleString("en-CA", { timeZone: "America/Winnipeg" });
+
+  let ip = "unknown";
+  try {
+    const r = await fetch("https://api.ipify.org?format=json");
+    ip = (await r.json()).ip;
+  } catch(_) {}
+
+  const record = {
+    citaId,
+    licenceType,
+    signedName:  sigName,
+    signedAt:    serverTimestamp(),
+    signedAtStr: tsStr,
+    ipAddress:   ip,
+    contractVersion: "v2-2025",
+    client: {
+      name:    bookingData.name,
+      licence: bookingData.licence,
+      phone:   bookingData.phone,
+      email:   bookingData.email
+    },
+    booking: {
+      fecha: bookingData.fecha,
+      horas: bookingData.horas
+    },
+    vehicle: vehicleData,
+    status: "signed"
+  };
+
+  try {
+    await addDoc(collection(db, "CONTRATOS"), record);
+    await sendNotification(sigName, tsStr);
+    // Done screen
+    set("done-name",    sigName);
+    set("done-name-es", sigName);
+    set("done-ts",      tsStr);
+    set("done-ts-es",   tsStr);
+    show("screen-done");
+  } catch(e) {
+    console.error(e);
+    btn.disabled = false;
+    btn.textContent = "Error — try again / Intentar de nuevo";
+  }
+};
+
+// ── EmailJS notification to Bolivar ───────────────────────────────────────
+async function sendNotification(sigName, ts) {
+  try {
+    await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        service_id:  EMAILJS_SERVICE,
+        template_id: EMAILJS_TEMPLATE,
+        user_id:     EMAILJS_KEY,
+        template_params: {
+          to_email:    "info@bolivarautos.ca",
+          from_name:   "BolivarAutos Contratos",
+          subject:     `✅ Contract signed — ${sigName}`,
+          message:     `Contract signed by ${sigName}\nDate: ${ts}\nLicence type: ${licenceType}\nBooking: ${citaId}\nClient: ${bookingData.name} | ${bookingData.phone}\nVehicle: ${vehicleData.make} ${vehicleData.model} ${vehicleData.year}\nDate: ${bookingData.fecha} | ${bookingData.horas} hrs`
+        }
+      })
+    });
+  } catch(_) { /* notification failure is non-fatal */ }
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function show(id) {
+  ["screen-loading","screen-modal","screen-contract","screen-done","screen-error"]
+    .forEach(s => {
+      const el = document.getElementById(s);
+      if (s === "screen-modal") {
+        el.classList.remove("active");
+      } else {
+        el.style.display = "none";
+        el.classList.remove("active");
+      }
+    });
+  const target = document.getElementById(id);
+  if (id === "screen-modal") {
+    target.classList.add("active");
+  } else if (["screen-done","screen-error"].includes(id)) {
+    target.style.display = "flex";
+    target.classList.add("active");
+  } else {
+    target.style.display = "block";
+    target.classList.add("active");
+  }
+}
+
+</script>
+</body>
+</html>
