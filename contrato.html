@@ -575,12 +575,12 @@ async function loadBooking() {
   if (!snap.exists()) throw new Error("Booking not found");
   const d = snap.data();
   bookingData = {
-    name:    d.nombre    || d.name    || "",
+    name:    d.cliente  || d.nombre  || d.name    || "",
     licence: d.licencia  || d.licence || "",
     phone:   d.telefono  || d.phone   || "",
     email:   d.email     || "",
     fecha:   d.fecha     || d.date    || "",
-    horas:   d.horas     || d.hours   || ""
+    horas:   d.duracion  || d.horas   || d.hours   || ""
   };
 }
 
