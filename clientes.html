@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Encargos - Dealer Manitoba</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            font-size: 13px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-top: 0;
+            margin-bottom: 25px;
+            border-left: 4px solid #3498db;
+            padding-left: 12px;
+        }
+        .dashboard-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .table-container {
+            flex: 3;
+            min-width: 700px;
+            overflow-x: auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+        }
+        .summary-container {
+            flex: 1.2;
+            min-width: 300px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 15px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            padding: 10px 6px;
+            font-weight: 500;
+            border: 1px solid #2c3e50;
+            text-align: left;
+        }
+        td {
+            border: 1px solid #dee2e6;
+            padding: 6px;
+            vertical-align: middle;
+        }
+        input, select {
+            width: 100%;
+            padding: 6px 4px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            transition: 0.15s;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52,152,219,0.2);
+        }
+        /* Estilo para campos de solo lectura (resultados automáticos) */
+        .readonly-cell {
+            background-color: #e9ecef;
+            text-align: right;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        /* Centrar el texto de los encabezados numéricos */
+        th.number-header {
+            text-align: right;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 15px;
+            margin-right: 8px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .export-btn {
+            background-color: #27ae60;
+        }
+        .export-btn:hover {
+            background-color: #2ecc71;
+        }
+        hr {
+            margin: 15px 0;
+            border-color: #e9ecef;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.85rem;
+        }
+        .summary-total {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #3498db;
+        }
+        .badge {
+            background-color: #e9ecef;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+        .footer-note {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 12px;
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: #495057;
+            border-radius: 4px;
+        }
+        @media (max-width: 1000px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .summary-container {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<h1>🏢 Gestión de Encargos de Compra</h1>
+<div class="subtitle">Comisión <strong>4%</strong> sobre el costo total (compra + preparación) · Formato profesional para Manitoba</div>
+
+<div class="dashboard-container">
+    <div class="table-container">
+        <table id="tablaEncargos">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Fecha<br>Encargo</th>
+                    <th>Cliente</th>
+                    <th>Auto (Año/Marca/Modelo)</th>
+                    <th>VIN<br>(últ.6)</th>
+                    <th class="number-header">Precio Auction<br>($)</th>
+                    <th class="number-header">Buyer Fee<br>($)</th>
+                    <th class="number-header">Transporte<br>($)</th>
+                    <th class="number-header">Seguro/Prep<br>($)</th>
+                    <th class="number-header">Depósito<br>Recibido ($)</th>
+                    <th>Estado</th>
+                    <th>Notas</th>
+                </tr>
+                <tr style="background-color: #f8f9fa; font-size: 0.7rem; color: #6c757d;">
+                    <th colspan="5" style="text-align: left; border: none;">(Datos que se ingresan)</th>
+                    <th colspan="4" style="text-align: left; border: none;">Costos de Auction y Preparación</th>
+                    <th colspan="3" style="text-align: left; border: none; border: none;">Seguimiento</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+                <!-- Las filas se generan dinámicamente con JS -->
+            </tbody>
+        </table>
+        <div style="margin-top: 15px;">
+            <button onclick="agregarFila()">+ Nuevo Encargo</button>
+            <button onclick="exportarCSV()" class="export-btn">📄 Exportar a Excel (CSV)</button>
+        </div>
+    </div>
+
+    <div class="summary-container">
+        <h3 style="margin-top: 0; font-size: 1.1rem;">📊 Resumen de Impuestos</h3>
+        <div class="summary-item">
+            <span>💰 Comisiones acumuladas (4%):</span>
+            <strong id="totalComisiones">$0.00</strong>
+        </div>
+        <div class="summary-item">
+            <span>🧾 GST 5% por pagar (sobre comisiones):</span>
+            <strong id="totalGST">$0.00</strong>
+        </div>
+        <div class="summary-item">
+            <span>🏦 RST 7% no aplica:</span>
+            <strong>$0.00</strong>
+        </div>
+        <div class="summary-total">
+            <span>💵 TOTAL A APARTAR PARA IMPUESTOS:</span>
+            <strong id="totalImpuestos">$0.00</strong>
+        </div>
+        <hr>
+        <div class="summary-item">
+            <span>📈 Total de operaciones activas:</span>
+            <strong id="totalOperaciones">0</strong>
+        </div>
+        <div class="summary-item">
+            <span>🚀 Monto total gestionado (costo + comisión):</span>
+            <strong id="totalGestionado">$0.00</strong>
+        </div>
+        <div class="footer-note">
+            ✅ <strong>Impuestos aplicables:</strong> Solo pagas <strong>GST del 5% sobre tu comisión</strong>. El RST (7%) lo paga el cliente directamente al registrar el vehículo en Manitoba. El depósito del cliente se resta automáticamente del total a pagar. Recomendamos guardar siempre el CSV de respaldo.
+        </div>
+    </div>
+</div>
+
+<script>
+    // Datos iniciales con un ejemplo
+    let encargos = [
+        { id: 1, fecha: "2026-04-15", cliente: "Juan Pérez", auto: "2020 Mazda CX-5", vin: "ABC123", precioAuction: 15000, buyerFee: 300, transporte: 200, seguroPrep: 100, deposito: 5000, estado: "En Proceso", notas: "Cliente aprobó condiciones" }
+    ];
+
+    function formatearMoneda(valor) {
+        return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(valor);
+    }
+
+    function recalcularTodo() {
+        let totalComisiones = 0;
+        let totalGST = 0;
+        let totalGestionado = 0;
+
+        for (let i = 0; i < encargos.length; i++) {
+            const e = encargos[i];
+            const auctionCost = (e.precioAuction || 0) + (e.buyerFee || 0) + (e.transporte || 0);
+            const totalPrep = (e.seguroPrep || 0);
+            const costoTotalVehiculo = auctionCost + totalPrep;
+            const comision = costoTotalVehiculo * 0.04;
+            const gst = comision * 0.05;
+            const totalCliente = costoTotalVehiculo + comision + gst;
+            const saldo = totalCliente - (e.deposito || 0);
+
+            e.costoTotalVehiculo = costoTotalVehiculo;
+            e.comision = comision;
+            e.gst = gst;
+            e.totalCliente = totalCliente;
+            e.saldo = saldo;
+
+            totalComisiones += comision;
+            totalGST += gst;
+            totalGestionado += costoTotalVehiculo + comision;
+        }
+
+        document.getElementById('totalComisiones').innerHTML = formatearMoneda(totalComisiones);
+        document.getElementById('totalGST').innerHTML = formatearMoneda(totalGST);
+        document.getElementById('totalImpuestos').innerHTML = formatearMoneda(totalGST);
+        document.getElementById('totalOperaciones').innerHTML = encargos.length;
+        document.getElementById('totalGestionado').innerHTML = formatearMoneda(totalGestionado);
+    }
+
+    function renderizarTabla() {
+        let tbody = document.getElementById("cuerpoTabla");
+        tbody.innerHTML = "";
+
+        for (let idx = 0; idx < encargos.length; idx++) {
+            const e = encargos[idx];
+            const fila = document.createElement("tr");
+
+            // 1. ID
+            const tdId = document.createElement("td");
+            const spanId = document.createElement("span");
+            spanId.innerText = e.id;
+            tdId.appendChild(spanId);
+            fila.appendChild(tdId);
+
+            // 2. Fecha
+            const tdFecha = document.createElement("td");
+            const inputFecha = document.createElement("input");
+            inputFecha.type = "date";
+            inputFecha.value = e.fecha;
+            inputFecha.addEventListener("change", (function(i) { return function(ev) { encargos[i].fecha = ev.target.value; renderizarTabla(); }; })(idx));
+            tdFecha.appendChild(inputFecha);
+            fila.appendChild(tdFecha);
+
+            // 3. Cliente
+            const tdCliente = document.createElement("td");
+            const inputCliente = document.createElement("input");
+            inputCliente.value = e.cliente || "";
+            inputCliente.placeholder = "Nombre";
+            inputCliente.addEventListener("change", (function(i) { return function(ev) { encargos[i].cliente = ev.target.value; }; })(idx));
+            tdCliente.appendChild(inputCliente);
+            fila.appendChild(tdCliente);
+
+            // 4. Auto
+            const tdAuto = document.createElement("td");
+            const inputAuto = document.createElement("input");
+            inputAuto.value = e.auto || "";
+            inputAuto.placeholder = "Ej. 2020 Mazda CX-5";
+            inputAuto.addEventListener("change", (function(i) { return function(ev) { encargos[i].auto = ev.target.value; }; })(idx));
+            tdAuto.appendChild(inputAuto);
+            fila.appendChild(tdAuto);
+
+            // 5. VIN
+            const tdVin = document.createElement("td");
+            const inputVin = document.createElement("input");
+            inputVin.value = e.vin || "";
+            inputVin.placeholder = "últ.6 dígitos";
+            inputVin.addEventListener("change", (function(i) { return function(ev) { encargos[i].vin = ev.target.value; }; })(idx));
+            tdVin.appendChild(inputVin);
+            fila.appendChild(tdVin);
+
+            // 6. Precio Auction
+            const tdAuction = document.createElement("td");
+            const inputAuction = document.createElement("input");
+            inputAuction.type = "number";
+            inputAuction.value = e.precioAuction;
+            inputAuction.addEventListener("change", (function(i) { return function(ev) { encargos[i].precioAuction = parseFloat(ev.target.value) || 0; renderizarTabla(); }; })(idx));
+            tdAuction.appendChild(inputAuction);
+            fila.appendChild(tdAuction);
+
+            // 7. Buyer Fee
+            const tdFee = document.createElement("td");
+            const inputFee = document.createElement("input");
+            inputFee.type = "number";
+            inputFee.value = e.buyerFee;
+            inputFee.addEventListener("change", (function(i) { return function(ev) { encargos[i].buyerFee = parseFloat(ev.target.value) || 0; renderizarTabla(); }; })(idx));
+            tdFee.appendChild(inputFee);
+            fila.appendChild(tdFee);
+
+            // 8. Transporte
+            const tdTransp = document.createElement("td");
+            const inputTransp = document.createElement("input");
+            inputTransp.type = "number";
+            inputTransp.value = e.transporte;
+            inputTransp.addEventListener("change", (function(i) { return function(ev) { encargos[i].transporte = parseFloat(ev.target.value) || 0; renderizarTabla(); }; })(idx));
+            tdTransp.appendChild(inputTransp);
+            fila.appendChild(tdTransp);
+
+            // 9. SeguroPreparación
+            const tdPrep = document.createElement("td");
+            const inputPrep = document.createElement("input");
+            inputPrep.type = "number";
+            inputPrep.value = e.seguroPrep;
+            inputPrep.placeholder = "Safety, COI, etc.";
+            inputPrep.addEventListener("change", (function(i) { return function(ev) { encargos[i].seguroPrep = parseFloat(ev.target.value) || 0; renderizarTabla(); }; })(idx));
+            tdPrep.appendChild(inputPrep);
+            fila.appendChild(tdPrep);
+
+            // 10. Depósito recibido
+            const tdDep = document.createElement("td");
+            const inputDep = document.createElement("input");
+            inputDep.type = "number";
+            inputDep.value = e.deposito;
+            inputDep.addEventListener("change", (function(i) { return function(ev) { encargos[i].deposito = parseFloat(ev.target.value) || 0; renderizarTabla(); }; })(idx));
+            tdDep.appendChild(inputDep);
+            fila.appendChild(tdDep);
+
+            // 11. Estado (dropdown)
+            const tdEstado = document.createElement("td");
+            const selectEstado = document.createElement("select");
+            const opciones = ["En Proceso", "Comprado", "Preparado", "Entregado"];
+            opciones.forEach(op => {
+                const option = document.createElement("option");
+                option.value = op;
+                option.textContent = op;
+                if (e.estado === op) option.selected = true;
+                selectEstado.appendChild(option);
+            });
+            selectEstado.addEventListener("change", (function(i) { return function(ev) { encargos[i].estado = ev.target.value; }; })(idx));
+            tdEstado.appendChild(selectEstado);
+            fila.appendChild(tdEstado);
+
+            // 12. Notas
+            const tdNotas = document.createElement("td");
+            const inputNotas = document.createElement("input");
+            inputNotas.value = e.notas || "";
+            inputNotas.placeholder = "Observaciones";
+            inputNotas.addEventListener("change", (function(i) { return function(ev) { encargos[i].notas = ev.target.value; }; })(idx));
+            tdNotas.appendChild(inputNotas);
+            fila.appendChild(tdNotas);
+
+            tbody.appendChild(fila);
+        }
+        recalcularTodo();
+    }
+
+    function agregarFila() {
+        const nuevoId = encargos.length > 0 ? Math.max(...encargos.map(e => e.id)) + 1 : 1;
+        encargos.push({
+            id: nuevoId,
+            fecha: new Date().toISOString().split('T')[0],
+            cliente: "",
+            auto: "",
+            vin: "",
+            precioAuction: 0,
+            buyerFee: 0,
+            transporte: 0,
+            seguroPrep: 0,
+            deposito: 0,
+            estado: "En Proceso",
+            notas: ""
+        });
+        renderizarTabla();
+    }
+
+    function exportarCSV() {
+        let csvRows = [];
+        // Encabezados para el reporte de gestión
+        const headers = [
+            "ID", "Fecha Encargo", "Cliente", "Vehículo", "VIN",
+            "Precio Auction", "Buyer Fee", "Transporte", "Seguro/Prep (Safety)",
+            "Depósito Recibido", "Estado", "Notas",
+            "Costo Total Vehículo (Auction+Prep)", "Comisión 4%", "GST 5% sobre Comisión",
+            "Total a Pagar Cliente", "Saldo Pendiente"
+        ];
+        csvRows.push(headers.join(","));
+
+        for (const e of encargos) {
+            const auctionCost = (e.precioAuction || 0) + (e.buyerFee || 0) + (e.transporte || 0);
+            const totalPrep = (e.seguroPrep || 0);
+            const costoTotalVehiculo = auctionCost + totalPrep;
+            const comision = costoTotalVehiculo * 0.04;
+            const gst = comision * 0.05;
+            const totalCliente = costoTotalVehiculo + comision + gst;
+            const saldo = totalCliente - (e.deposito || 0);
+
+            const row = [
+                e.id, e.fecha, `"${(e.cliente || "").replace(/"/g, '""')}"`, `"${(e.auto || "").replace(/"/g, '""')}"`,
+                `"${(e.vin || "").replace(/"/g, '""')}"`, e.precioAuction, e.buyerFee, e.transporte, e.seguroPrep,
+                e.deposito, `"${e.estado}"`, `"${(e.notas || "").replace(/"/g, '""')}"`,
+                costoTotalVehiculo.toFixed(2), comision.toFixed(2), gst.toFixed(2),
+                totalCliente.toFixed(2), saldo.toFixed(2)
+            ];
+            csvRows.push(row.join(","));
+        }
+
+        const blob = new Blob(["\uFEFF" + csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute("download", "reporte_encargos_vehiculos.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    renderizarTabla();
+</script>
+</body>
+</html>
