@@ -269,8 +269,11 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         </div>
       </div>
       <div class="sec">
-        <div class="sec-title">Detalle de transferencias reales</div>
-        <div id="transf-list">
+        <div class="sec-toggle" onclick="toggleTransferencias()">
+          <div class="sec-title" style="margin-bottom:0">Detalle de transferencias reales</div>
+          <span class="arrow" id="transf-arrow">+</span>
+        </div>
+        <div id="transf-list" style="display:none">
           <div class="loading">Cargando…</div>
         </div>
       </div>
@@ -398,24 +401,36 @@ function fmt(n, dec){ dec=(dec===undefined)?0:dec; return '$'+Number(n||0).toLoc
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 
 // ================= NAVEGACION HOME / FONDO =================
+// El fondo y la pestaña activos se guardan en la URL (#FONDO/pestaña), así que
+// al refrescar la página el navegador vuelve exactamente al mismo lugar.
 function openFondo(id){
   currentFondoId = id;
   document.getElementById('homeScreen').style.display='none';
   document.getElementById('fondoScreen').style.display='block';
   document.getElementById('fondoTitle').textContent = FONDOS[id].nombre.toUpperCase();
-  showTab('resumen');
+  const tabDesdeUrl = (location.hash.replace('#','').split('/')[1]) || 'resumen';
+  showTab(tabDesdeUrl);
   if(firebaseReady){ initApp(); } else { pendingOpenId = id; }
 }
 function goHome(){
   document.getElementById('fondoScreen').style.display='none';
   document.getElementById('homeScreen').style.display='block';
+  history.replaceState(null,'',location.pathname+location.search);
 }
 function showTab(name){
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   document.getElementById('tabbtn-'+name).classList.add('active');
+  if(currentFondoId){ location.hash = currentFondoId+'/'+name; }
   window.scrollTo(0,0);
+}
+function toggleTransferencias(){
+  const box = document.getElementById('transf-list');
+  const arrow = document.getElementById('transf-arrow');
+  const abierto = box.style.display !== 'none';
+  box.style.display = abierto ? 'none' : 'block';
+  arrow.textContent = abierto ? '+' : '−';
 }
 
 // ================= LOGIN =================
@@ -771,24 +786,34 @@ function utilidadDelMes(mes){
   return {total, detalle};
 }
 
+// Combina los meses del cronograma del crédito con cualquier mes donde haya
+// una venta real registrada, aunque caiga fuera del cronograma original.
+function mesesDisponibles(){
+  const base = (creditoData && creditoData.meses) || [];
+  const ventaMeses = autosCache
+    .filter(a=>a.ventaReal>0 && a.ventaFecha)
+    .map(a=>a.ventaFecha.slice(0,7));
+  return Array.from(new Set([...base, ...ventaMeses])).sort();
+}
+
 function renderSimulador(){
   if(!creditoData) return;
   const cuota = creditoData.cuotaMensualUSD || 0;
   document.getElementById('util-sub').textContent = `Punto de equilibrio: $${cuota} USD/mes (cubre la cuota del crédito). El excedente se distribuye en partes iguales entre los inversionistas.`;
 
   const sel = document.getElementById('sim-mes');
-  const meses = creditoData.meses || [];
-  if(sel.options.length===0 && meses.length){
-    meses.forEach(m=>{
-      const o = document.createElement('option');
-      o.value = m; o.textContent = mesLabel(m);
-      sel.appendChild(o);
-    });
-  }
-  if(!sel.options.length) return;
+  const meses = mesesDisponibles();
+  const prevValue = sel.value;
+  sel.innerHTML = '';
+  meses.forEach(m=>{
+    const o = document.createElement('option');
+    o.value = m; o.textContent = mesLabel(m);
+    sel.appendChild(o);
+  });
+  if(!meses.length) return;
 
   const conVenta = meses.filter(m=>utilidadDelMes(m).total>0);
-  let mesActivo = sel.value || conVenta[0] || meses[0];
+  let mesActivo = (meses.includes(prevValue) ? prevValue : '') || conVenta[0] || meses[0];
   sel.value = mesActivo;
 
   const {total: util, detalle} = utilidadDelMes(mesActivo);
@@ -848,6 +873,16 @@ function renderTransferencias(){
 document.querySelectorAll('.modal-bg').forEach(m=>{
   m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });
 });
+
+// Si la URL ya trae un fondo (#FONDO/pestaña) — por ejemplo después de un
+// refresco — entra directo ahí en vez de mostrar el menú principal.
+(function(){
+  const hashId = location.hash.replace('#','').split('/')[0];
+  if(hashId && FONDOS[hashId]){
+    openFondo(hashId);
+  }
+})();
+
 </script>
 </body>
 </html>
