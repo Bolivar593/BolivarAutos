@@ -305,11 +305,11 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <label>Fecha de compra</label>
     <input type="date" id="autoFecha">
     <label>Costo del carro ($)</label>
-    <input type="number" id="autoCosto" placeholder="9515">
+    <input type="number" id="autoCosto" placeholder="0.00">
     <label>Tax GST — recuperable, no se resta del costo ($)</label>
-    <input type="number" id="autoGst" placeholder="475">
+    <input type="number" id="autoGst" placeholder="0.00">
     <label>Comisión BolivarAutos — dealer (%)</label>
-    <input type="number" id="autoComision" placeholder="4" step="0.1">
+    <input type="number" id="autoComision" placeholder="0.0" step="0.1">
     <label>Estado</label>
     <select id="autoEstado">
       <option value="En Preparación">En Preparación</option>
@@ -317,7 +317,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <option value="Vendido">Vendido</option>
     </select>
     <label>Precio de venta — dejar vacío si aún no se vende ($)</label>
-    <input type="number" id="autoVenta" placeholder="11000">
+    <input type="number" id="autoVenta" placeholder="0.00">
     <label>Fecha de venta — necesaria para que la utilidad se refleje en el mes correcto</label>
     <input type="date" id="autoFechaVenta">
     <label>Fotos</label>
@@ -622,13 +622,16 @@ function renderAutos(){
 
     let finHtml = `<div class="auto-fin"><div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmt(comisionMonto,2)}</b></div>`;
     if(ventaReal > 0){
-      const gananciaBruta = ventaReal - (a.costoTotal||0);
+      const gananciaBruta = ventaReal - capitalInvertido;
       const gananciaNeta = gananciaBruta - comisionMonto;
       const ventaFechaStr = a.ventaFecha ? new Date(a.ventaFecha+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
       finHtml += `<div class="r"><span>Precio de venta</span><b>${fmt(ventaReal)}</b></div>
         <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>
-        <div class="r"><span>Ganancia bruta</span><b class="${gananciaBruta>=0?'pos':''}">${fmt(gananciaBruta,2)}</b></div>
+        <div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmt(gananciaBruta,2)}</b></div>
         <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmt(gananciaNeta,2)}</b></div>`;
+      if(gstPagado > 0){
+        finHtml += `<div class="r" style="font-size:11.5px;color:#999"><span>El Tax GST de ${fmt(gstPagado)} se recupera aparte, vía crédito fiscal — no se vuelve a sumar a la ganancia.</span></div>`;
+      }
     } else {
       finHtml += `<div class="r"><span>Precio de venta</span><b>Pendiente de venta</b></div>`;
     }
@@ -750,7 +753,7 @@ async function guardarAuto(){
 }
 
 // ================= SIMULADOR =================
-// Suma la ganancia neta (venta - costo - comisión) de todos los vehículos
+// Suma la ganancia neta (venta - costo - GST - comisión) de todos los vehículos
 // vendidos cuya fecha de venta cae dentro del mes indicado (formato 'YYYY-MM').
 function utilidadDelMes(mes){
   let total = 0;
@@ -760,7 +763,8 @@ function utilidadDelMes(mes){
     if(a.ventaFecha.slice(0,7) !== mes) return;
     const comisionPct = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
     const comisionMonto = (a.costoTotal||0) * comisionPct/100;
-    const gananciaNeta = (a.ventaReal||0) - (a.costoTotal||0) - comisionMonto;
+    const capitalInvertido = (a.costoTotal||0) + (a.gstPagado||0);
+    const gananciaNeta = (a.ventaReal||0) - capitalInvertido - comisionMonto;
     total += gananciaNeta;
     detalle.push({nombre:a.nombre, gananciaNeta});
   });
