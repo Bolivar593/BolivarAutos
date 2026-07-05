@@ -1860,7 +1860,7 @@ function loadDashboard() {
   var st = {
     fbReady:false, totReady:false, finished:false,
     tRentas:0, nRentas:0, tGST:0, tPST:0, tMes:0, nMes:0,
-    tGastos:0, tITC:0, nGastos:0, totalesOK:false
+    tGastos:0, tITC:0, nGastos:0, totalesOK:false, disponibleReal:null
   };
 
   function finalizar() {
@@ -1871,7 +1871,7 @@ function loadDashboard() {
     var statusEl = document.getElementById('d-gastos-status');
     if(statusEl) statusEl.style.display = st.totalesOK ? 'none' : 'block';
     mostrarDashboard(capitalF, banco, st.tRentas, st.tGST, st.tPST,
-                     st.tGastos, st.tITC, st.nRentas, st.nGastos, st.tMes, st.nMes);
+                     st.tGastos, st.tITC, st.nRentas, st.nGastos, st.tMes, st.nMes, st.disponibleReal);
   }
 
   // ── A) Leer documento TOTALES/dashboard de Firebase (escrito por Apps Script) ──
@@ -1884,6 +1884,7 @@ function loadDashboard() {
       if(t.capital          !== undefined) document.getElementById('dash-capital').value = parseFloat(t.capital);
       if(t.impuestosApartar !== undefined) document.getElementById('dash-imp').value      = parseFloat(t.impuestosApartar);
       if(t.remesaNomina     !== undefined) document.getElementById('dash-remesa').value   = parseFloat(t.remesaNomina);
+      if(t.disponibleReal   !== undefined) st.disponibleReal = parseFloat(t.disponibleReal);
       if(parseFloat(t.totalRentas||0) > 0) {
         st.tRentas = parseFloat(t.totalRentas    || 0);
         st.tGST    = parseFloat(t.totalGSTrentas || 0);
@@ -1933,14 +1934,17 @@ function loadDashboard() {
   });
 }
 
-function mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
+function mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes, disponibleReal) {
   var gstNeto    = Math.max(0, tGST - tITC);
   var remesa     = parseFloat(document.getElementById('dash-remesa').value) || 0;
   var impFijo    = parseFloat(document.getElementById('dash-imp').value);   // GST+RST fijo, sincronizado con la hoja
   var impSales   = isNaN(impFijo) ? (gstNeto + tPST) : impFijo;             // usa el fijo; si está vacío, calcula de Firebase
   var impTotal   = impSales + remesa;     // total a apartar = GST + RST + remesa nómina CRA
   var saldoNeto  = tRentas - tGastos; // rentas cobradas (sin taxes) minus gastos
-  var disponible = banco - capital - impTotal;
+  // Usar el Disponible real calculado por el Flujo de Caja (capital protegido); si no llegó, respaldo al cálculo local
+  var disponible = (disponibleReal !== null && disponibleReal !== undefined && !isNaN(disponibleReal))
+                   ? disponibleReal
+                   : (banco - capital - impTotal);
 
   document.getElementById('d-disponible').textContent   = '$'+disponible.toFixed(2);
   document.getElementById('d-saldo').textContent        = '$'+saldoNeto.toFixed(2);
