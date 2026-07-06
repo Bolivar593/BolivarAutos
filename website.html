@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wild Strawberry Children's Centre — Winnipeg Child Care Since 1971</title>
+<meta name="description" content="A community childcare centre serving Winnipeg's West End for over 50 years. Toddler, Preschool and School Age programs across two locations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF7EE; --card:#fff; --ink:#33291F; --soft:#6E6053;
+  --berry:#C4374B; --berry-deep:#93222F; --berry-tint:#F9E4E6;
+  --leaf:#41693C; --leaf-deep:#2C4A28; --leaf-tint:#E7EFDC;
+  --sun:#EFB63C; --sun-tint:#FBEFD3; --line:#EADFCE;
+  --radius:20px; --shadow:0 12px 34px rgba(51,41,31,.10);
+  --fd:"Baloo 2",ui-rounded,system-ui,sans-serif; --fb:"Nunito",system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{font-family:var(--fb);color:var(--ink);line-height:1.6;background:var(--paper)}
+h1,h2,h3,h4{font-family:var(--fd);line-height:1.12;font-weight:700}
+a{color:inherit}
+button{font-family:var(--fb);cursor:pointer;border:none;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--sun);outline-offset:3px;border-radius:6px}
+img{max-width:100%;display:block}
+section{scroll-margin-top:76px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,247,238,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:1140px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;gap:14px}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.berry{width:42px;height:46px;flex:none;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20110%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22lf%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%235AA33C%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23357026%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Cg%20transform%3D%22translate%2850%2C42%29%22%3E%0A%3Cg%20fill%3D%22url%28%23lf%29%22%20stroke%3D%22%232E6320%22%20stroke-width%3D%221%22%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C-4%2C-28%20-13%2C-37%20-20%2C-37%20C-18%2C-28%20-11%2C-19%200%2C-13%20Z%22%20transform%3D%22rotate%28-6%200%20-13%29%22/%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C4%2C-28%2013%2C-37%2020%2C-37%20C18%2C-28%2011%2C-19%200%2C-13%20Z%22%20transform%3D%22rotate%286%200%20-13%29%22/%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C-8%2C-28%20-24%2C-33%20-33%2C-29%20C-27%2C-20%20-15%2C-15%200%2C-13%20Z%22/%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C8%2C-28%2024%2C-33%2033%2C-29%20C27%2C-20%2015%2C-15%200%2C-13%20Z%22/%3E%0A%3Cpath%20d%3D%22M0%2C-12%20C-3%2C-30%203%2C-30%200%2C-12%20Z%22%20stroke%3D%22%232E6320%22%20stroke-width%3D%223%22/%3E%0A%3C/g%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C32%2C-13%2044%2C6%2038%2C27%20C33%2C44%2017%2C62%200%2C62%20C-17%2C62%20-33%2C44%20-38%2C27%20C-44%2C6%20-32%2C-13%200%2C-13%20Z%22%20fill%3D%22%23E24A5E%22/%3E%0A%3Ccircle%20cx%3D%22-19%22%20cy%3D%2216%22%20r%3D%226.5%22%20fill%3D%22%23F58AA0%22%20opacity%3D%22.7%22/%3E%3Ccircle%20cx%3D%2219%22%20cy%3D%2216%22%20r%3D%226.5%22%20fill%3D%22%23F58AA0%22%20opacity%3D%22.7%22/%3E%0A%3Ccircle%20cx%3D%22-10%22%20cy%3D%226%22%20r%3D%224.3%22%20fill%3D%22%233A1418%22/%3E%3Ccircle%20cx%3D%2210%22%20cy%3D%226%22%20r%3D%224.3%22%20fill%3D%22%233A1418%22/%3E%0A%3Ccircle%20cx%3D%22-8.5%22%20cy%3D%224.5%22%20r%3D%221.4%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%2211.5%22%20cy%3D%224.5%22%20r%3D%221.4%22%20fill%3D%22%23fff%22/%3E%0A%3Cpath%20d%3D%22M-8%2C18%20Q0%2C27%208%2C18%22%20stroke%3D%22%233A1418%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cg%20fill%3D%22%23F7E2A6%22%3E%3Ccircle%20cx%3D%22-24%22%20cy%3D%2228%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%2242%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%22-13%22%20cy%3D%2242%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2242%22%20r%3D%221.5%22/%3E%3C/g%3E%0A%3C/g%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;background-position:center}
+
+
+
+.logo b{font-family:var(--fd);font-size:1.06rem;display:block;line-height:1.05}
+.logo small{color:var(--soft);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;font-weight:800}
+.nav-links{margin-left:auto;display:flex;gap:4px;align-items:center}
+.nav-links a{color:var(--soft);text-decoration:none;font-weight:700;font-size:.9rem;padding:9px 13px;border-radius:10px}
+.nav-links a:hover{background:var(--leaf-tint);color:var(--leaf-deep)}
+.nav-links a.btn-berry,.nav-links a.btn-berry:hover{color:#fff}
+.nav-links a.btn-berry:hover{background:var(--berry-deep)}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:800;border-radius:999px;text-decoration:none;transition:transform .15s ease,box-shadow .15s ease;font-size:.92rem;padding:12px 22px}
+.btn:hover{transform:translateY(-2px)}
+.btn-berry{background:var(--berry);color:#fff;box-shadow:0 6px 16px rgba(196,55,75,.32)}
+.btn-berry:hover{background:var(--berry-deep)}
+.btn-ghost{border:2px solid var(--leaf);color:var(--leaf-deep)}
+.btn-ghost:hover{background:var(--leaf-tint)}
+.nav-cta{padding:9px 18px;font-size:.85rem}
+.menu-toggle{display:none;margin-left:auto;font-size:1.5rem;padding:6px 10px}
+
+/* hero */
+.hero-bg{position:relative;background-image:linear-gradient(180deg,rgba(251,247,238,.74),rgba(251,247,238,.74)),url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221200%22%20height%3D%22800%22%20viewBox%3D%220%200%201200%20800%22%3E%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23FBF7EE%22/%3E%3Cg%20opacity%3D%220.9%22%3E%0A%3Crect%20x%3D%2290%22%20y%3D%22120%22%20width%3D%2290%22%20height%3D%2290%22%20rx%3D%2212%22%20fill%3D%22%23C4374B%22%20transform%3D%22rotate%28-8%20135%20165%29%22/%3E%3Crect%20x%3D%22210%22%20y%3D%2290%22%20width%3D%2270%22%20height%3D%2270%22%20rx%3D%2210%22%20fill%3D%22%23EFB63C%22%20transform%3D%22rotate%286%20245%20125%29%22/%3E%3Ccircle%20cx%3D%22330%22%20cy%3D%22150%22%20r%3D%2242%22%20fill%3D%22%2341693C%22/%3E%3Crect%20x%3D%22150%22%20y%3D%22240%22%20width%3D%2280%22%20height%3D%2280%22%20rx%3D%2211%22%20fill%3D%22%232E7FA3%22%20transform%3D%22rotate%2810%20190%20280%29%22/%3E%3Cpolygon%20points%3D%22300%2C230%20345%2C310%20255%2C310%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%22420%22%20y%3D%22110%22%20width%3D%2280%22%20height%3D%2280%22%20rx%3D%2211%22%20fill%3D%22%236B4FA1%22%20transform%3D%22rotate%28-5%20460%20150%29%22/%3E%3Ccircle%20cx%3D%22540%22%20cy%3D%22180%22%20r%3D%2236%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%22600%22%20y%3D%22120%22%20width%3D%2276%22%20height%3D%2276%22%20rx%3D%2210%22%20fill%3D%22%2341693C%22%20transform%3D%22rotate%288%20638%20158%29%22/%3E%3Crect%20x%3D%22720%22%20y%3D%22150%22%20width%3D%2284%22%20height%3D%2284%22%20rx%3D%2212%22%20fill%3D%22%23EFB63C%22%20transform%3D%22rotate%28-7%20762%20192%29%22/%3E%3Cpolygon%20points%3D%22860%2C140%20908%2C224%20812%2C224%22%20fill%3D%22%232E7FA3%22/%3E%3Crect%20x%3D%22940%22%20y%3D%22110%22%20width%3D%2278%22%20height%3D%2278%22%20rx%3D%2211%22%20fill%3D%22%23C4374B%22%20transform%3D%22rotate%285%20979%20149%29%22/%3E%3Ccircle%20cx%3D%221080%22%20cy%3D%22170%22%20r%3D%2240%22%20fill%3D%22%236B4FA1%22/%3E%0A%3Crect%20x%3D%2280%22%20y%3D%22400%22%20width%3D%2282%22%20height%3D%2282%22%20rx%3D%2211%22%20fill%3D%22%2341693C%22%20transform%3D%22rotate%287%20121%20441%29%22/%3E%3Ccircle%20cx%3D%22250%22%20cy%3D%22430%22%20r%3D%2240%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%22340%22%20y%3D%22410%22%20width%3D%2276%22%20height%3D%2276%22%20rx%3D%2210%22%20fill%3D%22%23C4374B%22%20transform%3D%22rotate%28-6%20378%20448%29%22/%3E%3Cpolygon%20points%3D%22500%2C400%20546%2C482%20454%2C482%22%20fill%3D%22%23EFB63C%22/%3E%3Crect%20x%3D%22600%22%20y%3D%22420%22%20width%3D%2280%22%20height%3D%2280%22%20rx%3D%2211%22%20fill%3D%22%232E7FA3%22%20transform%3D%22rotate%289%20640%20460%29%22/%3E%3Ccircle%20cx%3D%22760%22%20cy%3D%22450%22%20r%3D%2238%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%22840%22%20y%3D%22410%22%20width%3D%2282%22%20height%3D%2282%22%20rx%3D%2212%22%20fill%3D%22%236B4FA1%22%20transform%3D%22rotate%28-8%20881%20451%29%22/%3E%3Ccircle%20cx%3D%221010%22%20cy%3D%22440%22%20r%3D%2240%22%20fill%3D%22%2341693C%22/%3E%3Crect%20x%3D%221090%22%20y%3D%22410%22%20width%3D%2278%22%20height%3D%2278%22%20rx%3D%2211%22%20fill%3D%22%23EFB63C%22%20transform%3D%22rotate%286%201129%20449%29%22/%3E%0A%3Crect%20x%3D%22120%22%20y%3D%22640%22%20width%3D%2280%22%20height%3D%2280%22%20rx%3D%2211%22%20fill%3D%22%23EFB63C%22%20transform%3D%22rotate%28-7%20160%20680%29%22/%3E%3Cpolygon%20points%3D%22280%2C630%20326%2C712%20234%2C712%22%20fill%3D%22%2341693C%22/%3E%3Ccircle%20cx%3D%22420%22%20cy%3D%22670%22%20r%3D%2240%22%20fill%3D%22%236B4FA1%22/%3E%3Crect%20x%3D%22500%22%20y%3D%22650%22%20width%3D%2278%22%20height%3D%2278%22%20rx%3D%2211%22%20fill%3D%22%23C4374B%22%20transform%3D%22rotate%288%20539%20689%29%22/%3E%3Crect%20x%3D%22640%22%20y%3D%22640%22%20width%3D%2284%22%20height%3D%2284%22%20rx%3D%2212%22%20fill%3D%22%232E7FA3%22%20transform%3D%22rotate%28-6%20682%20682%29%22/%3E%3Ccircle%20cx%3D%22800%22%20cy%3D%22680%22%20r%3D%2238%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%22880%22%20y%3D%22650%22%20width%3D%2276%22%20height%3D%2276%22%20rx%3D%2210%22%20fill%3D%22%2341693C%22%20transform%3D%22rotate%287%20918%20688%29%22/%3E%3Cpolygon%20points%3D%221020%2C640%201066%2C722%20974%2C722%22%20fill%3D%22%23C4374B%22/%3E%0A%3C/g%3E%3C/svg%3E");background-attachment:fixed,fixed;background-size:cover,cover;background-position:center,center}
+.hero{max-width:1140px;margin:0 auto;padding:70px 22px 46px;display:grid;grid-template-columns:1.05fr .95fr;gap:50px;align-items:center;position:relative;z-index:1}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--leaf-tint);color:var(--leaf-deep);font-weight:800;font-size:.76rem;letter-spacing:.07em;text-transform:uppercase;padding:7px 15px;border-radius:999px;margin-bottom:20px}
+.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;margin-bottom:18px}
+.hero h1 em{font-style:normal;color:var(--berry)}
+.hero .lead{font-size:1.14rem;color:var(--soft);max-width:34rem;margin-bottom:28px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.hero-art{position:relative}
+.collage{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;aspect-ratio:1}
+.tile{border-radius:22px;display:grid;place-items:center;font-size:3rem;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.tile::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.3) 1.3px,transparent 1.6px);background-size:16px 16px;opacity:.5}
+.tile.big{grid-row:span 2;font-size:4rem}
+.badge-float{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:12px 20px;font-weight:800;font-size:.85rem;color:var(--leaf-deep);white-space:nowrap;display:flex;align-items:center;gap:8px}
+
+/* strip */
+.strip{background:var(--leaf-deep);color:#F2EFE2}
+.strip-in{max-width:1140px;margin:0 auto;padding:16px 22px;display:flex;gap:30px;justify-content:center;flex-wrap:wrap;font-weight:700;font-size:.94rem}
+.strip-in b{color:var(--sun)}
+
+/* section shells */
+.section{max-width:1140px;margin:0 auto;padding:74px 22px;background-color:var(--paper);position:relative;z-index:1}.bg-crayons{background-image:linear-gradient(180deg,rgba(251,247,238,.82),rgba(251,247,238,.82)),url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221200%22%20height%3D%22800%22%20viewBox%3D%220%200%201200%20800%22%3E%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23FBF7EE%22/%3E%3Cg%20opacity%3D%220.85%22%3E%3Cg%20transform%3D%22translate%28303%20686%29%20rotate%289%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23C4374B%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28193%20458%29%20rotate%2857%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23EFB63C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23EFB63C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28678%20565%29%20rotate%2820%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%2341693C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%2341693C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28654%20147%29%20rotate%2817%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%232E7FA3%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%232E7FA3%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%2873%20560%29%20rotate%28-27%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%236B4FA1%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%236B4FA1%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28624%20319%29%20rotate%28-36%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23E08B4A%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28794%20561%29%20rotate%289%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23C4374B%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28916%20642%29%20rotate%280%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23EFB63C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23EFB63C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28466%20234%29%20rotate%28-31%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%2341693C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%2341693C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28710%20235%29%20rotate%2851%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%232E7FA3%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%232E7FA3%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%281008%20615%29%20rotate%28-11%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%236B4FA1%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%236B4FA1%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28819%2095%29%20rotate%2825%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23E08B4A%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28855%20145%29%20rotate%28-40%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23C4374B%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28836%20685%29%20rotate%28-55%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23EFB63C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23EFB63C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28368%20111%29%20rotate%2845%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%2341693C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%2341693C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28946%20355%29%20rotate%280%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%232E7FA3%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%232E7FA3%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28669%20476%29%20rotate%2831%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%236B4FA1%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%236B4FA1%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28867%20517%29%20rotate%28-10%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23E08B4A%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28805%20670%29%20rotate%28-4%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23C4374B%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%281047%20217%29%20rotate%2852%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%23EFB63C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%23EFB63C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28434%20179%29%20rotate%28-56%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%2341693C%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%2341693C%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3Cg%20transform%3D%22translate%28199%20586%29%20rotate%28-33%29%22%3E%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%2226%22%20rx%3D%2213%22%20fill%3D%22%232E7FA3%22/%3E%3Cpolygon%20points%3D%22120%2C0%20150%2C13%20120%2C26%22%20fill%3D%22%232E7FA3%22/%3E%3Crect%20x%3D%2212%22%20y%3D%228%22%20width%3D%2290%22%20height%3D%2210%22%20rx%3D%225%22%20fill%3D%22%23FBF7EE%22%20opacity%3D%220.35%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");background-attachment:fixed,fixed;background-size:cover,cover;background-position:center,center}.bg-map{background-image:linear-gradient(180deg,rgba(251,247,238,.82),rgba(251,247,238,.82)),url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221200%22%20height%3D%22800%22%20viewBox%3D%220%200%201200%20800%22%3E%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23EAF2E0%22/%3E%3Cg%20opacity%3D%220.9%22%3E%0A%3Crect%20x%3D%220%22%20y%3D%22180%22%20width%3D%221200%22%20height%3D%2290%22%20fill%3D%22%23FBF7EE%22/%3E%3Crect%20x%3D%220%22%20y%3D%22470%22%20width%3D%221200%22%20height%3D%2270%22%20fill%3D%22%23FBF7EE%22/%3E%3Crect%20x%3D%22260%22%20y%3D%220%22%20width%3D%2280%22%20height%3D%22800%22%20fill%3D%22%23FBF7EE%22/%3E%3Crect%20x%3D%22720%22%20y%3D%220%22%20width%3D%2290%22%20height%3D%22800%22%20fill%3D%22%23FBF7EE%22/%3E%0A%3Crect%20x%3D%2240%22%20y%3D%2240%22%20width%3D%22180%22%20height%3D%22110%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%3Crect%20x%3D%22360%22%20y%3D%2240%22%20width%3D%22320%22%20height%3D%22110%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%3Crect%20x%3D%22840%22%20y%3D%2240%22%20width%3D%22320%22%20height%3D%22110%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%0A%3Crect%20x%3D%2240%22%20y%3D%22300%22%20width%3D%22180%22%20height%3D%22140%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%3Crect%20x%3D%22360%22%20y%3D%22300%22%20width%3D%22320%22%20height%3D%22140%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%3Crect%20x%3D%22840%22%20y%3D%22300%22%20width%3D%22320%22%20height%3D%22140%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%0A%3Crect%20x%3D%2240%22%20y%3D%22580%22%20width%3D%22180%22%20height%3D%22180%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%3Crect%20x%3D%22360%22%20y%3D%22580%22%20width%3D%22320%22%20height%3D%22180%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%3Crect%20x%3D%22840%22%20y%3D%22580%22%20width%3D%22320%22%20height%3D%22180%22%20rx%3D%226%22%20fill%3D%22%23DCE9C8%22/%3E%0A%3Cg%20transform%3D%22translate%28470%20210%29%22%3E%3Cpath%20d%3D%22M0%2C0%20C-30%2C-46%2030%2C-46%200%2C0%20Z%22%20fill%3D%22%23C4374B%22%20transform%3D%22translate%280%2C-40%29%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22-58%22%20r%3D%2220%22%20fill%3D%22%23C4374B%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22-58%22%20r%3D%228%22%20fill%3D%22%23FBF7EE%22/%3E%3C/g%3E%0A%3Cg%20transform%3D%22translate%28900%20500%29%22%3E%3Cpath%20d%3D%22M0%2C0%20C-30%2C-46%2030%2C-46%200%2C0%20Z%22%20fill%3D%22%2341693C%22%20transform%3D%22translate%280%2C-40%29%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22-58%22%20r%3D%2220%22%20fill%3D%22%2341693C%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%22-58%22%20r%3D%228%22%20fill%3D%22%23FBF7EE%22/%3E%3C/g%3E%0A%3C/g%3E%3C/svg%3E");background-attachment:fixed,fixed;background-size:cover,cover;background-position:center,center}
+.sec-head{max-width:640px;margin-bottom:40px}
+.sec-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.sec-head h2{font-size:clamp(1.8rem,3.2vw,2.5rem);margin:10px 0 12px}
+.sec-head p{color:var(--soft);font-size:1.04rem}
+
+/* programs */
+.prog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.prog{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease}
+.prog:hover{transform:translateY(-5px);box-shadow:var(--shadow)}
+.prog-top{height:96px;display:grid;place-items:center;font-size:2.6rem;position:relative}
+.prog-top::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.3) 1.3px,transparent 1.6px);background-size:15px 15px;opacity:.5}
+.prog-body{padding:22px 24px}
+.prog-body .age{color:var(--berry);font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+.prog-body h3{font-size:1.28rem;margin-bottom:8px}
+.prog-body p{color:var(--soft);font-size:.94rem}
+
+/* about */
+.about{background-image:linear-gradient(180deg,rgba(245,239,226,.80),rgba(245,239,226,.80)),url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221200%22%20height%3D%22800%22%20viewBox%3D%220%200%201200%20800%22%3E%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23F5EFE2%22/%3E%3Cg%20opacity%3D%220.9%22%3E%0A%3Ccircle%20cx%3D%221000%22%20cy%3D%22150%22%20r%3D%2270%22%20fill%3D%22%23EFB63C%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%220%22%20y%3D%22469%22%20width%3D%22136%22%20height%3D%22331%22%20fill%3D%22%23C4374B%22/%3E%3Cpolygon%20points%3D%220%2C469%2068%2C419%20136%2C469%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%2218%22%20y%3D%22499%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%2264%22%20y%3D%22499%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%2218%22%20y%3D%22569%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%2264%22%20y%3D%22569%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%2218%22%20y%3D%22639%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%2264%22%20y%3D%22639%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%2218%22%20y%3D%22709%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%2264%22%20y%3D%22709%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22144%22%20y%3D%22451%22%20width%3D%22146%22%20height%3D%22349%22%20fill%3D%22%2393222F%22/%3E%3Cpolygon%20points%3D%22144%2C451%20217%2C401%20290%2C451%22%20fill%3D%22%2393222F%22/%3E%3Crect%20x%3D%22162%22%20y%3D%22481%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22208%22%20y%3D%22481%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22254%22%20y%3D%22481%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22162%22%20y%3D%22551%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22208%22%20y%3D%22551%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22254%22%20y%3D%22551%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22162%22%20y%3D%22621%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22208%22%20y%3D%22621%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22254%22%20y%3D%22621%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22162%22%20y%3D%22691%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22208%22%20y%3D%22691%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22254%22%20y%3D%22691%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22298%22%20y%3D%22491%22%20width%3D%22156%22%20height%3D%22309%22%20fill%3D%22%2341693C%22/%3E%3Cpolygon%20points%3D%22298%2C491%20376%2C441%20454%2C491%22%20fill%3D%22%2341693C%22/%3E%3Crect%20x%3D%22316%22%20y%3D%22521%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22362%22%20y%3D%22521%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22408%22%20y%3D%22521%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22316%22%20y%3D%22591%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22362%22%20y%3D%22591%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22408%22%20y%3D%22591%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22316%22%20y%3D%22661%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22362%22%20y%3D%22661%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22408%22%20y%3D%22661%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22316%22%20y%3D%22731%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22362%22%20y%3D%22731%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22408%22%20y%3D%22731%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22462%22%20y%3D%22521%22%20width%3D%22157%22%20height%3D%22279%22%20fill%3D%22%232C4A28%22/%3E%3Cpolygon%20points%3D%22462%2C521%20540%2C471%20619%2C521%22%20fill%3D%22%232C4A28%22/%3E%3Crect%20x%3D%22480%22%20y%3D%22551%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22526%22%20y%3D%22551%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22572%22%20y%3D%22551%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22480%22%20y%3D%22621%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22526%22%20y%3D%22621%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22572%22%20y%3D%22621%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22480%22%20y%3D%22691%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22526%22%20y%3D%22691%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22572%22%20y%3D%22691%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22627%22%20y%3D%22573%22%20width%3D%22163%22%20height%3D%22227%22%20fill%3D%22%23E08B4A%22/%3E%3Cpolygon%20points%3D%22627%2C573%20708%2C523%20790%2C573%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%22645%22%20y%3D%22603%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22691%22%20y%3D%22603%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22737%22%20y%3D%22603%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22645%22%20y%3D%22673%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22691%22%20y%3D%22673%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22737%22%20y%3D%22673%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22645%22%20y%3D%22743%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22691%22%20y%3D%22743%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22737%22%20y%3D%22743%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22798%22%20y%3D%22539%22%20width%3D%22158%22%20height%3D%22261%22%20fill%3D%22%236B4FA1%22/%3E%3Cpolygon%20points%3D%22798%2C539%20877%2C489%20956%2C539%22%20fill%3D%22%236B4FA1%22/%3E%3Crect%20x%3D%22816%22%20y%3D%22569%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22862%22%20y%3D%22569%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22908%22%20y%3D%22569%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22816%22%20y%3D%22639%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22862%22%20y%3D%22639%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22908%22%20y%3D%22639%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22816%22%20y%3D%22709%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22862%22%20y%3D%22709%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22908%22%20y%3D%22709%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22964%22%20y%3D%22554%22%20width%3D%22154%22%20height%3D%22246%22%20fill%3D%22%232E7FA3%22/%3E%3Crect%20x%3D%22982%22%20y%3D%22584%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221028%22%20y%3D%22584%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221074%22%20y%3D%22584%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22982%22%20y%3D%22654%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221028%22%20y%3D%22654%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221074%22%20y%3D%22654%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%22982%22%20y%3D%22724%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221028%22%20y%3D%22724%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221074%22%20y%3D%22724%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221126%22%20y%3D%22512%22%20width%3D%22160%22%20height%3D%22288%22%20fill%3D%22%23C4374B%22/%3E%3Cpolygon%20points%3D%221126%2C512%201206%2C462%201286%2C512%22%20fill%3D%22%23C4374B%22/%3E%3Crect%20x%3D%221144%22%20y%3D%22542%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221190%22%20y%3D%22542%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221236%22%20y%3D%22542%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221144%22%20y%3D%22612%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221190%22%20y%3D%22612%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221236%22%20y%3D%22612%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221144%22%20y%3D%22682%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221190%22%20y%3D%22682%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221236%22%20y%3D%22682%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221144%22%20y%3D%22752%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221190%22%20y%3D%22752%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3Crect%20x%3D%221236%22%20y%3D%22752%22%20width%3D%2226%22%20height%3D%2234%22%20rx%3D%223%22%20fill%3D%22%23FBEFD3%22%20opacity%3D%220.8%22/%3E%3C/g%3E%3C/svg%3E");background-attachment:fixed,fixed;background-size:cover,cover;background-position:center,center}
+.about-grid{max-width:1140px;margin:0 auto;padding:74px 22px;display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.about-grid h2{font-size:clamp(1.8rem,3.2vw,2.4rem);margin-bottom:16px}
+.about-grid p{color:var(--soft);margin-bottom:14px}
+.stats-row{display:flex;gap:16px;margin-top:24px;flex-wrap:wrap}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 20px;flex:1;min-width:120px}
+.stat b{font-family:var(--fd);font-size:1.7rem;color:var(--leaf-deep);display:block}
+.stat span{font-size:.82rem;color:var(--soft);font-weight:700}
+.value-list{list-style:none;display:flex;flex-direction:column;gap:12px}
+.value-list li{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.95rem;font-weight:600}
+.value-list .vic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:1.2rem;flex:none}
+
+/* portal band */
+.portal{margin:0;padding:40px 22px 74px;background:var(--paper);position:relative;z-index:1}.portal>*{max-width:1140px;margin:0 auto}
+.portal-card{background:linear-gradient(135deg,var(--berry),var(--berry-deep));color:#fff;border-radius:28px;padding:56px 48px;position:relative;overflow:hidden;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.portal-card::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.16) 1.4px,transparent 1.8px);background-size:20px 20px;opacity:.6}
+.portal-card>*{position:relative;z-index:1}
+.portal-card h2{font-size:clamp(1.7rem,3vw,2.3rem);margin-bottom:14px}
+.portal-card p{opacity:.94;margin-bottom:22px;font-size:1.05rem}
+.portal-feats{list-style:none;display:flex;flex-direction:column;gap:11px}
+.portal-feats li{display:flex;gap:11px;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:12px 15px;font-weight:700;font-size:.94rem}
+.btn-white{background:rgba(255,255,255,.18);color:#fff;border:2px solid #fff;backdrop-filter:blur(2px)}
+.btn-white:hover{background:#fff;color:var(--berry-deep)}
+
+/* contact */
+.contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.loc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.loc h3{font-size:1.1rem;margin-bottom:4px}
+.loc .tagline{color:var(--berry);font-weight:800;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px;display:block}
+.loc p{color:var(--soft);font-size:.92rem;margin-bottom:6px;display:flex;gap:8px;align-items:flex-start}
+.hours-note{max-width:1140px;margin:22px auto 0;padding:0 22px}
+.hours-card{background:var(--sun-tint);border:1px solid #EDD49A;border-radius:16px;padding:18px 22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-weight:700}
+.hours-card .big{font-family:var(--fd);font-size:1.15rem;color:#8A6410}
+
+/* footer */
+.footer{background:var(--leaf-deep);color:#DCE4D3;margin-top:20px}
+
+/* sticky waitlist tab */
+.wl-tab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:60;background:var(--sun);color:#5C4410;font-family:var(--fd);font-weight:800;font-size:.9rem;padding:14px 12px;border-radius:14px 0 0 14px;box-shadow:-4px 4px 16px rgba(51,41,31,.18);writing-mode:vertical-rl;text-orientation:mixed;text-decoration:none;letter-spacing:1px;transition:padding .15s ease,background .15s ease;display:flex;align-items:center;gap:8px}
+.wl-tab:hover{padding-right:18px;background:#F0A93A}
+.wl-tab .dot{width:9px;height:9px;border-radius:50%;background:var(--berry);writing-mode:horizontal-tb}
+@media(max-width:600px){.wl-tab{writing-mode:horizontal-tb;top:auto;bottom:16px;right:16px;transform:none;border-radius:999px;padding:12px 18px;box-shadow:0 6px 18px rgba(51,41,31,.25)}}
+
+/* waitlist section */
+.waitlist{background-image:linear-gradient(180deg,rgba(245,239,226,.78),rgba(245,239,226,.78)),url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%221200%22%20height%3D%22800%22%20viewBox%3D%220%200%201200%20800%22%3E%3Crect%20width%3D%221200%22%20height%3D%22800%22%20fill%3D%22%23F5EFE2%22/%3E%3Cg%20opacity%3D%220.9%22%3E%0A%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%221200%22%20height%3D%22480%22%20fill%3D%22%23EAF2E0%22/%3E%0A%3Crect%20x%3D%22120%22%20y%3D%2270%22%20width%3D%22220%22%20height%3D%22180%22%20rx%3D%2210%22%20fill%3D%22%23BFE3EE%22/%3E%3Cline%20x1%3D%22230%22%20y1%3D%2270%22%20x2%3D%22230%22%20y2%3D%22250%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%228%22/%3E%3Cline%20x1%3D%22120%22%20y1%3D%22160%22%20x2%3D%22340%22%20y2%3D%22160%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%228%22/%3E%0A%3Crect%20x%3D%22500%22%20y%3D%2270%22%20width%3D%22220%22%20height%3D%22180%22%20rx%3D%2210%22%20fill%3D%22%23BFE3EE%22/%3E%3Cline%20x1%3D%22610%22%20y1%3D%2270%22%20x2%3D%22610%22%20y2%3D%22250%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%228%22/%3E%3Cline%20x1%3D%22500%22%20y1%3D%22160%22%20x2%3D%22720%22%20y2%3D%22160%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%228%22/%3E%0A%3Crect%20x%3D%22880%22%20y%3D%2270%22%20width%3D%22220%22%20height%3D%22180%22%20rx%3D%2210%22%20fill%3D%22%23BFE3EE%22/%3E%3Cline%20x1%3D%22990%22%20y1%3D%2270%22%20x2%3D%22990%22%20y2%3D%22250%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%228%22/%3E%3Cline%20x1%3D%22880%22%20y1%3D%22160%22%20x2%3D%221100%22%20y2%3D%22160%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%228%22/%3E%0A%3Crect%20x%3D%2280%22%20y%3D%22330%22%20width%3D%22360%22%20height%3D%22120%22%20rx%3D%228%22%20fill%3D%22%23E08B4A%22/%3E%3Crect%20x%3D%2280%22%20y%3D%22330%22%20width%3D%22360%22%20height%3D%2216%22%20fill%3D%22%23C4374B%22/%3E%3Cline%20x1%3D%2280%22%20y1%3D%22390%22%20x2%3D%22440%22%20y2%3D%22390%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%226%22/%3E%3Cline%20x1%3D%22200%22%20y1%3D%22346%22%20x2%3D%22200%22%20y2%3D%22450%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%226%22/%3E%3Cline%20x1%3D%22320%22%20y1%3D%22346%22%20x2%3D%22320%22%20y2%3D%22450%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%226%22/%3E%0A%3Crect%20x%3D%22760%22%20y%3D%22330%22%20width%3D%22360%22%20height%3D%22120%22%20rx%3D%228%22%20fill%3D%22%236B4FA1%22/%3E%3Crect%20x%3D%22760%22%20y%3D%22330%22%20width%3D%22360%22%20height%3D%2216%22%20fill%3D%22%2341693C%22/%3E%3Cline%20x1%3D%22760%22%20y1%3D%22390%22%20x2%3D%221120%22%20y2%3D%22390%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%226%22/%3E%3Cline%20x1%3D%22880%22%20y1%3D%22346%22%20x2%3D%22880%22%20y2%3D%22450%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%226%22/%3E%3Cline%20x1%3D%221000%22%20y1%3D%22346%22%20x2%3D%221000%22%20y2%3D%22450%22%20stroke%3D%22%23FBF7EE%22%20stroke-width%3D%226%22/%3E%0A%3Cellipse%20cx%3D%22600%22%20cy%3D%22620%22%20rx%3D%22360%22%20ry%3D%22120%22%20fill%3D%22%23EFB63C%22%20opacity%3D%220.55%22/%3E%3Cellipse%20cx%3D%22600%22%20cy%3D%22620%22%20rx%3D%22250%22%20ry%3D%2280%22%20fill%3D%22%23C4374B%22%20opacity%3D%220.4%22/%3E%3Cellipse%20cx%3D%22600%22%20cy%3D%22620%22%20rx%3D%22140%22%20ry%3D%2244%22%20fill%3D%22%232E7FA3%22%20opacity%3D%220.4%22/%3E%0A%3C/g%3E%3C/svg%3E");background-attachment:fixed,fixed;background-size:cover,cover;background-position:center,center}
+.wl-inner{max-width:900px;margin:0 auto;padding:74px 22px}
+.wl-card{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:36px;box-shadow:var(--shadow)}
+.wl-form{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px}
+.wl-field{display:flex;flex-direction:column;gap:6px}
+.wl-field.full{grid-column:1/-1}
+.wl-field label{font-size:.82rem;font-weight:800;color:var(--ink)}
+.wl-field label .req{color:var(--berry)}
+.wl-field input,.wl-field select,.wl-field textarea{border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;font-family:var(--fb);font-size:.94rem;background:var(--paper);color:var(--ink);width:100%}
+.wl-field input:focus,.wl-field select:focus,.wl-field textarea:focus{outline:3px solid var(--sun);outline-offset:1px;border-color:var(--sun)}
+.wl-field textarea{resize:vertical;min-height:72px}
+.wl-hint{font-size:.78rem;color:var(--soft)}
+.wl-check{display:flex;gap:10px;align-items:flex-start;background:var(--sun-tint);border:1px solid #EDD49A;border-radius:12px;padding:13px 15px;font-size:.86rem;font-weight:600;color:#6b5320}
+.wl-check input{width:20px;height:20px;flex:none;margin-top:1px}
+.wl-submit{grid-column:1/-1;background:var(--berry);color:#fff;border-radius:999px;padding:14px 28px;font-weight:800;font-size:1rem;justify-self:start;transition:background .15s ease,transform .15s ease}
+.wl-submit:hover{background:var(--berry-deep);transform:translateY(-2px)}
+.wl-success{display:none;text-align:center;padding:30px 10px}
+.wl-success.show{display:block}
+.wl-toggle{display:inline-flex;align-items:center;gap:10px;background:var(--berry);color:#fff;border-radius:999px;padding:15px 30px;font-family:var(--fd);font-weight:800;font-size:1.05rem;box-shadow:0 6px 16px rgba(196,55,75,.32);transition:background .15s ease,transform .15s ease;margin:0 auto;cursor:pointer}
+.wl-toggle:hover{background:var(--berry-deep);transform:translateY(-2px)}
+.wl-toggle .arw{transition:transform .25s ease;font-size:1.1rem}
+.wl-toggle.open .arw{transform:rotate(180deg)}
+.wl-collapse{max-height:0;overflow:hidden;transition:max-height .45s ease;margin-top:0}
+.wl-collapse.open{max-height:2000px;margin-top:24px}
+.wl-toggle-wrap{text-align:center}
+.wl-success .ok{width:64px;height:64px;border-radius:50%;background:var(--leaf-tint);color:var(--leaf-deep);display:grid;place-items:center;font-size:2rem;margin:0 auto 16px}
+.wl-success h3{font-size:1.4rem;margin-bottom:8px}
+.wl-success p{color:var(--soft)}
+
+.footer-in{max-width:1140px;margin:0 auto;padding:50px 22px 30px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:34px}
+.footer h4{color:#fff;margin-bottom:12px;font-size:1rem}
+.footer p,.footer a{font-size:.9rem;margin-bottom:7px;color:#DCE4D3;text-decoration:none;display:block}
+.footer a:hover{color:var(--sun)}
+.footer .logo b{color:#fff}.footer .logo small{color:#A9BBA0}
+.footer .fin{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);padding-top:20px;margin-top:8px;font-size:.82rem;text-align:center;color:#A9BBA0}
+
+@media(max-width:920px){
+  .hero{grid-template-columns:1fr;padding-top:48px}
+  .about-grid{grid-template-columns:1fr;gap:34px}
+  .portal-card{grid-template-columns:1fr;padding:40px 28px}
+  .prog-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-in{grid-template-columns:1fr}
+  .wl-form{grid-template-columns:1fr}
+  .wl-card{padding:24px}
+  body{background-attachment:scroll}
+  .hero-bg,.about,.waitlist{background-attachment:scroll,scroll;background-size:cover,cover;background-position:center,center}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--paper);border-bottom:1px solid var(--line);flex-direction:column;padding:12px 22px;gap:4px}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px}
+  .menu-toggle{display:block}
+}
+/* Tablet: keep two columns where a single column would waste space */
+@media(min-width:601px) and (max-width:920px){
+  .prog-grid{grid-template-columns:1fr 1fr}
+  .contact-grid{grid-template-columns:1fr 1fr}
+  .wl-form{grid-template-columns:1fr 1fr}
+  .footer-in{grid-template-columns:1fr 1fr}
+}
+
+/* reveal on scroll */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}
+.reveal.d2{transition-delay:.16s}
+.reveal.d3{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+/* welcome splash */
+.splash{position:fixed;inset:0;z-index:999;background:linear-gradient(135deg,#C4374B,#93222F);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;animation:splashOut .8s ease 3s forwards}
+.splash::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.16) 1.6px,transparent 2px);background-size:20px 20px;opacity:.5}
+.splash-logo{width:120px;height:132px;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20110%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22lf%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%235AA33C%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23357026%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%3Cg%20transform%3D%22translate%2850%2C42%29%22%3E%0A%3Cg%20fill%3D%22url%28%23lf%29%22%20stroke%3D%22%232E6320%22%20stroke-width%3D%221%22%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C-4%2C-28%20-13%2C-37%20-20%2C-37%20C-18%2C-28%20-11%2C-19%200%2C-13%20Z%22%20transform%3D%22rotate%28-6%200%20-13%29%22/%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C4%2C-28%2013%2C-37%2020%2C-37%20C18%2C-28%2011%2C-19%200%2C-13%20Z%22%20transform%3D%22rotate%286%200%20-13%29%22/%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C-8%2C-28%20-24%2C-33%20-33%2C-29%20C-27%2C-20%20-15%2C-15%200%2C-13%20Z%22/%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C8%2C-28%2024%2C-33%2033%2C-29%20C27%2C-20%2015%2C-15%200%2C-13%20Z%22/%3E%0A%3Cpath%20d%3D%22M0%2C-12%20C-3%2C-30%203%2C-30%200%2C-12%20Z%22%20stroke%3D%22%232E6320%22%20stroke-width%3D%223%22/%3E%0A%3C/g%3E%0A%3Cpath%20d%3D%22M0%2C-13%20C32%2C-13%2044%2C6%2038%2C27%20C33%2C44%2017%2C62%200%2C62%20C-17%2C62%20-33%2C44%20-38%2C27%20C-44%2C6%20-32%2C-13%200%2C-13%20Z%22%20fill%3D%22%23E24A5E%22/%3E%0A%3Ccircle%20cx%3D%22-19%22%20cy%3D%2216%22%20r%3D%226.5%22%20fill%3D%22%23F58AA0%22%20opacity%3D%22.7%22/%3E%3Ccircle%20cx%3D%2219%22%20cy%3D%2216%22%20r%3D%226.5%22%20fill%3D%22%23F58AA0%22%20opacity%3D%22.7%22/%3E%0A%3Ccircle%20cx%3D%22-10%22%20cy%3D%226%22%20r%3D%224.3%22%20fill%3D%22%233A1418%22/%3E%3Ccircle%20cx%3D%2210%22%20cy%3D%226%22%20r%3D%224.3%22%20fill%3D%22%233A1418%22/%3E%0A%3Ccircle%20cx%3D%22-8.5%22%20cy%3D%224.5%22%20r%3D%221.4%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%2211.5%22%20cy%3D%224.5%22%20r%3D%221.4%22%20fill%3D%22%23fff%22/%3E%0A%3Cpath%20d%3D%22M-8%2C18%20Q0%2C27%208%2C18%22%20stroke%3D%22%233A1418%22%20stroke-width%3D%223%22%20fill%3D%22none%22%20stroke-linecap%3D%22round%22/%3E%0A%3Cg%20fill%3D%22%23F7E2A6%22%3E%3Ccircle%20cx%3D%22-24%22%20cy%3D%2228%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%2224%22%20cy%3D%2228%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%220%22%20cy%3D%2242%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%22-13%22%20cy%3D%2242%22%20r%3D%221.5%22/%3E%3Ccircle%20cx%3D%2213%22%20cy%3D%2242%22%20r%3D%221.5%22/%3E%3C/g%3E%0A%3C/g%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;background-position:center;filter:drop-shadow(0 8px 20px rgba(0,0,0,.25));animation:splashPop .7s cubic-bezier(.2,1.3,.5,1) both;position:relative;z-index:1}
+.splash-name{font-family:var(--fd);font-weight:800;font-size:2rem;color:#fff;position:relative;z-index:1;animation:splashRise .6s ease .25s both}
+.splash-sub{font-family:var(--fb);font-weight:800;font-size:.82rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.9);position:relative;z-index:1;animation:splashRise .6s ease .4s both}
+.splash-tag{font-family:var(--fb);font-weight:600;font-size:1rem;color:rgba(255,255,255,.92);margin-top:6px;position:relative;z-index:1;animation:splashRise .6s ease .55s both}
+@keyframes splashPop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes splashRise{from{transform:translateY(14px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+@media(prefers-reduced-motion:reduce){.splash{animation:splashOut .5s ease 3s forwards}.splash-logo,.splash-name,.splash-sub,.splash-tag{animation:none}}
+
+</style>
+</head>
+<body>
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="splash-logo"></div>
+  <div class="splash-name">Wild Strawberry</div>
+  <div class="splash-sub">Children's Centre</div>
+  <div class="splash-tag">Where little ones grow, play &amp; belong</div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top">
+      <span class="berry" aria-hidden="true"></span>
+      <span><b>Wild Strawberry</b><small>Children's Centre</small></span>
+    </a>
+    <button class="menu-toggle" onclick="document.getElementById('navlinks').classList.toggle('open')" aria-label="Menu">☰</button>
+    <div class="nav-links" id="navlinks">
+      <a href="#programs">Programs</a>
+      <a href="#about">About</a>
+      <a href="#portal">Family Portal</a>
+      <a href="#waitlist">Waitlist</a>
+      <a href="#contact">Contact</a>
+      <a href="#portal" class="btn btn-berry nav-cta">Family Login</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Sticky waitlist tab -->
+<a href="#waitlist" class="wl-tab"><span class="dot"></span>Join the Waitlist</a>
+
+<!-- HERO -->
+<div class="hero-bg">
+<header class="hero" id="top">
+  <div>
+    <span class="eyebrow">🍓 Serving Winnipeg's West End since 1971</span>
+    <h1>Where little ones <em>grow, play &amp; belong</em>.</h1>
+    <p class="lead">A community childcare centre embracing inclusion and celebrating diversity — with warm, qualified educators across Toddler, Preschool and School Age programs. Now with a family app that keeps you connected to your child's day.</p>
+    <div class="hero-ctas">
+      <a href="#programs" class="btn btn-berry">Explore our programs</a>
+      <a href="#waitlist" class="btn btn-ghost">Join the waitlist</a>
+    </div>
+  </div>
+  <div class="hero-art">
+    <div class="collage" aria-hidden="true">
+      <div class="tile big" style="background:linear-gradient(135deg,#F6C9CF,#E08B97)">🍓</div>
+      <div class="tile" style="background:linear-gradient(135deg,#DCE9C8,#A8C68F)">🎨</div>
+      <div class="tile" style="background:linear-gradient(135deg,#BFE3EE,#7FB9D4)">🧸</div>
+    </div>
+    <div class="badge-float">🌟 Over 50 years of community care</div>
+  </div>
+</header>
+</div>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-in">
+    <span><b>2</b> locations in the West End</span>
+    <span><b>3</b> age-based programs</span>
+    <span><b>6:30 AM – 5:30 PM</b> Mon–Fri</span>
+    <span><b>Licensed</b> by Manitoba ELCC</span>
+  </div>
+</div>
+
+<!-- PROGRAMS -->
+<section class="section" id="programs">
+  <div class="sec-head center reveal">
+    <span class="eyebrow">Our programs</span>
+    <h2>A place for every age &amp; stage</h2>
+    <p>Play-based, emergent learning that follows your child's curiosity — guided by experienced early childhood educators.</p>
+  </div>
+  <div class="prog-grid">
+    <div class="prog reveal d1">
+      <div class="prog-top" style="background:linear-gradient(135deg,#F2B33D,#E08B4A)">🧸</div>
+      <div class="prog-body">
+        <span class="age">18 months – 2.5 years</span>
+        <h3>Toddler Program</h3>
+        <p>Gentle routines, sensory play and lots of cuddles as your toddler explores, moves and learns to trust new caregivers.</p>
+      </div>
+    </div>
+    <div class="prog reveal d2">
+      <div class="prog-top" style="background:linear-gradient(135deg,#F6C9CF,#E08B97)">🎨</div>
+      <div class="prog-body">
+        <span class="age">2.5 years – Kindergarten</span>
+        <h3>Preschool Program</h3>
+        <p>Creative, play-based days that build early literacy, friendships and confidence, getting your child ready for school.</p>
+      </div>
+    </div>
+    <div class="prog reveal d3">
+      <div class="prog-top" style="background:linear-gradient(135deg,#DCE9C8,#A8C68F)">📚</div>
+      <div class="prog-body">
+        <span class="age">Kindergarten – Grade 6</span>
+        <h3>School Age Program</h3>
+        <p>Before- and after-school care with homework help, active play and enriching activities — including safe school pick-up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<div class="about" id="about">
+  <div class="about-grid reveal">
+    <div>
+      <span class="eyebrow">Our story</span>
+      <h2>Rooted in this community for over 50 years</h2>
+      <p>Wild Strawberry Children's Centre began in 1971 as a group of parents who wanted quality, welcoming care for their children in Winnipeg's West End. What started as a small parent cooperative has grown into a trusted community centre spanning multiple locations.</p>
+      <p>We embrace inclusion and celebrate the diversity of the families we serve — a place where every child, and every family, belongs.</p>
+      <p>Under the leadership of Executive Director Amrita Premdas, who has guided the centre since 2010, Wild Strawberry has grown while staying true to its cooperative roots — bringing consistency, warmth and a deep commitment to early childhood education to every family who walks through our doors.</p>
+      <div class="stats-row">
+        <div class="stat"><b>50+</b><span>Years serving families</span></div>
+        <div class="stat"><b>3</b><span>Programs, ages 18m–12y</span></div>
+        <div class="stat"><b>2</b><span>West End locations</span></div>
+      </div>
+    </div>
+    <div>
+      <ul class="value-list">
+        <li><span class="vic" style="background:var(--berry-tint)">🤝</span> Inclusion &amp; belonging for every family</li>
+        <li><span class="vic" style="background:var(--leaf-tint)">🌱</span> Play-based, emergent learning</li>
+        <li><span class="vic" style="background:var(--sun-tint)">🍎</span> Healthy meals prepared on-site</li>
+        <li><span class="vic" style="background:var(--berry-tint)">👩‍🏫</span> Qualified, caring early childhood educators</li>
+        <li><span class="vic" style="background:var(--leaf-tint)">🏙️</span> Proudly part of the West End community</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- FAMILY PORTAL -->
+<section class="portal" id="portal">
+  <div class="portal-card reveal">
+    <div>
+      <span class="eyebrow" style="background:var(--sun);color:#5C4410">📱 New — Family Portal</span>
+      <h2>Your child's day, right in your pocket</h2>
+      <p>Our new family app keeps you connected all day long — no more wondering how things are going.</p>
+      <a href="#" class="btn btn-white" onclick="alert('The Family Portal login will connect here once the app is live.');return false;">Family Login →</a>
+    </div>
+    <ul class="portal-feats">
+      <li>🕖 Live check-in &amp; check-out records</li>
+      <li>📝 Daily reports — meals, naps &amp; mood</li>
+      <li>🍽️ This week's meal menu</li>
+      <li>📸 Weekly photo albums from the room</li>
+      <li>💬 Messages &amp; announcements</li>
+    </ul>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<div class="waitlist" id="waitlist">
+  <div class="wl-inner">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Enrollment</span>
+      <h2>Join our waitlist</h2>
+      <p>Spaces are limited and demand is high. Add your child to our waitlist and we'll contact you as a space becomes available. There is no cost and no obligation to join.</p>
+    </div>
+    <div class="wl-toggle-wrap reveal">
+      <button type="button" class="wl-toggle" id="wlToggle" onclick="toggleWaitlist()">Start my waitlist request <span class="arw">▾</span></button>
+    </div>
+    <div class="wl-collapse" id="wlCollapse">
+    <div class="wl-card">
+      <form id="wlForm" onsubmit="return submitWaitlist(event)">
+        <div class="wl-form">
+          <div class="wl-field full"><label>Child's full name <span class="req">*</span></label><input name="childName" required></div>
+          <div class="wl-field"><label>Date of birth <span class="req">*</span></label><input type="date" name="dob" required></div>
+          <div class="wl-field"><label>Sex</label><select name="sex"><option value="">Prefer not to say</option><option>Female</option><option>Male</option><option>Other</option></select></div>
+          <div class="wl-field"><label>Program needed <span class="req">*</span></label><select name="program" required><option value="">Select a program</option><option>Toddler (18 months – 2.5 years)</option><option>Preschool (2.5 years – Kindergarten)</option><option>School Age (Kindergarten – Grade 6)</option><option>Not sure yet</option></select></div>
+          <div class="wl-field"><label>Date care is needed <span class="req">*</span></label><input type="date" name="startDate" required></div>
+
+          <div class="wl-field"><label>Parent / guardian name <span class="req">*</span></label><input name="parentName" required></div>
+          <div class="wl-field"><label>Relationship to child</label><input name="relationship" placeholder="e.g. Mother, Father, Guardian"></div>
+          <div class="wl-field"><label>Email <span class="req">*</span></label><input type="email" name="email" required></div>
+          <div class="wl-field"><label>Phone <span class="req">*</span></label><input type="tel" name="phone" required></div>
+          <div class="wl-field full"><label>Home address</label><input name="address" placeholder="Street, city, postal code"></div>
+          <div class="wl-field full"><label>Preferred location</label><select name="location"><option>659 Alverstone St. — Preschool</option><option>836 Ellice Ave. — Toddler / Preschool</option><option>836 Ellice Ave. — School Age</option><option>No preference</option></select></div>
+
+          <label class="wl-check full"><input type="checkbox" required> I understand that joining the waitlist does not guarantee a space, and I consent to Wild Strawberry Children's Centre storing this information to contact me about enrollment.</label>
+          <button type="submit" class="wl-submit">Submit waitlist request</button>
+        </div>
+      </form>
+      <div class="wl-success" id="wlSuccess">
+        <div class="ok">✓</div>
+        <h3>Thank you — your request has been received</h3>
+        <p>We've added your child to our waitlist. Our team will reach out by email or phone as a space becomes available. You're welcome to contact us any time with questions.</p>
+      </div>
+    </div>
+    </div>
+    <p class="wl-hint" style="text-align:center;margin-top:16px;max-width:620px;margin-left:auto;margin-right:auto">Licensed child care centres in Manitoba maintain their own waitlists. You can also explore other licensed providers through Manitoba Child Care Search.</p>
+  </div>
+</div>
+
+
+<!-- CONTACT -->
+<section class="section" id="contact" style="padding-top:20px">
+  <div class="sec-head center reveal">
+    <span class="eyebrow">Visit us</span>
+    <h2>Our locations</h2>
+    <p>Two welcoming centres in the heart of Winnipeg's West End.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="loc reveal d1">
+      <h3>Preschool Centre</h3>
+      <span class="tagline">Preschool Program</span>
+      <p>📍 659 Alverstone St.<br>Winnipeg, MB R3E 2G8</p>
+      <p>📞 (204) 783-1397</p>
+    </div>
+    <div class="loc reveal d2">
+      <h3>Ellice Centre</h3>
+      <span class="tagline">Toddler &amp; Preschool</span>
+      <p>📍 836 Ellice Ave.<br>Winnipeg, MB</p>
+      <p>📞 (204) 779-6272</p>
+    </div>
+    <div class="loc reveal d3">
+      <h3>School Age Program</h3>
+      <span class="tagline">Before &amp; after school</span>
+      <p>📍 836 Ellice Ave.<br>Winnipeg, MB</p>
+      <p>📞 (204) 775-8754</p>
+    </div>
+  </div>
+  <div class="hours-note">
+    <div class="hours-card">
+      <span class="big">🕕 Open Mon–Fri, 6:30 AM – 5:30 PM</span>
+      <span style="color:#8A6410">Closed on weekends &amp; holidays</span>
+      <a href="mailto:wildfun@mymts.net" class="btn btn-berry" style="margin-left:auto" data-email>✉️ wildfun@mymts.net</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-in">
+    <div>
+      <a class="logo" href="#top" style="margin-bottom:14px"><span class="berry"></span><span><b>Wild Strawberry</b><small>Children's Centre</small></span></a>
+      <p>A community childcare centre embracing inclusion and celebrating diversity — serving Winnipeg's West End since 1971.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="#programs">Programs</a>
+      <a href="#about">About us</a>
+      <a href="#portal">Family Portal</a>
+      <a href="#waitlist">Join the waitlist</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div>
+      <h4>Get in touch</h4>
+      <a href="tel:+12047831397">📞 (204) 783-1397</a>
+      <a href="mailto:wildfun@mymts.net" data-email>✉️ wildfun@mymts.net</a>
+      <p>Mon–Fri · 6:30 AM – 5:30 PM</p>
+    </div>
+    <div class="fin">© 2026 Wild Strawberry Children's Centre. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+/* ===========================================================
+   EDIT THIS ONE LINE to change the centre's email everywhere.
+   Note: wildfun@mymts.net is a Bell MTS address tied to the
+   centre's internet account. A dedicated address on the
+   centre's own domain (e.g. info@wildstrawberry.ca) is
+   recommended — it stays even if the internet provider changes.
+   =========================================================== */
+const CENTRE_EMAIL = "wildfun@mymts.net";
+
+document.querySelectorAll('[data-email]').forEach(a=>{
+  a.href = "mailto:" + CENTRE_EMAIL;
+  a.textContent = "✉️ " + CENTRE_EMAIL;
+});
+
+// close mobile menu when a link is tapped
+document.querySelectorAll('#navlinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navlinks').classList.remove('open')));
+
+// waitlist collapsible
+function toggleWaitlist(){
+  const c=document.getElementById('wlCollapse');
+  const t=document.getElementById('wlToggle');
+  const open = !c.classList.contains('open');
+  c.classList.toggle('open',open);
+  t.classList.toggle('open',open);
+  t.childNodes[0].nodeValue = open ? 'Hide the form ' : 'Start my waitlist request ';
+}
+
+// waitlist form (practice: shows confirmation; no data leaves the page)
+function submitWaitlist(e){
+  e.preventDefault();
+  document.getElementById('wlForm').style.display='none';
+  document.getElementById('wlSuccess').classList.add('show');
+  document.getElementById('wlSuccess').scrollIntoView({behavior:'smooth',block:'center'});
+  return false;
+}
+
+// remove splash after it fades so it never blocks the page
+setTimeout(function(){var s=document.getElementById('splash'); if(s) s.remove();}, 4200);
+
+// reveal sections gently as they scroll into view
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in');}); return; }
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+</body>
+</html>
