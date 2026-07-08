@@ -106,24 +106,37 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .auto-grid .k{color:#444}
 .auto-grid .v{font-weight:700;color:#1a1a1a;text-align:right}
 .auto-fin{margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6}
-.auto-fin .r{display:flex;justify-content:space-between;font-size:17px;padding:5px 0;flex-wrap:wrap;gap:4px}
-.auto-fin .r b{color:#1E293B;font-weight:700}
+.auto-fin .r{display:flex;justify-content:space-between;align-items:flex-start;font-size:17px;padding:5px 0;flex-wrap:wrap;gap:4px 10px}
+.auto-fin .r>span:first-child{flex:1 1 auto;min-width:120px}
+.auto-fin .r b{color:#1E293B;font-weight:700;text-align:right;flex-shrink:0}
 .auto-fin .r b.pos{color:#15803d}
+.dual-cad{display:block}
+.dual-usd{display:block;color:#8a93a3;font-weight:400;font-size:14px;margin-top:2px}
+@media(max-width:480px){
+  .auto-fin .r{flex-direction:column;align-items:flex-start}
+  .auto-fin .r b{text-align:left}
+  .sim-row{flex-direction:column;align-items:flex-start}
+  .sim-row .val{text-align:left}
+  .sim-table-row{flex-direction:column;align-items:flex-start}
+  .sim-table-row .p{text-align:left}
+}
 
 /* SIMULADOR */
 .sim-input-row{display:flex;gap:10px;align-items:center;background:#f8fafc;border:1.5px solid #2563EB;border-radius:10px;padding:14px;margin-bottom:14px;flex-wrap:wrap}
 .sim-input-row label{font-size:16px;color:#333;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
 .sim-input-row select{flex:1;border:1px solid #ccd3dc;border-radius:8px;padding:11px 10px;font-size:18px;min-width:130px}
 .sim-result{background:#f8fafc;border:1.5px solid #2563EB;border-radius:10px;padding:18px}
-.sim-row{display:flex;justify-content:space-between;padding:8px 0;font-size:20px;flex-wrap:wrap;gap:4px}
+.sim-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;font-size:20px;flex-wrap:wrap;gap:4px 10px}
+.sim-row .lbl{flex:1 1 auto;min-width:120px}
+.sim-row .val{text-align:right;flex-shrink:0}
 .sim-row.tot{border-top:2px solid #e2e8f0;margin-top:6px;padding-top:12px;font-weight:700;font-size:20px}
 .sim-row .neg{color:#92400e}
 .sim-row .pos{color:#15803d}
 .sim-table{margin-top:14px;font-size:19px}
 .sim-table-title{font-size:15px;color:#555;text-transform:uppercase;font-weight:700;margin-bottom:6px;letter-spacing:0.3px}
-.sim-table-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #f3f4f6;flex-wrap:wrap;gap:4px}
-.sim-table-row .m{color:#333}
-.sim-table-row .p{font-weight:700}
+.sim-table-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f3f4f6;flex-wrap:wrap;gap:4px 10px}
+.sim-table-row .m{color:#333;flex:1 1 auto;min-width:100px}
+.sim-table-row .p{font-weight:700;text-align:right;flex-shrink:0}
 
 /* TRANSFERENCIAS */
 .transf-group{margin-bottom:14px}
@@ -391,7 +404,8 @@ const COMISION_DEFAULT = 4;
 const TASA_CAMBIO_AUTOS = 1.41; // CAD por cada 1 USD
 function cadAUsd(cad){ return (cad||0) / TASA_CAMBIO_AUTOS; }
 function fmtDual(cad, dec){
-  return fmt(cad, dec)+' CAD <span style="color:#777;font-weight:400">(≈ '+fmt(cadAUsd(cad), dec===undefined?2:dec)+' USD)</span>';
+  dec = (dec===undefined)?2:dec;
+  return '<span class="dual-cad">'+fmt(cad,dec)+' CAD</span><span class="dual-usd">≈ '+fmt(cadAUsd(cad),dec)+' USD</span>';
 }
 const MESES_NOMBRES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 function mesLabel(m){
@@ -942,10 +956,10 @@ function renderSimulador(){
 
   document.getElementById('sim-result').innerHTML = `
     ${detalleHtml}
-    <div class="sim-row"><span>Utilidad del mes (${mesLabel(mesActivo)})</span><b>${fmt(util,2)} CAD (≈ ${fmt(utilUSD,2)} USD)</b></div>
-    <div class="sim-row"><span>Cuota del crédito</span><span class="${cubreCuota?'pos':'neg'}">- ${fmt(cuota)} USD</span></div>
-    <div class="sim-row tot"><span>Utilidad neta a distribuir</span><span class="${neto>0?'pos':''}">${fmt(neto,2)} USD</span></div>
-    <div class="sim-row"><span>Distribución individual entre los tres inversionistas</span><b>${fmt(porPersona,2)} USD</b></div>
+    <div class="sim-row"><span class="lbl">Utilidad del mes (${mesLabel(mesActivo)})</span><b class="val">${fmtDual(util)}</b></div>
+    <div class="sim-row"><span class="lbl">Cuota del crédito</span><span class="val ${cubreCuota?'pos':'neg'}">- ${fmt(cuota)} USD</span></div>
+    <div class="sim-row tot"><span class="lbl">Utilidad neta a distribuir</span><span class="val ${neto>0?'pos':''}">${fmt(neto,2)} USD</span></div>
+    <div class="sim-row"><span class="lbl">Distribución individual entre los tres inversionistas</span><b class="val">${fmt(porPersona,2)} USD</b></div>
     ${(utilUSD>0 && !cubreCuota) ? '<div class="sim-row"><span style="color:#b45309">La cuota del mes todavía no se cubre por completo</span></div>' : ''}
   `;
 
