@@ -448,6 +448,8 @@ let resumenData = null, creditoData = null, autosCache = [];
 let autoFotosNuevas = [];
 let autoFotosExistentes = [];
 let adminMode = false;
+let adminTimer = null;
+const ADMIN_TIMEOUT_MS = 5*60*1000; // 5 minutos de inactividad antes de cerrar el modo edición
 
 function col(){ return FONDOS[currentFondoId].prefix; }
 function colAutos(){ return FONDOS[currentFondoId].prefix + '_AUTOS'; }
@@ -470,6 +472,24 @@ function syncAdminBtns(){
     el.textContent = on ? 'Editando' : 'Editar';
   });
 }
+
+// Cierra el modo edición solo por falta de uso, para que nadie deje la pestaña
+// abierta en modo "Editando" sin querer.
+function detenerAdminTimer(){
+  if(adminTimer){ clearTimeout(adminTimer); adminTimer = null; }
+}
+function reiniciarAdminTimer(){
+  if(!adminMode) return;
+  detenerAdminTimer();
+  adminTimer = setTimeout(()=>{
+    adminMode = false;
+    updateAdminUI();
+    showToast('Modo edición desactivado por inactividad');
+  }, ADMIN_TIMEOUT_MS);
+}
+['click','touchstart','keydown','scroll'].forEach(evt=>{
+  document.addEventListener(evt, reiniciarAdminTimer, {passive:true});
+});
 
 function openFondo(id){
   currentFondoId = id;
@@ -524,7 +544,7 @@ function toggleTransferencias(){
 
 // ================= LOGIN =================
 function openLoginModal(){
-  if(adminMode){ adminMode=false; updateAdminUI(); showToast('Modo edición desactivado'); return; }
+  if(adminMode){ adminMode=false; detenerAdminTimer(); updateAdminUI(); showToast('Modo edición desactivado'); return; }
   document.getElementById('loginModalBg').classList.add('open');
   document.getElementById('loginPass').value='';
   setTimeout(()=>document.getElementById('loginPass').focus(),100);
@@ -536,6 +556,7 @@ function doLogin(){
     adminMode = true;
     closeLoginModal();
     updateAdminUI();
+    reiniciarAdminTimer();
     showToast('Modo edición activado');
   } else {
     showToast('Clave incorrecta');
@@ -902,7 +923,9 @@ function renderSimulador(){
   if(!meses.length) return;
 
   const conVenta = meses.filter(m=>utilidadDelMes(m).total>0);
-  let mesActivo = (meses.includes(prevValue) ? prevValue : '') || meses[0] || '2026-06';
+  const hoy = new Date();
+  const mesActualStr = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0');
+  let mesActivo = meses.includes(prevValue) ? prevValue : (meses.includes(mesActualStr) ? mesActualStr : (meses[0] || '2026-06'));
   sel.value = mesActivo;
 
   const {total: util, totalUSD: utilUSD, detalle} = utilidadDelMes(mesActivo);
