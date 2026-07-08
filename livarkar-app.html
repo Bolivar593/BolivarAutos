@@ -28,25 +28,25 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 /* --- PROGRESS --- */
 .progress{display:flex;flex-direction:column;gap:5px;margin-bottom:1rem;background:#fff;border-radius:10px;padding:12px 14px;border:0.5px solid #e0e0e0}
-.progress-title{font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:5px}
+.progress-title{font-size:14px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:5px}
 .prog-row{display:flex;align-items:center;gap:10px;padding:3px 0}
 .prog-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
 .prog-icon.done{background:#1565C0;color:#fff}
 .prog-icon.pending{background:#eeeeee;color:#aaa}
-.prog-text{font-size:15px;font-weight:600;color:#333}
+.prog-text{font-size:18px;font-weight:600;color:#222}
 .prog-text.done{color:#1565C0}
-.prog-text.pending{color:#aaa}
+.prog-text.pending{color:#777}
 
 /* --- CARDS --- */
 .card,.gcard{background:#fff;border:0.5px solid #e0e0e0;border-left:4px solid #3D9EFF;border-radius:0 10px 10px 0;padding:1rem 1.1rem;margin-bottom:.9rem}
-.sec-label,.gcard .sec-label{font-size:14px;font-weight:700;color:#1565C0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+.sec-label,.gcard .sec-label{font-size:17px;font-weight:700;color:#1565C0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
 
 /* --- RATE ROW --- */
 .rate-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.rate-row label{font-size:14px;color:#555;font-weight:500;white-space:nowrap}
+.rate-row label{font-size:17px;color:#333;font-weight:600;white-space:nowrap}
 .rate-box{display:inline-flex;align-items:center;border:0.5px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fff}
 .rate-prefix{font-size:16px;font-weight:500;color:#1565C0;padding:0 8px;background:#f5f8ff}
-.rate-input{font-size:18px;font-weight:500;color:#1565C0;border:none;width:60px;outline:none;text-align:center;padding:8px 4px}
+.rate-input{font-size:22px;font-weight:600;color:#1565C0;border:none;width:60px;outline:none;text-align:center;padding:8px 4px}
 .rate-suffix{font-size:13px;color:#aaa;font-weight:400;padding-right:10px}
 
 /* --- ZONE GRID --- */
@@ -59,11 +59,11 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 /* --- CALENDAR --- */
 .cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.cal-nav button{background:#f5f5f5;border:0.5px solid #e0e0e0;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:18px;color:#1565C0}
-.cal-nav span{font-size:18px;font-weight:700;color:#111}
+.cal-nav button{background:#f5f5f5;border:0.5px solid #e0e0e0;border-radius:8px;padding:9px 16px;cursor:pointer;font-size:22px;color:#1565C0}
+.cal-nav span{font-size:21px;font-weight:700;color:#111}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cal-hdr{text-align:center;font-size:13px;font-weight:700;color:#777;padding:4px 0}
-.cal-day{text-align:center;padding:10px 2px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;color:#111;border:0.5px solid transparent}
+.cal-hdr{text-align:center;font-size:15px;font-weight:700;color:#555;padding:4px 0}
+.cal-day{text-align:center;padding:13px 2px;border-radius:8px;font-size:19px;font-weight:600;cursor:pointer;color:#111;border:0.5px solid transparent}
 .cal-day:hover:not(.past):not(.empty){background:#f5f8ff}
 .cal-day.sel{background:#1565C0;color:#fff}
 .cal-day.today{border-color:#1565C0;color:#1565C0}
@@ -72,8 +72,8 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 /* --- DURATION / TIME --- */
 .dur-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.dur-row label{font-size:16px;color:#333;font-weight:700;white-space:nowrap}
-.dur-row select{font-size:15px;font-weight:400;padding:9px 10px;border:0.5px solid #e0e0e0;border-radius:8px;flex:1;color:#111;background:#fff}
+.dur-row label{font-size:18px;color:#222;font-weight:700;white-space:nowrap}
+.dur-row select{font-size:18px;font-weight:500;padding:12px 12px;border:0.5px solid #e0e0e0;border-radius:8px;flex:1;color:#111;background:#fff}
 .time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:7px;max-height:250px;overflow-y:auto}
 .tslot{border:0.5px solid #e0e0e0;border-radius:8px;padding:10px 4px;text-align:center;cursor:pointer;background:#fff}
 .tslot.sel{border-color:#1565C0;background:#f5f8ff}
@@ -88,12 +88,12 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 /* --- FORM --- */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .fg{display:flex;flex-direction:column;gap:5px}
-.fg label{font-size:16px;color:#333;font-weight:700}
-.fg input{font-size:16px;font-weight:400;padding:12px 13px;border:0.5px solid #e0e0e0;border-radius:8px;width:100%;-webkit-appearance:none;color:#111;background:#fff}
+.fg label{font-size:18px;color:#222;font-weight:700}
+.fg input{font-size:19px;font-weight:400;padding:14px 14px;border:0.5px solid #e0e0e0;border-radius:8px;width:100%;-webkit-appearance:none;color:#111;background:#fff}
 .fg input:focus{outline:none;border-color:#1565C0}
 
 /* --- BUTTONS --- */
-.btn-confirm{width:100%;padding:16px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;text-align:center;border:3px solid #3D9EFF;background:#1565C0;color:#fff;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
+.btn-confirm{width:100%;padding:18px;border-radius:10px;font-size:20px;font-weight:600;cursor:pointer;text-align:center;border:3px solid #3D9EFF;background:#1565C0;color:#fff;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
 .btn-confirm:active{opacity:0.85}
 .btn-confirm.ready{background:#0F6E56}
 .btn{padding:14px 8px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent;width:100%;display:block}
@@ -112,14 +112,14 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 
 /* --- SUMMARY --- */
 .summary{background:#f5f8ff;border:0.5px solid #bbdefb;border-radius:10px;padding:1rem;margin-bottom:.8rem}
-.sum-row{display:flex;justify-content:space-between;font-size:16px;font-weight:600;padding:6px 0;color:#333}
+.sum-row{display:flex;justify-content:space-between;font-size:19px;font-weight:600;padding:8px 0;color:#222}
 .sum-row span:last-child{color:#1565C0;font-weight:500}
-.sum-tax{display:flex;justify-content:space-between;font-size:13px;font-weight:400;padding:3px 0;color:#888}
+.sum-tax{display:flex;justify-content:space-between;font-size:16px;font-weight:400;padding:4px 0;color:#666}
 .sum-tax span:last-child{color:#1565C0}
 .sum-divider{border:none;border-top:0.5px solid #bbdefb;margin:8px 0}
-.sum-total{display:flex;justify-content:space-between;font-size:24px;font-weight:600;padding-top:10px;margin-top:8px;border-top:0.5px solid #1565C0;color:#1565C0}
+.sum-total{display:flex;justify-content:space-between;font-size:28px;font-weight:700;padding-top:10px;margin-top:8px;border-top:0.5px solid #1565C0;color:#1565C0}
 .msg-label{font-size:11px;font-weight:500;color:#0F6E56;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;display:none}
-.msgbox{background:#f1f8f5;border:0.5px solid #a5d6a7;border-radius:10px;padding:1rem;font-size:14px;font-weight:400;color:#1b4332;line-height:1.8;white-space:pre-wrap;margin-bottom:.8rem;display:none}
+.msgbox{background:#f1f8f5;border:0.5px solid #a5d6a7;border-radius:10px;padding:1rem;font-size:17px;font-weight:400;color:#1b4332;line-height:1.8;white-space:pre-wrap;margin-bottom:.8rem;display:none}
 
 /* --- ADMIN --- */
 .admin-toggle{text-align:center;margin:6px 0 .8rem}
@@ -398,7 +398,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 <div class="wrap">
   <div class="header" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px">
     <h1 style="font-size:20px;font-weight:500;letter-spacing:-0.3px">BolivarAutos<span style="color:#2B7FE1">·</span>Renta</h1>
-    <p id="h2" style="font-size:12px;opacity:0.75;margin-top:3px">Winnipeg, MB &nbsp;·&nbsp; Lun-Dom 9AM-8PM &nbsp;·&nbsp; (204)509-6153</p>
+    <p id="h2" style="font-size:15px;opacity:0.85;margin-top:3px">Winnipeg, MB &nbsp;·&nbsp; Lun-Dom 9AM-8PM &nbsp;·&nbsp; (204)509-6153</p>
   </div>
   <div class="lang-row" style="justify-content:space-between;align-items:center">
     <div style="display:flex;gap:8px">
@@ -425,7 +425,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="47.5" oninput="updateDurOptions();upd()">
         <span class="rate-suffix">CAD</span>
       </div>
-      <span style="font-size:13px;color:#aaa;font-weight:600" id="l-rate-note">sin impuestos</span>
+      <span style="font-size:15px;color:#666;font-weight:600" id="l-rate-note">sin impuestos</span>
     </div>
   </div>
   <div class="card">
@@ -1860,7 +1860,7 @@ function loadDashboard() {
   var st = {
     fbReady:false, totReady:false, finished:false,
     tRentas:0, nRentas:0, tGST:0, tPST:0, tMes:0, nMes:0,
-    tGastos:0, tITC:0, nGastos:0, totalesOK:false, disponibleReal:null
+    tGastos:0, tITC:0, nGastos:0, totalesOK:false
   };
 
   function finalizar() {
@@ -1871,7 +1871,7 @@ function loadDashboard() {
     var statusEl = document.getElementById('d-gastos-status');
     if(statusEl) statusEl.style.display = st.totalesOK ? 'none' : 'block';
     mostrarDashboard(capitalF, banco, st.tRentas, st.tGST, st.tPST,
-                     st.tGastos, st.tITC, st.nRentas, st.nGastos, st.tMes, st.nMes, st.disponibleReal);
+                     st.tGastos, st.tITC, st.nRentas, st.nGastos, st.tMes, st.nMes);
   }
 
   // ── A) Leer documento TOTALES/dashboard de Firebase (escrito por Apps Script) ──
@@ -1884,7 +1884,6 @@ function loadDashboard() {
       if(t.capital          !== undefined) document.getElementById('dash-capital').value = parseFloat(t.capital);
       if(t.impuestosApartar !== undefined) document.getElementById('dash-imp').value      = parseFloat(t.impuestosApartar);
       if(t.remesaNomina     !== undefined) document.getElementById('dash-remesa').value   = parseFloat(t.remesaNomina);
-      if(t.disponibleReal   !== undefined) st.disponibleReal = parseFloat(t.disponibleReal);
       if(parseFloat(t.totalRentas||0) > 0) {
         st.tRentas = parseFloat(t.totalRentas    || 0);
         st.tGST    = parseFloat(t.totalGSTrentas || 0);
@@ -1934,17 +1933,14 @@ function loadDashboard() {
   });
 }
 
-function mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes, disponibleReal) {
+function mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
   var gstNeto    = Math.max(0, tGST - tITC);
   var remesa     = parseFloat(document.getElementById('dash-remesa').value) || 0;
   var impFijo    = parseFloat(document.getElementById('dash-imp').value);   // GST+RST fijo, sincronizado con la hoja
   var impSales   = isNaN(impFijo) ? (gstNeto + tPST) : impFijo;             // usa el fijo; si está vacío, calcula de Firebase
   var impTotal   = impSales + remesa;     // total a apartar = GST + RST + remesa nómina CRA
   var saldoNeto  = tRentas - tGastos; // rentas cobradas (sin taxes) minus gastos
-  // Usar el Disponible real calculado por el Flujo de Caja (capital protegido); si no llegó, respaldo al cálculo local
-  var disponible = (disponibleReal !== null && disponibleReal !== undefined && !isNaN(disponibleReal))
-                   ? disponibleReal
-                   : (banco - capital - impTotal);
+  var disponible = banco - capital - impTotal;
 
   document.getElementById('d-disponible').textContent   = '$'+disponible.toFixed(2);
   document.getElementById('d-saldo').textContent        = '$'+saldoNeto.toFixed(2);
