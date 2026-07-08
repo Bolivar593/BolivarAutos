@@ -277,6 +277,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div class="tab-page" id="tab-vehiculos">
       <div class="sec">
         <div class="sec-title">Inversión en vehículos</div>
+        <div class="note" style="margin-top:0;margin-bottom:14px">Los costos y ventas de los vehículos se manejan en <b>dólares canadienses (CAD)</b>, ya que se compran en Canadá. El pago del crédito y el reparto de utilidades a los inversionistas se hace en <b>dólares americanos (USD)</b>. Se muestra el equivalente en ambas monedas con una tasa de referencia de <b>1.41 CAD por cada 1 USD</b>.</div>
         <div id="autos-list"><div class="loading">Cargando…</div></div>
         <button class="btn ghost block" id="btnAddAuto" style="display:none" onclick="openAutoModal()">+ Agregar vehículo</button>
       </div>
@@ -352,9 +353,9 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <input type="text" id="autoVin">
     <label>Fecha de compra</label>
     <input type="date" id="autoFecha">
-    <label>Costo del carro ($)</label>
+    <label>Costo del carro (CAD $)</label>
     <input type="number" id="autoCosto" placeholder="0.00">
-    <label>Taxes, Safety, Arreglo, Fees ($)</label>
+    <label>Taxes, Safety, Arreglo, Fees (CAD $)</label>
     <input type="number" id="autoGst" placeholder="0.00">
     <label>Comisión BolivarAutos — dealer (%)</label>
     <input type="number" id="autoComision" placeholder="0.0" step="0.1">
@@ -364,7 +365,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <option value="Disponible">Disponible</option>
       <option value="Vendido">Vendido</option>
     </select>
-    <label>Precio de venta — dejar vacío si aún no se vende ($)</label>
+    <label>Precio de venta — dejar vacío si aún no se vende (CAD $)</label>
     <input type="number" id="autoVenta" placeholder="0.00">
     <label>Fecha de venta — necesaria para que la utilidad se refleje en el mes correcto</label>
     <input type="date" id="autoFechaVenta">
@@ -384,6 +385,14 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 // ================= CONFIG GENERAL =================
 const ADMIN_PASSWORD = '8334'; // misma clave que livarkar-app.html, aplica a todos los fondos
 const COMISION_DEFAULT = 4;
+// Los costos y ventas de vehículos se registran en CAD (se compran en Canadá).
+// El pago del crédito y el reparto de utilidades a los inversionistas es en USD.
+// Esta tasa convierte CAD -> USD para poder ver ambos valores lado a lado.
+const TASA_CAMBIO_AUTOS = 1.41; // CAD por cada 1 USD
+function cadAUsd(cad){ return (cad||0) / TASA_CAMBIO_AUTOS; }
+function fmtDual(cad, dec){
+  return fmt(cad, dec)+' CAD <span style="color:#777;font-weight:400">(≈ '+fmt(cadAUsd(cad), dec===undefined?2:dec)+' USD)</span>';
+}
 const MESES_NOMBRES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 function mesLabel(m){
   const p = m.split('-'); const n = MESES_NOMBRES[parseInt(p[1],10)-1];
@@ -711,21 +720,21 @@ function renderAutos(){
     const ventaReal = a.ventaReal || 0;
     const editBtn = adminMode ? `<button class="btn sm ghost" style="margin-top:10px" onclick="openAutoModal('${a.id}')">Editar</button>` : '';
 
-    let costoGridHtml = `<div class="k">Costo del carro</div><div class="v">${fmt(a.costoTotal)}</div>`;
+    let costoRowsHtml = `<div class="r"><span>Costo del carro</span><b>${fmtDual(a.costoTotal)}</b></div>`;
     if(gstPagado > 0){
-      costoGridHtml += `<div class="k">Taxes, Safety, Arreglo, Fees</div><div class="v">${fmt(gstPagado)}</div>
-        <div class="k" style="font-weight:700;color:#1E293B">Total invertido</div><div class="v" style="font-weight:700;color:#1E293B">${fmt(capitalInvertido)}</div>`;
+      costoRowsHtml += `<div class="r"><span>Taxes, Safety, Arreglo, Fees</span><b>${fmtDual(gstPagado)}</b></div>
+        <div class="r"><span style="font-weight:700;color:#1E293B">Total invertido</span><b style="color:#1E293B">${fmtDual(capitalInvertido)}</b></div>`;
     }
 
-    let finHtml = `<div class="auto-fin"><div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmt(comisionMonto,2)}</b></div>`;
+    let finHtml = `<div class="auto-fin">${costoRowsHtml}<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmtDual(comisionMonto,2)}</b></div>`;
     if(ventaReal > 0){
       const gananciaBruta = ventaReal - capitalInvertido;
       const gananciaNeta = gananciaBruta - comisionMonto;
       const ventaFechaStr = a.ventaFecha ? new Date(a.ventaFecha+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
-      finHtml += `<div class="r"><span>Precio de venta</span><b>${fmt(ventaReal)}</b></div>
+      finHtml += `<div class="r"><span>Precio de venta</span><b>${fmtDual(ventaReal)}</b></div>
         <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>
-        <div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmt(gananciaBruta,2)}</b></div>
-        <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmt(gananciaNeta,2)}</b></div>`;
+        <div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmtDual(gananciaBruta,2)}</b></div>
+        <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
     } else {
       finHtml += `<div class="r"><span>Precio de venta</span><b>Pendiente de venta</b></div>`;
     }
@@ -740,7 +749,6 @@ function renderAutos(){
         </div>
         <div class="auto-grid">
           <div class="k">Fecha de compra</div><div class="v">${fechaStr}</div>
-          ${costoGridHtml}
           <div class="k">VIN</div><div class="v">${a.vin||'—'}</div>
         </div>
         ${finHtml}
@@ -847,8 +855,10 @@ async function guardarAuto(){
 }
 
 // ================= SIMULADOR =================
-// Suma la ganancia neta (venta - costo - GST - comisión) de todos los vehículos
-// vendidos cuya fecha de venta cae dentro del mes indicado (formato 'YYYY-MM').
+// Suma la ganancia neta (venta - costo - taxes/safety/fees - comisión) de todos los
+// vehículos vendidos cuya fecha de venta cae dentro del mes indicado ('YYYY-MM').
+// Los vehículos se manejan en CAD; se devuelve también el equivalente en USD,
+// que es la moneda en la que se paga el crédito y se reparte la utilidad.
 function utilidadDelMes(mes){
   let total = 0;
   const detalle = [];
@@ -860,9 +870,9 @@ function utilidadDelMes(mes){
     const capitalInvertido = (a.costoTotal||0) + (a.gstPagado||0);
     const gananciaNeta = (a.ventaReal||0) - capitalInvertido - comisionMonto;
     total += gananciaNeta;
-    detalle.push({nombre:a.nombre, gananciaNeta});
+    detalle.push({nombre:a.nombre, gananciaNeta, gananciaNetaUSD: cadAUsd(gananciaNeta)});
   });
-  return {total, detalle};
+  return {total, totalUSD: cadAUsd(total), detalle};
 }
 
 // Combina los meses del cronograma del crédito con cualquier mes donde haya
@@ -878,7 +888,7 @@ function mesesDisponibles(){
 function renderSimulador(){
   if(!creditoData) return;
   const cuota = creditoData.cuotaMensualUSD || 0;
-  document.getElementById('util-sub').textContent = `Punto de equilibrio: $${cuota} USD/mes (cubre la cuota del crédito). El excedente se distribuye en partes iguales entre los inversionistas.`;
+  document.getElementById('util-sub').textContent = `Punto de equilibrio: $${cuota} USD/mes (cubre la cuota del crédito). El excedente se distribuye en partes iguales entre los inversionistas. Los vehículos se registran en CAD y se convierten a USD a 1.41 CAD por USD.`;
 
   const sel = document.getElementById('sim-mes');
   const meses = mesesDisponibles();
@@ -895,34 +905,34 @@ function renderSimulador(){
   let mesActivo = (meses.includes(prevValue) ? prevValue : '') || meses[0] || '2026-06';
   sel.value = mesActivo;
 
-  const {total: util, detalle} = utilidadDelMes(mesActivo);
-  const neto = Math.max(0, util - cuota);
+  const {total: util, totalUSD: utilUSD, detalle} = utilidadDelMes(mesActivo);
+  const neto = Math.max(0, utilUSD - cuota);
   const porPersona = neto/3;
-  const cubreCuota = util >= cuota;
+  const cubreCuota = utilUSD >= cuota;
 
   const detalleHtml = detalle.length
     ? `<div class="sim-row" style="flex-direction:column;align-items:flex-start;gap:4px">
          <span style="color:#999;font-size:11.5px;text-transform:uppercase;font-weight:700;letter-spacing:0.3px">Origen de la utilidad</span>
-         ${detalle.map(d=>`<span style="font-size:16px;color:#555">${d.nombre}: ${fmt(d.gananciaNeta,2)}</span>`).join('')}
+         ${detalle.map(d=>`<span style="font-size:16px;color:#555">${d.nombre}: ${fmt(d.gananciaNeta,2)} CAD (≈ ${fmt(d.gananciaNetaUSD,2)} USD)</span>`).join('')}
        </div>`
     : `<div class="sim-row"><span style="color:#999">Ningún vehículo registra venta en este mes</span></div>`;
 
   document.getElementById('sim-result').innerHTML = `
     ${detalleHtml}
-    <div class="sim-row"><span>Utilidad del mes (${mesLabel(mesActivo)})</span><b>${fmt(util,2)}</b></div>
-    <div class="sim-row"><span>Cuota del crédito</span><span class="${cubreCuota?'pos':'neg'}">- ${fmt(cuota)}</span></div>
-    <div class="sim-row tot"><span>Utilidad neta a distribuir</span><span class="${neto>0?'pos':''}">${fmt(neto,2)}</span></div>
-    <div class="sim-row"><span>Distribución individual entre los tres inversionistas</span><b>${fmt(porPersona,2)}</b></div>
-    ${(util>0 && !cubreCuota) ? '<div class="sim-row"><span style="color:#b45309">La cuota del mes todavía no se cubre por completo</span></div>' : ''}
+    <div class="sim-row"><span>Utilidad del mes (${mesLabel(mesActivo)})</span><b>${fmt(util,2)} CAD (≈ ${fmt(utilUSD,2)} USD)</b></div>
+    <div class="sim-row"><span>Cuota del crédito</span><span class="${cubreCuota?'pos':'neg'}">- ${fmt(cuota)} USD</span></div>
+    <div class="sim-row tot"><span>Utilidad neta a distribuir</span><span class="${neto>0?'pos':''}">${fmt(neto,2)} USD</span></div>
+    <div class="sim-row"><span>Distribución individual entre los tres inversionistas</span><b>${fmt(porPersona,2)} USD</b></div>
+    ${(utilUSD>0 && !cubreCuota) ? '<div class="sim-row"><span style="color:#b45309">La cuota del mes todavía no se cubre por completo</span></div>' : ''}
   `;
 
   const tabla = document.getElementById('sim-table');
   if(!conVenta.length){ tabla.innerHTML=''; return; }
   let html = '<div class="sim-table-title">Historial</div>';
   conVenta.forEach(m=>{
-    const u = utilidadDelMes(m).total;
+    const u = utilidadDelMes(m).totalUSD;
     const n = Math.max(0,u-cuota);
-    html += `<div class="sim-table-row"><span class="m">${mesLabel(m)}</span><span class="p">${fmt(u,2)} → ${fmt(n/3,2)} c/u</span></div>`;
+    html += `<div class="sim-table-row"><span class="m">${mesLabel(m)}</span><span class="p">${fmt(u,2)} USD → ${fmt(n/3,2)} USD c/u</span></div>`;
   });
   tabla.innerHTML = html;
 }
