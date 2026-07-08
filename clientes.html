@@ -354,7 +354,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <input type="date" id="autoFecha">
     <label>Costo del carro ($)</label>
     <input type="number" id="autoCosto" placeholder="0.00">
-    <label>Tax GST — recuperable, no se resta del costo ($)</label>
+    <label>Taxes, Safety, Arreglo, Fees ($)</label>
     <input type="number" id="autoGst" placeholder="0.00">
     <label>Comisión BolivarAutos — dealer (%)</label>
     <input type="number" id="autoComision" placeholder="0.0" step="0.1">
@@ -713,8 +713,8 @@ function renderAutos(){
 
     let costoGridHtml = `<div class="k">Costo del carro</div><div class="v">${fmt(a.costoTotal)}</div>`;
     if(gstPagado > 0){
-      costoGridHtml += `<div class="k">Tax GST</div><div class="v">${fmt(gstPagado)}</div>
-        <div class="k" style="font-weight:700;color:#1E293B">Total con Tax GST</div><div class="v" style="font-weight:700;color:#1E293B">${fmt(capitalInvertido)}</div>`;
+      costoGridHtml += `<div class="k">Taxes, Safety, Arreglo, Fees</div><div class="v">${fmt(gstPagado)}</div>
+        <div class="k" style="font-weight:700;color:#1E293B">Total invertido</div><div class="v" style="font-weight:700;color:#1E293B">${fmt(capitalInvertido)}</div>`;
     }
 
     let finHtml = `<div class="auto-fin"><div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmt(comisionMonto,2)}</b></div>`;
@@ -726,9 +726,6 @@ function renderAutos(){
         <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>
         <div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmt(gananciaBruta,2)}</b></div>
         <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmt(gananciaNeta,2)}</b></div>`;
-      if(gstPagado > 0){
-        finHtml += `<div class="r" style="font-size:15px;color:#999"><span>El Tax GST de ${fmt(gstPagado)} se recupera aparte, vía crédito fiscal — no se vuelve a sumar a la ganancia.</span></div>`;
-      }
     } else {
       finHtml += `<div class="r"><span>Precio de venta</span><b>Pendiente de venta</b></div>`;
     }
