@@ -986,28 +986,11 @@ document.querySelectorAll('.modal-bg').forEach(m=>{
   m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });
 });
 
-// Si la URL ya trae estado guardado, restaurar directamente.
-(function(){
-  const parts = location.hash.replace('#','').split('/');
-  const hashId = parts[0];
-  const hashSection = parts[1];
-  if(hashId && FONDOS[hashId]){
-    currentFondoId = hashId;
-    if(hashSection && hashSection !== 'menu'){
-      // Ir directo a la sección (ej. tras un refresco)
-      document.getElementById('homeScreen').style.display='none';
-      document.getElementById('fondoMenuScreen').style.display='none';
-      document.getElementById('fondoScreen').style.display='block';
-      document.getElementById('fondoTitle').textContent = FONDOS[hashId].nombre.toUpperCase();
-      document.getElementById('fondoMenuTitle').textContent = FONDOS[hashId].nombre.toUpperCase();
-      document.getElementById('fondoSectionLabel').textContent = SECTION_LABELS[hashSection]||'';
-      showTab(hashSection);
-      if(firebaseReady){ initApp(); } else { pendingOpenId = hashId; }
-    } else {
-      openFondo(hashId);
-    }
-  }
-})();
+// La app siempre inicia desde la pantalla de inicio (Home), sin importar
+// qué pestaña se haya visitado la última vez. Se limpia cualquier hash
+// guardado en la URL de una sesión anterior.
+if(location.hash){ history.replaceState(null,'',location.pathname+location.search); }
+
 
 </script>
 </body>
