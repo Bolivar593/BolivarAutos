@@ -95,13 +95,21 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .auto-card{border:1.5px solid #2563EB;border-radius:12px;overflow:hidden;margin-bottom:14px}
 .auto-photo{width:100%;background:#eef1f5;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:16px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;position:relative;overflow:hidden;min-height:60px}
 .auto-photo img{width:100%;height:auto;display:block;object-fit:contain}
-.auto-body{padding:16px 16px}
-.auto-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.auto-head{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.auto-head-left{display:flex;align-items:center;gap:10px;min-width:0}
+.auto-thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;flex-shrink:0;border:1px solid #d8dde5;background:#eef1f5}
+.auto-thumb-placeholder{width:52px;height:52px;border-radius:9px;flex-shrink:0;border:1px solid #d8dde5;background:#eef1f5;display:flex;align-items:center;justify-content:center;color:#9aa3b0;font-size:9px;font-weight:700;text-align:center;line-height:1.2;padding:2px}
 .auto-nombre{font-size:24px;font-weight:700;color:#1a1a1a}
+.auto-head-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.auto-toggle-label{font-size:14px;color:#2563EB;font-weight:700;white-space:nowrap;border:1.5px solid #2563EB;border-radius:7px;padding:6px 10px}
+.auto-toggle-label.close{color:#dc2626;border-color:#dc2626}
 .auto-estado{font-size:14px;font-weight:700;padding:6px 12px;border-radius:7px;white-space:nowrap;flex-shrink:0}
 .auto-estado.prep{background:#fef3e2;color:#92400e}
 .auto-estado.disp{background:#dbeafe;color:#1d4ed8}
 .auto-estado.vendido{background:#dcfce7;color:#15803d}
+.auto-details{display:none}
+.auto-card.expanded .auto-details{display:block}
+.auto-body{padding:14px 16px}
 .auto-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-top:12px;font-size:19px}
 .auto-grid .k{color:#444}
 .auto-grid .v{font-weight:700;color:#1a1a1a;text-align:right}
@@ -459,6 +467,7 @@ let pendingOpenId = null;
 let unsubscribers = [];
 let db, storage;
 let resumenData = null, creditoData = null, autosCache = [];
+let autosExpandState = {}; // {id: true/false} — sólo guarda overrides manuales del usuario
 let autoFotosNuevas = [];
 let autoFotosExistentes = [];
 let adminMode = false;
@@ -740,11 +749,34 @@ async function togglePagado(mes, valor){
 }
 
 // ================= AUTOS =================
+// Clave de orden: usa la marca de tiempo de creación (creadoEn) si existe;
+// los vehículos antiguos que no la tienen (creados antes de este cambio) usan
+// su fecha de compra como respaldo, para que igual aparezcan en un orden razonable.
+function autoOrderKey(a){
+  if(a.creadoEn && typeof a.creadoEn.toMillis === 'function') return a.creadoEn.toMillis();
+  if(a.creadoEn && a.creadoEn.seconds) return a.creadoEn.seconds*1000;
+  if(a.fechaCompra) return new Date(a.fechaCompra+'T00:00:00').getTime();
+  return 0;
+}
+
+function isAutoExpanded(a){
+  if(Object.prototype.hasOwnProperty.call(autosExpandState, a.id)) return autosExpandState[a.id];
+  return a.estado !== 'Vendido'; // los vendidos se pliegan por defecto; el resto abierto
+}
+
+function toggleAutoExpand(id){
+  const a = autosCache.find(x=>x.id===id);
+  if(!a) return;
+  autosExpandState[id] = !isAutoExpanded(a);
+  renderAutos();
+}
+
 function renderAutos(){
   const list = document.getElementById('autos-list');
   if(!autosCache.length){ list.innerHTML = '<div class="loading">Todavía no hay vehículos registrados</div>'; return; }
+  const ordenados = autosCache.slice().sort((a,b)=>autoOrderKey(b)-autoOrderKey(a));
   list.innerHTML='';
-  autosCache.forEach(a=>{
+  ordenados.forEach(a=>{
     const estadoClass = a.estado==='Vendido' ? 'vendido' : (a.estado==='Disponible' ? 'disp' : 'prep');
     const foto = (a.fotos && a.fotos[0]) ? `<img src="${a.fotos[0]}">` : 'SIN FOTOGRAFÍA';
     const fechaStr = a.fechaCompra ? new Date(a.fechaCompra+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
@@ -753,7 +785,13 @@ function renderAutos(){
     const gstPagado = a.gstPagado || 0;
     const capitalInvertido = (a.costoTotal||0) + gstPagado;
     const ventaReal = a.ventaReal || 0;
-    const editBtn = adminMode ? `<button class="btn sm ghost" style="margin-top:10px" onclick="openAutoModal('${a.id}')">Editar</button>` : '';
+    const editBtn = adminMode ? `<button class="btn sm ghost" style="margin-top:10px" onclick="event.stopPropagation();openAutoModal('${a.id}')">Editar</button>` : '';
+
+    let gananciaBruta = 0, gananciaNeta = 0;
+    if(ventaReal > 0){
+      gananciaBruta = ventaReal - capitalInvertido;
+      gananciaNeta = gananciaBruta - comisionMonto;
+    }
 
     let costoRowsHtml = `<div class="r"><span>Costo del carro</span><b>${fmtDual(a.costoTotal)}</b></div>`;
     if(gstPagado > 0){
@@ -763,8 +801,6 @@ function renderAutos(){
 
     let finHtml = `<div class="auto-fin">${costoRowsHtml}<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmtDual(comisionMonto,2)}</b></div>`;
     if(ventaReal > 0){
-      const gananciaBruta = ventaReal - capitalInvertido;
-      const gananciaNeta = gananciaBruta - comisionMonto;
       const ventaFechaStr = a.ventaFecha ? new Date(a.ventaFecha+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
       finHtml += `<div class="r"><span>Precio de venta</span><b>${fmtDual(ventaReal)}</b></div>
         <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>
@@ -775,19 +811,33 @@ function renderAutos(){
     }
     finHtml += `</div>`;
 
-    list.innerHTML += `<div class="auto-card">
-      <div class="auto-photo">${foto}</div>
+    const expanded = isAutoExpanded(a);
+    const thumbHtml = (a.fotos && a.fotos[0])
+      ? `<img class="auto-thumb" src="${a.fotos[0]}">`
+      : `<div class="auto-thumb-placeholder">SIN FOTO</div>`;
+    const fotoGrandeHtml = (a.fotos && a.fotos[0]) ? `<div class="auto-photo">${foto}</div>` : '';
+
+    list.innerHTML += `<div class="auto-card ${expanded?'expanded':''}">
       <div class="auto-body">
-        <div class="auto-head">
-          <div class="auto-nombre">${a.nombre}</div>
-          <div class="auto-estado ${estadoClass}">${a.estado}</div>
+        <div class="auto-head" onclick="toggleAutoExpand('${a.id}')">
+          <div class="auto-head-left">
+            ${thumbHtml}
+            <div class="auto-nombre">${a.nombre}</div>
+          </div>
+          <div class="auto-head-right">
+            <div class="auto-estado ${estadoClass}">${a.estado}</div>
+            <span class="auto-toggle-label ${expanded?'close':''}">${expanded?'Cerrar ✕':'Ver ficha'}</span>
+          </div>
         </div>
-        <div class="auto-grid">
-          <div class="k">Fecha de compra</div><div class="v">${fechaStr}</div>
-          <div class="k">VIN</div><div class="v">${a.vin||'—'}</div>
+        <div class="auto-details">
+          ${fotoGrandeHtml}
+          <div class="auto-grid">
+            <div class="k">Fecha de compra</div><div class="v">${fechaStr}</div>
+            <div class="k">VIN</div><div class="v">${a.vin||'—'}</div>
+          </div>
+          ${finHtml}
+          ${editBtn}
         </div>
-        ${finHtml}
-        ${editBtn}
       </div>
     </div>`;
   });
@@ -878,6 +928,7 @@ async function guardarAuto(){
     if(editId){
       await db.collection(colAutos()).doc(editId).update(data);
     } else {
+      data.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
       await db.collection(colAutos()).add(data);
     }
     showToast('Vehículo guardado');
