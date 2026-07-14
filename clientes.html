@@ -109,6 +109,14 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .auto-estado.vendido{background:#dcfce7;color:#15803d}
 .auto-details{display:none}
 .auto-card.expanded .auto-details{display:block}
+.proceso-note{background:#eff6ff;border:1.5px solid #2563EB;border-radius:10px;padding:12px 14px;margin-top:12px}
+.proceso-badge{display:inline-block;background:#2563EB;color:#fff;font-size:14px;font-weight:700;padding:5px 11px;border-radius:7px}
+.proceso-texto{font-size:17px;color:#1e3a5f;margin-top:8px;line-height:1.5}
+
+/* BADGE DE NOTIFICACION (estilo WhatsApp) */
+.notif-badge{display:inline-flex;align-items:center;justify-content:center;background:#dc2626;color:#fff;font-size:14px;font-weight:700;line-height:1;min-width:26px;height:26px;padding:0 8px;border-radius:13px;flex-shrink:0}
+.menu-btn-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.notif-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#dc2626;flex-shrink:0}
 .auto-body{padding:14px 16px}
 .auto-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;margin-top:12px;font-size:19px}
 .auto-grid .k{color:#444}
@@ -226,7 +234,10 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     </button>
     <button class="menu-section-btn" onclick="goToSection('vehiculos')">
       <div><div class="lbl">Vehículos</div><div class="sub">Inversión en autos</div></div>
-      <span class="arr">&rarr;</span>
+      <div class="menu-btn-right">
+        <span class="notif-badge" id="badge-vehiculos" style="display:none">0</span>
+        <span class="arr">&rarr;</span>
+      </div>
     </button>
     <button class="menu-section-btn" onclick="goToSection('utilidades')">
       <div><div class="lbl">Utilidades</div><div class="sub">Distribución de ganancias</div></div>
@@ -389,6 +400,16 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <option value="Disponible">Disponible</option>
       <option value="Vendido">Vendido</option>
     </select>
+    <label>Qué se está haciendo con el carro ahora (opcional)</label>
+    <select id="autoProcesoEstado">
+      <option value="">— Ninguno —</option>
+      <option value="En tránsito">En tránsito</option>
+      <option value="En taller / Safety">En taller / Safety</option>
+      <option value="Buscando repuestos">Buscando repuestos</option>
+      <option value="Detailing">Detailing</option>
+    </select>
+    <label>Nota adicional (opcional)</label>
+    <input type="text" id="autoProcesoNota" placeholder="Ej: esperando recogerlo en Toronto">
     <label>Precio de venta — dejar vacío si aún no se vende (CAD $)</label>
     <input type="number" id="autoVenta" placeholder="0.00">
     <label>Fecha de venta — necesaria para que la utilidad se refleje en el mes correcto</label>
@@ -471,6 +492,53 @@ let unsubscribers = [];
 let db, storage;
 let resumenData = null, creditoData = null, autosCache = [];
 let autosExpandState = {}; // {id: true/false} — sólo guarda overrides manuales del usuario
+
+// ===== NOTIFICACIONES (globo rojo) =====
+// Guarda en el propio teléfono qué actualizaciones ya vio esta persona.
+// Formato: {idDelAuto: marcaDeTiempoQueYaVio}
+function vistosKey(){ return 'livarkar_vistos_' + (currentFondoId||''); }
+function getVistos(){
+  try{ return JSON.parse(localStorage.getItem(vistosKey()) || '{}'); }
+  catch(e){ return {}; }
+}
+function setVistos(v){
+  try{ localStorage.setItem(vistosKey(), JSON.stringify(v)); }catch(e){}
+}
+// Marca de tiempo (en milisegundos) de la última modificación de un vehículo.
+function autoUpdateKey(a){
+  const t = a.actualizadoEn || a.creadoEn;
+  if(t && typeof t.toMillis === 'function') return t.toMillis();
+  if(t && t.seconds) return t.seconds*1000;
+  return 0;
+}
+// Un auto tiene novedad si se actualizó después de la última vez que se vio.
+function autoTieneNovedad(a){
+  const ts = autoUpdateKey(a);
+  if(!ts) return false; // registros viejos sin marca de tiempo: nunca notifican
+  const vistos = getVistos();
+  return ts > (vistos[a.id] || 0);
+}
+function marcarAutoVisto(id){
+  const a = autosCache.find(x=>x.id===id);
+  if(!a) return;
+  const ts = autoUpdateKey(a);
+  if(!ts) return;
+  const vistos = getVistos();
+  vistos[id] = ts;
+  setVistos(vistos);
+}
+function contarNovedades(){
+  return autosCache.filter(autoTieneNovedad).length;
+}
+function renderBadges(){
+  const el = document.getElementById('badge-vehiculos');
+  if(!el) return;
+  // En modo edición no se notifica: quien hace el cambio no necesita avisarse a sí mismo.
+  const n = adminMode ? 0 : contarNovedades();
+  if(n > 0){ el.textContent = n; el.style.display = 'inline-flex'; }
+  else { el.style.display = 'none'; }
+}
+
 let autoFotosNuevas = [];
 let autoFotosExistentes = [];
 let adminMode = false;
@@ -527,11 +595,25 @@ function openFondo(id){
   if(firebaseReady){ initApp(); } else { pendingOpenId = id; }
 }
 
+// Al salir de la pestaña Vehículos, todo lo que estaba a la vista queda por revisado.
+// Se hace al salir (no al entrar) para que los globos rojos alcancen a verse.
+function marcarVehiculosVistos(){
+  const vistos = getVistos();
+  autosCache.forEach(a=>{
+    const ts = autoUpdateKey(a);
+    if(ts) vistos[a.id] = ts;
+  });
+  setVistos(vistos);
+  renderBadges();
+}
+
 function goToFondoMenu(){
+  const enVehiculos = document.getElementById('tab-vehiculos').classList.contains('active');
   document.getElementById('fondoScreen').style.display='none';
   document.getElementById('fondoMenuScreen').style.display='block';
   document.getElementById('fondoMenuTitle').textContent = FONDOS[currentFondoId].nombre.toUpperCase();
   location.hash = currentFondoId+'/menu';
+  if(enVehiculos) marcarVehiculosVistos();
   window.scrollTo(0,0);
 }
 
@@ -544,10 +626,13 @@ function goToSection(name){
 }
 
 function goHome(){
+  const enVehiculos = document.getElementById('tab-vehiculos').classList.contains('active')
+    && document.getElementById('fondoScreen').style.display !== 'none';
   document.getElementById('fondoMenuScreen').style.display='none';
   document.getElementById('fondoScreen').style.display='none';
   document.getElementById('homeScreen').style.display='block';
   history.replaceState(null,'',location.pathname+location.search);
+  if(enVehiculos) marcarVehiculosVistos();
   window.scrollTo(0,0);
 }
 
@@ -595,6 +680,7 @@ function updateAdminUI(){
   renderAutos();
   renderSimulador();
   renderTransferencias();
+  renderBadges();
 }
 
 // ================= FIREBASE INIT =================
@@ -680,6 +766,7 @@ async function initApp(){
       snap.forEach(d=>autosCache.push(Object.assign({id:d.id}, d.data())));
       renderAutos();
       renderSimulador();
+      renderBadges();
     }));
   }catch(e){
     console.error(e);
@@ -770,8 +857,11 @@ function isAutoExpanded(a){
 function toggleAutoExpand(id){
   const a = autosCache.find(x=>x.id===id);
   if(!a) return;
-  autosExpandState[id] = !isAutoExpanded(a);
+  const abriendo = !isAutoExpanded(a);
+  autosExpandState[id] = abriendo;
+  if(abriendo) marcarAutoVisto(id); // al abrir la ficha, la novedad queda revisada
   renderAutos();
+  renderBadges();
 }
 
 function renderAutos(){
@@ -819,6 +909,13 @@ function renderAutos(){
       ? `<img class="auto-thumb" src="${a.fotos[0]}">`
       : `<div class="auto-thumb-placeholder">SIN FOTO</div>`;
     const fotoGrandeHtml = (a.fotos && a.fotos[0]) ? `<div class="auto-photo">${foto}</div>` : '';
+    let procesoHtml = '';
+    if(a.procesoEstado || a.procesoNota){
+      procesoHtml = `<div class="proceso-note">
+        ${a.procesoEstado ? `<span class="proceso-badge">${a.procesoEstado}</span>` : ''}
+        ${a.procesoNota ? `<div class="proceso-texto">${a.procesoNota}</div>` : ''}
+      </div>`;
+    }
 
     list.innerHTML += `<div class="auto-card ${expanded?'expanded':''}">
       <div class="auto-body">
@@ -828,12 +925,14 @@ function renderAutos(){
             <div class="auto-nombre">${a.nombre}</div>
           </div>
           <div class="auto-head-right">
+            ${(!adminMode && autoTieneNovedad(a)) ? '<span class="notif-dot"></span>' : ''}
             <div class="auto-estado ${estadoClass}">${a.estado}</div>
             <span class="auto-toggle-label ${expanded?'close':''}">${expanded?'Cerrar ✕':'Ver ficha'}</span>
           </div>
         </div>
         <div class="auto-details">
           ${fotoGrandeHtml}
+          ${procesoHtml}
           <div class="auto-grid">
             <div class="k">Fecha de compra</div><div class="v">${fechaStr}</div>
             <div class="k">VIN</div><div class="v">${a.vin||'—'}</div>
@@ -862,6 +961,8 @@ function openAutoModal(id){
     document.getElementById('autoGst').value = a.gstPagado||'';
     document.getElementById('autoComision').value = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
     document.getElementById('autoEstado').value = a.estado||'En Preparación';
+    document.getElementById('autoProcesoEstado').value = a.procesoEstado || '';
+    document.getElementById('autoProcesoNota').value = a.procesoNota || '';
     document.getElementById('autoVenta').value = a.ventaReal || '';
     document.getElementById('autoFechaVenta').value = a.ventaFecha || '';
     autoFotosExistentes = (a.fotos||[]).slice();
@@ -869,9 +970,10 @@ function openAutoModal(id){
   } else {
     document.getElementById('autoModalTitle').textContent='Agregar vehículo';
     document.getElementById('autoEditId').value='';
-    ['autoNombre','autoVin','autoFecha','autoCosto','autoGst','autoVenta','autoFechaVenta'].forEach(id2=>document.getElementById(id2).value='');
+    ['autoNombre','autoVin','autoFecha','autoCosto','autoGst','autoVenta','autoFechaVenta','autoProcesoNota'].forEach(id2=>document.getElementById(id2).value='');
     document.getElementById('autoComision').value = COMISION_DEFAULT;
     document.getElementById('autoEstado').value='En Preparación';
+    document.getElementById('autoProcesoEstado').value='';
   }
   document.getElementById('autoModalBg').classList.add('open');
 }
@@ -925,13 +1027,26 @@ async function guardarAuto(){
       ventaReal: isNaN(ventaVal) ? 0 : ventaVal,
       ventaFecha: ventaFechaVal || '',
       estado: document.getElementById('autoEstado').value,
+      procesoEstado: document.getElementById('autoProcesoEstado').value,
+      procesoNota: document.getElementById('autoProcesoNota').value.trim(),
       fotos
     };
     const editId = document.getElementById('autoEditId').value;
     if(editId){
+      // Sólo se notifica si algo cambió de verdad. Si se abre el formulario y se
+      // guarda sin tocar nada, no se marca como novedad y no aparece el globo rojo.
+      const anterior = autosCache.find(x=>x.id===editId) || {};
+      const huboCambio = Object.keys(data).some(k=>{
+        if(k === 'fotos'){
+          return JSON.stringify(data.fotos||[]) !== JSON.stringify(anterior.fotos||[]);
+        }
+        return data[k] !== (anterior[k] !== undefined ? anterior[k] : (typeof data[k]==='number' ? 0 : ''));
+      });
+      if(huboCambio) data.actualizadoEn = firebase.firestore.FieldValue.serverTimestamp();
       await db.collection(colAutos()).doc(editId).update(data);
     } else {
       data.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
+      data.actualizadoEn = firebase.firestore.FieldValue.serverTimestamp();
       await db.collection(colAutos()).add(data);
     }
     showToast('Vehículo guardado');
