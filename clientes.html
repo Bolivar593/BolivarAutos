@@ -95,6 +95,17 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .auto-card{border:1.5px solid #2563EB;border-radius:12px;overflow:hidden;margin-bottom:14px}
 .auto-photo{width:100%;background:#eef1f5;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:16px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;position:relative;overflow:hidden;min-height:60px}
 .auto-photo img{width:100%;height:auto;display:block;object-fit:contain}
+
+/* CARRUSEL DE FOTOS */
+.foto-carrusel{position:relative;width:100%;background:#eef1f5;border-radius:10px;overflow:hidden;margin-bottom:4px}
+.foto-carrusel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.foto-carrusel-track::-webkit-scrollbar{display:none}
+.foto-carrusel-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center}
+.foto-carrusel-slide img{width:100%;height:auto;display:block;object-fit:contain}
+.foto-contador{position:absolute;top:10px;right:10px;background:rgba(15,23,42,0.78);color:#fff;font-size:14px;font-weight:700;padding:4px 11px;border-radius:20px;pointer-events:none}
+.foto-dots{display:flex;justify-content:center;gap:7px;padding:8px 0 2px}
+.foto-dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;transition:.2s}
+.foto-dot.on{background:#2563EB;width:22px;border-radius:4px}
 .auto-head{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
 .auto-head-left{display:flex;align-items:center;gap:10px;min-width:0}
 .auto-thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;flex-shrink:0;border:1px solid #d8dde5;background:#eef1f5}
@@ -111,7 +122,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .auto-card.expanded .auto-details{display:block}
 .proceso-note{background:#eff6ff;border:1.5px solid #2563EB;border-radius:10px;padding:12px 14px;margin-top:12px}
 .proceso-badge{display:inline-block;background:#2563EB;color:#fff;font-size:14px;font-weight:700;padding:5px 11px;border-radius:7px}
-.proceso-texto{font-size:17px;color:#1e3a5f;margin-top:8px;line-height:1.5}
+.proceso-texto{font-size:17px;color:#1e3a5f;margin-top:8px;line-height:1.5;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
 
 /* BADGE DE NOTIFICACION (estilo WhatsApp) */
 .notif-badge{display:inline-flex;align-items:center;justify-content:center;background:#dc2626;color:#fff;font-size:14px;font-weight:700;line-height:1;min-width:26px;height:26px;padding:0 8px;border-radius:13px;flex-shrink:0}
@@ -175,7 +186,8 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:14px;padding:24px;max-width:380px;width:100%;max-height:88vh;overflow-y:auto;border:2px solid #2563EB}
 .modal h3{font-size:19px;margin-bottom:18px;color:#1E293B;text-transform:uppercase;letter-spacing:0.3px;font-weight:700}
-.modal input,.modal select{width:100%;padding:14px 12px;border:1.5px solid #ccd3dc;border-radius:9px;font-size:19px;margin-bottom:12px}
+.modal input,.modal select,.modal textarea{width:100%;padding:14px 12px;border:1.5px solid #ccd3dc;border-radius:9px;font-size:19px;margin-bottom:12px}
+.modal textarea{font-family:inherit;line-height:1.5;resize:vertical;min-height:80px}
 .modal label{font-size:15px;color:#444;font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.2px}
 .modal-actions{display:flex;gap:10px;margin-top:8px}
 .modal-actions .btn{flex:1}
@@ -409,7 +421,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <option value="Detailing">Detailing</option>
     </select>
     <label>Nota adicional (opcional)</label>
-    <input type="text" id="autoProcesoNota" placeholder="Ej: esperando recogerlo en Toronto">
+    <textarea id="autoProcesoNota" rows="3" placeholder="Ej: esperando recogerlo en Toronto"></textarea>
     <label>Precio de venta — dejar vacío si aún no se vende (CAD $)</label>
     <input type="number" id="autoVenta" placeholder="0.00">
     <label>Fecha de venta — necesaria para que la utilidad se refleje en el mes correcto</label>
@@ -549,6 +561,7 @@ function col(){ return FONDOS[currentFondoId].prefix; }
 function colAutos(){ return FONDOS[currentFondoId].prefix + '_AUTOS'; }
 function fmt(n, dec){ dec=(dec===undefined)?0:dec; return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
 // ================= NAVEGACION HOME / FONDO =================
 const SECTION_LABELS = {
@@ -854,6 +867,16 @@ function isAutoExpanded(a){
   return a.estado !== 'Vendido'; // los vendidos se pliegan por defecto; el resto abierto
 }
 
+function onCarruselScroll(track){
+  const total = parseInt(track.dataset.total,10) || 1;
+  const idx = Math.round(track.scrollLeft / track.clientWidth);
+  const cont = track.parentElement.querySelector('.foto-actual');
+  if(cont) cont.textContent = Math.min(idx+1, total);
+  const dotsWrap = track.parentElement.parentElement;
+  const dots = dotsWrap ? dotsWrap.querySelectorAll('.foto-dot') : [];
+  dots.forEach((d,i)=>d.classList.toggle('on', i===idx));
+}
+
 function toggleAutoExpand(id){
   const a = autosCache.find(x=>x.id===id);
   if(!a) return;
@@ -871,7 +894,6 @@ function renderAutos(){
   list.innerHTML='';
   ordenados.forEach(a=>{
     const estadoClass = a.estado==='Vendido' ? 'vendido' : (a.estado==='Disponible' ? 'disp' : 'prep');
-    const foto = (a.fotos && a.fotos[0]) ? `<img src="${a.fotos[0]}">` : 'SIN FOTOGRAFÍA';
     const fechaStr = a.fechaCompra ? new Date(a.fechaCompra+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
     const comisionPct = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
     const comisionMonto = (a.costoTotal||0) * comisionPct/100;
@@ -905,15 +927,27 @@ function renderAutos(){
     finHtml += `</div>`;
 
     const expanded = isAutoExpanded(a);
-    const thumbHtml = (a.fotos && a.fotos[0])
-      ? `<img class="auto-thumb" src="${a.fotos[0]}">`
+    const fotos = (a.fotos || []).filter(Boolean);
+    const thumbHtml = fotos.length
+      ? `<img class="auto-thumb" src="${fotos[0]}">`
       : `<div class="auto-thumb-placeholder">SIN FOTO</div>`;
-    const fotoGrandeHtml = (a.fotos && a.fotos[0]) ? `<div class="auto-photo">${foto}</div>` : '';
+    let fotoGrandeHtml = '';
+    if(fotos.length === 1){
+      fotoGrandeHtml = `<div class="auto-photo"><img src="${fotos[0]}"></div>`;
+    } else if(fotos.length > 1){
+      const slides = fotos.map(src=>`<div class="foto-carrusel-slide"><img src="${src}"></div>`).join('');
+      const dots = fotos.map((_,i)=>`<span class="foto-dot ${i===0?'on':''}"></span>`).join('');
+      fotoGrandeHtml = `<div class="foto-carrusel">
+          <div class="foto-carrusel-track" data-total="${fotos.length}" onscroll="onCarruselScroll(this)">${slides}</div>
+          <div class="foto-contador"><span class="foto-actual">1</span>/${fotos.length}</div>
+        </div>
+        <div class="foto-dots">${dots}</div>`;
+    }
     let procesoHtml = '';
     if(a.procesoEstado || a.procesoNota){
       procesoHtml = `<div class="proceso-note">
         ${a.procesoEstado ? `<span class="proceso-badge">${a.procesoEstado}</span>` : ''}
-        ${a.procesoNota ? `<div class="proceso-texto">${a.procesoNota}</div>` : ''}
+        ${a.procesoNota ? `<div class="proceso-texto">${escapeHtml(a.procesoNota)}</div>` : ''}
       </div>`;
     }
 
