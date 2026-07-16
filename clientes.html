@@ -118,6 +118,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .auto-estado.prep{background:#fef3e2;color:#92400e}
 .auto-estado.disp{background:#dbeafe;color:#1d4ed8}
 .auto-estado.vendido{background:#dcfce7;color:#15803d}
+.auto-estado.cancelado{background:#e5e7eb;color:#4b5563}
 .auto-details{display:none}
 .auto-card.expanded .auto-details{display:block}
 .proceso-note{background:#eff6ff;border:1.5px solid #2563EB;border-radius:10px;padding:12px 14px;margin-top:12px}
@@ -137,6 +138,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .auto-fin .r>span:first-child{flex:1 1 auto;min-width:120px}
 .auto-fin .r b{color:#1E293B;font-weight:700;text-align:right;flex-shrink:0}
 .auto-fin .r b.pos{color:#15803d}
+.auto-fin .r.cancel-msg{color:#4b5563;font-size:15px;background:#f3f4f6;border-radius:8px;padding:10px 12px;margin-top:6px}
 .dual-cad{display:block}
 .dual-usd{display:block;color:#8a93a3;font-weight:400;font-size:14px;margin-top:2px}
 @media(max-width:480px){
@@ -411,6 +413,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <option value="En Preparación">En Preparación</option>
       <option value="Disponible">Disponible</option>
       <option value="Vendido">Vendido</option>
+      <option value="Cancelado">Cancelado / Arbitraje</option>
     </select>
     <label>Qué se está haciendo con el carro ahora (opcional)</label>
     <select id="autoProcesoEstado">
@@ -419,6 +422,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
       <option value="En taller / Safety">En taller / Safety</option>
       <option value="Buscando repuestos">Buscando repuestos</option>
       <option value="Detailing">Detailing</option>
+      <option value="En arbitraje">En arbitraje</option>
     </select>
     <label>Nota adicional (opcional)</label>
     <textarea id="autoProcesoNota" rows="3" placeholder="Ej: esperando recogerlo en Toronto"></textarea>
@@ -864,7 +868,7 @@ function autoOrderKey(a){
 
 function isAutoExpanded(a){
   if(Object.prototype.hasOwnProperty.call(autosExpandState, a.id)) return autosExpandState[a.id];
-  return a.estado !== 'Vendido'; // los vendidos se pliegan por defecto; el resto abierto
+  return (a.estado !== 'Vendido' && a.estado !== 'Cancelado'); // vendidos y cancelados se pliegan por defecto; el resto abierto
 }
 
 function onCarruselScroll(track){
@@ -893,7 +897,7 @@ function renderAutos(){
   const ordenados = autosCache.slice().sort((a,b)=>autoOrderKey(b)-autoOrderKey(a));
   list.innerHTML='';
   ordenados.forEach(a=>{
-    const estadoClass = a.estado==='Vendido' ? 'vendido' : (a.estado==='Disponible' ? 'disp' : 'prep');
+    const estadoClass = a.estado==='Vendido' ? 'vendido' : (a.estado==='Cancelado' ? 'cancelado' : (a.estado==='Disponible' ? 'disp' : 'prep'));
     const fechaStr = a.fechaCompra ? new Date(a.fechaCompra+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
     const comisionPct = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
     const comisionMonto = (a.costoTotal||0) * comisionPct/100;
@@ -914,17 +918,24 @@ function renderAutos(){
         <div class="r"><span style="font-weight:700;color:#1E293B">Total invertido</span><b style="color:#1E293B">${fmtDual(capitalInvertido)}</b></div>`;
     }
 
-    let finHtml = `<div class="auto-fin">${costoRowsHtml}<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmtDual(comisionMonto,2)}</b></div>`;
-    if(ventaReal > 0){
-      const ventaFechaStr = a.ventaFecha ? new Date(a.ventaFecha+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
-      finHtml += `<div class="r"><span>Precio de venta</span><b>${fmtDual(ventaReal)}</b></div>
-        <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>
-        <div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmtDual(gananciaBruta,2)}</b></div>
-        <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
+    let finHtml;
+    if(a.estado === 'Cancelado'){
+      finHtml = `<div class="auto-fin">${costoRowsHtml}
+        <div class="r cancel-msg"><span>Operación revertida — el trato se canceló (arbitraje). No genera ganancia ni pérdida para el fondo; el capital regresa.</span></div>
+      </div>`;
     } else {
-      finHtml += `<div class="r"><span>Precio de venta</span><b>Pendiente de venta</b></div>`;
+      finHtml = `<div class="auto-fin">${costoRowsHtml}<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmtDual(comisionMonto,2)}</b></div>`;
+      if(ventaReal > 0){
+        const ventaFechaStr = a.ventaFecha ? new Date(a.ventaFecha+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
+        finHtml += `<div class="r"><span>Precio de venta</span><b>${fmtDual(ventaReal)}</b></div>
+          <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>
+          <div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmtDual(gananciaBruta,2)}</b></div>
+          <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
+      } else {
+        finHtml += `<div class="r"><span>Precio de venta</span><b>Pendiente de venta</b></div>`;
+      }
+      finHtml += `</div>`;
     }
-    finHtml += `</div>`;
 
     const expanded = isAutoExpanded(a);
     const fotos = (a.fotos || []).filter(Boolean);
