@@ -1,0 +1,2797 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="LIVARKAR Admin">
+<link rel="apple-touch-icon" href="logo-icon.png">
+<title>LIVARKAR Admin</title>
+<style>
+/* ===== LIVARKAR APP CSS — EJECUTIVO ===== */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;padding:14px;min-height:100vh;color:#1a1a1a;font-size:16px;-webkit-text-size-adjust:100%}
+.wrap,.gastos-wrap,.dash-wrap{max-width:560px;margin:0 auto}
+@media(min-width:768px){.wrap,.gastos-wrap{max-width:900px}}
+
+/* --- HEADER --- */
+.header,.gastos-header{background:#1565C0;color:#fff;padding:1.2rem 1.4rem;border-radius:12px;margin-bottom:1rem}
+.header h1,.gastos-header h1{font-size:22px;font-weight:500;margin-bottom:3px;letter-spacing:-0.3px}
+.header p,.gastos-header p{font-size:13px;opacity:0.8;font-weight:400}
+
+/* --- LANG BUTTONS --- */
+.lang-row{display:flex;gap:8px;margin-bottom:1rem}
+.lbtn{padding:9px 22px;border-radius:8px;font-size:15px;cursor:pointer;font-weight:500}
+.lbtn.on{background:#1565C0;color:#fff;border:1px solid #1565C0}
+.lbtn.off{background:#fff;color:#555;border:1px solid #ddd}
+
+/* --- PROGRESS --- */
+.progress{display:flex;flex-direction:column;gap:5px;margin-bottom:1rem;background:#fff;border-radius:10px;padding:12px 14px;border:0.5px solid #e0e0e0}
+.progress-title{font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:5px}
+.prog-row{display:flex;align-items:center;gap:10px;padding:3px 0}
+.prog-icon{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.prog-icon.done{background:#1565C0;color:#fff}
+.prog-icon.pending{background:#eeeeee;color:#aaa}
+.prog-text{font-size:15px;font-weight:600;color:#333}
+.prog-text.done{color:#1565C0}
+.prog-text.pending{color:#aaa}
+
+/* --- CARDS --- */
+.card,.gcard{background:#fff;border:0.5px solid #e0e0e0;border-left:4px solid #3D9EFF;border-radius:0 10px 10px 0;padding:1rem 1.1rem;margin-bottom:.9rem}
+.sec-label,.gcard .sec-label{font-size:14px;font-weight:700;color:#1565C0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px}
+
+/* --- RATE ROW --- */
+.rate-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.rate-row label{font-size:14px;color:#555;font-weight:500;white-space:nowrap}
+.rate-box{display:inline-flex;align-items:center;border:0.5px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fff}
+.rate-prefix{font-size:16px;font-weight:500;color:#1565C0;padding:0 8px;background:#f5f8ff}
+.rate-input{font-size:18px;font-weight:500;color:#1565C0;border:none;width:60px;outline:none;text-align:center;padding:8px 4px}
+.rate-suffix{font-size:13px;color:#aaa;font-weight:400;padding-right:10px}
+
+/* --- ZONE GRID --- */
+.zone-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:7px}
+.zcard{border:0.5px solid #e0e0e0;border-radius:8px;padding:10px 10px;cursor:pointer;background:#fff}
+.zcard.sel{border-color:#1565C0;background:#f5f8ff}
+.zcard .zn{font-size:17px;font-weight:700;color:#111;margin-bottom:2px}
+.zcard.sel .zn{color:#1565C0}
+.zcard .za{font-size:13px;color:#777;font-weight:500}
+
+/* --- CALENDAR --- */
+.cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cal-nav button{background:#f5f5f5;border:0.5px solid #e0e0e0;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:18px;color:#1565C0}
+.cal-nav span{font-size:18px;font-weight:700;color:#111}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-hdr{text-align:center;font-size:13px;font-weight:700;color:#777;padding:4px 0}
+.cal-day{text-align:center;padding:10px 2px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;color:#111;border:0.5px solid transparent}
+.cal-day:hover:not(.past):not(.empty){background:#f5f8ff}
+.cal-day.sel{background:#1565C0;color:#fff}
+.cal-day.today{border-color:#1565C0;color:#1565C0}
+.cal-day.past{color:#ccc;cursor:default}
+.cal-day.empty{cursor:default}
+
+/* --- DURATION / TIME --- */
+.dur-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dur-row label{font-size:16px;color:#333;font-weight:700;white-space:nowrap}
+.dur-row select{font-size:15px;font-weight:400;padding:9px 10px;border:0.5px solid #e0e0e0;border-radius:8px;flex:1;color:#111;background:#fff}
+.time-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:7px;max-height:250px;overflow-y:auto}
+.tslot{border:0.5px solid #e0e0e0;border-radius:8px;padding:10px 4px;text-align:center;cursor:pointer;background:#fff}
+.tslot.sel{border-color:#1565C0;background:#f5f8ff}
+.tslot.unavail{opacity:0.3;cursor:default;background:#f5f5f5}
+.tslot.booked{cursor:not-allowed;background:#fff5f5;border-color:#ffcdd2}
+.tslot .tm{font-size:16px;font-weight:700;color:#111}
+.tslot.sel .tm{color:#1565C0}
+.tslot.booked .tm{color:#e53935}
+.tslot .te{font-size:13px;font-weight:500;color:#777;margin-top:2px}
+.tslot.booked .te{color:#e53935}
+
+/* --- FORM --- */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:16px;color:#333;font-weight:700}
+.fg input{font-size:16px;font-weight:400;padding:12px 13px;border:0.5px solid #e0e0e0;border-radius:8px;width:100%;-webkit-appearance:none;color:#111;background:#fff}
+.fg input:focus{outline:none;border-color:#1565C0}
+
+/* --- BUTTONS --- */
+.btn-confirm{width:100%;padding:16px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;text-align:center;border:3px solid #3D9EFF;background:#1565C0;color:#fff;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
+.btn-confirm:active{opacity:0.85}
+.btn-confirm.ready{background:#0F6E56}
+.btn{padding:14px 8px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;text-align:center;border:none;-webkit-tap-highlight-color:transparent;width:100%;display:block}
+.btn:active{opacity:0.8}
+.btn:disabled{opacity:0.3;cursor:default}
+.btn-wa{background:#25D366;color:#fff}
+.btn-sms{background:#1565C0;color:#fff}
+.btn-copy{background:#f5f5f5;color:#111;border:0.5px solid #e0e0e0}
+.btn-acal{background:#333;color:#fff}
+.btn-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+
+/* --- BANNERS --- */
+.error-banner{background:#fff8e1;border:0.5px solid #ffd54f;border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:14px;font-weight:500;color:#5d4037;display:none;line-height:1.6}
+.confirm-banner{background:#e8f5e9;border:0.5px solid #a5d6a7;border-radius:10px;padding:.9rem;margin-bottom:.8rem;font-size:15px;font-weight:500;color:#1b5e20;text-align:center;display:none}
+.loading-slots{font-size:14px;font-weight:400;color:#1565C0;text-align:center;padding:14px 0;display:none}
+
+/* --- SUMMARY --- */
+.summary{background:#f5f8ff;border:0.5px solid #bbdefb;border-radius:10px;padding:1rem;margin-bottom:.8rem}
+.sum-row{display:flex;justify-content:space-between;font-size:16px;font-weight:600;padding:6px 0;color:#333}
+.sum-row span:last-child{color:#1565C0;font-weight:500}
+.sum-tax{display:flex;justify-content:space-between;font-size:13px;font-weight:400;padding:3px 0;color:#888}
+.sum-tax span:last-child{color:#1565C0}
+.sum-divider{border:none;border-top:0.5px solid #bbdefb;margin:8px 0}
+.sum-total{display:flex;justify-content:space-between;font-size:24px;font-weight:600;padding-top:10px;margin-top:8px;border-top:0.5px solid #1565C0;color:#1565C0}
+.msg-label{font-size:11px;font-weight:500;color:#0F6E56;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;display:none}
+.msgbox{background:#f1f8f5;border:0.5px solid #a5d6a7;border-radius:10px;padding:1rem;font-size:14px;font-weight:400;color:#1b4332;line-height:1.8;white-space:pre-wrap;margin-bottom:.8rem;display:none}
+
+/* --- ADMIN --- */
+.admin-toggle{text-align:center;margin:6px 0 .8rem}
+.admin-toggle button{background:none;border:none;font-size:13px;color:#bbb;cursor:pointer;font-weight:400;text-decoration:underline}
+.admin-panel{background:#fff;border:0.5px solid #e0e0e0;border-radius:10px;padding:.9rem 1rem;margin-bottom:.8rem;display:none}
+.admin-title{font-size:14px;font-weight:700;color:#e53935;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.admin-row{padding:9px 0;border-bottom:0.5px solid #f5f5f5}
+.admin-row:last-child{border-bottom:none}
+.admin-row-top{display:flex;justify-content:space-between;align-items:center}
+.admin-info{flex:1}
+.admin-info strong{font-size:20px;font-weight:700;color:#111}
+.admin-info span{display:block;font-size:17px;color:#444;font-weight:600;margin-top:4px}
+.admin-btns{display:flex;gap:6px;flex-direction:column;align-items:flex-end}
+.btn-cancel{background:#fff5f5;color:#e53935;border:0.5px solid #ffcdd2;border-radius:7px;padding:10px 14px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn-cancel-wa{background:#25D366;color:#fff;border:none;border-radius:7px;padding:10px 14px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap}
+.admin-empty{font-size:16px;color:#aaa;font-weight:500;text-align:center;padding:10px 0}
+.admin-pw{display:flex;gap:8px;margin-bottom:10px}
+.admin-pw input{flex:1;font-size:15px;padding:9px 11px;border:0.5px solid #e0e0e0;border-radius:8px}
+.admin-pw button{background:#1565C0;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:14px;font-weight:500;cursor:pointer}
+.admin-date-row{display:flex;gap:8px;align-items:center;margin-bottom:10px}
+.admin-date-row label{font-size:18px;font-weight:700;color:#333;white-space:nowrap}
+.admin-date-row input{flex:1;font-size:18px;padding:12px 13px;border:0.5px solid #e0e0e0;border-radius:8px}
+.hist-section{margin-top:14px;border-top:0.5px solid #e0e0e0;padding-top:12px}
+.hist-title{font-size:11px;font-weight:500;color:#1565C0;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.hist-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.hist-filters label{font-size:12px;font-weight:500;color:#555;white-space:nowrap}
+.hist-month-sel{font-size:13px;font-weight:400;padding:7px 10px;border:0.5px solid #e0e0e0;border-radius:8px;color:#1565C0;background:#f5f8ff;cursor:pointer}
+.btn-hist{background:#1565C0;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-export-xlsx{background:#0F6E56;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-del-cancel{background:#b71c1c;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:500;cursor:pointer}
+.hist-summary{background:#f5f8ff;border:0.5px solid #bbdefb;border-radius:10px;padding:10px 12px;margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hist-sum-item{display:flex;flex-direction:column;gap:2px}
+.hist-sum-label{font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.4px}
+.hist-sum-value{font-size:16px;font-weight:500;color:#1565C0}
+.hist-sum-item.total .hist-sum-value{color:#0F6E56;font-size:18px}
+.hist-sum-item.count .hist-sum-value{color:#111}
+.hist-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:0.5px solid #e0e0e0}
+.hist-table{width:100%;border-collapse:collapse;font-size:13px}
+.hist-table thead tr{background:#1565C0}
+.hist-table th{color:#fff;padding:9px 10px;text-align:left;font-size:12px;font-weight:500;white-space:nowrap}
+.hist-table td{padding:8px 10px;border-bottom:0.5px solid #f5f5f5;font-size:13px;font-weight:400;color:#333;white-space:nowrap}
+.hist-table tbody tr:last-child td{border-bottom:none}
+.hist-table tbody tr:nth-child(even) td{background:#fafafa}
+.hist-table tbody tr:hover td{background:#f5f8ff}
+.hist-table tr.hist-cancelada td{color:#ccc;text-decoration:line-through}
+.hist-table .col-num{text-align:right}
+.hist-table .col-total{font-weight:500;color:#1565C0;text-align:right}
+.hist-table tr.hist-cancelada .col-total{color:#ccc}
+.hist-table .badge-activa{background:#e8f5e9;color:#1b5e20;border-radius:5px;padding:2px 6px;font-size:11px;font-weight:500}
+.hist-table .badge-cancel{background:#fff5f5;color:#e53935;border-radius:5px;padding:2px 6px;font-size:11px;font-weight:500}
+.hist-empty{font-size:13px;color:#aaa;font-weight:400;text-align:center;padding:18px 0}
+.past-toggle-btn{width:100%;margin-top:10px;padding:8px;border-radius:7px;font-size:12px;font-weight:500;background:#f5f8ff;color:#1565C0;border:0.5px solid #bbdefb;cursor:pointer;text-align:center}
+.past-form{background:#fafafa;border:0.5px solid #e0e0e0;border-radius:9px;padding:10px 12px;margin-top:7px;display:none}
+.past-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.past-fg{display:flex;flex-direction:column;gap:3px}
+.past-fg label{font-size:12px;font-weight:500;color:#777}
+.past-fg input,.past-fg select{font-size:13px;padding:7px 8px;border:0.5px solid #e0e0e0;border-radius:7px;width:100%;color:#111;background:#fff}
+.past-row{display:flex;gap:6px;margin-bottom:4px;align-items:flex-end}
+.past-row .past-fg{flex:1}
+.btn-past-save{padding:8px 14px;border-radius:7px;font-size:13px;font-weight:500;background:#1565C0;color:#fff;border:none;cursor:pointer;white-space:nowrap}
+.past-success{background:#e8f5e9;border:0.5px solid #a5d6a7;border-radius:7px;padding:7px;font-size:13px;font-weight:500;color:#1b5e20;text-align:center;display:none;margin-top:6px}
+
+/* ===== ADMIN AUTOS CSS ===== */
+#tab-autos :root{--blue:#2563eb;--blue-dark:#1d4ed8;--blue-light:#eff6ff;--navy:#1e293b;--gray-50:#f8fafc;--gray-100:#f1f5f9;--gray-200:#e2e8f0;--gray-400:#94a3b8;--gray-600:#475569;--gray-800:#1e293b;--green:#10b981;--red:#ef4444;--orange:#f59e0b;--white:#ffffff}
+#tab-autos{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--gray-800);min-height:100vh}
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#1e293b 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.login-card{background:rgba(255,255,255,0.05);border:3px solid #3D9EFF;border-radius:20px;padding:48px 40px;width:100%;max-width:400px;backdrop-filter:blur(20px);text-align:center}
+.login-logo{display:inline-flex;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo-box{background:var(--blue);border-radius:12px;padding:10px 16px;display:flex;align-items:center;gap:6px}
+.login-logo-box .b{font-size:32px;font-weight:900;color:white;line-height:1}
+.login-logo-box .dot{width:8px;height:8px;background:white;border-radius:50%}
+.login-logo-box .livar{font-size:18px;font-weight:800;color:white}
+.login-title{font-size:14px;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.login-subtitle{font-size:22px;font-weight:700;color:white;margin-bottom:32px}
+.login-input{width:100%;padding:14px 18px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;font-size:16px;color:white;letter-spacing:4px;text-align:center;margin-bottom:16px;outline:none}
+.login-input:focus{border-color:var(--blue)}
+.login-input::placeholder{letter-spacing:2px;color:rgba(255,255,255,0.3);font-size:14px}
+.pw-wrapper{position:relative;width:100%}
+.pw-eye{position:absolute;right:14px;top:50%;transform:translateY(-60%);background:none;border:none;cursor:pointer;font-size:20px;color:rgba(255,255,255,0.45);padding:4px}
+.login-btn{width:100%;padding:14px;background:var(--blue);color:white;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer}
+.login-btn:hover{background:var(--blue-dark)}
+.login-error{color:#fca5a5;font-size:13px;margin-top:12px;display:none}
+#appScreen{display:none}
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.sidebar{background:#1e293b;padding:24px 0;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.sidebar-logo{padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,0.08)}
+.sidebar-logo-box{display:flex;align-items:center;gap:4px;background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3);border-radius:10px;padding:8px 14px;width:fit-content}
+.sidebar-logo-box .b{font-size:28px;font-weight:900;color:white;line-height:1}
+.sidebar-logo-box .dot{width:7px;height:7px;background:var(--blue);border-radius:50%;margin:0 4px}
+.sidebar-logo-box .livar{font-size:16px;font-weight:800;color:white}
+.sidebar-label{font-size:9px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:3px;text-transform:uppercase;margin-top:6px;padding-left:2px}
+.sidebar-nav{padding:20px 12px;flex:1}
+.nav-section-title{font-size:10px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:2px;text-transform:uppercase;padding:0 8px;margin-bottom:8px;margin-top:20px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:rgba(255,255,255,0.55);font-size:14px;font-weight:500;cursor:pointer;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85)}
+.nav-item.active{background:var(--blue);color:white}
+.nav-item .icon{font-size:18px;width:22px;text-align:center}
+.sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08)}
+.logout-btn{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.4);font-size:13px;cursor:pointer;background:none;border:none}
+.logout-btn:hover{color:rgba(255,255,255,0.8)}
+.main{padding:32px;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}
+.page-title{font-size:26px;font-weight:700;color:var(--gray-800)}
+.page-subtitle{font-size:14px;color:var(--gray-400);margin-top:2px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none}
+.btn-primary{background:var(--blue);color:white}
+.btn-primary:hover{background:var(--blue-dark)}
+.btn-danger{background:#fef2f2;color:var(--red)}
+.btn-danger:hover{background:#fee2e2}
+.btn-ghost{background:var(--gray-100);color:var(--gray-600)}
+.btn-ghost:hover{background:var(--gray-200)}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:white;border-radius:14px;padding:20px 24px;border:1px solid var(--gray-200)}
+.stat-label{font-size:12px;font-weight:600;color:var(--gray-400);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.stat-value{font-size:32px;font-weight:800;color:var(--gray-800);line-height:1}
+.stat-value.blue{color:var(--blue)}
+.stat-value.green{color:var(--green)}
+.vehicle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.vehicle-card{background:white;border-radius:14px;border:1px solid var(--gray-200);overflow:hidden}
+.vehicle-card:hover{box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+.vehicle-card-img{width:100%;height:180px;object-fit:cover;background:var(--gray-100);display:flex;align-items:center;justify-content:center;color:var(--gray-400);font-size:40px}
+.vehicle-card-img img{width:100%;height:180px;object-fit:cover}
+.vehicle-card-body{padding:16px}
+.vehicle-card-name{font-size:16px;font-weight:700;color:var(--gray-800);margin-bottom:4px}
+.vehicle-card-price{font-size:20px;font-weight:800;color:var(--blue);margin-bottom:8px}
+.vehicle-card-meta{display:flex;gap:8px;margin-bottom:12px}
+.badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--blue-light);color:var(--blue)}
+.badge.gray{background:var(--gray-100);color:var(--gray-600)}
+.vehicle-card-actions{display:flex;gap:8px}
+.vehicle-card-actions .btn{flex:1;justify-content:center;padding:8px 12px;font-size:13px}
+.empty-state{text-align:center;padding:60px 20px;color:var(--gray-400)}
+.empty-state .icon{font-size:48px;margin-bottom:16px}
+.empty-state h3{font-size:18px;font-weight:600;color:var(--gray-600);margin-bottom:8px}
+.empty-state p{font-size:14px;margin-bottom:24px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal{background:white;border-radius:20px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-header{padding:24px 28px 0;display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-size:20px;font-weight:700}
+.modal-close{background:var(--gray-100);border:none;border-radius:8px;width:32px;height:32px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-600)}
+.modal-body{padding:24px 28px 28px}
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:13px;font-weight:600;color:var(--gray-600);margin-bottom:6px}
+.form-input,.form-select{width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-size:14px;color:var(--gray-800);background:white;outline:none}
+.form-input:focus,.form-select:focus{border-color:var(--blue)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.photo-upload-area{border:2px dashed var(--gray-200);border-radius:12px;padding:24px;text-align:center;cursor:pointer;position:relative}
+.photo-upload-area:hover{border-color:var(--blue);background:var(--blue-light)}
+.photo-upload-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.photo-upload-icon{font-size:32px;margin-bottom:8px}
+.photo-upload-text{font-size:14px;font-weight:600;color:var(--gray-600)}
+.photo-upload-hint{font-size:12px;color:var(--gray-400);margin-top:4px}
+.photo-previews{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.photo-preview{position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden}
+.photo-preview img{width:100%;height:100%;object-fit:cover}
+.photo-preview-remove{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:50%;width:20px;height:20px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.upload-progress{display:none;margin-top:12px}
+.progress-bar-container{background:var(--gray-100);border-radius:999px;height:6px;overflow:hidden}
+.progress-bar{height:100%;background:var(--blue);border-radius:999px;width:0%}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--gray-800);color:white;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:9999;transform:translateY(80px);opacity:0;max-width:300px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#064e3b;border-left:4px solid var(--green)}
+.toast.error{background:#7f1d1d;border-left:4px solid var(--red)}
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;color:var(--gray-400);gap:10px}
+.spinner{width:20px;height:20px;border:2px solid var(--gray-200);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--gray-100)}
+.photo-count-badge{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.65);color:white;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.vehicle-img-wrapper{position:relative}
+.mobile-topbar{display:none}
+@media(max-width:768px){.layout{grid-template-columns:1fr}.sidebar{position:fixed;left:-260px;top:0;height:100vh;width:240px;z-index:999;transition:left 0.3s ease}.sidebar.open{left:0}.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:998}.sidebar-overlay.open{display:block}.mobile-topbar{display:flex !important;position:sticky;top:0;z-index:100;background:white;border-bottom:1px solid var(--gray-200);padding:14px 20px;align-items:center;justify-content:space-between}.hamburger{background:none;border:none;font-size:24px;cursor:pointer;padding:4px}.main{padding:20px 16px}.stats-grid{grid-template-columns:repeat(2,1fr);gap:12px}.vehicle-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.btn{padding:12px 18px;font-size:15px}.vehicle-card-actions .btn{padding:10px 8px;font-size:13px}.modal{border-radius:16px 16px 0 0;max-height:95vh}.modal-overlay{align-items:flex-end;padding:0}.photo-upload-area{padding:24px 16px}input,select{font-size:16px !important}}
+
+/* ===== GASTOS CSS ===== */
+.gfg{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.gfg label{font-size:13px;color:#555;font-weight:500}
+.gfg input,.gfg select{font-size:15px;font-weight:400;padding:10px 11px;border:0.5px solid #e0e0e0;border-radius:8px;width:100%;-webkit-appearance:none;color:#111;background:#fff}
+.gfg input:focus,.gfg select:focus{outline:none;border-color:#1565C0}
+.gtoggle-row{display:flex;gap:10px;margin-bottom:10px}
+.gtoggle{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;border-radius:9px;border:0.5px solid #e0e0e0;cursor:pointer;font-size:14px;font-weight:500;color:#888;background:#fff;-webkit-tap-highlight-color:transparent}
+.gtoggle.on{border-color:#1565C0;background:#f5f8ff;color:#1565C0}
+.btn-guardar-gasto{width:100%;padding:16px;border-radius:10px;font-size:17px;font-weight:500;cursor:pointer;background:#1565C0;color:#fff;border:3px solid #3D9EFF;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
+.btn-guardar-gasto:active{opacity:0.85}
+.gasto-success{background:#e8f5e9;border:0.5px solid #a5d6a7;border-radius:10px;padding:12px;font-size:15px;font-weight:500;color:#1b5e20;text-align:center;display:none;margin-bottom:10px}
+.gasto-error{background:#fff8e1;border:0.5px solid #ffd54f;border-radius:10px;padding:12px;font-size:13px;font-weight:500;color:#5d4037;display:none;margin-bottom:10px}
+.gasto-item{background:#fafafa;border:0.5px solid #e0e0e0;border-radius:9px;padding:11px 12px;margin-bottom:7px}
+.gi-top{display:flex;justify-content:space-between;align-items:center}
+.gi-cat{font-size:14px;font-weight:500;color:#1565C0}
+.gi-monto{font-size:16px;font-weight:500;color:#0F6E56}
+.gi-sub{font-size:12px;color:#aaa;font-weight:400;margin-top:2px}
+.gi-desc{font-size:12px;color:#777;font-weight:400;margin-top:3px}
+
+/* ===== DASHBOARD CSS ===== */
+.dash-wrap{max-width:560px;margin:0 auto;padding:14px}
+.dash-main{background:#1565C0;border-radius:12px;padding:20px;margin-bottom:.9rem;text-align:center}
+.dash-main-label{font-size:11px;font-weight:500;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px}
+.dash-main-amount{font-size:40px;font-weight:500;color:#fff;line-height:1;margin-bottom:5px}
+.dash-main-sub{font-size:13px;color:rgba(255,255,255,0.6);font-weight:400}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.9rem}
+.dash-card{background:#fff;border:0.5px solid #e0e0e0;border-radius:10px;padding:14px}
+.dash-card-label{font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px}
+.dash-card-amount{font-size:22px;font-weight:500;color:#1565C0}
+.dash-card-sub{font-size:11px;color:#bbb;font-weight:400;margin-top:3px}
+.dash-impuestos{background:#fff;border:0.5px solid #ffcdd2;border-radius:10px;padding:14px;margin-bottom:.9rem}
+.dash-imp-title{font-size:11px;font-weight:500;color:#e53935;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
+.dash-imp-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid #fff5f5}
+.dash-imp-row:last-child{border-bottom:none}
+.dash-imp-label{font-size:14px;font-weight:400;color:#555}
+.dash-imp-amount{font-size:16px;font-weight:500;color:#e53935}
+.dash-imp-total{display:flex;justify-content:space-between;align-items:center;background:#fff5f5;border-radius:8px;padding:10px 12px;margin-top:7px}
+.dash-refresh{width:100%;padding:13px;border-radius:9px;font-size:15px;font-weight:500;background:#f5f5f5;color:#1565C0;border:0.5px solid #e0e0e0;cursor:pointer;margin-bottom:10px}
+.capital-edit-row{display:flex;align-items:center;gap:8px;background:#fafafa;border:0.5px solid #e0e0e0;border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.capital-edit-row label{font-size:13px;font-weight:500;color:#888;white-space:nowrap}
+.capital-edit-row input{font-size:16px;font-weight:500;color:#555;border:none;background:transparent;width:120px;text-align:right}
+.dash-loading{text-align:center;padding:40px 0;color:#aaa;font-size:15px;font-weight:400}
+
+
+/* ===== NAV BAR ===== */
+.bottom-nav{position:sticky;top:0;z-index:100;display:flex;background:#1A2035;padding:0;border-bottom:3px solid #3D9EFF;margin-bottom:14px;box-shadow:0 3px 10px rgba(0,0,0,0.3)}
+.bnav-btn{flex:1;padding:16px 4px;background:transparent;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;-webkit-tap-highlight-color:transparent;border-bottom:3px solid transparent}
+.bnav-label{font-size:19px;font-weight:600;color:rgba(255,255,255,0.85);letter-spacing:0.2px}
+.bnav-btn.active .bnav-label{color:#ffffff;font-weight:700;font-size:19px}
+.bnav-btn.active{border-bottom:3px solid #3D9EFF;background:rgba(43,127,225,0.18)}
+.tab-page{display:none}
+.tab-page.active{display:block}
+
+/* ===== AJUSTE DE LETRA MAS GRANDE — SOLO PESTAÑA ALQUILER (no toca otras pestañas) ===== */
+#tab-rentas .header h1{font-size:24px!important}
+#tab-rentas .header p{font-size:16px!important}
+#tab-rentas .lbtn{font-size:18px;padding:10px 24px}
+#tab-rentas .progress-title{font-size:14px}
+#tab-rentas .prog-text{font-size:18px}
+#tab-rentas .sec-label{font-size:17px}
+#tab-rentas .rate-row label{font-size:17px}
+#tab-rentas .rate-prefix{font-size:19px}
+#tab-rentas .rate-input{font-size:21px}
+#tab-rentas .rate-suffix{font-size:16px!important}
+#tab-rentas .zcard .zn{font-size:20px}
+#tab-rentas .zcard .za{font-size:16px}
+#tab-rentas .cal-hdr{font-size:16px}
+#tab-rentas .cal-nav span{font-size:20px}
+#tab-rentas .cal-nav button{font-size:20px}
+#tab-rentas .cal-day{font-size:19px}
+#tab-rentas .dur-row label{font-size:19px}
+#tab-rentas .dur-row select{font-size:18px}
+#tab-rentas .tslot .tm{font-size:19px}
+#tab-rentas .tslot .te{font-size:16px}
+#tab-rentas .fg label{font-size:19px}
+#tab-rentas .fg input{font-size:19px}
+#tab-rentas .btn-confirm{font-size:20px}
+#tab-rentas .sum-row{font-size:19px}
+#tab-rentas .sum-tax{font-size:16px}
+#tab-rentas .sum-total{font-size:27px}
+#tab-rentas .msgbox{font-size:17px}
+#tab-rentas .admin-title{font-size:17px}
+#tab-rentas .admin-toggle button{font-size:16px}
+#tab-rentas .hist-table th{font-size:14px}
+#tab-rentas .hist-table td{font-size:15px}
+</style>
+</head>
+<body style="overflow:hidden">
+
+<!-- NAV BAR TOP -->
+<nav class="bottom-nav" id="main-nav" style="display:none">
+  <button class="bnav-btn" id="bnav-rentas" onclick="showTab('rentas')">
+    <span class="bnav-label">Alquiler</span>
+  </button>
+  <button class="bnav-btn" id="bnav-gastos" onclick="showTab('gastos')">
+    <span class="bnav-label">Gastos</span>
+  </button>
+  <button class="bnav-btn" id="bnav-dashboard" onclick="showTab('dashboard')">
+    <span class="bnav-label">Saldo</span>
+  </button>
+  <button class="bnav-btn" id="bnav-autos" onclick="showTab('autos')">
+    <span class="bnav-label">Autos</span>
+  </button>
+</nav>
+
+<!-- PANTALLA DE INICIO -->
+<div id="home-screen" style="min-height:100vh;background:#f5f5f5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
+  <div style="text-align:center;margin-bottom:36px">
+    <div style="font-size:28px;font-weight:700;color:#1A2035;letter-spacing:3px;margin-bottom:6px">LIVARKAR</div>
+    <div style="font-size:13px;color:#888;font-weight:400">Services Management Ltd.</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:360px">
+    <button onclick="goTab('rentas')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Alquiler</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Agendar citas →</div>
+    </button>
+    <button onclick="goTab('gastos')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Gastos</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Registrar →</div>
+    </button>
+    <button onclick="goTab('dashboard')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Saldo</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Ver finanzas →</div>
+    </button>
+    <button onclick="goTab('autos')" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px;padding:20px 24px;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:18px;font-weight:600;color:#fff;letter-spacing:0.3px">Autos</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.45);font-weight:400">Inventario →</div>
+    </button>
+  </div>
+  <div style="margin-top:32px;font-size:12px;color:#bbb">BolivarAutos · Winnipeg, MB</div>
+</div>
+
+<!-- TAB: RENTAS -->
+<div class="tab-page" id="tab-rentas">
+<div class="wrap">
+  <div class="header" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px">
+    <h1 style="font-size:20px;font-weight:500;letter-spacing:-0.3px">BolivarAutos<span style="color:#2B7FE1">·</span>Renta</h1>
+    <p id="h2" style="font-size:12px;opacity:0.75;margin-top:3px">Winnipeg, MB &nbsp;·&nbsp; Lun-Dom 9AM-8PM &nbsp;·&nbsp; (204)509-6153</p>
+  </div>
+  <div class="lang-row" style="justify-content:space-between;align-items:center">
+    <div style="display:flex;gap:8px">
+      <button class="lbtn on"  id="btn-en" onclick="setLang('en')">English</button>
+      <button class="lbtn off" id="btn-es" onclick="setLang('es')">Español</button>
+    </div>
+    <button onclick="resetForm()" title="Nueva reserva" style="background:transparent;border:2px solid #3D9EFF;border-radius:8px;padding:8px 12px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D9EFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+    </button>
+  </div>
+  <div class="progress">
+    <div class="progress-title" id="prog-title">Progreso de la reserva</div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-1">1</div><div class="prog-text pending" id="pt-1">Zona MPI no seleccionada</div></div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-2">2</div><div class="prog-text pending" id="pt-2">Fecha no seleccionada</div></div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-3">3</div><div class="prog-text pending" id="pt-3">Hora no seleccionada</div></div>
+    <div class="prog-row"><div class="prog-icon pending" id="pi-4">4</div><div class="prog-text pending" id="pt-4">Nombre y telefono faltan</div></div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-rate">Tarifa por hora</div>
+    <div class="rate-row">
+      <label id="l-rate-lbl">Precio/hr:</label>
+      <div class="rate-box">
+        <span class="rate-prefix">$</span>
+        <input class="rate-input" id="rate-val" type="number" min="1" max="999" value="47.5" oninput="updateDurOptions();upd()">
+        <span class="rate-suffix">CAD</span>
+      </div>
+      <span style="font-size:13px;color:#aaa;font-weight:600" id="l-rate-note">sin impuestos</span>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-z">1. Zona MPI / Tipo de sesion</div>
+    <div class="zone-grid" id="zone-grid"></div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-d">2. Fecha</div>
+    <div class="cal-nav">
+      <button onclick="pm()">&#8592;</button>
+      <span id="cal-month"></span>
+      <button onclick="nm()">&#8594;</button>
+    </div>
+    <div class="cal-grid" id="cal"></div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-t">3. Hora de inicio</div>
+    <div class="dur-row">
+      <label id="l-dur">Duracion</label>
+      <select id="dur" onchange="renderTimes();upd()">
+        <option value="1">1 hr</option>
+        <option value="1.5">1.5 hrs</option>
+        <option value="2" selected>2 hrs</option>
+        <option value="2.5">2.5 hrs</option>
+        <option value="3">3 hrs</option>
+        <option value="4">4 hrs</option>
+      </select>
+    </div>
+    <div class="loading-slots" id="loading-slots">Verificando disponibilidad...</div>
+    <div class="time-grid" id="time-grid"></div>
+  </div>
+  <div class="card">
+    <div class="sec-label" id="l-c">4. Datos del cliente</div>
+    <div class="form-row">
+      <div class="fg">
+        <label id="l-nm">Nombre completo</label>
+        <input id="nm" type="text" placeholder="Juan Perez" oninput="upd()">
+      </div>
+      <div class="fg">
+        <label id="l-ph">Telefono (WhatsApp)</label>
+        <input id="ph" type="tel" placeholder="204-509-6153" oninput="phoneMask(this);upd()" onpaste="setTimeout(function(){phoneMask(document.getElementById('ph'));upd();},10)">
+      </div>
+    </div>
+    <div class="fg" style="margin-top:8px">
+      <label id="l-no">Notas</label>
+      <input id="no" type="text" placeholder="ej. primera vez manejando...">
+    </div>
+  </div>
+  <button class="btn-confirm" id="btn-confirm" onclick="handleConfirm()">
+    <span id="btn-confirm-text">VERIFICAR RESERVA</span>
+  </button>
+  <div class="error-banner" id="error-banner"></div>
+  <div class="summary" id="summ" style="display:none">
+    <div class="sum-row"><span id="ls-z">Zona</span><span id="sv-z">--</span></div>
+    <div class="sum-row"><span id="ls-d">Fecha</span><span id="sv-d">--</span></div>
+    <div class="sum-row"><span id="ls-t">Hora</span><span id="sv-t">--</span></div>
+    <div class="sum-row"><span id="ls-c">Cliente</span><span id="sv-c">--</span></div>
+    <div class="sum-row"><span id="ls-p">Telefono</span><span id="sv-p">--</span></div>
+    <hr class="sum-divider">
+    <div class="sum-row"><span>Subtotal</span><span id="sv-sub">--</span></div>
+    <div class="sum-tax"><span>GST (5%)</span><span id="sv-gst">--</span></div>
+    <div class="sum-tax"><span>PST (7%)</span><span id="sv-pst">--</span></div>
+    <div class="sum-total"><span>Total</span><span id="sv-tot">--</span></div>
+  </div>
+  <div class="confirm-banner" id="confirm-banner">Cita guardada correctamente</div>
+  <div class="msg-label" id="msg-label">Vista previa del mensaje</div>
+  <div class="msgbox" id="msgbox"></div>
+  <!-- Step 1: Add to calendar FIRST -->
+  <div id="cal-step" style="display:none;margin-bottom:10px">
+    <button class="btn btn-acal" onclick="goAppleCal()" style="width:100%"><span id="l-acal">1. Agregar a Calendario iPhone</span></button>
+    <div id="cal-hint" style="font-size:14px;font-weight:700;color:#f59e0b;text-align:center;margin-top:8px;display:none" id="cal-warn"></div>
+  </div>
+  <!-- Step 2: Send message (locked until calendar done) -->
+  <div class="btn-grid2" id="action-btns" style="display:none">
+    <button class="btn btn-wa"  id="bwa-msg" onclick="sendWA()">WhatsApp</button>
+    <button class="btn btn-sms" id="bsm-msg" onclick="sendSMS()">SMS</button>
+  </div>
+  <div class="btn-grid2" id="action-btns2" style="display:none;margin-bottom:10px">
+    <button class="btn btn-copy" onclick="sendCopy()"><span id="l-cp">Copiar mensaje</span></button>
+  </div>
+  <!-- New booking button -->
+  <div id="new-booking-btn" style="display:none;margin-bottom:16px">
+    <button class="btn" onclick="resetApp()" style="background:#1e3d8f;color:#fff;width:100%;font-size:18px;padding:18px"><span id="l-new">+ Nueva cita</span></button>
+  </div>
+  <!-- Enviar contrato -->
+  <div id="btn-contrato" style="display:none;margin-bottom:16px">
+    <button onclick="sendContrato()" style="background:#0a7c3e;color:#fff;width:100%;font-size:16px;font-weight:700;padding:16px;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px">
+      📄 Enviar Contrato por WhatsApp
+    </button>
+  </div>
+  <div class="admin-toggle">
+    <button onclick="toggleAdmin()" id="admin-toggle-btn">Administrar citas</button>
+  </div>
+  <div class="admin-panel" id="admin-panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="admin-title" id="admin-title" style="margin-bottom:0">Gestion de citas</div>
+      <button onclick="toggleAdmin()" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 12px;font-size:13px;font-weight:800;color:#dc2626;cursor:pointer">✕ Cerrar</button>
+    </div>
+    <div id="admin-login-area">
+      <div class="admin-pw">
+        <input type="password" id="admin-pw" placeholder="Contrasena" onkeydown="if(event.key==='Enter')adminLogin()">
+        <button onclick="adminLogin()">Entrar</button>
+      </div>
+    </div>
+    <div id="admin-content" style="display:none">
+      <div class="admin-date-row">
+        <label id="admin-date-lbl">Fecha:</label>
+        <input type="date" id="admin-date" onchange="loadAdminBookings()">
+      </div>
+      <div id="admin-list"></div>
+      <div class="hist-section">
+        <div class="hist-title">📋 Historial de citas</div>
+        <div class="hist-filters">
+          <label>Mes:</label>
+          <select class="hist-month-sel" id="hist-month-sel"></select>
+          <button class="btn-hist" onclick="loadHistorial()">Ver</button>
+          <button class="btn-export-xlsx" id="btn-export-xlsx" style="display:none" onclick="exportXLS()">⬇ Excel</button>
+          <button class="btn-del-cancel" id="btn-del-cancel" style="display:none" onclick="deleteCanceladas()">🗑 Borrar canceladas</button>
+        </div>
+        <div id="hist-summary" class="hist-summary" style="display:none"></div>
+        <div class="hist-wrap" id="hist-wrap" style="display:none">
+          <table class="hist-table">
+            <thead><tr>
+              <th>Fecha</th><th>Hora</th><th>Dur.</th><th>Zona</th><th>Cliente</th><th>Teléfono</th>
+              <th class="col-num">Subtotal</th><th class="col-num">GST</th><th class="col-num">PST</th>
+              <th class="col-num">Total</th><th>Estado</th><th>Contrato</th>
+            </tr></thead>
+            <tbody id="hist-tbody"></tbody>
+          </table>
+        </div>
+        <div id="hist-empty" class="hist-empty" style="display:none">No hay citas para este período.</div>
+      </div>
+      <!-- Panel de contratos firmados -->
+      <div style="margin-top:12px">
+        <button onclick="toggleContratos()" class="past-toggle-btn">📄 Ver Contratos firmados</button>
+        <div id="contratos-panel" style="display:none;margin-top:10px;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden">
+          <div id="contratos-list" style="padding:12px;font-size:13px;color:#333">Cargando...</div>
+        </div>
+      </div>
+      <!-- Agregar cita pasada - colapsable al final -->
+      <button class="past-toggle-btn" onclick="togglePastForm()" id="past-toggle-btn">+ Agregar cita de fecha pasada</button>
+      <div class="past-form" id="past-form-wrap">
+        <div class="past-form-grid">
+          <div class="past-fg"><label>Fecha</label><input type="date" id="past-fecha" max=""></div>
+          <div class="past-fg"><label>Hora</label><select id="past-hora"></select></div>
+          <div class="past-fg"><label>Duracion</label><select id="past-dur"><option value="1">1 hr</option><option value="1.5">1.5 hrs</option><option value="2" selected>2 hrs</option><option value="2.5">2.5 hrs</option><option value="3">3 hrs</option><option value="4">4 hrs</option></select></div>
+          <div class="past-fg"><label>Zona</label><select id="past-zona"><option value="bison">Bison</option><option value="gateway">Gateway</option><option value="kingedward">King Edward</option><option value="mainst">Main St</option><option value="stmarys">St. Marys</option><option value="any">Any zone / Driving</option></select></div>
+        </div>
+        <div class="past-row">
+          <div class="past-fg"><label>Nombre y Telefono</label><input type="text" id="past-cliente" placeholder="Ej: Juan (204)555-1234"></div>
+          <button class="btn-past-save" onclick="savePastBooking()">Guardar</button>
+        </div>
+        <div class="past-success" id="past-success">Cita guardada</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- TAB: GASTOS -->
+<div class="tab-page" id="tab-gastos">
+<div class="gastos-wrap">
+  <div class="gastos-header" style="background:#1A2035;border:3px solid #3D9EFF;border-radius:12px">
+    <h1 style="font-size:20px;font-weight:500;letter-spacing:-0.3px">LIVARKAR<span style="color:#2B7FE1">·</span>Gastos</h1>
+    <p style="font-size:12px;opacity:0.75;margin-top:3px">LIVARKAR Services Management Ltd.</p>
+  </div>
+  <div class="gcard">
+    <div class="sec-label">Datos del gasto</div>
+    <div class="gfg"><label>Fecha</label><input type="date" id="g-fecha"></div>
+    <div class="gfg">
+      <label>Categoría</label>
+      <select id="g-categoria">
+        <option value="Arriendo Local">Arriendo Local</option>
+        <option value="Combustible Vehículo">Combustible Vehículo</option>
+        <option value="Teléfono/Internet">Teléfono/Internet</option>
+        <option value="Seguro Vehículo">Seguro Vehículo</option>
+        <option value="Publicidad/Marketing">Publicidad/Marketing</option>
+        <option value="Mantenimiento Vehículo">Mantenimiento Vehículo</option>
+        <option value="Comisiones Bancarias">Comisiones Bancarias</option>
+        <option value="Contabilidad/CPA">Contabilidad/CPA</option>
+        <option value="Papelería/Suministros">Papelería/Suministros</option>
+        <option value="Limpieza/Detailing">Limpieza/Detailing</option>
+        <option value="Otros">Otros</option>
+      </select>
+    </div>
+    <div class="gfg"><label>Descripción</label><input type="text" id="g-descripcion" placeholder="Ej: Renta Mayo local dealer"></div>
+    <div class="gfg"><label>Proveedor</label><input type="text" id="g-proveedor" placeholder="Ej: Wilkes AutoCenter"></div>
+  </div>
+  <div class="gcard">
+    <div class="sec-label">Monto e impuestos</div>
+    <div class="gfg"><label>Monto Neto $CAD (SIN impuestos)</label><input type="number" id="g-monto" placeholder="0.00" min="0" step="0.01"></div>
+    <div class="gtoggle-row">
+      <button class="gtoggle on" id="g-gst-btn" onclick="toggleGasto('gst')">
+        <span>GST 5%</span><span id="g-gst-val">✅ Aplica</span>
+      </button>
+      <button class="gtoggle" id="g-rst-btn" onclick="toggleGasto('rst')">
+        <span>RST 7%</span><span id="g-rst-val">❌ No aplica</span>
+      </button>
+    </div>
+    <div id="g-preview" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px;margin-bottom:12px;display:none">
+      <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:6px">RESUMEN DEL GASTO:</div>
+      <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:#333;font-weight:700">Monto neto:</span><span id="g-prev-monto" style="font-weight:800">$0.00</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:#333;font-weight:700">GST 5%:</span><span id="g-prev-gst" style="font-weight:800">$0.00</span></div>
+      <div style="display:flex;justify-content:space-between"><span style="font-size:14px;color:#333;font-weight:700">RST 7%:</span><span id="g-prev-rst" style="font-weight:800">$0.00</span></div>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid #86efac;margin-top:6px;padding-top:6px"><span style="font-size:15px;font-weight:900;color:#1e8449">TOTAL A PAGAR:</span><span id="g-prev-total" style="font-size:18px;font-weight:900;color:#1e8449">$0.00</span></div>
+    </div>
+    <div class="gfg">
+      <label>Método de pago</label>
+      <select id="g-metodo">
+        <option value="E-Transfer">E-Transfer</option>
+        <option value="Cheque">Cheque</option>
+        <option value="Visa">Visa</option>
+        <option value="Efectivo">Efectivo</option>
+        <option value="Banco">Banco (débito)</option>
+        <option value="Autopac">Autopac</option>
+      </select>
+    </div>
+    <div class="gfg"><label># Recibo (opcional)</label><input type="text" id="g-recibo" placeholder="Ej: INV-003"></div>
+  </div>
+  <div id="g-success" class="gasto-success">✅ Gasto guardado correctamente en Firebase y Google Sheets</div>
+  <div id="g-error" class="gasto-error"></div>
+  <button class="btn-guardar-gasto" onclick="guardarGasto()">💾 GUARDAR GASTO</button>
+  <div class="gcard">
+    <div class="sec-label">Últimos gastos registrados</div>
+    <div id="gastos-lista"><div style="text-align:center;color:#aaa;padding:16px;font-weight:700">Cargando...</div></div>
+  </div>
+</div>
+</div>
+
+<!-- TAB: DASHBOARD -->
+<div class="tab-page" id="tab-dashboard">
+<div style="padding:16px 14px 24px">
+
+  <!-- Top bar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div style="font-size:19px;font-weight:600;color:#2B7FE1;letter-spacing:2.5px">LIVARKAR</div>
+    <div style="font-size:12px;color:#888;background:#f5f5f5;border-radius:8px;padding:4px 10px" id="dash-fecha">—</div>
+  </div>
+
+  <!-- Campos ocultos capital/banco/remesa (funcionalidad intacta) -->
+  <!-- Valores por defecto = últimos de la hoja (Flujo de Caja). Se sobrescriben solos si el script los manda a Firebase. -->
+  <div style="display:none">
+    <input type="number" id="dash-capital" value="2289.06" step="0.01" onchange="loadDashboard()">
+    <input type="number" id="dash-banco" value="3091.33" step="0.01" onchange="loadDashboard()">
+    <input type="number" id="dash-remesa" value="563.28" step="0.01" onchange="loadDashboard()">
+    <input type="number" id="dash-imp" value="316.47" step="0.01" onchange="loadDashboard()">
+    <!-- Disponible real (E32) y GST por cobrar al CRA (E34), leídos directo de la hoja -->
+    <input type="number" id="dash-disponible" value="-77.48" step="0.01" onchange="loadDashboard()">
+    <input type="number" id="dash-gstcobrar" value="323.95" step="0.01" onchange="loadDashboard()">
+  </div>
+
+  <!-- Status gastos -->
+  <div id="d-gastos-status" style="background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:13px;font-weight:700;color:#856404;display:none">
+    ⚠️ Gastos desde Google Sheets no disponibles — mostrando datos de Firebase
+  </div>
+
+  <!-- Loading -->
+  <div id="dash-loading" style="text-align:center;padding:40px 0;color:#888;font-size:15px">⏳ Cargando...</div>
+
+  <!-- Contenido -->
+  <div id="dash-content" style="display:none">
+
+    <!-- Sección: resumen -->
+    <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">resumen</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+
+      <!-- Disponible real -->
+      <div style="background:#fff;border:0.5px solid #e0e0e0;border-left:3px solid #1565C0;border-radius:0 12px 12px 0;padding:14px">
+        <div style="font-size:16px;color:#aaa;margin-bottom:6px">💳</div>
+        <div style="font-size:12px;color:#888;margin-bottom:3px">Disponible real</div>
+        <div style="font-size:22px;font-weight:500;color:#1565C0" id="d-disponible">$0.00</div>
+        <div style="font-size:11px;color:#bbb;margin-top:2px">después de impuestos</div>
+      </div>
+
+      <!-- Por cobrar -->
+      <div style="background:#fff;border:0.5px solid #e0e0e0;border-left:3px solid #0F6E56;border-radius:0 12px 12px 0;padding:14px">
+        <div style="font-size:16px;color:#aaa;margin-bottom:6px">📅</div>
+        <div style="font-size:12px;color:#888;margin-bottom:3px">Por cobrar</div>
+        <div style="font-size:22px;font-weight:500;color:#0F6E56" id="citas-prox-total-val">$0.00</div>
+        <div style="font-size:11px;color:#bbb;margin-top:2px" id="citas-prox-count-sub">citas futuras</div>
+      </div>
+
+      <!-- Ingresos este mes -->
+      <div style="background:#fff;border:0.5px solid #e0e0e0;border-left:3px solid #BA7517;border-radius:0 12px 12px 0;padding:14px">
+        <div style="font-size:16px;color:#aaa;margin-bottom:6px">📈</div>
+        <div style="font-size:12px;color:#888;margin-bottom:3px">Ingresos este mes</div>
+        <div style="font-size:22px;font-weight:500;color:#BA7517" id="d-mes">$0.00</div>
+        <div style="font-size:11px;color:#bbb;margin-top:2px" id="d-mes-count">0 citas cobradas</div>
+      </div>
+
+      <!-- Impuestos -->
+      <div style="background:#fff;border:0.5px solid #e0e0e0;border-left:3px solid #A32D2D;border-radius:0 12px 12px 0;padding:14px">
+        <div style="font-size:16px;color:#aaa;margin-bottom:6px">⚠️</div>
+        <div style="font-size:12px;color:#888;margin-bottom:3px">Impuestos a apartar</div>
+        <div style="font-size:22px;font-weight:500;color:#A32D2D" id="d-imp-total">$0.00</div>
+        <div style="font-size:11px;color:#bbb;margin-top:2px">GST + RST + remesa CRA</div>
+      </div>
+    </div>
+
+    <!-- GST POR COBRAR AL CRA (E34) — mismo formato que las tarjetas de arriba -->
+    <div style="background:#fff;border:0.5px solid #e0e0e0;border-left:3px solid #0F6E56;border-radius:0 12px 12px 0;padding:14px;margin-bottom:20px">
+      <div style="font-size:16px;color:#aaa;margin-bottom:6px">💚</div>
+      <div style="font-size:12px;color:#888;margin-bottom:3px">GST por cobrar al CRA</div>
+      <div style="font-size:22px;font-weight:500;color:#0F6E56" id="d-gst-cobrar">$0.00</div>
+      <div style="font-size:11px;color:#bbb;margin-top:2px">a tu favor · se devuelve ~marzo 2027</div>
+    </div>
+
+    <!-- CALENDARIO FISCAL — acordeón plegable -->
+    <div style="background:#fff;border:0.5px solid #e0e0e0;border-radius:12px;overflow:hidden;margin-bottom:20px">
+      <button onclick="toggleCalFiscal()" style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px;border:none;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent">
+        <span style="font-size:14px;font-weight:600;color:#333">📅 Calendario fiscal</span>
+        <span id="cal-fiscal-chev" style="font-size:13px;color:#888;transition:transform .25s;display:inline-block">▼</span>
+      </button>
+      <div id="cal-fiscal-body" style="display:none;border-top:0.5px solid #f0f0f0">
+        <div id="cal-fiscal">
+          <div style="padding:14px;color:#888;font-size:13px">Cargando fechas...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDs ocultos que usa el JS (no eliminar) -->
+    <div style="display:none">
+      <span id="d-rentas">$0.00</span>
+      <span id="d-rentas-count">0 citas</span>
+      <span id="d-saldo">$0.00</span>
+      <span id="d-gastos">$0.00</span>
+      <span id="d-gastos-count">0 registros</span>
+      <span id="d-gst">$0.00</span>
+      <span id="d-rst">$0.00</span>
+    </div>
+
+    <!-- Citas por cobrar -->
+    <div style="font-size:11px;font-weight:500;color:#aaa;text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px">citas por cobrar</div>
+    <div style="background:#fff;border:0.5px solid #e0e0e0;border-radius:12px;overflow:hidden;margin-bottom:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:0.5px solid #f0f0f0">
+        <div style="font-size:13px;font-weight:500;color:#333">Próximas activas</div>
+        <div style="font-size:11px;background:#E6F1FB;color:#185FA5;border-radius:8px;padding:2px 8px;font-weight:500" id="citas-prox-total">cargando...</div>
+      </div>
+      <div id="citas-prox-content" style="font-size:13px;color:#333;padding:4px 0">Cargando...</div>
+    </div>
+
+  </div>
+
+  <!-- Botón actualizar -->
+  <button onclick="loadDashboard()" style="width:100%;padding:13px;border-radius:10px;font-size:15px;font-weight:500;background:#1565C0;color:#fff;border:3px solid #3D9EFF;cursor:pointer">
+    Actualizar datos
+  </button>
+
+</div>
+</div>
+
+<!-- TAB: AUTOS (admin.html exact) -->
+<div class="tab-page" id="tab-autos">
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar" id="mobileTopbar">
+  <button class="hamburger" onclick="admToggleSidebar()">☰</button>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-size:11px;font-weight:700;color:#2563eb;letter-spacing:1.5px;text-transform:uppercase;">Admin</span>
+    <div style="background:#1e293b;border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:4px;">
+      <span style="font-size:20px;font-weight:900;color:white;line-height:1;">B</span>
+      <span style="width:7px;height:7px;background:#2563eb;border-radius:50%;"></span>
+      <span style="font-size:12px;font-weight:800;color:white;">LIVAR</span>
+    </div>
+  </div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="admToggleSidebar()"></div>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <button onclick="volverInicio()" style="position:absolute;top:20px;left:20px;background:transparent;border:2px solid #3D9EFF;border-radius:8px;padding:9px 12px;cursor:pointer;z-index:10000;display:flex;align-items:center;justify-content:center">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D9EFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+  </button>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-box">
+        <span class="b">B</span>
+        <span class="dot"></span>
+        <span class="livar">LIVAR</span>
+      </div>
+    </div>
+    <div class="login-title">Panel de Administración</div>
+    <div class="login-subtitle">BolivarAutos</div>
+    <div class="pw-wrapper">
+      <input type="password" id="passwordInput" class="login-input" placeholder="Contraseña"
+        onkeydown="if(event.key==='Enter') admLogin()"
+        onfocus="setTimeout(()=>this.scrollIntoView({behavior:'smooth',block:'center'}),300)">
+      <button class="pw-eye" type="button" onclick="admTogglePwEye()" id="eyeBtn">👁</button>
+    </div>
+    <button class="login-btn" onclick="admLogin()">Ingresar</button>
+    <div class="login-error" id="loginError">Contraseña incorrecta. Intenta de nuevo.</div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="appScreen">
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-box">
+          <span class="b">B</span>
+          <span class="dot"></span>
+          <span class="livar">LIVAR</span>
+        </div>
+        <div class="sidebar-label">Admin Panel</div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-item active" onclick="admShowPage('dashboard')">
+          <span class="icon">📊</span> Dashboard
+        </div>
+        <div class="nav-section-title">BolivarAutos</div>
+        <div class="nav-item" onclick="admShowPage('vehiculos')">
+          <span class="icon">🚗</span> Vehículos
+        </div>
+        <div class="nav-item" onclick="admShowPage('suscriptores')">
+          <span class="icon">🔔</span> Suscriptores
+        </div>
+        <!-- Auto de Renta -->
+        <div class="nav-section-title">Renta</div>
+        <div class="nav-item" onclick="admShowPage('vehiculo-renta')">
+          <span class="icon">📋</span> Auto de Renta
+        </div>
+        <div id="vr-panel" style="display:none"></div>
+
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="admLogout()">
+          <span>🚪</span> Cerrar sesión
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Dashboard</div>
+            <div class="page-subtitle">Bienvenido, Bolivar</div>
+          </div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Vehículos en venta</div>
+            <div class="stat-value blue" id="statVehiculos">—</div>
+          </div>
+<div class="stat-card">
+            <div class="stat-label">Fotos subidas</div>
+            <div class="stat-value" id="statFotos">—</div>
+          </div>
+        </div>
+        <div style="background:white; border-radius:14px; border:1px solid var(--gray-200); padding:24px;">
+          <div style="font-weight:700; font-size:16px; margin-bottom:16px;">Accesos rápidos</div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="admShowPage('vehiculos'); admOpenAddModal()">➕ Agregar vehículo</button>
+            <a href="https://bolivarautos.ca" target="_blank" class="btn btn-ghost">🌐 Ver sitio web</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- VEHÍCULOS -->
+      <div class="page" id="page-vehiculos">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Vehículos</div>
+            <div class="page-subtitle">Gestiona tu inventario de venta</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="admOpenAddModal()">➕ Agregar vehículo</button>
+            <button class="btn" onclick="admOpenNotifyModal()" style="background:#2563eb;color:#fff;border-color:#2563eb;">📣 Notificar suscriptores</button>
+          </div>
+        </div>
+        <div id="vehiculosList">
+          <div class="loading"><div class="spinner"></div> Cargando vehículos...</div>
+        </div>
+      </div>
+
+      <!-- PAGE: SUSCRIPTORES -->
+      <!-- PAGE: AUTO DE RENTA -->
+      <div class="page" id="page-vehiculo-renta">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Auto de Renta</div>
+            <div class="page-subtitle">Datos del vehículo para el contrato</div>
+          </div>
+        </div>
+        <div style="max-width:480px">
+          <div style="background:#fff;border:2px solid #2563eb;border-radius:12px;padding:24px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Marca</label><input id="vr-marca" type="text" placeholder="Toyota" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;outline:none"></div>
+              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Modelo</label><input id="vr-modelo" type="text" placeholder="Corolla" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;outline:none"></div>
+              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Año</label><input id="vr-ano" type="text" placeholder="2020" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;outline:none"></div>
+              <div><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">Placa</label><input id="vr-placa" type="text" placeholder="ABC 123" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;outline:none"></div>
+              <div style="grid-column:1/-1"><label style="font-size:12px;font-weight:600;color:#555;display:block;margin-bottom:4px">VIN</label><input id="vr-vin" type="text" placeholder="1HGBH41JXMN109186" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:14px;outline:none"></div>
+            </div>
+            <button onclick="saveVehicleRenta()" style="margin-top:16px;background:#2563eb;color:#fff;border:none;border-radius:8px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer">💾 Guardar datos del auto</button>
+            <span id="vr-saved" style="display:none;margin-left:12px;color:#16a34a;font-size:13px;font-weight:700">✅ Guardado</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="page-suscriptores">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Suscriptores</div>
+            <div class="page-subtitle">Personas suscritas a alertas de nuevos autos</div>
+          </div>
+          <button class="btn" onclick="admCargarSuscriptores()" style="background:#1e293b;color:#fff;border-color:#1e293b;">↺ Actualizar</button>
+        </div>
+
+        <!-- Contadores -->
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px;">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:26px;font-weight:800;color:#2563eb;" id="admSuscrTotal">—</div>
+            <div style="font-size:12px;color:#64748b;margin-top:4px;">Total activos</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:26px;font-weight:800;color:#10b981;" id="admSuscrEmail">—</div>
+            <div style="font-size:12px;color:#64748b;margin-top:4px;">Email</div>
+          </div>
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:26px;font-weight:800;color:#f59e0b;" id="admSuscrPush">—</div>
+            <div style="font-size:12px;color:#64748b;margin-top:4px;">Push Android</div>
+          </div>
+        </div>
+
+        <!-- Lista -->
+        <div id="admSuscrLista" style="display:flex;flex-direction:column;gap:10px;">
+          <div class="loading"><div class="spinner"></div> Cargando suscriptores...</div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- MODAL AGREGAR/EDITAR VEHÍCULO -->
+<div class="modal-overlay" id="vehiculoModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Agregar vehículo</div>
+      <button class="modal-close" onclick="admCloseModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editingId">
+
+      <div class="form-group">
+        <label class="form-label">Nombre del vehículo</label>
+        <input type="text" id="vNombre" class="form-input" placeholder="Ej: Honda Civic 2019">
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Precio (CAD)</label>
+          <input type="number" id="vPrecio" class="form-input" placeholder="18500">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kilometraje</label>
+          <input type="number" id="vKm" class="form-input" placeholder="65000">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Categoría</label>
+        <select id="vCategoria" class="form-select">
+          <option value="sedan">Sedán</option>
+          <option value="suv">SUV</option>
+          <option value="likenew">Like New</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Link Carfax (opcional)</label>
+        <input type="url" id="vCarfax" class="form-input" placeholder="https://www.carfax.ca/...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Fotos del vehículo</label>
+        <div class="photo-upload-area" id="uploadArea">
+          <input type="file" id="photoInput" accept="image/*" multiple onchange="admHandlePhotoSelect(event)">
+          <div class="photo-upload-icon">📷</div>
+          <div class="photo-upload-text">Selecciona o arrastra las fotos aquí</div>
+          <div class="photo-upload-hint">Puedes seleccionar varias fotos a la vez</div>
+        </div>
+        <div class="photo-previews" id="photoPreviews"></div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <div class="progress-text" id="progressText">Subiendo fotos...</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="admCloseModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="admSaveVehiculo()">💾 Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NOTIFICAR SUSCRIPTORES -->
+<div id="admNotifyModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:24px;max-width:420px;width:92%;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <button onclick="admCloseNotifyModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;">✕</button>
+    <h3 style="color:#0f172a;font-size:17px;font-weight:700;margin-bottom:4px;">📣 Notificar suscriptores</h3>
+    <p style="color:#64748b;font-size:12px;margin-bottom:14px;" id="admNotifyCount">Cargando...</p>
+    <label style="display:block;font-size:12px;font-weight:600;color:#334155;margin-bottom:5px;">Mensaje (opcional)</label>
+    <textarea id="admNotifyMsg" rows="3" placeholder="¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗" style="width:100%;padding:9px 11px;border:1.5px solid #cbd5e1;border-radius:8px;font-size:13px;resize:vertical;outline:none;margin-bottom:14px;"></textarea>
+    <div style="display:flex;gap:8px;">
+      <button onclick="admSendNotifications()" style="background:#1e293b;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;flex:1;">📨 Enviar a todos</button>
+      <button onclick="admCloseNotifyModal()" style="background:#f1f5f9;color:#334155;border:none;padding:10px 16px;border-radius:8px;font-size:13px;cursor:pointer;">Cancelar</button>
+    </div>
+    <div id="admNotifyResult" style="margin-top:10px;font-size:12px;display:none;"></div>
+  </div>
+</div>
+
+<!-- MODAL CONTRATO DIGITAL -->
+<div id="admContratoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:14px;padding:24px;max-width:400px;width:92%;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+    <button onclick="admCloseContratoModal()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#64748b;">✕</button>
+    <h3 style="color:#0f172a;font-size:17px;font-weight:700;margin-bottom:4px;">📋 Enviar contrato digital</h3>
+    <p id="admContratoInfo" style="color:#64748b;font-size:12px;margin-bottom:6px;"></p>
+
+    <!-- Signed status -->
+    <div id="admContratoSigned" style="display:none;background:#dcfce7;border:1px solid #86efac;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:#15803d;font-weight:600;">
+      ✅ <span id="admContratoSignedText"></span>
+    </div>
+
+    <label style="display:block;font-size:12px;font-weight:600;color:#334155;margin-bottom:8px;">Versión del contrato:</label>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button id="btnVerA" onclick="admSelectVersion('A')" style="flex:1;padding:10px;border-radius:8px;border:2px solid #2563eb;background:#eff6ff;color:#1e40af;font-weight:600;font-size:13px;cursor:pointer;">
+        ✅ Versión A<br><span style="font-size:11px;font-weight:400;">Licencia completa</span>
+      </button>
+      <button id="btnVerB" onclick="admSelectVersion('B')" style="flex:1;padding:10px;border-radius:8px;border:2px solid #e2e8f0;background:#f8fafc;color:#64748b;font-weight:600;font-size:13px;cursor:pointer;">
+        Versión B<br><span style="font-size:11px;font-weight:400;">GDL / Principiante</span>
+      </button>
+    </div>
+
+    <button onclick="admEnviarContrato()" style="width:100%;background:#25D366;color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">
+      📲 Enviar por WhatsApp
+    </button>
+    <button onclick="admRefreshFirma()" style="width:100%;background:#f1f5f9;color:#334155;border:none;padding:10px;border-radius:8px;font-size:13px;cursor:pointer;">
+      🔄 Verificar si ya firmó
+    </button>
+    <div id="admContratoResult" style="margin-top:10px;font-size:12px;display:none;"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="adm-toast"></div>
+
+<!-- SORTABLE (reordenar fotos) -->
+<!-- ADM TOAST -->
+<div class="toast" id="adm-toast"></div>
+</div>
+
+<!-- nav moved to top -->
+</nav>
+
+<script>
+// ===== NAVIGATION =====
+function volverInicio() {
+  document.getElementById('home-screen').style.display = 'flex';
+  document.getElementById('main-nav').style.display = 'none';
+  document.querySelectorAll('.tab-page').forEach(function(p){ p.classList.remove('active'); });
+  document.body.style.overflow = 'hidden';
+}
+
+function goTab(name) {
+  document.getElementById('home-screen').style.display = 'none';
+  document.getElementById('main-nav').style.display = 'flex';
+  document.body.style.overflow = '';
+  showTab(name);
+}
+
+function showTab(name) {
+  document.querySelectorAll('.tab-page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.bnav-btn').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('bnav-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='dashboard') loadDashboard();
+  if(name==='gastos') { setGastoFecha(); loadGastosRecientes(); }
+}
+
+// ===== RENTAS JS =====
+var ZONES=[
+  {id:'bison',  en:'Bison',    es:'Bison',    addr:'15 Barnes St'},
+  {id:'gateway',en:'Gateway',  es:'Gateway',  addr:'40 Lexington Park'},
+  {id:'kingedward',en:'King Edward',es:'King Edward',addr:'125 King Edward St E'},
+  {id:'mainst', en:'Main St',  es:'Main St',  addr:'1284 Main St'},
+  {id:'stmarys',en:"St. Mary's",es:"St. Mary's",addr:"930 St Mary's Rd"},
+  {id:'any',    en:'Any zone',es:'Cualquier zona',addr:'Winnipeg'}
+];
+var GST=0.05,PST=0.07;
+var WINNIPEG_OFFSET=-5; // UTC-5 (CDT), change to -6 in winter (CST)
+var DE=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],DS=['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+var ME=['January','February','March','April','May','June','July','August','September','October','November','December'];
+var MS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var lang='en',selZ=null,selD=null,selT=null;
+var cy=new Date().getFullYear(),cm=new Date().getMonth();
+var bookedSlots=[],db=null,adminUnlocked=false,bookingConfirmed=false,calendarDone=false;
+var bookedDates=new Set();
+var ADMIN_PW='8334';
+var currentUID='';
+
+function pad(n){return String(n).padStart(2,'0');}
+function getRate(){return parseFloat(document.getElementById('rate-val').value)||47.5;}
+function calcTax(sub){var g=sub*GST,p=sub*PST;return{gst:g,pst:p,total:sub+g+p};}
+function getZone(){for(var i=0;i<ZONES.length;i++){if(ZONES[i].id===selZ)return ZONES[i];}return null;}
+function phoneMask(el){
+  var raw=el.value;
+  // International number (starts with +) or pasted number with > 10 digits — don't mask
+  if(raw.charAt(0)==='+')return;
+  var digits=raw.replace(/\D/g,'');
+  if(digits.length>10)return;
+  // Canadian format xxx-xxx-xxxx
+  var pos=el.selectionStart;
+  if(digits.charAt(0)==='1')digits=digits.substring(1);
+  digits=digits.substring(0,10);
+  var o='';
+  if(digits.length>0)o+=digits.substring(0,3);
+  if(digits.length>=4)o+='-'+digits.substring(3,6);
+  if(digits.length>=7)o+='-'+digits.substring(6,10);
+  el.value=o;
+  try{el.setSelectionRange(pos,pos);}catch(e){}
+}
+function fmtH(h){var hh=Math.floor(h),mm=h%1===0.5?'30':'00';if(hh<12)return hh+':'+mm+' AM';if(hh===12)return'12:'+mm+' PM';return(hh-12)+':'+mm+' PM';}
+function parseH(ts){var m=ts.match(/(\d+):(\d+)\s(AM|PM)/);var h=parseInt(m[1]);if(m[3]==='PM'&&h!==12)h+=12;if(m[3]==='AM'&&h===12)h=0;return h+(m[2]==='30'?0.5:0);}
+function todayStr(){var n=new Date();return n.getFullYear()+'-'+pad(n.getMonth()+1)+'-'+pad(n.getDate());}
+function isPastSlot(ds,h){if(ds!==todayStr())return false;var n=new Date(),now=n.getHours()+(n.getMinutes()/60);return h<=now+0.5;}
+function isBooked(s,d){var e=s+d;for(var i=0;i<bookedSlots.length;i++){var b=bookedSlots[i];if(s<b.start+b.dur&&e>b.start)return true;}return false;}
+
+// Build ICS datetime string with Winnipeg timezone
+function icsDateTime(dateStr, timeH){
+  var parts=dateStr.split('-');
+  var yr=parseInt(parts[0]),mo=parseInt(parts[1]),dy=parseInt(parts[2]);
+  var hh=Math.floor(timeH),mm=timeH%1===0.5?30:0;
+  // Use TZID so iPhone respects local time
+  return 'TZID=America/Winnipeg:'+yr+pad(mo)+pad(dy)+'T'+pad(hh)+pad(mm)+'00';
+}
+
+function loadBookedSlots(dateStr){
+  bookedSlots=[];
+  if(!db){renderTimes();return;}
+  document.getElementById('loading-slots').style.display='block';
+  document.getElementById('time-grid').innerHTML='';
+  db.collection('CITAS_RENTA').where('fecha','==',dateStr).where('cancelada','==',false).get()
+  .then(function(snap){snap.forEach(function(doc){var d=doc.data();bookedSlots.push({start:parseH(d.hora),dur:parseFloat(d.duracion)});});document.getElementById('loading-slots').style.display='none';renderTimes();})
+  .catch(function(){document.getElementById('loading-slots').style.display='none';renderTimes();});
+}
+
+// ── GOOGLE SHEETS ─────────────────────────────────────────────
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbxzyS_4XhaUIgbykZN6KvK8QrHAzY6SN3GIAUDwC0zmagWVOi2bs4JNNxWWXNCzpUVs-A/exec';
+// ─────────────────────────────────────────────────────────────
+
+function saveToGoogleSheets(fecha, cliente, horas, tarifa){
+  if(!GAS_URL) return;
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({accion:'guardar', fecha:fecha, cliente:cliente, horas:horas, tarifa:tarifa})
+  }).catch(function(err){ console.warn('Sheets error:', err); });
+}
+
+function cancelToGoogleSheets(fecha, cliente){
+  if(!GAS_URL) return;
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({accion:'cancelar', fecha:fecha, cliente:cliente})
+  }).catch(function(err){ console.warn('Sheets cancel error:', err); });
+}
+
+var lastCitaId = null;
+
+function saveBookingBg(){
+  if(!db)return;
+  var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
+  var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
+  db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:currentUID})
+  .then(function(docRef){
+    lastCitaId = docRef.id;
+    saveToGoogleSheets(selD, nm, dur, rate);
+    bookedSlots.push({start:parseH(selT),dur:parseFloat(document.getElementById('dur').value)});
+    renderTimes();
+    var b=document.getElementById('confirm-banner');b.style.display='block';
+    setTimeout(function(){b.style.display='none';},4000);
+    // Show contract button
+    var cb=document.getElementById('btn-contrato');
+    if(cb)cb.style.display='block';
+  })
+  .catch(function(e){console.error(e);});
+}
+
+function sendContrato(){
+  if(!lastCitaId){alert('Guarda la cita primero.');return;}
+  var link='https://bolivarautos.ca/contrato.html?cita='+lastCitaId;
+  var nm=document.getElementById('nm').value.trim();
+  var msg='Hola '+nm+'! Por favor revisa y firma el contrato de arrendamiento de BolivarAutos-Renta:\n\n'+link+'\n\nCualquier duda llámanos: (204)509-6153';
+  var raw=document.getElementById('ph').value.trim();
+  var digits=raw.replace(/\D/g,'');
+  var waNum;
+  if(raw.charAt(0)==='+'){
+    waNum=digits; // already has country code, use as-is
+  } else {
+    waNum='1'+digits; // Canadian number, add +1
+  }
+  window.open('https://wa.me/'+waNum+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+function handleConfirm(){
+  var e=lang==='en';
+  var nm=document.getElementById('nm').value.trim();
+  var ph=document.getElementById('ph').value.trim();
+  var errors=[];
+  if(!selZ)errors.push(e?'Select an MPI zone':'Selecciona una zona MPI');
+  if(!selD)errors.push(e?'Select a date':'Selecciona una fecha');
+  if(!selT)errors.push(e?'Select a start time':'Selecciona una hora de inicio');
+  if(!nm)errors.push(e?'Enter the client name':'Ingresa el nombre del cliente');
+  if(!ph||ph.replace(/\D/g,'').length<10)errors.push(e?'Enter complete phone number (10 digits)':'Ingresa el telefono completo (10 digitos)');
+  var eb=document.getElementById('error-banner');
+  if(errors.length>0){
+    eb.style.display='block';
+    eb.innerHTML='<strong>'+(e?'Please complete:':'Falta completar:')+'</strong><br>'+errors.map(function(x){return '• '+x;}).join('<br>');
+    eb.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  eb.style.display='none';
+  bookingConfirmed=true;
+  calendarDone=false;
+  currentUID=Date.now()+'@bolivarautos';
+  upd();
+  saveBookingBg();
+  document.getElementById('cal-step').style.display='block';
+  document.getElementById('action-btns').style.display='none';
+  document.getElementById('action-btns2').style.display='none';
+  document.getElementById('new-booking-btn').style.display='none';
+  document.getElementById('btn-confirm').style.display='none';
+  document.getElementById('msgbox').style.display='block';
+  document.getElementById('msg-label').style.display='block';
+  document.getElementById('msgbox').textContent=buildMsg();
+  document.getElementById('summ').style.display='block';
+  var e=lang==='en';
+  document.getElementById('cal-hint').style.display='block';
+  document.getElementById('cal-hint').textContent=e?'Step 1: Add to calendar, then send the message':'Paso 1: Agrega al calendario, luego envia el mensaje';
+  window.scrollTo({top:document.getElementById('summ').offsetTop-20,behavior:'smooth'});
+}
+
+function updateProgress(){
+  var e=lang==='en';
+  var nm=document.getElementById('nm').value.trim();
+  var ph=document.getElementById('ph').value.trim();
+  function setStep(n,done,text){
+    var ic=document.getElementById('pi-'+n),tx=document.getElementById('pt-'+n);
+    ic.className='prog-icon '+(done?'done':'pending');
+    ic.textContent=done?'✓':n;
+    tx.className='prog-text '+(done?'done':'pending');
+    tx.textContent=text;
+  }
+  var z=getZone();
+  setStep(1,!!selZ,selZ&&z?((e?'Zone: ':'Zona: ')+z[lang]):(e?'Select MPI zone':'Selecciona zona MPI'));
+  setStep(2,!!selD,selD?(e?'Date: ':'Fecha: ')+selD:(e?'Select a date':'Selecciona una fecha'));
+  setStep(3,!!selT,selT?(e?'Time: ':'Hora: ')+selT:(e?'Select a start time':'Selecciona una hora'));
+  var clientOk=!!(nm&&ph&&ph.length>=14);
+  setStep(4,clientOk,clientOk?(nm+' | '+ph):(e?'Enter name and phone':'Ingresa nombre y telefono completo'));
+}
+
+function updateDurOptions(){
+  var r=getRate(),e=lang==='en',sel=document.getElementById('dur'),cur=sel.value;sel.innerHTML='';
+  [[1,1],[1.5,1.5],[2,2],[2.5,2.5],[3,3],[4,4]].forEach(function(a){var o=document.createElement('option');o.value=a[0];o.textContent=a[1]+(a[1]===1?' hr':' hrs')+' -- $'+(a[0]*r).toFixed(2)+(e?' (before tax)':' (sin imp.)');if(String(a[0])===String(cur))o.selected=true;sel.appendChild(o);});
+}
+function resetForm(){
+  // Reset state variables
+  selZ=null; selD=null; selT=null;
+  bookingConfirmed=false;
+  cy=new Date().getFullYear(); cm=new Date().getMonth();
+  // Clear form fields
+  var n=document.getElementById('nm'); if(n) n.value='';
+  var t=document.getElementById('ph'); if(t) t.value='';
+  var no=document.getElementById('no'); if(no) no.value='';
+  var dur=document.getElementById('sel-duracion'); if(dur) dur.value='2';
+  // Hide banners
+  var ids=['error-banner','confirm-banner','msgbox','msg-label'];
+  ids.forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+  // Hide confirm button
+  var cb=document.getElementById('btn-confirm'); if(cb) cb.style.display='none';
+  // Re-render everything
+  renderZones(); renderCal(); renderTimes(); updateDurOptions(); updateProgress();
+  window.scrollTo(0,0);
+}
+
+function setLang(l){lang=l;document.getElementById('btn-en').className='lbtn '+(l==='en'?'on':'off');document.getElementById('btn-es').className='lbtn '+(l==='es'?'on':'off');applyL();renderZones();renderCal();renderTimes();updateDurOptions();updateProgress();}
+function applyL(){
+  var e=lang==='en';
+  document.getElementById('h2').textContent='Winnipeg, MB - '+(e?'Mon-Sun':'Lun-Dom')+' 9AM-8PM fin de semana - (204)509-6153';
+  document.getElementById('l-rate').textContent=e?'Hourly rate':'Tarifa por hora';
+  document.getElementById('l-rate-lbl').textContent=e?'Price/hr:':'Precio/hr:';
+  document.getElementById('l-rate-note').textContent=e?'before tax':'sin impuestos';
+  document.getElementById('prog-title').textContent=e?'Booking progress':'Progreso de la reserva';
+  document.getElementById('l-z').textContent=e?'1. MPI Zone / Session type':'1. Zona MPI / Tipo de sesion';
+  document.getElementById('l-d').textContent=e?'2. Date':'2. Fecha';
+  document.getElementById('l-t').textContent=e?'3. Start time':'3. Hora de inicio';
+  document.getElementById('l-dur').textContent=e?'Duration':'Duracion';
+  document.getElementById('l-c').textContent=e?'4. Client info':'4. Datos del cliente';
+  document.getElementById('l-nm').textContent=e?'Full name':'Nombre completo';
+  document.getElementById('l-ph').textContent=e?'Phone (WhatsApp)':'Telefono (WhatsApp)';
+  document.getElementById('l-no').textContent=e?'Notes':'Notas';
+  document.getElementById('ls-z').textContent=e?'Zone':'Zona';
+  document.getElementById('ls-d').textContent=e?'Date':'Fecha';
+  document.getElementById('ls-t').textContent=e?'Time':'Hora';
+  document.getElementById('ls-c').textContent=e?'Client':'Cliente';
+  document.getElementById('ls-p').textContent=e?'Phone':'Telefono';
+  document.getElementById('l-cp').textContent=e?'Copy message':'Copiar mensaje';
+  document.getElementById('l-acal').textContent=e?'1. Add to iPhone Calendar':'1. Agregar a Calendario iPhone';
+  document.getElementById('l-new').textContent=e?'+ New booking':'+ Nueva cita';
+  document.getElementById('msg-label').textContent=e?'Message preview':'Vista previa del mensaje';
+  document.getElementById('btn-confirm-text').textContent=e?'VERIFY BOOKING':'VERIFICAR RESERVA';
+  document.getElementById('nm').placeholder=e?'John Smith':'Juan Perez';
+  document.getElementById('confirm-banner').textContent=e?'Appointment saved':'Cita guardada correctamente';
+  document.getElementById('admin-toggle-btn').textContent=e?'Manage bookings':'Administrar citas';
+  document.getElementById('admin-title').textContent=e?'Booking management':'Gestion de citas';
+  document.getElementById('admin-date-lbl').textContent=e?'Date:':'Fecha:';
+}
+function renderZones(){
+  var g=document.getElementById('zone-grid');g.innerHTML='';
+  ZONES.forEach(function(z){var d=document.createElement('div');d.className='zcard'+(selZ===z.id?' sel':'');d.innerHTML='<div class="zn">'+z[lang]+'</div><div class="za">'+z.addr+'</div>';(function(zone){d.onclick=function(){selZ=zone.id;renderZones();upd();updateProgress();};})(z);g.appendChild(d);});
+}
+function renderCal(){
+  var days=lang==='en'?DE:DS,mons=lang==='en'?ME:MS;
+  document.getElementById('cal-month').textContent=mons[cm]+' '+cy;
+  var g=document.getElementById('cal');g.innerHTML='';
+  days.forEach(function(d){var h=document.createElement('div');h.className='cal-hdr';h.textContent=d;g.appendChild(h);});
+  var first=new Date(cy,cm,1).getDay(),dN=new Date(cy,cm+1,0).getDate();
+  var today=new Date();today.setHours(0,0,0,0);
+  for(var i=0;i<first;i++){var emp=document.createElement('div');emp.className='cal-day empty';g.appendChild(emp);}
+  for(var d=1;d<=dN;d++){
+    var dt=new Date(cy,cm,d),isPast=dt<today,isTod=dt.getTime()===today.getTime();
+    var ds=cy+'-'+pad(cm+1)+'-'+pad(d);
+    var el=document.createElement('div');var cls='cal-day';
+    if(isPast)cls+=' past';if(isTod)cls+=' today';if(selD===ds)cls+=' sel';
+    el.className=cls;
+    var dot=bookedDates.has(ds)?'<div style="width:5px;height:5px;background:#2563eb;border-radius:50%;margin:2px auto 0;opacity:0.85"></div>':'<div style="width:5px;height:5px;margin:2px auto 0"></div>';
+    el.innerHTML='<div>'+d+'</div>'+dot;
+    if(!isPast){(function(dateStr){el.onclick=function(){selD=dateStr;if(selT&&isPastSlot(dateStr,parseH(selT)))selT=null;renderCal();upd();updateProgress();loadBookedSlots(dateStr);};})(ds);}
+    g.appendChild(el);
+  }
+}
+function loadBookedDates(){
+  if(!db)return;
+  var from=cy+'-'+pad(cm+1)+'-01';
+  var to=cy+'-'+pad(cm+1)+'-'+pad(new Date(cy,cm+1,0).getDate());
+  db.collection('CITAS_RENTA').where('fecha','>=',from).where('fecha','<=',to).where('cancelada','==',false).get()
+  .then(function(snap){bookedDates=new Set();snap.forEach(function(doc){bookedDates.add(doc.data().fecha);});renderCal();})
+  .catch(function(e){console.warn(e);});
+}
+function renderTimes(){
+  var dur=parseFloat(document.getElementById('dur').value);
+  var g=document.getElementById('time-grid');g.innerHTML='';
+  var endH=21; /* Lun-Vie hasta 9:00 PM */
+  if(selD){var day=new Date(selD+'T12:00:00').getDay();if(day===0||day===6)endH=20;} /* Sab-Dom hasta 8:00 PM */
+  for(var h=9;h<endH;h+=0.5){
+    if(h+dur>endH)break;
+    var past=selD?isPastSlot(selD,h):false,booked=isBooked(h,dur),ts=fmtH(h);
+    var el=document.createElement('div');var cls='tslot';
+    if(selT===ts)cls+=' sel';if(past)cls+=' unavail';else if(booked)cls+=' booked';
+    el.className=cls;
+    var endLabel=past?'--':booked?(lang==='en'?'Booked':'Ocupado'):'-> '+fmtH(h+dur);
+    el.innerHTML='<div class="tm">'+ts+'</div><div class="te">'+endLabel+'</div>';
+    if(!past&&!booked){(function(slot){el.onclick=function(){selT=slot;renderTimes();upd();updateProgress();};})(ts);}
+    g.appendChild(el);
+  }
+}
+function pm(){if(cm===0){cm=11;cy--;}else cm--;bookedDates=new Set();renderCal();loadBookedDates();}
+function nm(){if(cm===11){cm=0;cy++;}else cm++;bookedDates=new Set();renderCal();loadBookedDates();}
+
+function buildMsg(){
+  var nm=document.getElementById('nm').value,dur=parseFloat(document.getElementById('dur').value),no=document.getElementById('no').value;
+  var zone=getZone();if(!zone||!selT||!selD)return '';
+  var rate=getRate(),sub=dur*rate,tx=calcTax(sub),endT=fmtH(parseH(selT)+dur);
+  var msg='';
+  if(lang==='es'){
+    msg='Reserva confirmada -- BolivarAutos-Renta\n\nHola '+nm+'! Tu sesion esta lista.\n\n';
+    msg+='Zona: '+zone.es+' ('+zone.addr+')\nFecha: '+selD+'\nHora: '+selT+' -> '+endT+'\nDuracion: '+dur+'h\n\n';
+    msg+='Subtotal: $'+sub.toFixed(2)+' CAD\nGST (5%): $'+tx.gst.toFixed(2)+'\nPST (7%): $'+tx.pst.toFixed(2)+'\nTotal: $'+tx.total.toFixed(2)+' CAD\n';
+    if(no)msg+='\nNotas: '+no+'\n';
+    msg+='\nPlease bring your driver license.\n\nNos vemos pronto!\nBolivar -- (204)509-6153';
+  } else {
+    msg='Booking confirmed -- BolivarAutos-Renta\n\nHi '+nm+'! Your session is all set.\n\n';
+    msg+='Zone: '+zone.en+' ('+zone.addr+')\nDate: '+selD+'\nTime: '+selT+' -> '+endT+'\nDuration: '+dur+'h\n\n';
+    msg+='Subtotal: $'+sub.toFixed(2)+' CAD\nGST (5%): $'+tx.gst.toFixed(2)+'\nPST (7%): $'+tx.pst.toFixed(2)+'\nTotal: $'+tx.total.toFixed(2)+' CAD\n';
+    if(no)msg+='\nNotes: '+no+'\n';
+    msg+='\nPlease bring your driver license.\n\nSee you soon!\nBolivar -- (204)509-6153';
+  }
+  return msg;
+}
+
+function buildCancelMsg(d){
+  var e=lang==='en';
+  if(e) return 'Hi '+d.cliente+'! We need to cancel your BolivarAutos-Renta appointment:\n\nDate: '+d.fecha+'\nTime: '+d.hora+'\nZone: '+d.zona_nombre+'\n\nWe apologize for the inconvenience. Please contact us to reschedule.\nBolivar -- (204)509-6153';
+  return 'Hola '+d.cliente+'! Necesitamos cancelar tu cita de BolivarAutos-Renta:\n\nFecha: '+d.fecha+'\nHora: '+d.hora+'\nZona: '+d.zona_nombre+'\n\nDisculpa los inconvenientes. Contactanos para reagendar.\nBolivar -- (204)509-6153';
+}
+
+function upd(){
+  var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value;
+  var dur=parseFloat(document.getElementById('dur').value),zone=getZone();
+  var rate=getRate(),sub=dur*rate,tx=calcTax(sub);
+  var allDone=!!(selZ&&selD&&selT&&nm.trim()&&ph&&ph.length>=14);
+  var cb=document.getElementById('btn-confirm');
+  if(cb){cb.className='btn-confirm'+(allDone?' ready':'');cb.querySelector('span').textContent=allDone?(lang==='en'?'CONFIRM BOOKING':'CONFIRMAR RESERVA'):(lang==='en'?'VERIFY BOOKING':'VERIFICAR RESERVA');}
+  if(bookingConfirmed&&zone){
+    document.getElementById('sv-z').textContent=zone[lang];document.getElementById('sv-d').textContent=selD;
+    document.getElementById('sv-t').textContent=selT;document.getElementById('sv-c').textContent=nm||'--';
+    document.getElementById('sv-p').textContent=ph||'--';document.getElementById('sv-sub').textContent='$'+sub.toFixed(2);
+    document.getElementById('sv-gst').textContent='$'+tx.gst.toFixed(2);document.getElementById('sv-pst').textContent='$'+tx.pst.toFixed(2);
+    document.getElementById('sv-tot').textContent='$'+tx.total.toFixed(2)+' CAD';
+  }
+}
+
+function resetApp(){
+  selZ=null;selD=null;selT=null;
+  bookingConfirmed=false;calendarDone=false;currentUID='';
+  lastCitaId=null;
+  bookedSlots=[];
+  document.getElementById('nm').value='';
+  document.getElementById('ph').value='';
+  document.getElementById('no').value='';
+  document.getElementById('summ').style.display='none';
+  document.getElementById('msgbox').style.display='none';
+  document.getElementById('msg-label').style.display='none';
+  document.getElementById('action-btns').style.display='none';
+  document.getElementById('action-btns2').style.display='none';
+  document.getElementById('cal-step').style.display='none';
+  document.getElementById('new-booking-btn').style.display='none';
+  document.getElementById('btn-contrato').style.display='none';
+  document.getElementById('btn-confirm').style.display='block';
+  document.getElementById('error-banner').style.display='none';
+  document.getElementById('confirm-banner').style.display='none';
+  renderZones();renderCal();renderTimes();updateProgress();upd();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function sendWA(){var raw=document.getElementById('ph').value.trim();var digits=raw.replace(/\D/g,'');var waNum=raw.charAt(0)==='+' ? digits : '1'+digits;window.location.href='https://wa.me/'+waNum+'?text='+encodeURIComponent(buildMsg());}
+function sendSMS(){var ph=document.getElementById('ph').value.replace(/\D/g,'');window.location.href='sms:+1'+ph+'&body='+encodeURIComponent(buildMsg());}
+function sendCopy(){
+  var msg=buildMsg(),l=document.getElementById('l-cp');
+  if(navigator.clipboard){navigator.clipboard.writeText(msg).then(function(){l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(function(){l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2500);});}
+  else{var t=document.createElement('textarea');t.value=msg;t.style.cssText='position:fixed;opacity:0';document.body.appendChild(t);t.focus();t.select();document.execCommand('copy');document.body.removeChild(t);l.textContent=lang==='en'?'Copied!':'Copiado!';setTimeout(function(){l.textContent=lang==='en'?'Copy message':'Copiar mensaje';},2500);}
+}
+
+function goAppleCal(){
+  var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
+  var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
+  var startH=parseH(selT),endH=startH+dur;
+  var startDT=icsDateTime(selD,startH);
+  var endDT=icsDateTime(selD,endH);
+  var desc='Cliente: '+nm+'\\nTel: '+ph+'\\nTotal: $'+tx.total.toFixed(2)+' CAD'+(no?'\\nNotas: '+no:'')+'\\n\\nBolivar: (204)509-6153';
+  var uid=currentUID||Date.now()+'@bolivarautos';
+  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:BolivarAutos-Renta - '+nm+'\r\nDESCRIPTION:'+desc+'\r\nLOCATION:'+zone[lang]+' - '+zone.addr+', Winnipeg MB\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cita-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+  // Unlock message buttons
+  calendarDone=true;
+  var e=lang==='en';
+  document.getElementById('cal-hint').textContent=e?'Calendar added! Now send the confirmation message.':'Calendario agregado! Ahora envia el mensaje de confirmacion.';
+  document.getElementById('cal-hint').style.color='#166534';
+  document.getElementById('action-btns').style.display='grid';
+  document.getElementById('action-btns2').style.display='grid';
+  document.getElementById('new-booking-btn').style.display='block';
+}
+
+function goAppleCalCancel(d){
+  // Generate a CANCEL ICS to remove the event from iPhone calendar
+  var startH=parseH(d.hora),endH=startH+parseFloat(d.duracion);
+  var startDT=icsDateTime(d.fecha,startH);
+  var endDT=icsDateTime(d.fecha,endH);
+  var uid=d.calUID||d.fecha.replace(/-/g,'')+d.hora.replace(/[:\s]/g,'')+'@bolivarautos';
+  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nMETHOD:CANCEL\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:CANCELLED - BolivarAutos-Renta - '+d.cliente+'\r\nSTATUS:CANCELLED\r\nSEQUENCE:1\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
+  var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cancelacion-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+// Admin
+function togglePastForm(){
+  var f=document.getElementById('past-form-wrap'),btn=document.getElementById('past-toggle-btn');
+  var open=f.style.display==='none'||f.style.display==='';
+  f.style.display=open?'block':'none';
+  btn.textContent=open?'▲ Cerrar cita pasada':'+ Agregar cita de fecha pasada';
+}
+function buildPastHoras(){
+  var sel=document.getElementById('past-hora');if(!sel)return;sel.innerHTML='';
+  for(var h=9;h<21;h+=0.5){var hh=Math.floor(h),mm=h%1===0.5?'30':'00',label;
+  if(hh<12)label=hh+':'+mm+' AM';else if(hh===12)label='12:'+mm+' PM';else label=(hh-12)+':'+mm+' PM';
+  var o=document.createElement('option');o.value=label;o.textContent=label;sel.appendChild(o);}
+}
+function savePastBooking(){
+  if(!db){alert('Firebase no conectado');return;}
+  var fecha=document.getElementById('past-fecha').value;
+  var hora=document.getElementById('past-hora').value;
+  var dur=parseFloat(document.getElementById('past-dur').value);
+  var zonaId=document.getElementById('past-zona').value;
+  var cliente=document.getElementById('past-cliente').value.trim();
+  if(!fecha||!hora||!cliente){alert('Falta: fecha, hora o nombre');return;}
+  var ZONE_NAMES={bison:'Bison',gateway:'Gateway',kingedward:'King Edward',mainst:'Main St',stmarys:"St. Mary's",any:'Any zone / Driving'};
+  var rate=getRate(),sub=dur*rate,tx=calcTax(sub),uid=Date.now()+'@bolivarautos';
+  db.collection('CITAS_RENTA').add({fecha:fecha,hora:hora,duracion:dur,zona_id:zonaId,zona_nombre:ZONE_NAMES[zonaId]||zonaId,cliente:cliente,telefono:'',notas:'',tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:uid})
+  .then(function(){
+    saveToGoogleSheets(fecha,cliente,dur,rate);
+    var s=document.getElementById('past-success');s.style.display='block';
+    document.getElementById('past-fecha').value='';
+    document.getElementById('past-cliente').value='';
+    setTimeout(function(){s.style.display='none';},3000);
+    if(document.getElementById('admin-date').value===fecha)loadAdminBookings();
+  }).catch(function(e){alert('Error: '+e.message);});
+}
+function toggleAdmin(){var p=document.getElementById('admin-panel');var open=p.style.display==='none'||p.style.display==='';p.style.display=open?'block':'none';if(open)setTimeout(function(){p.scrollIntoView({behavior:'smooth',block:'start'});},80);}
+function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();buildMonthSelector();loadAdminBookings();buildPastHoras();var yd=new Date();yd.setDate(yd.getDate()-1);document.getElementById("past-fecha").max=yd.getFullYear()+"-"+String(yd.getMonth()+1).padStart(2,"0")+"-"+String(yd.getDate()).padStart(2,"0");}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
+
+function loadAdminBookings(){
+  if(!db||!adminUnlocked)return;
+  var dateStr=document.getElementById('admin-date').value;
+  var list=document.getElementById('admin-list');
+  list.innerHTML='<div class="admin-empty">Cargando...</div>';
+  db.collection('CITAS_RENTA').where('fecha','==',dateStr).where('cancelada','==',false).get()
+  .then(function(snap){
+    if(snap.empty){list.innerHTML='<div class="admin-empty">'+(lang==='en'?'No bookings for this date':'No hay citas para esta fecha')+'</div>';return;}
+    list.innerHTML='';
+    snap.forEach(function(doc){
+      var d=doc.data();d.docId=doc.id;
+      var row=document.createElement('div');row.className='admin-row';
+      var top=document.createElement('div');top.className='admin-row-top';
+      var info=document.createElement('div');info.className='admin-info';
+
+      // Signed badge placeholder
+      var signedBadge=document.createElement('span');
+      signedBadge.id='badge-'+doc.id;
+      signedBadge.style.cssText='display:none;background:#dcfce7;color:#16a34a;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:6px;';
+      signedBadge.textContent='✅ Contrato firmado';
+
+      var infoTop=document.createElement('div');
+      infoTop.innerHTML='<strong>'+d.hora+' ('+d.duracion+'h) - '+d.zona_nombre+'</strong>';
+      infoTop.appendChild(signedBadge);
+      var infoSub=document.createElement('span');
+      infoSub.textContent=d.cliente+' | '+d.telefono;
+      info.appendChild(infoTop);
+      info.appendChild(infoSub);
+
+      // Check Firebase if already signed
+      db.collection('CONTRATOS').doc(doc.id).get().then(function(cDoc){
+        if(cDoc.exists && cDoc.data().aceptado){
+          var badge=document.getElementById('badge-'+doc.id);
+          if(badge){
+            badge.style.display='inline-block';
+            var ts=cDoc.data().timestamp||'';
+            badge.title='Firmado: '+ts+' | Versión: '+( cDoc.data().version||'A');
+          }
+        }
+      }).catch(function(){});
+
+      var btns=document.createElement('div');btns.className='admin-btns';
+
+      // 📋 Contrato button
+      var btnContrato=document.createElement('button');
+      btnContrato.style.cssText='background:#1e293b;color:#fff;border:none;border-radius:7px;padding:10px 14px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;';
+      btnContrato.textContent='📋 Contrato';
+      (function(docData,docId){
+        btnContrato.onclick=function(){ admOpenContratoModal(docData,docId); };
+      })(d,doc.id);
+
+      // Cancel button
+      var btnCancel=document.createElement('button');
+      btnCancel.className='btn-cancel';
+      btnCancel.textContent=lang==='en'?'Cancel':'Cancelar';
+      (function(docData,docId,dateStr){
+        btnCancel.onclick=function(){
+          if(!confirm(lang==='en'?'Cancel this appointment?':'Cancelar esta cita?'))return;
+          db.collection('CITAS_RENTA').doc(docId).update({cancelada:true})
+          .then(function(){
+            cancelToGoogleSheets(docData.fecha, docData.cliente);
+            goAppleCalCancel(docData);
+            loadAdminBookings();
+            if(selD===dateStr)loadBookedSlots(dateStr);
+            document.getElementById('btn-contrato').style.display='none';
+            lastCitaId=null;
+          }).catch(function(e){alert('Error: '+e.message);});
+        };
+      })(d,doc.id,dateStr);
+
+      // WhatsApp button
+      var btnWA=document.createElement('button');
+      btnWA.className='btn-cancel-wa';
+      btnWA.textContent='WhatsApp';
+      (function(docData){
+        btnWA.onclick=function(){
+          var ph=docData.telefono.replace(/\D/g,'');
+          if(ph.length===10)ph='1'+ph;
+          var msg=buildCancelMsg(docData);
+          window.location.href='https://wa.me/'+ph+'?text='+encodeURIComponent(msg);
+        };
+      })(d);
+
+      btns.appendChild(btnContrato);
+      btns.appendChild(btnCancel);
+      btns.appendChild(btnWA);
+      top.appendChild(info);top.appendChild(btns);
+      row.appendChild(top);list.appendChild(row);
+    });
+  }).catch(function(e){list.innerHTML='<div class="admin-empty">Error: '+e.message+'</div>';});
+}
+
+
+// ── HISTORIAL ──────────────────────────────────────────────
+var historialData=[];
+function buildMonthSelector(){var sel=document.getElementById('hist-month-sel');sel.innerHTML='';var now=new Date();var opt=document.createElement('option');opt.value='all';opt.textContent='Todos los meses';sel.appendChild(opt);var ms=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];for(var i=0;i<18;i++){var d=new Date(now.getFullYear(),now.getMonth()-i,1);var val=d.getFullYear()+'-'+pad(d.getMonth()+1);var o=document.createElement('option');o.value=val;o.textContent=ms[d.getMonth()]+' '+d.getFullYear();if(i===0)o.selected=true;sel.appendChild(o);}}
+
+var signedCitaIds=new Set();
+function loadHistorial(){if(!db||!adminUnlocked)return;var selVal=document.getElementById('hist-month-sel').value;var tbody=document.getElementById('hist-tbody');var summary=document.getElementById('hist-summary');var wrap=document.getElementById('hist-wrap');var empty=document.getElementById('hist-empty');tbody.innerHTML='<tr><td colspan="12" style="text-align:center;color:#888;padding:16px;font-weight:700">Cargando...</td></tr>';wrap.style.display='block';empty.style.display='none';summary.style.display='none';document.getElementById('btn-export-xlsx').style.display='none';document.getElementById('btn-del-cancel').style.display='none';historialData=[];var query;if(selVal==='all'){query=db.collection('CITAS_RENTA').orderBy('fecha','desc');}else{var yr=parseInt(selVal.split('-')[0]),mo=parseInt(selVal.split('-')[1]);var from=selVal+'-01';var to=selVal+'-'+pad(new Date(yr,mo,0).getDate());query=db.collection('CITAS_RENTA').where('fecha','>=',from).where('fecha','<=',to).orderBy('fecha','desc');}db.collection('CONTRATOS').get().then(function(cSnap){signedCitaIds=new Set();cSnap.forEach(function(d){if(d.data().citaId)signedCitaIds.add(d.data().citaId);});return query.get();}).then(function(snap){if(snap.empty){tbody.innerHTML='';wrap.style.display='none';empty.style.display='block';return;}snap.forEach(function(doc){var d=doc.data();d.docId=doc.id;historialData.push(d);});renderHistorial();}).catch(function(e){tbody.innerHTML='<tr><td colspan="12" style="color:#dc2626;padding:12px;font-weight:700">Error: '+e.message+'</td></tr>';});}
+function renderHistorial(){var tbody=document.getElementById('hist-tbody');var summary=document.getElementById('hist-summary');var wrap=document.getElementById('hist-wrap');tbody.innerHTML='';wrap.style.display='block';var activas=historialData.filter(function(d){return !d.cancelada;});var canceladas=historialData.filter(function(d){return !!d.cancelada;});var tSub=0,tGST=0,tPST=0,tTot=0;activas.forEach(function(d){tSub+=parseFloat(d.subtotal||0);tGST+=parseFloat(d.gst||0);tPST+=parseFloat(d.pst||0);tTot+=parseFloat(d.total||0);});summary.style.display='grid';summary.innerHTML='<div class="hist-sum-item count"><div class="hist-sum-label">Citas activas</div><div class="hist-sum-value">'+activas.length+' de '+historialData.length+'</div></div><div class="hist-sum-item total"><div class="hist-sum-label">Total cobrado</div><div class="hist-sum-value">$'+tTot.toFixed(2)+' CAD</div></div><div class="hist-sum-item"><div class="hist-sum-label">Subtotal</div><div class="hist-sum-value">$'+tSub.toFixed(2)+'</div></div><div class="hist-sum-item"><div class="hist-sum-label">GST / PST</div><div class="hist-sum-value">$'+tGST.toFixed(2)+' / $'+tPST.toFixed(2)+'</div></div>';historialData.forEach(function(d){var canc=!!d.cancelada;var signed=signedCitaIds.has(d.docId);var tr=document.createElement('tr');if(canc)tr.className='hist-cancelada';tr.innerHTML='<td>'+d.fecha+'</td><td>'+d.hora+'</td><td>'+d.duracion+'h</td><td>'+(d.zona_nombre||'--')+'</td><td>'+d.cliente+'</td><td>'+d.telefono+'</td><td class="col-num">$'+parseFloat(d.subtotal||0).toFixed(2)+'</td><td class="col-num">$'+parseFloat(d.gst||0).toFixed(2)+'</td><td class="col-num">$'+parseFloat(d.pst||0).toFixed(2)+'</td><td class="col-total">$'+parseFloat(d.total||0).toFixed(2)+'</td><td>'+(canc?'<span class="badge-cancel">Cancelada</span>':'<span class="badge-activa">Activa</span>')+'</td><td style="text-align:center;font-size:16px">'+(signed?'<span title="Contrato firmado">✅</span>':'<span style="color:#ccc">—</span>')+'</td>';tbody.appendChild(tr);});document.getElementById('btn-export-xlsx').style.display='inline-block';if(canceladas.length>0)document.getElementById('btn-del-cancel').style.display='inline-block';}
+
+var _contratos=[];
+var contratosPanelOpen=false;
+function toggleContratos(){contratosPanelOpen=!contratosPanelOpen;var panel=document.getElementById('contratos-panel');panel.style.display=contratosPanelOpen?'block':'none';if(contratosPanelOpen)loadContratosList();}
+function loadContratosList(){var list=document.getElementById('contratos-list');list.innerHTML='Cargando...';db.collection('CONTRATOS').orderBy('signedAt','desc').limit(50).get().then(function(snap){if(snap.empty){list.innerHTML='<p style="color:#aaa;text-align:center;padding:8px">No hay contratos firmados aún.</p>';return;}_contratos=[];var html='';snap.forEach(function(doc){var d=doc.data();d._docId=doc.id;var idx=_contratos.length;_contratos.push(d);var fecha=d.signedAtStr||'—';var tipo=d.licenceType==='B'?'GDL/Principiante':'Licencia completa';var signed=d.signedName||(d.client&&d.client.name)||'—';html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #f0f0f0"><span style="font-size:20px">✅</span><div style="flex:1;min-width:0"><div style="font-weight:700;font-size:13px">'+signed+'</div><div style="font-size:11px;color:#888">'+fecha+' · '+tipo+'</div></div><button onclick="viewContratoPDF('+idx+')" style="background:#1e3d8f;color:#fff;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap">📄 PDF</button></div>';});list.innerHTML=html;}).catch(function(e){list.innerHTML='<p style="color:red">Error: '+e.message+'</p>';});}
+function viewContratoPDF(idx){var d=_contratos[idx];if(!d)return;var cl=d.client||{};var bk=d.booking||{};var vh=d.vehicle||{};var isB=d.licenceType==='B';var veh=[vh.make,vh.model,vh.year].filter(Boolean).join(' ')||'—';var td1='padding:5px 8px;border:1px solid #ccc;font-size:12px;background:#D6E4F0;font-weight:700;width:42%';var td2='padding:5px 8px;border:1px solid #ccc;font-size:12px';var td3='padding:5px 8px;border:1px solid #ccc;font-size:12px;background:#f5f5f5';var cS='margin-bottom:10px;border:1px solid #ccc;border-radius:6px;overflow:hidden';var hS='background:#1F4E79;color:#fff;padding:7px 12px;font-weight:700;font-size:12px';var bS='padding:10px 12px';var tS='width:100%;border-collapse:collapse;margin:6px 0';var li='font-size:12px;margin-bottom:4px;line-height:1.5';
+var html='<div style="text-align:center;margin-bottom:16px"><div style="font-size:18px;font-weight:700;color:#1F4E79">LIVARKAR Services Management Ltd.</div><div style="font-size:12px;color:#555;margin:3px 0">BolivarAutos-Renta | Winnipeg, Manitoba, Canada</div><div style="font-size:12px;color:#555">(204) 509-6153 | info@bolivarautos.ca</div><hr style="border:none;border-top:2px solid #2E75B6;margin:10px 0"><div style="font-size:15px;font-weight:700">VEHICLE RENTAL AGREEMENT</div><div style="font-size:12px;color:#888;margin-top:4px">Licence Type: '+(isB?'B — GDL / Beginner Licence':'A — Full Licence')+'</div></div>'+'<div style="'+cS+'"><div style="'+hS+'">CLAUSE 1 — IDENTIFICATION OF PARTIES</div><div style="'+bS+'"><div style="font-size:11px;font-weight:700;color:#1F4E79;margin-bottom:4px">LESSOR</div><div style="background:#D6E4F0;border-radius:4px;padding:8px;margin-bottom:8px;font-size:12px"><strong>LIVARKAR Services Management Ltd.</strong><br>Operated by: LIVARKAR Services Management Ltd.<br>Blue Drive Commercial Insurance — Manitoba</div><div style="font-size:11px;font-weight:700;color:#1F4E79;margin-bottom:4px">RENTER</div><table style="'+tS+'"><tr><td style="'+td1+'">Full Name</td><td style="'+td2+'">'+(cl.name||'—')+'</td></tr><tr><td style="'+td1+'">Licence #</td><td style="'+td2+'">'+(cl.licence||'—')+'</td></tr><tr><td style="'+td1+'">Phone</td><td style="'+td2+'">'+(cl.phone||'—')+'</td></tr><tr><td style="'+td1+'">Email</td><td style="'+td2+'">'+(cl.email||'—')+'</td></tr></table></div></div>'+'<div style="'+cS+'"><div style="'+hS+'">CLAUSE 2 — VEHICLE</div><div style="'+bS+'"><table style="'+tS+'"><tr><td style="'+td1+'">Make/Model/Year</td><td style="'+td2+'">'+veh+'</td></tr><tr><td style="'+td1+'">Plate #</td><td style="'+td2+'">'+(vh.plate||'—')+'</td></tr><tr><td style="'+td1+'">VIN</td><td style="'+td2+'">'+(vh.vin||'—')+'</td></tr><tr><td style="'+td1+'">Insurance</td><td style="'+td3+'">Blue Drive Commercial — Manitoba</td></tr></table></div></div>'+'<div style="'+cS+'"><div style="'+hS+'">CLAUSE 3 — RENTAL PERIOD</div><div style="'+bS+'"><table style="'+tS+'"><tr><td style="'+td1+'">Date</td><td style="'+td2+'">'+(bk.fecha||'—')+'</td></tr><tr><td style="'+td1+'">Hours rented</td><td style="'+td2+'">'+(bk.horas?bk.horas+' hrs':'—')+'</td></tr></table></div></div>'+'<div style="'+cS+'"><div style="'+hS+'">CLAUSE 4 — INSURANCE & DEDUCTIBLE</div><div style="'+bS+'"><div style="border:1px solid #FF8C00;border-left:4px solid #FF8C00;background:#FFF2CC;padding:10px;border-radius:4px;font-size:12px"><strong>⚠️ The Renter accepts full responsibility for the Basic Autopac deductible of $1,000 CAD (or current MPI amount), regardless of fault.</strong></div></div></div>'+(isB?'<div style="'+cS+'"><div style="'+hS+'">CLAUSE 5 — MANDATORY SUPERVISOR (GDL)</div><div style="'+bS+'"><p style="font-size:12px">A fully licensed supervisor (Class 5F+, min. 18 yrs, no alcohol/drugs) must be present in the front passenger seat at all times.</p></div></div>':'')+'<div style="'+cS+'"><div style="'+hS+'">CLAUSE '+(isB?'6':'5')+' — CONDITIONS OF USE</div><div style="'+bS+'"><ul style="padding-left:18px"><li style="'+li+'">Vehicle used for driving within the city, within Manitoba. Commercial use prohibited.</li>'+(isB?'<li style="'+li+'">Fully licensed supervisor must be present at all times.</li>':'<li style="'+li+'">Renter is the only authorized driver.</li>')+'<li style="'+li+'">No driving under influence of alcohol, cannabis or drugs. Renter equally responsible in case of accident.</li><li style="'+li+'">If used for road test, same terms apply.</li><li style="'+li+'">Vehicle may not leave Manitoba without written consent.</li><li style="'+li+'">Return vehicle on time, clean, same fuel level.</li></ul><p style="font-style:italic;font-size:12px;border-top:1px dashed #ccc;padding-top:8px;margin-top:8px">The Renter declares renting the vehicle for personal hourly use under their own judgment. This agreement includes no service other than hourly vehicle rental.</p></div></div>'+'<div style="'+cS+'"><div style="'+hS+'">CLAUSE '+(isB?'7':'6')+' — LIMITATION OF LIABILITY</div><div style="'+bS+'"><p style="font-size:12px">LIVARKAR is not liable for personal injury, loss of belongings, or fines from traffic violations. Governed by the laws of Manitoba, Canada.</p></div></div>'+'<div style="'+cS+'"><div style="'+hS+'">CLAUSE '+(isB?'8':'7')+' — DECLARATION</div><div style="'+bS+'"><p style="font-size:12px">The Renter declares having read and accepted all terms. Electronic acceptance has the same legal validity as a handwritten signature under Manitoba\'s Electronic Commerce Act.</p></div></div>'+'<div style="border:2px solid #1F4E79;border-radius:8px;padding:16px;margin-top:16px;background:#f8faff"><div style="font-weight:700;color:#1F4E79;margin-bottom:10px">✍️ ELECTRONIC SIGNATURE</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="border:1px solid #ccc;border-radius:4px;padding:10px;font-size:12px"><strong style="display:block;font-size:11px;color:#888;margin-bottom:3px">Signed by</strong>'+(d.signedName||'—')+'</div><div style="border:1px solid #ccc;border-radius:4px;padding:10px;font-size:12px"><strong style="display:block;font-size:11px;color:#888;margin-bottom:3px">Date & Time</strong>'+(d.signedAtStr||'—')+'</div><div style="border:1px solid #ccc;border-radius:4px;padding:10px;font-size:12px"><strong style="display:block;font-size:11px;color:#888;margin-bottom:3px">Licence Type</strong>'+(isB?'B — GDL / Beginner':'A — Full Licence')+'</div><div style="border:1px solid #ccc;border-radius:4px;padding:10px;font-size:12px"><strong style="display:block;font-size:11px;color:#888;margin-bottom:3px">IP Address</strong>'+(d.ipAddress||'—')+'</div></div><div style="background:#e8f5e9;border:1px solid #4caf50;border-radius:4px;padding:6px 10px;font-size:11px;color:#2e7d32;text-align:center;margin-top:10px">✅ Electronically signed and accepted &nbsp;|&nbsp; Ref: CR-'+(d._docId?d._docId.substring(0,8).toUpperCase():'—')+'</div></div>';
+document.getElementById('pdf-content').innerHTML=html;document.getElementById('pdf-overlay').style.display='block';document.getElementById('pdf-overlay').scrollTop=0;}
+function saveVehicleRenta(){if(!db)return;var data={marca:document.getElementById('vr-marca').value.trim(),modelo:document.getElementById('vr-modelo').value.trim(),año:document.getElementById('vr-ano').value.trim(),placa:document.getElementById('vr-placa').value.trim().toUpperCase(),vin:document.getElementById('vr-vin').value.trim().toUpperCase(),renta:true};if(!data.marca||!data.modelo){alert('Ingresa al menos marca y modelo.');return;}db.collection('CONFIG').doc('vehiculo_renta').set(data).then(function(){var s=document.getElementById('vr-saved');s.style.display='inline';setTimeout(function(){s.style.display='none';},3000);}).catch(function(e){alert('Error: '+e.message);});}
+function loadVehicleRenta(){if(!db)return;db.collection('CONFIG').doc('vehiculo_renta').get().then(function(doc){if(!doc.exists)return;var d=doc.data();document.getElementById('vr-marca').value=d.marca||'';document.getElementById('vr-modelo').value=d.modelo||'';document.getElementById('vr-ano').value=d.año||'';document.getElementById('vr-placa').value=d.placa||'';document.getElementById('vr-vin').value=d.vin||'';});}
+function deleteCanceladas(){
+  var canceladas=historialData.filter(function(d){return !!d.cancelada;});
+  if(!canceladas.length){alert('No hay citas canceladas para borrar.');return;}
+  var sel=document.getElementById('hist-month-sel');
+  var label=sel.options[sel.selectedIndex].textContent;
+  if(!confirm('¿Borrar permanentemente '+canceladas.length+' citas canceladas de "'+label+'"?\n\nEsta acción no se puede deshacer.'))return;
+  var btn=document.getElementById('btn-del-cancel');
+  btn.textContent='Borrando...';btn.disabled=true;
+  var batch=db.batch();
+  canceladas.forEach(function(d){batch.delete(db.collection('CITAS_RENTA').doc(d.docId));});
+  batch.commit().then(function(){
+    alert('✅ '+canceladas.length+' citas canceladas eliminadas.');
+    btn.textContent='🗑 Borrar canceladas';btn.disabled=false;
+    loadHistorial(); // recargar
+  }).catch(function(e){
+    alert('Error al borrar: '+e.message);
+    btn.textContent='🗑 Borrar canceladas';btn.disabled=false;
+  });
+}
+
+function exportXLS(){var activas=historialData.filter(function(d){return !d.cancelada;});if(!activas.length){alert('No hay citas activas para exportar.');return;}if(typeof XLSX!=='undefined'){doExport(activas);return;}var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=function(){doExport(activas);};document.head.appendChild(s);}
+
+function doExport(activas){var sel=document.getElementById('hist-month-sel');var label=sel.options[sel.selectedIndex].textContent.replace(/\s+/g,'-');var rows=activas.map(function(d){return{'Fecha':d.fecha,'Hora':d.hora,'Duración (h)':parseFloat(d.duracion),'Zona':d.zona_nombre||'','Cliente':d.cliente,'Teléfono':d.telefono,'Subtotal ($)':parseFloat(parseFloat(d.subtotal||0).toFixed(2)),'GST 5% ($)':parseFloat(parseFloat(d.gst||0).toFixed(2)),'PST 7% ($)':parseFloat(parseFloat(d.pst||0).toFixed(2)),'Total CAD ($)':parseFloat(parseFloat(d.total||0).toFixed(2))};});var tSub=0,tGST=0,tPST=0,tTot=0;activas.forEach(function(d){tSub+=parseFloat(d.subtotal||0);tGST+=parseFloat(d.gst||0);tPST+=parseFloat(d.pst||0);tTot+=parseFloat(d.total||0);});rows.push({'Fecha':'TOTAL','Hora':'','Duración (h)':'','Zona':'','Cliente':activas.length+' citas','Teléfono':'','Subtotal ($)':parseFloat(tSub.toFixed(2)),'GST 5% ($)':parseFloat(tGST.toFixed(2)),'PST 7% ($)':parseFloat(tPST.toFixed(2)),'Total CAD ($)':parseFloat(tTot.toFixed(2))});var ws=XLSX.utils.json_to_sheet(rows);ws['!cols']=[{wch:12},{wch:10},{wch:10},{wch:16},{wch:20},{wch:16},{wch:12},{wch:10},{wch:10},{wch:13}];var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Citas BolivarAutos-Renta');XLSX.writeFile(wb,'historial-bolivarautos-'+label+'.xlsx');}
+// ──────────────────────────────────────────────────────────
+
+renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgress();upd();
+
+// ===== GASTOS =====
+var gastoGST = true, gastoRST = false;
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbxzyS_4XhaUIgbykZN6KvK8QrHAzY6SN3GIAUDwC0zmagWVOi2bs4JNNxWWXNCzpUVs-A/exec';
+
+function setGastoFecha() {
+  var d = new Date();
+  var s = d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  if(!document.getElementById('g-fecha').value) document.getElementById('g-fecha').value = s;
+}
+
+function toggleGasto(tipo) {
+  if(tipo==='gst') {
+    gastoGST = !gastoGST;
+    document.getElementById('g-gst-btn').className = 'gtoggle'+(gastoGST?' on':'');
+    document.getElementById('g-gst-val').textContent = gastoGST ? '✅ Aplica' : '❌ No aplica';
+  } else {
+    gastoRST = !gastoRST;
+    document.getElementById('g-rst-btn').className = 'gtoggle'+(gastoRST?' on':'');
+    document.getElementById('g-rst-val').textContent = gastoRST ? '✅ Aplica' : '❌ No aplica';
+  }
+  updateGastoPreview();
+}
+
+function updateGastoPreview() {
+  var monto = parseFloat(document.getElementById('g-monto').value) || 0;
+  var prev = document.getElementById('g-preview');
+  if(monto <= 0) { prev.style.display='none'; return; }
+  var gstAmt = gastoGST ? parseFloat((monto*0.05).toFixed(2)) : 0;
+  var rstAmt = gastoRST ? parseFloat((monto*0.07).toFixed(2)) : 0;
+  var totalAmt = parseFloat((monto+gstAmt+rstAmt).toFixed(2));
+  prev.style.display='block';
+  document.getElementById('g-prev-monto').textContent = '$'+monto.toFixed(2);
+  document.getElementById('g-prev-gst').textContent = '$'+gstAmt.toFixed(2);
+  document.getElementById('g-prev-rst').textContent = '$'+rstAmt.toFixed(2);
+  document.getElementById('g-prev-total').textContent = '$'+totalAmt.toFixed(2);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var montoInput = document.getElementById('g-monto');
+  if(montoInput) montoInput.addEventListener('input', updateGastoPreview);
+});
+
+function guardarGasto() {
+  var fecha = document.getElementById('g-fecha').value;
+  var cat = document.getElementById('g-categoria').value;
+  var desc = document.getElementById('g-descripcion').value.trim();
+  var prov = document.getElementById('g-proveedor').value.trim();
+  var monto = parseFloat(document.getElementById('g-monto').value);
+  var metodo = document.getElementById('g-metodo').value;
+  var recibo = document.getElementById('g-recibo').value.trim();
+  var errEl = document.getElementById('g-error');
+  var sucEl = document.getElementById('g-success');
+  errEl.style.display='none'; sucEl.style.display='none';
+  if(!fecha || !cat || isNaN(monto) || monto <= 0) {
+    errEl.textContent = '⚠️ Completa: fecha, categoría y monto.';
+    errEl.style.display = 'block'; return;
+  }
+  var gstAmt = gastoGST ? parseFloat((monto*0.05).toFixed(2)) : 0;
+  var rstAmt = gastoRST ? parseFloat((monto*0.07).toFixed(2)) : 0;
+  var totalAmt = parseFloat((monto+gstAmt+rstAmt).toFixed(2));
+  var gasto = {
+    fecha:fecha, categoria:cat, descripcion:desc||cat, proveedor:prov||'-',
+    monto:monto, gst_aplica:gastoGST, rst_aplica:gastoRST,
+    gst_amt:gstAmt, rst_amt:rstAmt, total:totalAmt,
+    metodo_pago:metodo, recibo:recibo, createdAt:new Date().toISOString()
+  };
+  if(db) {
+    db.collection('GASTOS_EMPRESA').add(gasto).then(function() {
+      enviarGastoSheets(gasto);
+      sucEl.style.display='block';
+      setTimeout(function(){ sucEl.style.display='none'; }, 4000);
+      document.getElementById('g-monto').value='';
+      document.getElementById('g-descripcion').value='';
+      document.getElementById('g-proveedor').value='';
+      document.getElementById('g-recibo').value='';
+      document.getElementById('g-preview').style.display='none';
+      loadGastosRecientes();
+    }).catch(function(e){ errEl.textContent='Error: '+e.message; errEl.style.display='block'; });
+  } else {
+    enviarGastoSheets(gasto);
+    sucEl.style.display='block';
+    setTimeout(function(){ sucEl.style.display='none'; },4000);
+  }
+}
+
+function enviarGastoSheets(g) {
+  if(!GAS_URL) return;
+  fetch(GAS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({accion:'gasto',fecha:g.fecha,categoria:g.categoria,
+      descripcion:g.descripcion,proveedor:g.proveedor,monto:g.monto,
+      gst_aplica:g.gst_aplica?'S':'N',rst_aplica:g.rst_aplica?'S':'N',
+      metodo_pago:g.metodo_pago,recibo:g.recibo})
+  }).catch(function(e){console.warn('Sheets error:',e);});
+}
+
+function loadGastosRecientes() {
+  var lista = document.getElementById('gastos-lista');
+  if(!db){lista.innerHTML='<div style="text-align:center;color:#aaa;padding:16px">Firebase no conectado</div>';return;}
+  db.collection('GASTOS_EMPRESA').orderBy('fecha','desc').limit(10).get()
+  .then(function(snap){
+    if(snap.empty){lista.innerHTML='<div style="text-align:center;color:#aaa;padding:16px;font-weight:700">No hay gastos registrados aún</div>';return;}
+    var html='';
+    snap.forEach(function(doc){
+      var g=doc.data();
+      var total=parseFloat(g.total||g.monto||0).toFixed(2);
+      var monto=parseFloat(g.monto||0).toFixed(2);
+      var gst=parseFloat(g.gst_amt||0).toFixed(2);
+      var rst=parseFloat(g.rst_amt||0).toFixed(2);
+      html+='<div class="gasto-item">';
+      html+='<div class="gi-top"><div class="gi-cat">'+g.categoria+'</div><div class="gi-monto">$'+total+'</div></div>';
+      html+='<div class="gi-desc">'+(g.descripcion||'-')+' | '+(g.proveedor||'-')+'</div>';
+      html+='<div class="gi-sub">Neto: $'+monto+' | GST: $'+gst+' | RST: $'+rst+' | '+g.metodo_pago+'</div>';
+      html+='<div class="gi-sub" style="color:#aaa">'+g.fecha+'</div>';
+      html+='<div style="text-align:right;margin-top:6px"><button onclick="borrarGasto(\''+doc.id+'\')" style="background:none;border:none;color:#ef4444;font-size:12px;cursor:pointer;padding:2px 4px;-webkit-tap-highlight-color:transparent">🗑 borrar</button></div>';
+      html+='</div>';
+    });
+    lista.innerHTML=html;
+  }).catch(function(e){lista.innerHTML='<div style="color:#dc2626;padding:12px">Error: '+e.message+'</div>';});
+}
+
+function borrarGasto(docId) {
+  if(!confirm('¿Borrar este gasto?\n\nSe elimina de Firebase. Si ya se registró en la hoja de Google Sheets, bórralo allá también manualmente.')) return;
+  db.collection('GASTOS_EMPRESA').doc(docId).delete()
+  .then(function(){ loadGastosRecientes(); })
+  .catch(function(e){ alert('Error al borrar: '+e.message); });
+}
+
+// ===== DASHBOARD =====
+// Lee los totales desde Firebase (escritos por Apps Script). Sin CORS/JSONP.
+function loadCitasProximas() {
+  if(!db) return;
+  // Fecha de hoy en hora LOCAL (Winnipeg) — evita desfase UTC
+  var now = new Date();
+  var todayStr = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+  db.collection('CITAS_RENTA')
+    .where('cancelada','==',false)
+    .get()
+    .then(function(snap){
+      var total = 0;
+      var rows = [];
+      snap.forEach(function(doc){
+        var d=doc.data();
+        // Filtrar fecha >= hoy en JavaScript (evita índice compuesto en Firebase)
+        if(d.fecha && d.fecha >= todayStr){ total+=parseFloat(d.total||0); rows.push(d); }
+      });
+      rows.sort(function(a,b){ return a.fecha>b.fecha?1:-1; });
+      var n = rows.length;
+      var totalStr = '$'+total.toFixed(2)+' CAD ('+n+' cita'+(n!==1?'s':'')+')';
+      document.getElementById('citas-prox-total').textContent = totalStr;
+      var valEl = document.getElementById('citas-prox-total-val');
+      var subEl = document.getElementById('citas-prox-count-sub');
+      if(valEl) valEl.textContent = '$'+total.toFixed(2);
+      if(subEl) subEl.textContent = n+' cita'+(n!==1?'s':'')+' futura'+(n!==1?'s':'');
+      if(n===0){
+        document.getElementById('citas-prox-content').innerHTML='<div style="color:#888;text-align:center;padding:6px">No hay citas próximas activas</div>';
+        return;
+      }
+      var html='';
+      rows.forEach(function(d){
+        var isHoy = d.fecha === todayStr;
+        var dotColor = isHoy ? '#0F6E56' : '#1565C0';
+        var fechaLabel = isHoy ? 'hoy · '+d.hora : d.fecha+' · '+d.hora;
+        html+='<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:0.5px solid #f5f5f5"><div style="width:7px;height:7px;border-radius:50%;background:'+dotColor+';flex-shrink:0"></div><div style="font-size:12px;color:#888;min-width:100px">'+fechaLabel+'</div><div style="font-size:13px;color:#333;flex:1">'+d.cliente+'</div><div style="font-size:13px;font-weight:500;color:#333">$'+parseFloat(d.total||0).toFixed(2)+'</div></div>';
+      });
+      document.getElementById('citas-prox-content').innerHTML=html;
+    })
+    .catch(function(e){
+      document.getElementById('citas-prox-total').textContent='Error al cargar';
+      console.warn('Error citas proximas:',e);
+    });
+}
+
+function toggleCitasProximas(){
+  var lista=document.getElementById('citas-prox-lista');
+  var icon=document.getElementById('citas-prox-icon');
+  if(!lista) return;
+  if(lista.style.display==='none'){ lista.style.display='block'; if(icon) icon.textContent='▲'; }
+  else { lista.style.display='none'; if(icon) icon.textContent='▼'; }
+}
+
+// ===== CALENDARIO FISCAL =====
+// Solo considera vencimientos desde julio 2026 en adelante (primer trimestre real de la empresa)
+var FISCAL_INICIO = new Date(2026,6,1);
+var fiscalPagados = {};
+var fiscalUltimoKey = null;
+
+function fmtFechaFiscal(d){
+  var m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  return d.getDate()+' '+m[d.getMonth()]+' '+d.getFullYear();
+}
+
+// Vencimientos trimestrales: día "dia" del mes siguiente al cierre del trimestre
+function vencimientosTrimestrales(dia){
+  var out=[];
+  for(var y=2026;y<=2029;y++){
+    out.push({fecha:new Date(y,3,dia),   periodo:'Ene\u2013Mar '+y});
+    out.push({fecha:new Date(y,6,dia),   periodo:'Abr\u2013Jun '+y});
+    out.push({fecha:new Date(y,9,dia),   periodo:'Jul\u2013Sep '+y});
+    out.push({fecha:new Date(y+1,0,dia), periodo:'Oct\u2013Dic '+y});
+  }
+  out.sort(function(a,b){return a.fecha-b.fecha;});
+  return out;
+}
+
+// GST anual: vence 31 de marzo del año siguiente al año declarado
+function vencimientosGST(){
+  var out=[];
+  for(var y=2027;y<=2030;y++){
+    out.push({fecha:new Date(y,2,31), periodo:'A\u00f1o '+(y-1)});
+  }
+  return out;
+}
+
+function proximoVencimiento(lista, tipo){
+  for(var i=0;i<lista.length;i++){
+    var v=lista[i];
+    if(v.fecha < FISCAL_INICIO) continue;
+    var key = tipo+'_'+v.fecha.getFullYear()+'-'+pad(v.fecha.getMonth()+1)+'-'+pad(v.fecha.getDate());
+    if(!fiscalPagados[key]) return {fecha:v.fecha, periodo:v.periodo, key:key};
+  }
+  return null;
+}
+
+function loadCalendarioFiscal(){
+  renderCalendarioFiscal();
+  if(!db) return;
+  db.collection('CONFIG').doc('calendario_fiscal').get().then(function(doc){
+    fiscalPagados = doc.exists ? (doc.data()||{}) : {};
+    renderCalendarioFiscal();
+  }).catch(function(){ /* si falla la nube, se muestran las fechas igual */ });
+}
+
+function toggleCalFiscal(){
+  var b=document.getElementById('cal-fiscal-body');
+  var ch=document.getElementById('cal-fiscal-chev');
+  if(!b||!ch) return;
+  var abierto = b.style.display!=='none';
+  b.style.display = abierto?'none':'block';
+  ch.style.transform = abierto?'rotate(0deg)':'rotate(180deg)';
+}
+
+function renderCalendarioFiscal(){
+  var cont=document.getElementById('cal-fiscal');
+  if(!cont) return;
+  var hoy=new Date(); hoy.setHours(0,0,0,0);
+  var items=[
+    {nombre:'N\u00f3mina CRA',  sub:'remesa trimestral \u00b7 vence d\u00eda 15', prox:proximoVencimiento(vencimientosTrimestrales(15),'nomina')},
+    {nombre:'RST Manitoba', sub:'trimestral \u00b7 vence d\u00eda 20',        prox:proximoVencimiento(vencimientosTrimestrales(20),'rst')},
+    {nombre:'GST/HST',      sub:'declaraci\u00f3n anual',                     prox:proximoVencimiento(vencimientosGST(),'gst')}
+  ];
+  var html='';
+  items.forEach(function(it,idx){
+    var p=it.prox;
+    var borde=(idx<items.length-1)?'border-bottom:0.5px solid #f0f0f0;':'';
+    if(!p){
+      html+='<div style="padding:12px 14px;'+borde+'"><div style="font-size:14px;font-weight:600;color:#333">'+it.nombre+'</div><div style="font-size:12px;color:#999">Sin vencimientos pendientes</div></div>';
+      return;
+    }
+    var dias=Math.round((p.fecha-hoy)/86400000);
+    var estado, color, bgc;
+    if(dias<0){ estado='\u26a0\ufe0f Vencida hace '+(-dias)+' d\u00eda'+((-dias)===1?'':'s'); color='#B71C1C'; bgc='#FBD2D2'; }
+    else if(dias===0){ estado='\u26a0\ufe0f \u00a1Vence HOY!'; color='#B71C1C'; bgc='#FBD2D2'; }
+    else if(dias<=14){ estado='Faltan '+dias+' d\u00eda'+(dias===1?'':'s'); color='#B33A00'; bgc='#FFDCC2'; }
+    else { estado='Faltan '+dias+' d\u00edas'; color='#0C447C'; bgc='#DCEBFA'; }
+    html+='<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;'+borde+'">'
+      +'<div style="flex:1;min-width:0">'
+      +'<div style="font-size:14px;font-weight:600;color:#333">'+it.nombre+'</div>'
+      +'<div style="font-size:11px;color:#999;margin-top:1px">'+it.sub+' \u00b7 per\u00edodo '+p.periodo+'</div>'
+      +'<div style="margin-top:5px;font-size:13px"><span style="font-weight:700;color:#333">'+fmtFechaFiscal(p.fecha)+'</span><span style="display:inline-block;margin-left:6px;background:'+bgc+';color:'+color+';font-weight:800;font-size:12px;padding:2px 9px;border-radius:999px">'+estado+'</span></div>'
+      +'</div>'
+      +'<button onclick="marcarPagoFiscal(\''+p.key+'\',\''+it.nombre+'\')" style="background:#f5f5f5;border:1px solid #e0e0e0;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:600;color:#555;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent">Marcar pagado</button>'
+      +'</div>';
+  });
+  var deshacer = fiscalUltimoKey
+    ? ' \u00b7 <a href="javascript:void(0)" onclick="deshacerPagoFiscal()" style="color:#1565C0;font-weight:600">Deshacer \u00faltimo</a>'
+    : '';
+  html+='<div style="background:#fafafa;border-top:0.5px solid #f0f0f0;padding:8px 14px;font-size:11px;color:#aaa">Al marcar pagado, pasa autom\u00e1ticamente a la siguiente fecha.'+deshacer+'</div>';
+  cont.innerHTML=html;
+}
+
+function guardarPagoFiscalNube(key, valor){
+  if(!db) return;
+  var upd={}; upd[key]=valor;
+  db.collection('CONFIG').doc('calendario_fiscal').set(upd,{merge:true}).catch(function(e){
+    alert('Se marc\u00f3 en este dispositivo, pero no se pudo guardar en la nube: '+e.message);
+  });
+}
+
+function marcarPagoFiscal(key, nombre){
+  if(!confirm('\u00bfMarcar como PAGADO este vencimiento de '+nombre+'?\n\nSe mostrar\u00e1 la siguiente fecha del calendario.')) return;
+  fiscalPagados[key]=true;
+  fiscalUltimoKey=key;
+  renderCalendarioFiscal();
+  guardarPagoFiscalNube(key, true);
+}
+
+function deshacerPagoFiscal(){
+  if(!fiscalUltimoKey) return;
+  if(!confirm('\u00bfVolver a marcar como PENDIENTE el \u00faltimo pago?')) return;
+  fiscalPagados[fiscalUltimoKey]=false;
+  guardarPagoFiscalNube(fiscalUltimoKey, false);
+  fiscalUltimoKey=null;
+  renderCalendarioFiscal();
+}
+
+function loadDashboard() {
+  if(!db){ return; }
+  loadCitasProximas();
+  loadCalendarioFiscal();
+  var now = new Date();
+  var meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var fechaEl = document.getElementById('dash-fecha');
+  if(fechaEl) fechaEl.textContent = now.getDate()+' '+meses[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('dash-loading').style.display='block';
+  document.getElementById('dash-content').style.display='none';
+  var capital = parseFloat(document.getElementById('dash-capital').value) || 3898.47;
+  var now = new Date();
+  var mesActual = now.getFullYear()+'-'+pad(now.getMonth()+1);
+
+  var st = {
+    fbReady:false, totReady:false, finished:false,
+    tRentas:0, nRentas:0, tGST:0, tPST:0, tMes:0, nMes:0,
+    tGastos:0, tITC:0, nGastos:0, totalesOK:false
+  };
+
+  function finalizar() {
+    if(st.finished || !st.fbReady || !st.totReady) return;
+    st.finished = true;
+    var capitalF = parseFloat(document.getElementById('dash-capital').value)||capital;
+    var banco = parseFloat(document.getElementById('dash-banco').value)||capitalF;
+    var statusEl = document.getElementById('d-gastos-status');
+    if(statusEl) statusEl.style.display = st.totalesOK ? 'none' : 'block';
+    mostrarDashboard(capitalF, banco, st.tRentas, st.tGST, st.tPST,
+                     st.tGastos, st.tITC, st.nRentas, st.nGastos, st.tMes, st.nMes);
+  }
+
+  // ── A) Leer documento TOTALES/dashboard de Firebase (escrito por Apps Script) ──
+  db.collection('TOTALES').doc('dashboard').get()
+  .then(function(doc) {
+    if(doc.exists) {
+      var t = doc.data();
+      // Auto-poblar desde la hoja (fuente única de verdad — escrito por el script)
+      if(t.saldoBanco       !== undefined) document.getElementById('dash-banco').value   = parseFloat(t.saldoBanco);
+      if(t.capital          !== undefined) document.getElementById('dash-capital').value = parseFloat(t.capital);
+      if(t.impuestosApartar !== undefined) document.getElementById('dash-imp').value      = parseFloat(t.impuestosApartar);
+      if(t.remesaNomina     !== undefined) document.getElementById('dash-remesa').value   = parseFloat(t.remesaNomina);
+      if(t.disponibleReal   !== undefined) document.getElementById('dash-disponible').value = parseFloat(t.disponibleReal);
+      if(t.gstPorCobrar     !== undefined) document.getElementById('dash-gstcobrar').value   = parseFloat(t.gstPorCobrar);
+      if(parseFloat(t.totalRentas||0) > 0) {
+        st.tRentas = parseFloat(t.totalRentas    || 0);
+        st.tGST    = parseFloat(t.totalGSTrentas || 0);
+        st.tPST    = parseFloat(t.totalRSTrentas || 0);
+        st.nRentas = parseInt(t.countRentas      || 0);
+        st.tGastos = parseFloat(t.totalGastos    || 0);
+        st.tITC    = parseFloat(t.totalITC       || 0);
+        st.nGastos = parseInt(t.countGastos      || 0);
+        st.totalesOK = true;
+      }
+    }
+    st.totReady = true;
+    finalizar();
+  })
+  .catch(function() {
+    st.totReady = true;
+    finalizar();
+  });
+
+  // ── B) Firebase rentas (respaldo + datos del mes actual) ──
+  db.collection('CITAS_RENTA').where('cancelada','==',false).get()
+  .then(function(snap) {
+    var fbRentas=0, fbN=0, fbGST=0, fbPST=0, fbMes=0, fbNMes=0;
+    var todayISO = now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+    snap.forEach(function(doc) {
+      var d = doc.data();
+      // Solo citas con fecha <= hoy (ya cobradas o de hoy)
+      if(!d.fecha || d.fecha > todayISO) return;
+      fbRentas += parseFloat(d.subtotal||0);
+      fbGST    += parseFloat(d.gst||0);
+      fbPST    += parseFloat(d.pst||0);
+      fbN++;
+      if(d.fecha && d.fecha.startsWith(mesActual)) {
+        fbMes += parseFloat(d.total||0); fbNMes++;
+      }
+    });
+    if(!st.totalesOK) {
+      st.tRentas=fbRentas; st.tGST=fbGST; st.tPST=fbPST; st.nRentas=fbN;
+    }
+    st.tMes=fbMes; st.nMes=fbNMes;
+    st.fbReady = true;
+    finalizar();
+  })
+  .catch(function(e) {
+    st.fbReady = true;
+    document.getElementById('dash-loading').innerHTML = '⚠️ Error Firebase: '+e.message;
+  });
+}
+
+function mostrarDashboard(capital, banco, tRentas, tGST, tPST, tGastos, tITC, nRentas, nGastos, tMes, nMes) {
+  var gstNeto    = Math.max(0, tGST - tITC);
+  var remesa     = parseFloat(document.getElementById('dash-remesa').value) || 0;
+  var impFijo    = parseFloat(document.getElementById('dash-imp').value);   // GST+RST fijo, sincronizado con la hoja
+  var impSales   = isNaN(impFijo) ? (gstNeto + tPST) : impFijo;             // usa el fijo; si está vacío, calcula de Firebase
+  var impTotal   = impSales + remesa;     // total a apartar = GST + RST + remesa nómina CRA
+  var saldoNeto  = tRentas - tGastos; // rentas cobradas (sin taxes) minus gastos
+  // Disponible real: usa el valor exacto de la hoja (E32). Si no viene, recalcula como respaldo.
+  var dispSheet  = parseFloat(document.getElementById('dash-disponible').value);
+  var disponible = !isNaN(dispSheet) ? dispSheet : (banco - capital - impTotal);
+  var gstCobrar  = parseFloat(document.getElementById('dash-gstcobrar').value) || 0;
+
+  document.getElementById('d-disponible').textContent   = '$'+disponible.toFixed(2);
+  document.getElementById('d-gst-cobrar').textContent   = '$'+gstCobrar.toFixed(2);
+  document.getElementById('d-saldo').textContent        = '$'+saldoNeto.toFixed(2);
+  document.getElementById('d-rentas').textContent       = '$'+tRentas.toFixed(2);
+  document.getElementById('d-rentas-count').textContent = nRentas+' citas';
+  document.getElementById('d-gastos').textContent       = '$'+tGastos.toFixed(2);
+  document.getElementById('d-gastos-count').textContent = nGastos+' gastos';
+  document.getElementById('d-mes').textContent          = '$'+tMes.toFixed(2);
+  document.getElementById('d-mes-count').textContent    = nMes+' citas';
+  document.getElementById('d-gst').textContent          = '$'+gstNeto.toFixed(2);
+  document.getElementById('d-rst').textContent          = '$'+tPST.toFixed(2);
+  document.getElementById('d-imp-total').textContent    = '$'+impTotal.toFixed(2);
+
+  document.getElementById('dash-loading').style.display = 'none';
+  document.getElementById('dash-content').style.display = 'block';
+}
+
+function toggleImpuestos() {
+  var det = document.getElementById('imp-detalle');
+  var ico = document.getElementById('imp-toggle-icon');
+  if(!det) return;
+  if(det.style.display==='none'){ det.style.display='block'; if(ico) ico.textContent='▲'; }
+  else { det.style.display='none'; if(ico) ico.textContent='▼'; }
+}
+
+// ===== ADMIN AUTOS JS =====
+
+  // ── FIREBASE CONFIG ──
+
+  // ── PASSWORD ── (puedes cambiar esta contraseña)
+  var ADMIN_PASSWORD = "8334";
+
+  // ── STATE ──
+  let admSelectedFiles = [];
+  let admExistingPhotos = [];
+
+  // ── LOGIN ──
+  function admLogin() {
+    const pw = document.getElementById('passwordInput').value;
+    if (pw === ADMIN_PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('appScreen').style.display = 'block';
+      admLoadVehiculos();
+      admLoadStats();
+      admStartSessionTimer();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('passwordInput').value = '';
+      document.getElementById('passwordInput').focus();
+    }
+  }
+
+  function admLogout() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+    document.getElementById('passwordInput').value = '';
+  }
+
+  function admTogglePwEye() {
+    const inp = document.getElementById('passwordInput');
+    const btn = document.getElementById('eyeBtn');
+    if (inp.type === 'password') { inp.type = 'text'; inp.style.letterSpacing = '2px'; btn.textContent = '🙈'; }
+    else { inp.type = 'password'; inp.style.letterSpacing = '4px'; btn.textContent = '👁'; }
+  }
+
+  // ── NAVIGATION ──
+  function admShowPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    event.currentTarget.classList.add('active');
+    if (name === 'suscriptores') admCargarSuscriptores();
+    if (name === 'vehiculo-renta') loadVehicleRenta();
+  }
+
+  // ── SUSCRIPTORES ──
+  function admCargarSuscriptores() {
+    const lista = document.getElementById('admSuscrLista');
+    lista.innerHTML = '<div class="loading"><div class="spinner"></div> Cargando suscriptores...</div>';
+
+    db.collection('SUSCRIPTORES').get().then(function(snap) {
+      const docs = [];
+      snap.forEach(function(doc) { docs.push({ id: doc.id, data: doc.data() }); });
+
+      const emails  = docs.filter(d => d.data.tipo === 'email' && d.data.activo !== false);
+      const pushes  = docs.filter(d => d.data.tipo === 'push'  && d.data.activo !== false);
+      const activos = docs.filter(d => d.data.activo !== false);
+
+      document.getElementById('admSuscrTotal').textContent = activos.length;
+      document.getElementById('admSuscrEmail').textContent = emails.length;
+      document.getElementById('admSuscrPush').textContent  = pushes.length;
+
+      if (docs.length === 0) {
+        lista.innerHTML = '<div class="empty-state"><div class="icon">🔔</div><h3>No hay suscriptores todavía</h3><p>Cuando alguien se suscriba en la web aparecerá aquí</p></div>';
+        return;
+      }
+
+      docs.sort((a, b) => (b.data.fecha || '').localeCompare(a.data.fecha || ''));
+      lista.innerHTML = '';
+
+      docs.forEach(function(item) {
+        const d = item.data;
+        const esActivo = d.activo !== false;
+        const label = d.tipo === 'email' ? ('📧 ' + (d.email || '—')) : '📱 Push Android';
+        const fecha = d.fecha ? d.fecha.substring(0, 10) : '—';
+
+        const row = document.createElement('div');
+        row.style.cssText = 'background:#fff;border:1px solid #e2e8f0;border-left:4px solid ' + (esActivo ? '#10b981' : '#cbd5e1') + ';border-radius:0 12px 12px 0;padding:14px 16px;display:flex;align-items:center;gap:12px;';
+        row.innerHTML =
+          '<div style="flex:1;min-width:0;">' +
+            '<div style="font-size:15px;font-weight:600;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + label + '</div>' +
+            '<div style="font-size:12px;color:#94a3b8;margin-top:3px;">' + fecha + ' · ' + (esActivo ? '<span style="color:#10b981;font-weight:600;">Activo</span>' : '<span style="color:#94a3b8;">Pausado</span>') + '</div>' +
+          '</div>' +
+          '<button onclick="admSuscrToggle(\'' + item.id + '\',' + esActivo + ')" style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:' + (esActivo ? '#fef3c7' : '#dcfce7') + ';color:' + (esActivo ? '#92400e' : '#166534') + ';">' + (esActivo ? 'Pausar' : 'Activar') + '</button>' +
+          '<button onclick="admSuscrEliminar(\'' + item.id + '\')" style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fee2e2;color:#991b1b;">Eliminar</button>';
+        lista.appendChild(row);
+      });
+    }).catch(function(e) {
+      lista.innerHTML = '<div style="text-align:center;padding:32px;color:#ef4444;font-size:14px;">Error al cargar: ' + e.message + '</div>';
+    });
+  }
+
+  function admSuscrToggle(id, activo) {
+    db.collection('SUSCRIPTORES').doc(id).update({ activo: !activo }).then(function() {
+      admCargarSuscriptores();
+    }).catch(function(e) { alert('Error: ' + e.message); });
+  }
+
+  function admSuscrEliminar(id) {
+    if (!confirm('¿Eliminar este suscriptor permanentemente?')) return;
+    db.collection('SUSCRIPTORES').doc(id).delete().then(function() {
+      admCargarSuscriptores();
+    }).catch(function(e) { alert('Error: ' + e.message); });
+  }
+
+  // ── STATS ──
+  async function admLoadStats() {
+    try {
+      const snap = await db.collection('VEHICULOS_BG').get();
+      document.getElementById('statVehiculos').textContent = snap.size;
+      let totalFotos = 0;
+      snap.forEach(doc => {
+        const data = doc.data();
+        if (data.fotos) totalFotos += data.fotos.length;
+      });
+      document.getElementById('statFotos').textContent = totalFotos;
+    } catch(e) { console.error(e); }
+  }
+
+  // ── LOAD VEHICULOS ──
+  function admLoadVehiculos() {
+    const container = document.getElementById('vehiculosList');
+    db.collection('VEHICULOS_BG').onSnapshot(snap => {
+      admLoadStats();
+      if (snap.empty) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="icon">🚗</div>
+            <h3>No hay vehículos todavía</h3>
+            <p>Agrega tu primer vehículo al inventario</p>
+            <button class="btn btn-primary" onclick="admOpenAddModal()">➕ Agregar primer vehículo</button>
+          </div>`;
+        return;
+      }
+
+      let html = '<div class="vehicle-grid">';
+      snap.forEach(doc => {
+        const d = doc.data();
+        const id = doc.id;
+        const fotos = d.fotos || [];
+        const firstPhoto = fotos.length > 0 ? fotos[0] : null;
+        const catLabel = d.categoria === 'suv' ? 'SUV' : d.categoria === 'likenew' ? 'Like New' : 'Sedán';
+
+        html += `
+          <div class="vehicle-card">
+            <div class="vehicle-img-wrapper">
+              ${firstPhoto
+                ? `<img src="${firstPhoto}" alt="${d.nombre}" style="width:100%;height:180px;object-fit:cover;">`
+                : `<div class="vehicle-card-img">🚗</div>`}
+              ${fotos.length > 1 ? `<div class="photo-count-badge">📸 ${fotos.length} fotos</div>` : ''}
+            </div>
+            <div class="vehicle-card-body">
+              <div class="vehicle-card-name">${d.nombre || '—'}</div>
+              <div class="vehicle-card-price">CAD $${(d.precio || 0).toLocaleString()}</div>
+              <div class="vehicle-card-meta">
+                <span class="badge">${catLabel}</span>
+                <span class="badge gray">${(d.km || 0).toLocaleString()} km</span>
+              </div>
+              <div class="vehicle-card-actions">
+                <button class="btn btn-ghost" onclick="admOpenEditModal('${id}')">✏️ Editar</button>
+                <button class="btn btn-danger" onclick="admDeleteVehiculo('${id}', '${(d.nombre||'').replace(/'/g,"\\'")}')">🗑️ Eliminar</button>
+              </div>
+            </div>
+          </div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    }, err => {
+      console.error(err);
+      container.innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><h3>Error al cargar</h3><p>' + err.message + '</p></div>';
+    });
+  }
+
+  // ── MODAL ──
+  function admOpenAddModal() {
+    document.getElementById('modalTitle').textContent = 'Agregar vehículo';
+    document.getElementById('editingId').value = '';
+    document.getElementById('vNombre').value = '';
+    document.getElementById('vPrecio').value = '';
+    document.getElementById('vKm').value = '';
+  document.getElementById('vCarfax').value = '';
+    document.getElementById('vCategoria').value = 'sedan';
+    admSelectedFiles = [];
+    admExistingPhotos = [];
+    document.getElementById('photoPreviews').innerHTML = '';
+    document.getElementById('vehiculoModal').classList.add('active');
+  }
+
+  async function admOpenEditModal(id) {
+    const doc = await db.collection('VEHICULOS_BG').doc(id).get();
+    const d = doc.data();
+    document.getElementById('modalTitle').textContent = 'Editar vehículo';
+    document.getElementById('editingId').value = id;
+    document.getElementById('vNombre').value = d.nombre || '';
+    document.getElementById('vPrecio').value = d.precio || '';
+    document.getElementById('vKm').value = d.km || '';
+    document.getElementById('vCategoria').value = d.categoria || 'sedan';
+    document.getElementById('vCarfax').value = d.carfax || '';
+    admSelectedFiles = [];
+    admExistingPhotos = d.fotos || [];
+    admRenderPreviews();
+    document.getElementById('vehiculoModal').classList.add('active');
+  }
+
+  function admCloseModal() {
+    document.getElementById('vehiculoModal').classList.remove('active');
+  }
+
+  // ── PHOTO HANDLING ──
+  function admHandlePhotoSelect(event) {
+    const files = Array.from(event.target.files);
+    admSelectedFiles = [...admSelectedFiles, ...files];
+    admRenderPreviews();
+    event.target.value = '';
+  }
+
+  function admRenderPreviews() {
+    const container = document.getElementById('photoPreviews');
+    container.innerHTML = '';
+
+    admExistingPhotos.forEach((url, i) => {
+      container.innerHTML += `
+        <div class="photo-preview" data-source="existing" data-index="${i}">
+          <img src="${url}" alt="foto">
+          <button class="photo-preview-remove" onclick="admRemoveExistingPhoto(${i})">✕</button>
+        </div>`;
+    });
+
+    admSelectedFiles.forEach((file, i) => {
+      const url = URL.createObjectURL(file);
+      container.innerHTML += `
+        <div class="photo-preview" data-source="new" data-index="${i}">
+          <img src="${url}" alt="foto">
+          <button class="photo-preview-remove" onclick="admRemoveNewPhoto(${i})">✕</button>
+        </div>`;
+    });
+
+    if (window._sortable) window._sortable.destroy();
+    window._sortable = new Sortable(container, {
+      animation: 150, delay: 400, delayOnTouchOnly: true, touchStartThreshold: 4,
+      onEnd: function() {
+        const newExisting = [], newSelected = [];
+        container.querySelectorAll('.photo-preview').forEach(div => {
+          const src = div.dataset.source, idx = parseInt(div.dataset.index);
+          if (src === 'existing') newExisting.push(admExistingPhotos[idx]);
+          else newSelected.push(admSelectedFiles[idx]);
+        });
+        admExistingPhotos = newExisting; admSelectedFiles = newSelected;
+        admRenderPreviews();
+      }
+    });
+  }
+
+  function admRemoveExistingPhoto(index) {
+    admExistingPhotos.splice(index, 1);
+    admRenderPreviews();
+  }
+
+  function admRemoveNewPhoto(index) {
+    admSelectedFiles.splice(index, 1);
+    admRenderPreviews();
+  }
+
+  // ── SAVE ──
+  async function admSaveVehiculo() {
+    const nombre = document.getElementById('vNombre').value.trim();
+    const precio = parseFloat(document.getElementById('vPrecio').value);
+    const km = parseInt(document.getElementById('vKm').value);
+    const categoria = document.getElementById('vCategoria').value;
+
+    if (!nombre || !precio || !km) {
+      admShowToast('Por favor completa todos los campos', 'error');
+      return;
+    }
+
+    const saveBtn = document.querySelector('.form-actions .btn-primary');
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Guardando...';
+
+    try {
+      let fotosUrls = [...admExistingPhotos];
+
+      if (admSelectedFiles.length > 0) {
+        document.getElementById('uploadProgress').style.display = 'block';
+        for (let i = 0; i < admSelectedFiles.length; i++) {
+          const file = admSelectedFiles[i];
+          const percent = Math.round(((i) / admSelectedFiles.length) * 100);
+          document.getElementById('progressBar').style.width = percent + '%';
+          document.getElementById('progressText').textContent = `Subiendo foto ${i+1} de ${admSelectedFiles.length}...`;
+
+          const ref = storage.ref(`vehiculos/${Date.now()}_${file.name}`);
+          await ref.put(file);
+          const url = await ref.getDownloadURL();
+          fotosUrls.push(url);
+        }
+        document.getElementById('progressBar').style.width = '100%';
+        document.getElementById('progressText').textContent = '¡Fotos subidas!';
+      }
+
+      const carfax = document.getElementById('vCarfax').value.trim() || '';
+        const data = { nombre, precio, km, categoria, carfax, fotos: fotosUrls, updatedAt: firebase.firestore.FieldValue.serverTimestamp() };
+      const editingId = document.getElementById('editingId').value;
+
+      if (editingId) {
+        await db.collection('VEHICULOS_BG').doc(editingId).update(data);
+        admShowToast('✅ Vehículo actualizado', 'success');
+      } else {
+        data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        await db.collection('VEHICULOS_BG').add(data);
+        admShowToast('✅ Vehículo agregado', 'success');
+      }
+
+      admCloseModal();
+    } catch (e) {
+      console.error(e);
+      admShowToast('Error: ' + e.message, 'error');
+    } finally {
+      saveBtn.disabled = false;
+      saveBtn.textContent = '💾 Guardar';
+      document.getElementById('uploadProgress').style.display = 'none';
+      document.getElementById('progressBar').style.width = '0%';
+    }
+  }
+
+  // ── DELETE ──
+  async function admDeleteVehiculo(id, nombre) {
+    if (!confirm(`¿Eliminar "${nombre}"? Esta acción no se puede deshacer.`)) return;
+    try {
+      await db.collection('VEHICULOS_BG').doc(id).delete();
+      admShowToast('🗑️ Vehículo eliminado', 'success');
+    } catch(e) {
+      admShowToast('Error al eliminar: ' + e.message, 'error');
+    }
+  }
+
+  // ── TOAST ──
+  function admShowToast(msg, type = '') {
+    const t = document.getElementById('adm-toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type + ' show';
+    setTimeout(() => t.className = 'toast', 3000);
+  }
+
+  // ── CLOSE MODAL ON OUTSIDE CLICK ──
+  document.getElementById('vehiculoModal').addEventListener('click', function(e) {
+    if (e.target === this) admCloseModal();
+  });
+
+  // ── SESSION 10 MIN ──
+  const SESSION_DURATION = 10 * 60 * 1000; // 10 minutes
+  let sessionTimer = null;
+
+  function admStartSessionTimer() {
+    clearTimeout(sessionTimer);
+    sessionTimer = setTimeout(() => {
+      admLogout();
+      alert('Sesión cerrada por inactividad (10 minutos).');
+    }, SESSION_DURATION);
+  }
+
+  function admResetSessionTimer() {
+    if (document.getElementById('appScreen').style.display !== 'none') {
+      admStartSessionTimer();
+    }
+  }
+
+  ['click','touchstart','keydown','scroll'].forEach(evt => {
+    document.addEventListener(evt, admResetSessionTimer, { passive: true });
+  });
+
+  // ── MOBILE SIDEBAR ──
+  function admToggleSidebar() {
+    document.querySelector('.sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+  }
+
+  // Close sidebar when nav item is tapped on mobile
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.querySelector('.sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('open');
+      }
+    });
+  });
+
+  // Start timer on login
+  const origDoLogin = admLogin;
+  // Patch admLogin to start timer
+
+
+
+// ===== FIREBASE INIT (shared) =====
+(function(){
+  var s1=document.createElement('script');
+  s1.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js';
+  s1.onload=function(){
+    var s2=document.createElement('script');
+    s2.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js';
+    s2.onload=function(){
+      var s3=document.createElement('script');
+      s3.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js';
+      s3.onload=function(){
+        var s4=document.createElement('script');
+        s4.src='https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js';
+        s4.onload=function(){
+          try{
+            if(!firebase.apps.length){
+              firebase.initializeApp({
+                apiKey:'AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ',
+                authDomain:'bolivarautos-919e4.firebaseapp.com',
+                projectId:'bolivarautos-919e4',
+                storageBucket:'bolivarautos-919e4.firebasestorage.app',
+                messagingSenderId:'397354528937',
+                appId:'1:397354528397:web:52fd2ec53984af7aaa7cc4'
+              });
+            }
+            db=firebase.firestore();
+            storage=firebase.storage();
+            loadBookedDates();
+          }catch(e){console.error(e);}
+        };
+        document.head.appendChild(s4);
+      };
+      document.head.appendChild(s3);
+    };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+})();
+
+// Init rentas
+renderZones();renderCal();renderTimes();updateDurOptions();applyL();updateProgress();upd();setTimeout(function(){loadBookedDates();},800);
+setGastoFecha();
+</script>
+<!-- PDF overlay -->
+<div id="pdf-overlay" style="display:none;position:fixed;inset:0;background:#fff;z-index:9999;overflow-y:auto">
+  <div style="position:sticky;top:0;background:#1F4E79;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+    <button onclick="window.print()" style="background:#fff;color:#1F4E79;border:none;border-radius:6px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer">🖨 Print / PDF</button>
+    <button onclick="document.getElementById('pdf-overlay').style.display='none'" style="background:rgba(255,255,255,0.2);color:#fff;border:none;border-radius:6px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer">✕ Cerrar</button>
+  </div>
+  <div id="pdf-content" style="padding:20px;max-width:800px;margin:0 auto;font-family:Arial,sans-serif;font-size:13px"></div>
+</div>
+</body>
+</html>
+<script>
+// ── CONTRATO DIGITAL ─────────────────────────────────────────────────────────
+var _contratoData   = null;
+var _contratoDocId  = null;
+var _contratoVersion = 'A';
+
+function admOpenContratoModal(docData, docId) {
+  _contratoData   = docData;
+  _contratoDocId  = docId;
+  _contratoVersion = 'A';
+  admSelectVersion('A');
+
+  document.getElementById('admContratoInfo').textContent =
+    docData.cliente + ' | ' + docData.fecha + ' ' + docData.hora + ' | $' + parseFloat(docData.total||0).toFixed(2) + ' CAD';
+  document.getElementById('admContratoResult').style.display = 'none';
+  document.getElementById('admContratoSigned').style.display = 'none';
+  document.getElementById('admContratoModal').style.display  = 'flex';
+
+  // Check immediately if already signed
+  admCheckFirma();
+}
+
+function admCloseContratoModal() {
+  document.getElementById('admContratoModal').style.display = 'none';
+}
+
+function admSelectVersion(v) {
+  _contratoVersion = v;
+  var a = document.getElementById('btnVerA');
+  var b = document.getElementById('btnVerB');
+  if(v === 'A') {
+    a.style.border = '2px solid #2563eb'; a.style.background = '#eff6ff'; a.style.color = '#1e40af';
+    b.style.border = '2px solid #e2e8f0'; b.style.background = '#f8fafc'; b.style.color = '#64748b';
+  } else {
+    b.style.border = '2px solid #2563eb'; b.style.background = '#eff6ff'; b.style.color = '#1e40af';
+    a.style.border = '2px solid #e2e8f0'; a.style.background = '#f8fafc'; a.style.color = '#64748b';
+  }
+}
+
+function admCheckFirma() {
+  if(!_contratoDocId) return;
+  var signedDiv  = document.getElementById('admContratoSigned');
+  var signedText = document.getElementById('admContratoSignedText');
+  db.collection('CONTRATOS').doc(_contratoDocId).get().then(function(cDoc){
+    if(cDoc.exists && cDoc.data().aceptado) {
+      var ts  = cDoc.data().timestamp || '';
+      var ver = cDoc.data().version   || 'A';
+      signedText.textContent = 'Firmado el ' + ts + ' — Versión ' + ver;
+      signedDiv.style.display = 'block';
+      // Also refresh badge in list
+      var badge = document.getElementById('badge-' + _contratoDocId);
+      if(badge) badge.style.display = 'inline-block';
+    } else {
+      signedDiv.style.display = 'none';
+    }
+  }).catch(function(){});
+}
+
+function admRefreshFirma() {
+  var resultEl = document.getElementById('admContratoResult');
+  resultEl.style.color   = '#64748b';
+  resultEl.textContent   = '🔄 Verificando...';
+  resultEl.style.display = 'block';
+  admCheckFirma();
+  setTimeout(function(){
+    var signedDiv = document.getElementById('admContratoSigned');
+    if(signedDiv.style.display === 'block') {
+      resultEl.style.display = 'none';
+    } else {
+      resultEl.style.color   = '#f59e0b';
+      resultEl.textContent   = '⏳ El cliente aún no ha firmado.';
+    }
+  }, 1500);
+}
+
+function admEnviarContrato() {
+  if(!_contratoData) return;
+  var d  = _contratoData;
+  var ph = d.telefono.replace(/\D/g,'');
+  if(ph.length === 10) ph = '1' + ph;
+
+  var base   = 'https://bolivarautos.ca/contrato.html';
+  var params = new URLSearchParams({
+    id:    _contratoDocId,
+    v:     _contratoVersion,
+    nom:   d.cliente,
+    tel:   d.telefono,
+    fecha: d.fecha,
+    hora:  d.hora,
+    zona:  d.zona_nombre || '',
+    hrs:   d.duracion    || '',
+    sub:   d.subtotal    || '',
+    gst:   d.gst         || '',
+    pst:   d.pst         || '',
+    tot:   d.total       || ''
+  });
+  var link = base + '?' + params.toString();
+  var verLabel = _contratoVersion === 'A' ? 'Full Licence' : 'GDL/Beginner';
+
+  var msg = 'Hi ' + d.cliente + '! Your BolivarAutos-Renta booking is confirmed ✅\n\n' +
+    '📅 ' + d.fecha + ' at ' + d.hora + '\n' +
+    '📍 Zone: ' + (d.zona_nombre || '') + '\n' +
+    '💵 Total: $' + parseFloat(d.total || 0).toFixed(2) + ' CAD\n\n' +
+    '📋 Please read and sign your rental agreement (' + verLabel + '):\n' + link + '\n\n' +
+    'Questions? Call/text: (204) 509-6153';
+
+  var resultEl = document.getElementById('admContratoResult');
+  resultEl.style.color   = '#16a34a';
+  resultEl.textContent   = '✅ Abriendo WhatsApp...';
+  resultEl.style.display = 'block';
+
+  setTimeout(function(){
+    window.open('https://wa.me/' + ph + '?text=' + encodeURIComponent(msg), '_blank');
+  }, 300);
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+// ── NOTIFICAR SUSCRIPTORES ───────────────────────────────────────────────────
+function admOpenNotifyModal() {
+  var modal = document.getElementById('admNotifyModal');
+  modal.style.display = 'flex';
+  modal.style.alignItems = 'center';
+  modal.style.justifyContent = 'center';
+  firebase.firestore().collection('SUSCRIPTORES').where('activo','==',true).get().then(function(snap){
+    var emails = 0;
+    snap.forEach(function(d){ if(d.data().tipo==='email') emails++; });
+    document.getElementById('admNotifyCount').textContent = 'Suscriptores: ' + emails + ' email' + (emails!==1?'s':'');
+  }).catch(function(){
+    document.getElementById('admNotifyCount').textContent = 'No se pudo cargar el conteo.';
+  });
+}
+
+function admCloseNotifyModal() {
+  document.getElementById('admNotifyModal').style.display = 'none';
+  document.getElementById('admNotifyResult').style.display = 'none';
+}
+
+function admSendNotifications() {
+  var msg = document.getElementById('admNotifyMsg').value.trim() ||
+    '¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗';
+  var resultEl = document.getElementById('admNotifyResult');
+  resultEl.style.display = 'none';
+
+  firebase.firestore().collection('SUSCRIPTORES').where('activo','==',true).get().then(function(snap){
+    var emails = [];
+    var pushTokens = [];
+    snap.forEach(function(d){
+      if(d.data().tipo==='email') emails.push(d.data().email);
+      if(d.data().tipo==='push' && d.data().token) pushTokens.push(d.data().token);
+    });
+
+    if(emails.length === 0 && pushTokens.length === 0) {
+      resultEl.style.color = '#64748b';
+      resultEl.textContent = 'No hay suscriptores aún.';
+      resultEl.style.display = 'block';
+      return;
+    }
+
+    var promises = [];
+
+    // Send emails via EmailJS
+    if(emails.length > 0) {
+      emailjs.init('2W_g_q0eqTdn1Haxh');
+      emails.forEach(function(email){
+        promises.push(emailjs.send('service_zh2gldt','template_jyes3kc',{
+          to_email: email,
+          message: msg,
+          site_url: 'https://bolivarautos.ca'
+        }));
+      });
+    }
+
+    Promise.allSettled(promises).then(function(results){
+      var sent = results.filter(function(r){ return r.status==='fulfilled'; }).length;
+      var total = emails.length;
+      var pushInfo = pushTokens.length > 0 ? ' + ' + pushTokens.length + ' push (Android)' : '';
+      resultEl.style.color = '#16a34a';
+      resultEl.textContent = '✅ Email enviado a ' + sent + '/' + total + pushInfo;
+      resultEl.style.display = 'block';
+    });
+  }).catch(function(err){
+    resultEl.style.color = '#dc2626';
+    resultEl.textContent = 'Error: ' + err.message;
+    resultEl.style.display = 'block';
+  });
+}
+</script>
