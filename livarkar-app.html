@@ -341,44 +341,44 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 /* ===== NAV BAR ===== */
 .bottom-nav{position:sticky;top:0;z-index:100;display:flex;background:#1A2035;padding:0;border-bottom:3px solid #3D9EFF;margin-bottom:14px;box-shadow:0 3px 10px rgba(0,0,0,0.3)}
 .bnav-btn{flex:1;padding:16px 4px;background:transparent;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;-webkit-tap-highlight-color:transparent;border-bottom:3px solid transparent}
-.bnav-label{font-size:16px;font-weight:500;color:rgba(255,255,255,0.75);letter-spacing:0.2px}
-.bnav-btn.active .bnav-label{color:#ffffff;font-weight:700;font-size:16px}
+.bnav-label{font-size:19px;font-weight:600;color:rgba(255,255,255,0.85);letter-spacing:0.2px}
+.bnav-btn.active .bnav-label{color:#ffffff;font-weight:700;font-size:19px}
 .bnav-btn.active{border-bottom:3px solid #3D9EFF;background:rgba(43,127,225,0.18)}
 .tab-page{display:none}
 .tab-page.active{display:block}
 
 /* ===== AJUSTE DE LETRA MAS GRANDE — SOLO PESTAÑA ALQUILER (no toca otras pestañas) ===== */
-#tab-rentas .header h1{font-size:23px!important}
-#tab-rentas .header p{font-size:15px!important}
-#tab-rentas .lbtn{font-size:17px;padding:10px 24px}
-#tab-rentas .progress-title{font-size:12px}
-#tab-rentas .prog-text{font-size:17px}
-#tab-rentas .sec-label{font-size:16px}
-#tab-rentas .rate-row label{font-size:16px}
-#tab-rentas .rate-prefix{font-size:18px}
-#tab-rentas .rate-input{font-size:20px}
-#tab-rentas .rate-suffix{font-size:15px!important}
-#tab-rentas .zcard .zn{font-size:19px}
-#tab-rentas .zcard .za{font-size:15px}
-#tab-rentas .cal-hdr{font-size:15px}
+#tab-rentas .header h1{font-size:24px!important}
+#tab-rentas .header p{font-size:16px!important}
+#tab-rentas .lbtn{font-size:18px;padding:10px 24px}
+#tab-rentas .progress-title{font-size:14px}
+#tab-rentas .prog-text{font-size:18px}
+#tab-rentas .sec-label{font-size:17px}
+#tab-rentas .rate-row label{font-size:17px}
+#tab-rentas .rate-prefix{font-size:19px}
+#tab-rentas .rate-input{font-size:21px}
+#tab-rentas .rate-suffix{font-size:16px!important}
+#tab-rentas .zcard .zn{font-size:20px}
+#tab-rentas .zcard .za{font-size:16px}
+#tab-rentas .cal-hdr{font-size:16px}
 #tab-rentas .cal-nav span{font-size:20px}
 #tab-rentas .cal-nav button{font-size:20px}
-#tab-rentas .cal-day{font-size:18px}
-#tab-rentas .dur-row label{font-size:18px}
-#tab-rentas .dur-row select{font-size:17px}
-#tab-rentas .tslot .tm{font-size:18px}
-#tab-rentas .tslot .te{font-size:15px}
-#tab-rentas .fg label{font-size:18px}
-#tab-rentas .fg input{font-size:18px}
-#tab-rentas .btn-confirm{font-size:19px}
-#tab-rentas .sum-row{font-size:18px}
-#tab-rentas .sum-tax{font-size:15px}
-#tab-rentas .sum-total{font-size:26px}
-#tab-rentas .msgbox{font-size:16px}
-#tab-rentas .admin-title{font-size:16px}
-#tab-rentas .admin-toggle button{font-size:15px}
-#tab-rentas .hist-table th{font-size:13px}
-#tab-rentas .hist-table td{font-size:14px}
+#tab-rentas .cal-day{font-size:19px}
+#tab-rentas .dur-row label{font-size:19px}
+#tab-rentas .dur-row select{font-size:18px}
+#tab-rentas .tslot .tm{font-size:19px}
+#tab-rentas .tslot .te{font-size:16px}
+#tab-rentas .fg label{font-size:19px}
+#tab-rentas .fg input{font-size:19px}
+#tab-rentas .btn-confirm{font-size:20px}
+#tab-rentas .sum-row{font-size:19px}
+#tab-rentas .sum-tax{font-size:16px}
+#tab-rentas .sum-total{font-size:27px}
+#tab-rentas .msgbox{font-size:17px}
+#tab-rentas .admin-title{font-size:17px}
+#tab-rentas .admin-toggle button{font-size:16px}
+#tab-rentas .hist-table th{font-size:14px}
+#tab-rentas .hist-table td{font-size:15px}
 </style>
 </head>
 <body style="overflow:hidden">
@@ -1426,8 +1426,8 @@ function loadBookedDates(){
 function renderTimes(){
   var dur=parseFloat(document.getElementById('dur').value);
   var g=document.getElementById('time-grid');g.innerHTML='';
-  var endH=15;
-  if(selD){var day=new Date(selD+'T12:00:00').getDay();if(day===0||day===6)endH=20;}
+  var endH=21; /* Lun-Vie hasta 9:00 PM */
+  if(selD){var day=new Date(selD+'T12:00:00').getDay();if(day===0||day===6)endH=20;} /* Sab-Dom hasta 8:00 PM */
   for(var h=9;h<endH;h+=0.5){
     if(h+dur>endH)break;
     var past=selD?isPastSlot(selD,h):false,booked=isBooked(h,dur),ts=fmtH(h);
@@ -1558,7 +1558,7 @@ function togglePastForm(){
 }
 function buildPastHoras(){
   var sel=document.getElementById('past-hora');if(!sel)return;sel.innerHTML='';
-  for(var h=9;h<15;h+=0.5){var hh=Math.floor(h),mm=h%1===0.5?'30':'00',label;
+  for(var h=9;h<21;h+=0.5){var hh=Math.floor(h),mm=h%1===0.5?'30':'00',label;
   if(hh<12)label=hh+':'+mm+' AM';else if(hh===12)label='12:'+mm+' PM';else label=(hh-12)+':'+mm+' PM';
   var o=document.createElement('option');o.value=label;o.textContent=label;sel.appendChild(o);}
 }
