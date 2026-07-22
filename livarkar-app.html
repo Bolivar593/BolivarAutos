@@ -126,12 +126,15 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .admin-toggle button{background:none;border:none;font-size:13px;color:#bbb;cursor:pointer;font-weight:400;text-decoration:underline}
 .admin-panel{background:#fff;border:0.5px solid #e0e0e0;border-radius:10px;padding:.9rem 1rem;margin-bottom:.8rem;display:none}
 .admin-title{font-size:14px;font-weight:700;color:#e53935;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px}
-.admin-row{padding:9px 0;border-bottom:0.5px solid #f5f5f5}
+.admin-row{padding:12px 0;border-bottom:0.5px solid #f5f5f5}
 .admin-row:last-child{border-bottom:none}
 .admin-row-top{display:flex;justify-content:space-between;align-items:center}
 .admin-info{flex:1}
-.admin-info strong{font-size:20px;font-weight:700;color:#111}
-.admin-info span{display:block;font-size:17px;color:#444;font-weight:600;margin-top:4px}
+.admin-hora{font-size:28px;font-weight:900;color:#111;line-height:1.15}
+.admin-hora .fin{font-size:16px;font-weight:600;color:#64748b}
+.admin-nombre{font-size:21px;font-weight:800;color:#2563eb;margin-top:5px}
+.admin-zona{display:block;font-size:17px;font-weight:600;color:#334155;margin-top:3px}
+.admin-tel{display:block;font-size:16px;font-weight:600;color:#64748b;margin-top:3px}
 .admin-btns{display:flex;gap:6px;flex-direction:column;align-items:flex-end}
 .btn-cancel{background:#fff5f5;color:#e53935;border:0.5px solid #ffcdd2;border-radius:7px;padding:10px 14px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap}
 .btn-cancel-wa{background:#25D366;color:#fff;border:none;border-radius:7px;padding:10px 14px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -1525,7 +1528,8 @@ function goAppleCal(){
   var endDT=icsDateTime(selD,endH);
   var desc='Cliente: '+nm+'\\nTel: '+ph+'\\nTotal: $'+tx.total.toFixed(2)+' CAD'+(no?'\\nNotas: '+no:'')+'\\n\\nBolivar: (204)509-6153';
   var uid=currentUID||Date.now()+'@bolivarautos';
-  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:BolivarAutos-Renta - '+nm+'\r\nDESCRIPTION:'+desc+'\r\nLOCATION:'+zone[lang]+' - '+zone.addr+', Winnipeg MB\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  var horaFmt=fmtH(startH);
+  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:'+horaFmt+' ('+dur+'h) - '+nm+'\r\nDESCRIPTION:'+desc+'\r\nLOCATION:'+zone[lang]+' - '+zone.addr+', Winnipeg MB\r\nEND:VEVENT\r\nEND:VCALENDAR';
   var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
   var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cita-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
   // Unlock message buttons
@@ -1544,7 +1548,8 @@ function goAppleCalCancel(d){
   var startDT=icsDateTime(d.fecha,startH);
   var endDT=icsDateTime(d.fecha,endH);
   var uid=d.calUID||d.fecha.replace(/-/g,'')+d.hora.replace(/[:\s]/g,'')+'@bolivarautos';
-  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nMETHOD:CANCEL\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:CANCELLED - BolivarAutos-Renta - '+d.cliente+'\r\nSTATUS:CANCELLED\r\nSEQUENCE:1\r\nEND:VEVENT\r\nEND:VCALENDAR';
+  var horaFmtC=fmtH(startH);
+  var ics='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//BolivarAutos//Renta//EN\r\nMETHOD:CANCEL\r\nBEGIN:VEVENT\r\nUID:'+uid+'\r\nDTSTART;'+startDT+'\r\nDTEND;'+endDT+'\r\nSUMMARY:CANCELADO - '+horaFmtC+' ('+d.duracion+'h) - '+d.cliente+'\r\nSTATUS:CANCELLED\r\nSEQUENCE:1\r\nEND:VEVENT\r\nEND:VCALENDAR';
   var blob=new Blob([ics],{type:'text/calendar;charset=utf-8'});
   var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='cancelacion-bolivarautos.ics';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
 }
@@ -1606,13 +1611,24 @@ function loadAdminBookings(){
       signedBadge.style.cssText='display:none;background:#dcfce7;color:#16a34a;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;margin-left:6px;';
       signedBadge.textContent='✅ Contrato firmado';
 
+      var horaFin=fmtH(parseH(d.hora)+parseFloat(d.duracion));
       var infoTop=document.createElement('div');
-      infoTop.innerHTML='<strong>'+d.hora+' ('+d.duracion+'h) - '+d.zona_nombre+'</strong>';
+      infoTop.className='admin-hora';
+      infoTop.innerHTML=d.hora+' <span class="fin">&rarr; '+horaFin+'</span>';
       infoTop.appendChild(signedBadge);
-      var infoSub=document.createElement('span');
-      infoSub.textContent=d.cliente+' | '+d.telefono;
+      var infoNombre=document.createElement('div');
+      infoNombre.className='admin-nombre';
+      infoNombre.textContent=d.cliente;
+      var infoZona=document.createElement('span');
+      infoZona.className='admin-zona';
+      infoZona.textContent='📍 '+d.zona_nombre;
+      var infoTel=document.createElement('span');
+      infoTel.className='admin-tel';
+      infoTel.textContent='📞 '+d.telefono;
       info.appendChild(infoTop);
-      info.appendChild(infoSub);
+      info.appendChild(infoNombre);
+      info.appendChild(infoZona);
+      info.appendChild(infoTel);
 
       // Check Firebase if already signed
       db.collection('CONTRATOS').doc(doc.id).get().then(function(cDoc){
@@ -1627,14 +1643,6 @@ function loadAdminBookings(){
       }).catch(function(){});
 
       var btns=document.createElement('div');btns.className='admin-btns';
-
-      // 📋 Contrato button
-      var btnContrato=document.createElement('button');
-      btnContrato.style.cssText='background:#1e293b;color:#fff;border:none;border-radius:7px;padding:10px 14px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;';
-      btnContrato.textContent='📋 Contrato';
-      (function(docData,docId){
-        btnContrato.onclick=function(){ admOpenContratoModal(docData,docId); };
-      })(d,doc.id);
 
       // Cancel button
       var btnCancel=document.createElement('button');
@@ -1668,7 +1676,6 @@ function loadAdminBookings(){
         };
       })(d);
 
-      btns.appendChild(btnContrato);
       btns.appendChild(btnCancel);
       btns.appendChild(btnWA);
       top.appendChild(info);top.appendChild(btns);
