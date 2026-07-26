@@ -974,7 +974,10 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
             <div class="page-title">Suscriptores</div>
             <div class="page-subtitle">Personas suscritas a alertas de nuevos autos</div>
           </div>
-          <button class="btn" onclick="admCargarSuscriptores()" style="background:#1e293b;color:#fff;border-color:#1e293b;">↺ Actualizar</button>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+            <button class="btn" onclick="admSincronizarFirmantes(false)" style="background:#2563eb;color:#fff;border-color:#2563eb;">✍️ Inscribir firmantes</button>
+            <button class="btn" onclick="admCargarSuscriptores()" style="background:#1e293b;color:#fff;border-color:#1e293b;">↺ Actualizar</button>
+          </div>
         </div>
 
         <!-- Contadores -->
@@ -992,6 +995,8 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
             <div style="font-size:12px;color:#64748b;margin-top:4px;">Push Android</div>
           </div>
         </div>
+
+        <div id="admSyncResult" style="display:none;font-size:14px;font-weight:600;margin-bottom:14px;padding:10px 14px;border-radius:10px;"></div>
 
         <!-- Lista -->
         <div id="admSuscrLista" style="display:flex;flex-direction:column;gap:10px;">
@@ -2214,7 +2219,80 @@ function toggleImpuestos() {
   }
 
   // ── SUSCRIPTORES ──
+  // Al abrir/actualizar: primero inscribe a los firmantes nuevos, luego dibuja la lista.
   function admCargarSuscriptores() {
+    admSincronizarFirmantes(true).then(function(){ _admRenderSuscriptores(); });
+  }
+
+  // Recorre CONTRATOS y agrega a SUSCRIPTORES el email de quienes firmaron el
+  // contrato y todavía no están en la lista (sin duplicar).
+  // silent=true no muestra el aviso verde (se usa en el barrido automático).
+  function admSincronizarFirmantes(silent) {
+    var statusEl = document.getElementById('admSyncResult');
+    if (!silent && statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.style.background = '#eff6ff';
+      statusEl.style.color = '#1e40af';
+      statusEl.textContent = '🔄 Buscando clientes que firmaron...';
+    }
+    if (!db) return Promise.resolve(0);
+    return db.collection('SUSCRIPTORES').get().then(function(subSnap) {
+      var existentes = {};
+      subSnap.forEach(function(doc) {
+        var e = (doc.data().email || '').trim().toLowerCase();
+        if (e) existentes[e] = true;
+      });
+      return db.collection('CONTRATOS').get().then(function(cSnap) {
+        var nuevos = [], vistos = {};
+        cSnap.forEach(function(doc) {
+          var d = doc.data();
+          var cl = d.client || {};
+          var email = (cl.email || '').trim().toLowerCase();
+          // valida que parezca un email real y que no esté ya inscrito ni repetido
+          if (!email || email.indexOf('@') < 1 || email.lastIndexOf('.') < email.indexOf('@')) return;
+          if (existentes[email] || vistos[email]) return;
+          vistos[email] = true;
+          nuevos.push({ email: email, nombre: (cl.name || d.signedName || '') });
+        });
+        if (nuevos.length === 0) {
+          if (!silent && statusEl) {
+            statusEl.style.background = '#f8fafc';
+            statusEl.style.color = '#64748b';
+            statusEl.textContent = '✓ Todos los que firmaron ya están inscritos. Nada nuevo por agregar.';
+          }
+          return 0;
+        }
+        var ahora = new Date().toISOString();
+        var batch = db.batch();
+        nuevos.forEach(function(n) {
+          batch.set(db.collection('SUSCRIPTORES').doc(), {
+            tipo: 'email', email: n.email, nombre: n.nombre,
+            activo: true, fecha: ahora, origen: 'contrato'
+          });
+        });
+        return batch.commit().then(function() {
+          if (!silent && statusEl) {
+            statusEl.style.background = '#dcfce7';
+            statusEl.style.color = '#166534';
+            statusEl.textContent = '✅ ' + nuevos.length +
+              (nuevos.length > 1 ? ' clientes que firmaron fueron inscritos' : ' cliente que firmó fue inscrito') +
+              ' a las alertas de autos nuevos.';
+          }
+          return nuevos.length;
+        });
+      });
+    }).catch(function(err) {
+      if (!silent && statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fee2e2';
+        statusEl.style.color = '#991b1b';
+        statusEl.textContent = 'Error al inscribir firmantes: ' + err.message;
+      }
+      return 0;
+    });
+  }
+
+  function _admRenderSuscriptores() {
     const lista = document.getElementById('admSuscrLista');
     lista.innerHTML = '<div class="loading"><div class="spinner"></div> Cargando suscriptores...</div>';
 
@@ -2262,14 +2340,14 @@ function toggleImpuestos() {
 
   function admSuscrToggle(id, activo) {
     db.collection('SUSCRIPTORES').doc(id).update({ activo: !activo }).then(function() {
-      admCargarSuscriptores();
+      _admRenderSuscriptores();
     }).catch(function(e) { alert('Error: ' + e.message); });
   }
 
   function admSuscrEliminar(id) {
     if (!confirm('¿Eliminar este suscriptor permanentemente?')) return;
     db.collection('SUSCRIPTORES').doc(id).delete().then(function() {
-      admCargarSuscriptores();
+      _admRenderSuscriptores();
     }).catch(function(e) { alert('Error: ' + e.message); });
   }
 
@@ -2478,6 +2556,8 @@ function toggleImpuestos() {
         data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
         await db.collection('VEHICULOS_BG').add(data);
         admShowToast('✅ Vehículo agregado', 'success');
+        // Opción 1: avisar automáticamente por email a los clientes que firmaron.
+        try { enviarAvisoAutoNuevo(); } catch (e) { console.error('Aviso auto nuevo:', e); }
       }
 
       admCloseModal();
@@ -2752,53 +2832,88 @@ function admCloseNotifyModal() {
   document.getElementById('admNotifyResult').style.display = 'none';
 }
 
+// Núcleo de envío: manda un mensaje por email a los suscriptores activos.
+// A cada correo le agrega automáticamente el enlace para darse de baja (CASL).
+function _enviarEmailsSuscriptores(msg) {
+  if (typeof emailjs === 'undefined') {
+    return Promise.reject(new Error('EmailJS no cargó (revisa la conexión).'));
+  }
+  return firebase.firestore().collection('SUSCRIPTORES').where('activo','==',true).get().then(function(snap){
+    var emails = [];
+    var pushTokens = [];
+    snap.forEach(function(d){
+      if(d.data().tipo==='email' && d.data().email) emails.push(d.data().email);
+      if(d.data().tipo==='push' && d.data().token) pushTokens.push(d.data().token);
+    });
+
+    if(emails.length === 0 && pushTokens.length === 0) {
+      return { sent:0, total:0, push:0, empty:true };
+    }
+
+    var promises = [];
+    if(emails.length > 0) {
+      emailjs.init('2W_g_q0eqTdn1Haxh');
+      emails.forEach(function(email){
+        var bajaUrl = 'https://bolivarautos.ca/baja.html?e=' + encodeURIComponent(email);
+        var fullMsg = msg +
+          '\n\n———\nDon\'t want these alerts? Unsubscribe: ' + bajaUrl +
+          '\n¿No deseas estos avisos? Cancela aquí: ' + bajaUrl;
+        promises.push(emailjs.send('service_zh2gldt','template_jyes3kc',{
+          to_email: email,
+          message: fullMsg,
+          site_url: 'https://bolivarautos.ca',
+          unsubscribe_url: bajaUrl
+        }));
+      });
+    }
+
+    return Promise.allSettled(promises).then(function(results){
+      var sent = results.filter(function(r){ return r.status==='fulfilled'; }).length;
+      return { sent:sent, total:emails.length, push:pushTokens.length, empty:false };
+    });
+  });
+}
+
+// Botón manual "Enviar notificación".
 function admSendNotifications() {
   var msg = document.getElementById('admNotifyMsg').value.trim() ||
     '¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗';
   var resultEl = document.getElementById('admNotifyResult');
   resultEl.style.display = 'none';
 
-  firebase.firestore().collection('SUSCRIPTORES').where('activo','==',true).get().then(function(snap){
-    var emails = [];
-    var pushTokens = [];
-    snap.forEach(function(d){
-      if(d.data().tipo==='email') emails.push(d.data().email);
-      if(d.data().tipo==='push' && d.data().token) pushTokens.push(d.data().token);
-    });
-
-    if(emails.length === 0 && pushTokens.length === 0) {
+  _enviarEmailsSuscriptores(msg).then(function(r){
+    if(r.empty){
       resultEl.style.color = '#64748b';
       resultEl.textContent = 'No hay suscriptores aún.';
-      resultEl.style.display = 'block';
-      return;
-    }
-
-    var promises = [];
-
-    // Send emails via EmailJS
-    if(emails.length > 0) {
-      emailjs.init('2W_g_q0eqTdn1Haxh');
-      emails.forEach(function(email){
-        promises.push(emailjs.send('service_zh2gldt','template_jyes3kc',{
-          to_email: email,
-          message: msg,
-          site_url: 'https://bolivarautos.ca'
-        }));
-      });
-    }
-
-    Promise.allSettled(promises).then(function(results){
-      var sent = results.filter(function(r){ return r.status==='fulfilled'; }).length;
-      var total = emails.length;
-      var pushInfo = pushTokens.length > 0 ? ' + ' + pushTokens.length + ' push (Android)' : '';
+    } else {
+      var pushInfo = r.push > 0 ? ' + ' + r.push + ' push (Android)' : '';
       resultEl.style.color = '#16a34a';
-      resultEl.textContent = '✅ Email enviado a ' + sent + '/' + total + pushInfo;
-      resultEl.style.display = 'block';
-    });
+      resultEl.textContent = '✅ Email enviado a ' + r.sent + '/' + r.total + pushInfo;
+    }
+    resultEl.style.display = 'block';
   }).catch(function(err){
     resultEl.style.color = '#dc2626';
     resultEl.textContent = 'Error: ' + err.message;
     resultEl.style.display = 'block';
+  });
+}
+
+// Aviso AUTOMÁTICO cuando se agrega un auto nuevo (Opción 1).
+// Usa el mismo texto aprobado y muestra el resultado por toast.
+function enviarAvisoAutoNuevo() {
+  var msg = '¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗';
+  try { if (typeof admShowToast === 'function') admShowToast('📧 Avisando a los clientes...'); } catch(e){}
+  _enviarEmailsSuscriptores(msg).then(function(r){
+    try {
+      if (typeof admShowToast !== 'function') return;
+      if(r.empty){
+        admShowToast('Auto agregado. Aún no hay clientes suscritos para avisar.');
+      } else {
+        admShowToast('✅ Aviso enviado a ' + r.sent + '/' + r.total + ' clientes', 'success');
+      }
+    } catch(e){}
+  }).catch(function(err){
+    try { if (typeof admShowToast === 'function') admShowToast('Auto agregado, pero el aviso falló: ' + err.message, 'error'); } catch(e){}
   });
 }
 </script>
