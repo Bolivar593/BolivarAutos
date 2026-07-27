@@ -482,6 +482,13 @@
       <input type="text" id="sig-name" autocomplete="name"
         placeholder="Full name / Nombre completo" oninput="validateSign()">
 
+      <label for="sig-email">
+        <span class="en">Email (required — we'll send your signed copy here):</span>
+        <span class="es">Email (obligatorio — aquí te enviaremos tu copia firmada):</span>
+      </label>
+      <input type="email" id="sig-email" autocomplete="email" inputmode="email"
+        placeholder="your@email.com" oninput="validateSign(); syncEmailPreview();">
+
       <div class="check-row">
         <input type="checkbox" id="sig-check" onchange="validateSign()">
         <span>
@@ -522,7 +529,7 @@
 <script type="module">
 import { initializeApp }                  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, doc, getDoc,
-         collection, addDoc, serverTimestamp }
+         collection, addDoc, updateDoc, serverTimestamp }
                                           from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // ── Firebase config (copy from renta.html if needed) ──────────────────────
@@ -611,6 +618,12 @@ function populateFields() {
   set("f-vehicle", veh || "—");
   set("f-plate",   vehicleData.plate || "—");
   set("f-vin",     vehicleData.vin   || "—");
+  // Si la reserva ya trae un correo, lo dejamos precargado (el cliente puede corregirlo).
+  if (bookingData.email) {
+    const emailInput = document.getElementById("sig-email");
+    if (emailInput) emailInput.value = bookingData.email;
+  }
+  if (typeof validateSign === "function") validateSign();
 }
 
 function set(id, val) {
@@ -650,10 +663,20 @@ window.setLang = function(lang) {
 };
 
 // ── Sign validation ────────────────────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 window.validateSign = function() {
   const name  = document.getElementById("sig-name").value.trim();
+  const email = document.getElementById("sig-email").value.trim();
   const check = document.getElementById("sig-check").checked;
-  document.getElementById("btn-sign").disabled = !(name.length > 2 && check);
+  const emailOk = EMAIL_RE.test(email);
+  document.getElementById("btn-sign").disabled = !(name.length > 2 && emailOk && check);
+};
+
+// Muestra en vivo, en la Cláusula 1, el correo que el cliente va escribiendo.
+window.syncEmailPreview = function() {
+  const email = document.getElementById("sig-email").value.trim();
+  set("f-email", email || "—");
 };
 
 // ── Sign & save ────────────────────────────────────────────────────────────
@@ -662,7 +685,8 @@ window.signContract = async function() {
   btn.disabled = true;
   btn.textContent = "Saving...";
 
-  const sigName = document.getElementById("sig-name").value.trim();
+  const sigName  = document.getElementById("sig-name").value.trim();
+  const sigEmail = document.getElementById("sig-email").value.trim().toLowerCase();
   const now     = new Date();
   const tsStr   = now.toLocaleString("en-CA", { timeZone: "America/Winnipeg" });
 
@@ -684,7 +708,7 @@ window.signContract = async function() {
       name:    bookingData.name,
       licence: bookingData.licence,
       phone:   bookingData.phone,
-      email:   bookingData.email
+      email:   sigEmail || bookingData.email
     },
     booking: {
       fecha: bookingData.fecha,
@@ -696,6 +720,12 @@ window.signContract = async function() {
 
   try {
     await addDoc(collection(db, "CONTRATOS"), record);
+    // Guarda también el correo en la reserva original, para que quede
+    // disponible en el resto de la app (historial, panel admin, etc.)
+    if (citaId && sigEmail) {
+      try { await updateDoc(doc(db, "CITAS_RENTA", citaId), { email: sigEmail }); }
+      catch(_) { /* no crítico si falla */ }
+    }
     await sendNotification(sigName, tsStr);
     // Done screen
     set("done-name",    sigName);
