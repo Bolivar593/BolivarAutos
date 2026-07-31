@@ -156,13 +156,15 @@
     padding: 24px 20px; margin-top: 16px; margin-bottom: 24px;
   }
   .sign-card h3 { color: var(--blue); font-size: 1rem; margin-bottom: 16px; }
-  .sign-card label { font-size: .85rem; font-weight: bold; display: block; margin-bottom: 6px; color: var(--text); }
-  .sign-card input[type=text] {
-    width: 100%; padding: 12px; border: 1.5px solid var(--border); border-radius: 6px;
-    font-size: .95rem; margin-bottom: 14px; outline: none;
+  .sign-card label { font-size: 1rem; font-weight: bold; display: block; margin-bottom: 8px; color: var(--text); }
+  .sign-card input[type=text],
+  .sign-card input[type=email] {
+    width: 100%; padding: 16px; border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 1.15rem; margin-bottom: 18px; outline: none;
     transition: border-color .2s;
   }
-  .sign-card input[type=text]:focus { border-color: var(--blue); }
+  .sign-card input[type=text]:focus,
+  .sign-card input[type=email]:focus { border-color: var(--blue); }
   .check-row { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 20px; }
   .check-row input[type=checkbox] { margin-top: 3px; width: 18px; height: 18px; flex-shrink: 0; cursor: pointer; accent-color: var(--blue); }
   .check-row span { font-size: .85rem; line-height: 1.5; color: #333; }
