@@ -3,7 +3,7 @@ const firebaseConfig = {
   authDomain: "bolivarautos-919e4.firebaseapp.com",
   projectId: "bolivarautos-919e4",
   storageBucket: "bolivarautos-919e4.firebasestorage.app",
-  messagingSenderId: "397354528937",
+  messagingSenderId: "397354528397",
   appId: "1:397354528397:web:52fd2ec53984af7aaa7cc4"
 };
 if (!firebase.apps.length) {
@@ -80,6 +80,31 @@ function getExistingPhotoHeight() {
   return 230;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+//  ORDEN DEL INVENTARIO Y ETIQUETA "NUEVO"
+//  · Los SUV salen siempre de primeros.
+//  · Dentro de cada grupo, el auto subido más recientemente va arriba.
+//  · Los autos subidos hace menos de DIAS_NUEVO días llevan etiqueta azul.
+//    Pasados esos días la etiqueta desaparece sola, sin tocar nada.
+// ═══════════════════════════════════════════════════════════════════════════
+const DIAS_NUEVO = 14;   // ← cambia este número si quieres más o menos días
+
+// Fecha en que se SUBIÓ el auto, en milisegundos.
+// Solo se usa createdAt (la fecha de subida). No se usa updatedAt a propósito:
+// así, editar el precio de un auto viejo no lo vuelve a marcar como nuevo.
+function fbFechaSubida(v) {
+  const c = v.createdAt;
+  if (!c) return 0;                                   // autos viejos sin fecha
+  if (typeof c.toMillis === 'function') return c.toMillis();
+  if (c.seconds) return c.seconds * 1000;
+  const t = Date.parse(c);
+  return isNaN(t) ? 0 : t;
+}
+
+function fbEsNuevo(ts) {
+  return ts > 0 && (Date.now() - ts) < DIAS_NUEVO * 24 * 60 * 60 * 1000;
+}
+
 function abrirCarfax(link, nombre) {
   if (link && link.startsWith('http')) {
     window.open(link, '_blank');
@@ -95,8 +120,24 @@ async function loadFirebaseVEHICULOS_BG() {
 
     var photoHeight = getExistingPhotoHeight();
 
+    // ── Se ordenan ANTES de dibujar: SUV primero, y dentro de cada
+    //    grupo el más reciente arriba. Los autos sin fecha de subida
+    //    (los más antiguos) quedan al final de su grupo.
+    const listaOrdenada = [];
     snapshot.forEach(doc => {
       const v = doc.data();
+      const cat = (v.categoria || 'sedan').toLowerCase();
+      listaOrdenada.push({ v: v, ts: fbFechaSubida(v), grupo: (cat === 'suv' ? 0 : 1) });
+    });
+    listaOrdenada.sort((a, b) => {
+      if (a.grupo !== b.grupo) return a.grupo - b.grupo;   // SUV primero
+      return b.ts - a.ts;                                  // más nuevo arriba
+    });
+
+    listaOrdenada.forEach(item => {
+      const v = item.v;
+      const esNuevo = fbEsNuevo(item.ts);
+      const textoNuevo = (typeof currentLang !== 'undefined' && currentLang === 'es') ? 'NUEVO' : 'NEW';
       const nombre = v.nombre || "";
       const precio = v.precio ? Number(v.precio).toLocaleString() : "";
       const km = v.km ? Number(v.km).toLocaleString() : "";
@@ -111,6 +152,7 @@ async function loadFirebaseVEHICULOS_BG() {
       card.innerHTML = `
         <div style="position:relative;width:100%;height:${photoHeight}px;overflow:hidden;background:#f3f4f6;flex-shrink:0;">
           ${img1 ? `<img src="${img1}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;">` : ''}
+          ${esNuevo ? `<span class="badge-nuevo" style="position:absolute;top:10px;left:10px;z-index:6;background:#2563eb;color:#fff;font-size:11px;font-weight:800;letter-spacing:1.5px;padding:5px 11px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,0.28);pointer-events:none;">${textoNuevo}</span>` : ''}
           <button onclick="fbOpenGallery('${fotosParam}')" class="btn-ver-fotos" style="position:absolute;bottom:10px;right:10px;background:rgba(0,0,0,0.6);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;cursor:pointer;">&#128247; Ver Fotos</button>
         </div>
         <div class="p-5">
