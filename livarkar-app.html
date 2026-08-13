@@ -1002,6 +1002,18 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         <div id="admSuscrLista" style="display:flex;flex-direction:column;gap:10px;">
           <div class="loading"><div class="spinner"></div> Cargando suscriptores...</div>
         </div>
+
+        <!-- Historial de correos enviados -->
+        <div style="margin-top:26px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+            <div>
+              <div style="font-size:16px;font-weight:800;color:#0f172a;">📬 Historial de avisos enviados</div>
+              <div style="font-size:13px;color:#64748b;margin-top:2px;">Cada correo que salió, con fecha y motivo</div>
+            </div>
+            <button class="btn" onclick="admCargarHistorialAvisos()" style="background:#f1f5f9;color:#0f172a;">↺ Ver</button>
+          </div>
+          <div id="admHistorialAvisos" style="font-size:14px;color:#64748b;">Toca “Ver” para cargar el historial.</div>
+        </div>
       </div>
 
     </main>
@@ -2351,6 +2363,41 @@ function toggleImpuestos() {
     }).catch(function(e) { alert('Error: ' + e.message); });
   }
 
+  // ── HISTORIAL DE AVISOS ENVIADOS ──
+  // Muestra los últimos correos que salieron: cuándo, por qué y a cuántos.
+  function admCargarHistorialAvisos() {
+    var cont = document.getElementById('admHistorialAvisos');
+    if (!cont) return;
+    cont.innerHTML = '<div class="loading"><div class="spinner"></div> Cargando historial...</div>';
+    db.collection('AVISOS_EMAIL').get().then(function(snap) {
+      var filas = [];
+      snap.forEach(function(doc) { filas.push(doc.data() || {}); });
+      if (filas.length === 0) {
+        cont.innerHTML = 'Todavía no hay avisos registrados. A partir de ahora, cada correo que salga queda anotado aquí.';
+        return;
+      }
+      filas.sort(function(a, b) { return String(b.fecha || '').localeCompare(String(a.fecha || '')); });
+      var html = '';
+      filas.slice(0, 20).forEach(function(f) {
+        var d = new Date(f.fecha || '');
+        var fecha = isNaN(d.getTime()) ? (f.fecha || '—')
+          : d.toLocaleString('es-CA', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+        var esAuto = (f.motivo === 'automatico');
+        var etiqueta = esAuto ? 'Automático (auto nuevo)' : 'Manual (botón Notificar)';
+        var color = esAuto ? '#2563eb' : '#0f172a';
+        html += '<div style="border-top:1px solid #e2e8f0;padding:10px 0;">' +
+          '<div style="font-weight:700;color:#0f172a;font-size:14px;">' + fecha + '</div>' +
+          '<div style="color:' + color + ';font-size:13px;font-weight:600;margin-top:2px;">' + etiqueta +
+            (f.vehiculo ? ' · ' + f.vehiculo : '') + '</div>' +
+          '<div style="color:#64748b;font-size:13px;margin-top:2px;">Enviado a ' + (f.enviados || 0) + ' de ' + (f.total || 0) + ' correos</div>' +
+        '</div>';
+      });
+      cont.innerHTML = html;
+    }).catch(function(e) {
+      cont.innerHTML = 'No se pudo cargar el historial: ' + e.message;
+    });
+  }
+
   // ── STATS ──
   async function admLoadStats() {
     try {
@@ -2554,10 +2601,14 @@ function toggleImpuestos() {
         admShowToast('✅ Vehículo actualizado', 'success');
       } else {
         data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-        await db.collection('VEHICULOS_BG').add(data);
+        // Se mide cuánto tarda en confirmarse el guardado: si tarda muchísimo
+        // significa que quedó en cola sin internet y el aviso NO debe salir solo.
+        const _t0 = Date.now();
+        const _nuevoRef = await db.collection('VEHICULOS_BG').add(data);
+        const _tardanza = Date.now() - _t0;
         admShowToast('✅ Vehículo agregado', 'success');
-        // Opción 1: avisar automáticamente por email a los clientes que firmaron.
-        try { enviarAvisoAutoNuevo(); } catch (e) { console.error('Aviso auto nuevo:', e); }
+        // Opción 1: avisar por email a los clientes que firmaron (con confirmación).
+        try { enviarAvisoAutoNuevo(nombre, _nuevoRef.id, _tardanza); } catch (e) { console.error('Aviso auto nuevo:', e); }
       }
 
       admCloseModal();
@@ -2832,18 +2883,32 @@ function admCloseNotifyModal() {
   document.getElementById('admNotifyResult').style.display = 'none';
 }
 
+// Enlace que abre la web directamente en el inventario, con los autos nuevos.
+var URL_AUTOS_NUEVOS = 'https://bolivarautos.ca/?nuevos=1#inventario';
+
 // Núcleo de envío: manda un mensaje por email a los suscriptores activos.
 // A cada correo le agrega automáticamente el enlace para darse de baja (CASL).
-function _enviarEmailsSuscriptores(msg) {
+// info = { motivo:'manual'|'automatico', vehiculo:'nombre del auto' }
+// Cambios de seguridad:
+//   · nunca manda dos correos a la misma dirección (aunque esté repetida en la lista)
+//   · deja constancia de CADA envío en la colección AVISOS_EMAIL, para poder
+//     revisar después quién recibió qué y por qué.
+function _enviarEmailsSuscriptores(msg, info) {
+  info = info || {};
   if (typeof emailjs === 'undefined') {
     return Promise.reject(new Error('EmailJS no cargó (revisa la conexión).'));
   }
   return firebase.firestore().collection('SUSCRIPTORES').where('activo','==',true).get().then(function(snap){
     var emails = [];
     var pushTokens = [];
+    var vistos = {};
     snap.forEach(function(d){
-      if(d.data().tipo==='email' && d.data().email) emails.push(d.data().email);
-      if(d.data().tipo==='push' && d.data().token) pushTokens.push(d.data().token);
+      var dt = d.data() || {};
+      if(dt.tipo==='email' && dt.email){
+        var e = String(dt.email).trim().toLowerCase();
+        if(e && !vistos[e]){ vistos[e] = true; emails.push(e); }
+      }
+      if(dt.tipo==='push' && dt.token) pushTokens.push(dt.token);
     });
 
     if(emails.length === 0 && pushTokens.length === 0) {
@@ -2861,7 +2926,7 @@ function _enviarEmailsSuscriptores(msg) {
         promises.push(emailjs.send('service_zh2gldt','template_jyes3kc',{
           to_email: email,
           message: fullMsg,
-          site_url: 'https://bolivarautos.ca',
+          site_url: URL_AUTOS_NUEVOS,
           unsubscribe_url: bajaUrl
         }));
       });
@@ -2869,6 +2934,18 @@ function _enviarEmailsSuscriptores(msg) {
 
     return Promise.allSettled(promises).then(function(results){
       var sent = results.filter(function(r){ return r.status==='fulfilled'; }).length;
+      // Registro de auditoría: queda guardado quién, cuándo y por qué.
+      try {
+        firebase.firestore().collection('AVISOS_EMAIL').add({
+          fecha: new Date().toISOString(),
+          motivo: info.motivo || 'manual',
+          vehiculo: info.vehiculo || '',
+          enviados: sent,
+          total: emails.length,
+          destinatarios: emails,
+          mensaje: msg
+        });
+      } catch(e){}
       return { sent:sent, total:emails.length, push:pushTokens.length, empty:false };
     });
   });
@@ -2877,11 +2954,11 @@ function _enviarEmailsSuscriptores(msg) {
 // Botón manual "Enviar notificación".
 function admSendNotifications() {
   var msg = document.getElementById('admNotifyMsg').value.trim() ||
-    '¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗';
+    ('¡Nuevo auto en inventario! Míralo aquí: ' + URL_AUTOS_NUEVOS + ' 🚗');
   var resultEl = document.getElementById('admNotifyResult');
   resultEl.style.display = 'none';
 
-  _enviarEmailsSuscriptores(msg).then(function(r){
+  _enviarEmailsSuscriptores(msg, { motivo:'manual', vehiculo:'' }).then(function(r){
     if(r.empty){
       resultEl.style.color = '#64748b';
       resultEl.textContent = 'No hay suscriptores aún.';
@@ -2899,11 +2976,39 @@ function admSendNotifications() {
 }
 
 // Aviso AUTOMÁTICO cuando se agrega un auto nuevo (Opción 1).
-// Usa el mismo texto aprobado y muestra el resultado por toast.
-function enviarAvisoAutoNuevo() {
-  var msg = '¡Nuevo auto en inventario! Visita bolivarautos.ca 🚗';
+// PROTECCIONES para que nunca salga un correo sin que tú lo sepas:
+//   1) Pide confirmación en pantalla antes de enviar.
+//   2) Si el guardado tardó mucho (quedó en cola por falta de internet y se
+//      completó horas después), NO envía nada solo: te avisa y tú decides.
+//   3) No repite el aviso del mismo auto aunque se guarde dos veces.
+function enviarAvisoAutoNuevo(nombreAuto, vehiculoId, tardanzaMs) {
+  var msg = '¡Nuevo auto en inventario! Míralo aquí: ' + URL_AUTOS_NUEVOS + ' 🚗';
+
+  // (2) Guardado tardío = posible cola offline. No se envía automáticamente.
+  if (typeof tardanzaMs === 'number' && tardanzaMs > 90000) {
+    try { if (typeof admShowToast === 'function') admShowToast('Auto guardado. NO se envió aviso (el guardado quedó en cola). Usa 📣 Notificar suscriptores si quieres avisar.', 'error'); } catch(e){}
+    return;
+  }
+
+  // (3) ¿Ya se avisó este mismo auto?
+  try {
+    if (vehiculoId && localStorage.getItem('avisoEnviado_' + vehiculoId) === '1') {
+      if (typeof admShowToast === 'function') admShowToast('Este auto ya tenía aviso enviado. No se repitió.');
+      return;
+    }
+  } catch(e){}
+
+  // (1) Confirmación explícita.
+  var pregunta = '¿Enviar aviso por email a los clientes suscritos'
+    + (nombreAuto ? ' por "' + nombreAuto + '"' : '') + '?';
+  if (!confirm(pregunta)) {
+    try { if (typeof admShowToast === 'function') admShowToast('Auto agregado. No se envió ningún aviso.'); } catch(e){}
+    return;
+  }
+  try { if (vehiculoId) localStorage.setItem('avisoEnviado_' + vehiculoId, '1'); } catch(e){}
+
   try { if (typeof admShowToast === 'function') admShowToast('📧 Avisando a los clientes...'); } catch(e){}
-  _enviarEmailsSuscriptores(msg).then(function(r){
+  _enviarEmailsSuscriptores(msg, { motivo:'automatico', vehiculo: nombreAuto || '' }).then(function(r){
     try {
       if (typeof admShowToast !== 'function') return;
       if(r.empty){
