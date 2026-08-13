@@ -477,7 +477,7 @@ var firebaseConfigNotify = {
   projectId: "bolivarautos-919e4",
   storageBucket: "bolivarautos-919e4.firebasestorage.app",
   messagingSenderId: "397354528397",
-  appId: "1:397354528397:web:PLACEHOLDER"   // ← se actualiza en paso 2
+  appId: "1:397354528397:web:52fd2ec53984af7aaa7cc4"
 };
 
 // Reuse existing app if already initialized
@@ -756,5 +756,36 @@ function barSubscribePush() {
   });
 }
 </script>
+<!-- ═══ INVENTARIO: idioma de la etiqueta NUEVO + apertura desde el correo ═══
+     El orden (SUV primero, autos nuevos arriba) y la etiqueta azul se hacen
+     en firebase-vehicles.js. Aquí solo queda:
+       · cambiar NUEVO / NEW cuando se cambia de idioma
+       · bajar solo al inventario cuando el enlace trae ?nuevos=1 (el del correo)
+-->
+<script>
+(function(){
+  ['btnES','btnEN'].forEach(function(id){
+    var b = document.getElementById(id);
+    if(b) b.addEventListener('click', function(){
+      setTimeout(function(){
+        var badges = document.querySelectorAll('#carGrid .badge-nuevo');
+        for(var i=0;i<badges.length;i++){
+          badges[i].textContent = (window.currentLang === 'es') ? 'NUEVO' : 'NEW';
+        }
+      }, 60);
+    });
+  });
+
+  if(/[?&]nuevos=1/.test(location.search) || location.hash === '#inventario'){
+    setTimeout(function(){
+      try{
+        var sec = document.getElementById('inventario');
+        if(sec && sec.scrollIntoView) sec.scrollIntoView({ behavior:'smooth', block:'start' });
+      }catch(e){}
+    }, 2200);
+  }
+})();
+</script>
+
 </body>
 </html>
