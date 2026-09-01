@@ -121,6 +121,36 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .msg-label{font-size:11px;font-weight:500;color:#0F6E56;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:5px;display:none}
 .msgbox{background:#f1f8f5;border:0.5px solid #a5d6a7;border-radius:10px;padding:1rem;font-size:14px;font-weight:400;color:#1b4332;line-height:1.8;white-space:pre-wrap;margin-bottom:.8rem;display:none}
 
+/* --- RECIBOS --- */
+.rec-box{background:#f5f8ff;border:1px solid #bbdefb;border-radius:10px;padding:14px 16px;margin:12px 0}
+.rec-box-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.rec-lbl{font-size:13px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.rec-num{font-size:34px;font-weight:900;color:#1565C0;line-height:1.1}
+.rec-pend{font-size:34px;font-weight:900;color:#B33A00;line-height:1.1}
+.btn-lote{width:100%;margin-top:12px;padding:16px;border-radius:9px;font-size:17px;font-weight:700;background:#0F6E56;color:#fff;border:none;cursor:pointer}
+.btn-lote:disabled{opacity:0.35;cursor:default}
+.btn-cobrar{background:#0F6E56;color:#fff;border:1px solid #0F6E56}
+.btn-recibo{background:#1565C0;color:#fff;border:1px solid #1565C0}
+.btn-verrec{background:#E6F1FB;color:#0C447C;border:1px solid #bbdefb;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-anular{background:#fff5f5;color:#B71C1C;border:1px solid #ffcdd2;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-mail{background:#0F6E56;color:#fff;border:none;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-wa-rec{background:#25D366;color:#fff;border:none;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
+.badge-cobrada{background:#e8f5e9;color:#1b5e20;border-radius:6px;padding:4px 9px;font-size:14px;font-weight:700}
+.badge-atrasada{background:#FBD2D2;color:#B71C1C;border-radius:6px;padding:4px 9px;font-size:14px;font-weight:700}
+.badge-recibo{background:#E6F1FB;color:#0C447C;border-radius:6px;padding:4px 9px;font-size:14px;font-weight:800}
+.rec-metodo-row{display:flex;gap:6px;align-items:stretch;width:100%}
+.rec-metodo-row select{flex:1 1 auto;min-width:0}
+.admin-btns .rec-metodo-row{width:100%}
+.admin-btns .rec-metodo-row button{width:auto;flex:0 0 auto;padding:12px 14px}
+.rec-metodo-row select{font-size:16px;font-weight:600;padding:12px 10px;border:1px solid #e0e0e0;border-radius:8px;background:#fff;color:#111}
+.rec-list-wrap{border:1px solid #e0e0e0;border-radius:9px;overflow:hidden;margin-top:10px}
+.rec-row{padding:14px 15px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff}
+.rec-row:last-child{border-bottom:none}
+.rec-row-num{font-size:22px;font-weight:900;color:#1565C0;line-height:1.2}
+.rec-row-sub{font-size:15px;font-weight:600;color:#444;margin-top:3px}
+.rec-row-tot{font-size:20px;font-weight:800;color:#111;white-space:nowrap}
+.rec-empty{padding:16px;text-align:center;font-size:16px;font-weight:600;color:#999;background:#fff}
+
 /* --- ADMIN --- */
 .admin-toggle{text-align:center;margin:6px 0 .8rem}
 .admin-toggle button{background:none;border:none;font-size:13px;color:#bbb;cursor:pointer;font-weight:400;text-decoration:underline}
@@ -135,8 +165,9 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .admin-nombre{font-size:21px;font-weight:800;color:#2563eb;margin-top:5px}
 .admin-zona{display:block;font-size:17px;font-weight:600;color:#334155;margin-top:3px}
 .admin-tel{display:block;font-size:16px;font-weight:600;color:#64748b;margin-top:3px}
-.admin-btns{display:flex;gap:6px;flex-direction:column;align-items:flex-end}
-.btn-cancel{background:#fff5f5;color:#e53935;border:0.5px solid #ffcdd2;border-radius:7px;padding:10px 14px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap}
+.admin-btns{display:flex;gap:7px;flex-direction:column;align-items:stretch;width:165px;flex:0 0 165px}
+.admin-btns button{width:100%;box-sizing:border-box;padding:12px 10px;font-size:15px;font-weight:700;border-radius:8px;cursor:pointer;white-space:nowrap;text-align:center;line-height:1.2}
+.btn-cancel{background:#fff5f5;color:#e53935;border:1px solid #ffcdd2}
 .btn-cancel-wa{background:#25D366;color:#fff;border:none;border-radius:7px;padding:10px 14px;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap}
 .admin-empty{font-size:16px;color:#aaa;font-weight:500;text-align:center;padding:10px 0}
 .admin-pw{display:flex;gap:8px;margin-bottom:10px}
@@ -614,8 +645,39 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
           <div class="past-fg"><label>Nombre y Telefono</label><input type="text" id="past-cliente" placeholder="Ej: Juan (204)555-1234"></div>
           <button class="btn-past-save" onclick="savePastBooking()">Guardar</button>
         </div>
+        <div style="display:flex;align-items:center;gap:12px;margin:8px 0 4px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:#333;cursor:pointer">
+            <input type="checkbox" id="past-cobrado" checked style="width:20px;height:20px;margin:0">
+            Ya cobrado
+          </label>
+          <select id="past-metodo" style="font-size:15px;font-weight:600;padding:9px 10px;border:1px solid #e0e0e0;border-radius:7px;background:#fff;color:#111">
+            <option value="Cash">Cash</option>
+            <option value="E-transfer">E-transfer</option>
+          </select>
+        </div>
         <div class="past-success" id="past-success">Cita guardada</div>
       </div>
+    </div>
+  </div>
+
+  <div class="card" id="card-recibos" style="display:none">
+    <div class="sec-label">5. Recibos</div>
+    <div class="rec-box">
+      <div class="rec-box-row">
+        <div>
+          <div class="rec-lbl">Proximo recibo</div>
+          <div class="rec-num" id="rec-next">#--</div>
+        </div>
+        <div style="text-align:right">
+          <div class="rec-lbl">Cobradas sin recibo</div>
+          <div class="rec-pend" id="rec-pend">0</div>
+        </div>
+      </div>
+      <button class="btn-lote" id="btn-lote" onclick="generarRecibosLote()" disabled>Generar recibos pendientes</button>
+    </div>
+    <button class="past-toggle-btn" onclick="toggleRecibos()" id="rec-toggle-btn" style="font-size:16px;padding:13px">Ver recibos emitidos</button>
+    <div id="rec-panel" style="display:none">
+      <div class="rec-list-wrap" id="rec-list"><div class="rec-empty">Cargando...</div></div>
     </div>
   </div>
 </div>
@@ -1267,7 +1329,7 @@ function saveBookingBg(){
   if(!db)return;
   var nm=document.getElementById('nm').value,ph=document.getElementById('ph').value,no=document.getElementById('no').value;
   var dur=parseFloat(document.getElementById('dur').value),rate=getRate(),sub=dur*rate,tx=calcTax(sub),zone=getZone();
-  db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:currentUID})
+  db.collection('CITAS_RENTA').add({fecha:selD,hora:selT,duracion:dur,zona_id:selZ,zona_nombre:zone?zone.es:'',cliente:nm,telefono:ph,notas:no,tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,cobrada:false,recibo:null,metodoPago:'',calUID:currentUID})
   .then(function(docRef){
     lastCitaId = docRef.id;
     saveToGoogleSheets(selD, nm, dur, rate);
@@ -1594,18 +1656,379 @@ function savePastBooking(){
   if(!fecha||!hora||!cliente){alert('Falta: fecha, hora o nombre');return;}
   var ZONE_NAMES={bison:'Bison',gateway:'Gateway',kingedward:'King Edward',mainst:'Main St',stmarys:"St. Mary's",any:'Any zone / Driving'};
   var rate=getRate(),sub=dur*rate,tx=calcTax(sub),uid=Date.now()+'@bolivarautos';
-  db.collection('CITAS_RENTA').add({fecha:fecha,hora:hora,duracion:dur,zona_id:zonaId,zona_nombre:ZONE_NAMES[zonaId]||zonaId,cliente:cliente,telefono:'',notas:'',tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,calUID:uid})
+  db.collection('CITAS_RENTA').add({fecha:fecha,hora:hora,duracion:dur,zona_id:zonaId,zona_nombre:ZONE_NAMES[zonaId]||zonaId,cliente:cliente,telefono:'',notas:'',tarifa:rate,subtotal:parseFloat(sub.toFixed(2)),gst:parseFloat(tx.gst.toFixed(2)),pst:parseFloat(tx.pst.toFixed(2)),total:parseFloat(tx.total.toFixed(2)),cancelada:false,cobrada:document.getElementById('past-cobrado').checked,recibo:null,metodoPago:document.getElementById('past-metodo').value,fechaCobro:(document.getElementById('past-cobrado').checked?fecha:''),calUID:uid})
   .then(function(){
     saveToGoogleSheets(fecha,cliente,dur,rate);
     var s=document.getElementById('past-success');s.style.display='block';
     document.getElementById('past-fecha').value='';
     document.getElementById('past-cliente').value='';
     setTimeout(function(){s.style.display='none';},3000);
+    refrescarPanelRecibos();
     if(document.getElementById('admin-date').value===fecha)loadAdminBookings();
   }).catch(function(e){alert('Error: '+e.message);});
 }
+// ══ SISTEMA DE RECIBOS ═══════════════════════════════════════
+var DATOS_NEGOCIO = {
+  nombre: 'LIVARKAR Services Management Ltd.',
+  comercial: 'BolivarAutos-Renta',
+  bn: '718836166 RT0001',
+  tel: '(204)509-6153'
+};
+
+var RECIBO_INICIAL = 101;
+
+function tomarNumeroRecibo(){
+  var ref = db.collection('CONTADORES').doc('recibos');
+  return db.runTransaction(function(t){
+    return t.get(ref).then(function(doc){
+      var prox = doc.exists ? (doc.data().proximo || RECIBO_INICIAL) : RECIBO_INICIAL;
+      t.set(ref, {proximo: prox + 1}, {merge:true});
+      return prox;
+    });
+  });
+}
+
+function verProximoRecibo(){
+  if(!db) return;
+  db.collection('CONTADORES').doc('recibos').get().then(function(doc){
+    var prox = doc.exists ? (doc.data().proximo || RECIBO_INICIAL) : RECIBO_INICIAL;
+    var el = document.getElementById('rec-next');
+    if(el) el.textContent = '#' + prox;
+  }).catch(function(){});
+}
+
+function contarPendientesRecibo(){
+  if(!db) return;
+  db.collection('CITAS_RENTA').where('cancelada','==',false).where('cobrada','==',true).get()
+  .then(function(snap){
+    var n = 0;
+    snap.forEach(function(d){ if(!d.data().recibo) n++; });
+    var el = document.getElementById('rec-pend');
+    if(el) el.textContent = n;
+    var btn = document.getElementById('btn-lote');
+    if(btn) btn.disabled = (n === 0);
+  }).catch(function(){});
+}
+
+function refrescarPanelRecibos(){
+  verProximoRecibo();
+  contarPendientesRecibo();
+  var p = document.getElementById('rec-panel');
+  if(p && p.style.display === 'block') cargarRecibos();
+}
+
+function toggleRecibos(){
+  var p = document.getElementById('rec-panel');
+  var b = document.getElementById('rec-toggle-btn');
+  var open = p.style.display === 'none' || p.style.display === '';
+  p.style.display = open ? 'block' : 'none';
+  b.textContent = open ? 'Cerrar recibos emitidos' : 'Ver recibos emitidos';
+  if(open) cargarRecibos();
+}
+
+function cargarRecibos(){
+  if(!db) return;
+  var cont = document.getElementById('rec-list');
+  if(!cont) return;
+  cont.innerHTML = '<div class="rec-empty">Cargando...</div>';
+  db.collection('CITAS_RENTA').get().then(function(snap){
+    var lista = [];
+    snap.forEach(function(doc){
+      var d = doc.data();
+      if(d.recibo){
+        lista.push({num:d.recibo, docId:doc.id, cliente:d.cliente, fecha:(d.fechaCobro||d.fecha||''),
+                    metodo:d.metodoPago, tipo:d.tipoEmision, total:d.total, anulado:!!d.cancelada, motivo:''});
+      }
+      if(d.recibosAnulados && d.recibosAnulados.length){
+        d.recibosAnulados.forEach(function(a){
+          lista.push({num:a.num, docId:doc.id, cliente:d.cliente, fecha:(a.fechaCobro||d.fecha||''),
+                      metodo:d.metodoPago, tipo:a.tipoEmision||'', total:d.total, anulado:true, motivo:a.motivo||''});
+        });
+      }
+    });
+    if(!lista.length){ cont.innerHTML = '<div class="rec-empty">Aun no hay recibos emitidos.</div>'; return; }
+    lista.sort(function(a,b){ return b.num - a.num; });
+    var html = '';
+    lista.forEach(function(r){
+      html += '<div class="rec-row"'+(r.anulado?' style="opacity:0.6;background:#fafafa"':'')+'>'
+        + '<div style="min-width:0"><div class="rec-row-num">RECIBO #'+r.num
+        + (r.anulado?' <span style="font-size:15px;color:#B71C1C;font-weight:800">ANULADO</span>':'')+'</div>'
+        + '<div style="font-size:18px;font-weight:800;color:#111;margin-top:3px">'+(r.cliente||'(sin nombre)')+'</div>'
+        + '<div class="rec-row-sub">'+r.fecha+' &middot; '+(r.metodo||'')+' &middot; '+(r.tipo||'')+'</div>'
+        + (r.motivo?'<div style="font-size:14px;color:#B71C1C;font-weight:700;margin-top:3px">Motivo: '+r.motivo+'</div>':'')
+        + '</div>'
+        + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:7px">'
+        + '<div class="rec-row-tot">$'+parseFloat(r.total||0).toFixed(2)+'</div>'
+        + (r.anulado ? '' :
+             '<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">'
+           + '<button class="btn-verrec" onclick="reimprimirRecibo(\''+r.docId+'\')">Ver</button>'
+           + '<button class="btn-wa-rec" onclick="enviarReciboWA(\''+r.docId+'\')">WhatsApp</button>'
+           + '<button class="btn-mail" onclick="enviarReciboEmail(\''+r.docId+'\')">Email</button>'
+           + '<button class="btn-anular" onclick="anularRecibo(\''+r.docId+'\')">Anular</button>'
+           + '</div>')
+        + '</div></div>';
+    });
+    cont.innerHTML = html;
+  }).catch(function(e){
+    cont.innerHTML = '<div class="rec-empty" style="color:#dc2626">Error: '+e.message+'</div>';
+  });
+}
+
+function anularRecibo(docId){
+  if(!db) return;
+  db.collection('CITAS_RENTA').doc(docId).get().then(function(doc){
+    if(!doc.exists){ alert('Cita no encontrada'); return; }
+    var d = doc.data();
+    if(!d.recibo){ alert('Esta cita no tiene recibo activo.'); return; }
+    if(!confirm('Anular el recibo #'+d.recibo+'?\n\nEl numero queda registrado como ANULADO y no se reutiliza. La cita queda lista para emitir un recibo nuevo.')) return;
+    var motivo = prompt('Motivo de la anulacion (ej: monto equivocado):','');
+    if(motivo === null) return;
+    motivo = String(motivo).trim() || 'Sin motivo indicado';
+
+    var anulados = d.recibosAnulados || [];
+    anulados.push({
+      num: d.recibo,
+      motivo: motivo,
+      tipoEmision: d.tipoEmision || '',
+      fechaCobro: d.fechaCobro || '',
+      anuladoEl: todayStr()
+    });
+
+    db.collection('CITAS_RENTA').doc(docId).update({
+      recibo: null,
+      tipoEmision: '',
+      recibosAnulados: anulados
+    }).then(function(){
+      var copia = {};
+      for(var k in d){ copia[k] = d[k]; }
+      copia.estadoRecibo = 'Anulado';
+      copia.motivoAnulacion = motivo;
+      reciboToGoogleSheets(copia, 'Anulado');
+      alert('Recibo #'+d.recibo+' anulado.\n\nLa cita quedo cobrada sin recibo: puedes emitir uno nuevo cuando quieras.');
+      loadAdminBookings();
+      refrescarPanelRecibos();
+      cargarRecibos();
+    }).catch(function(e){ alert('Error: '+e.message); });
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
+function reimprimirRecibo(docId){
+  if(!db) return;
+  db.collection('CITAS_RENTA').doc(docId).get().then(function(doc){
+    if(doc.exists) imprimirRecibo(doc.data());
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
+function textoRecibo(d){
+  var L = [];
+  L.push('*' + DATOS_NEGOCIO.nombre + '*');
+  L.push(DATOS_NEGOCIO.comercial + ' - ' + DATOS_NEGOCIO.tel);
+  L.push('GST/HST No. ' + DATOS_NEGOCIO.bn);
+  L.push('');
+  L.push('*RECIBO #' + d.recibo + '*');
+  L.push('');
+  L.push('Fecha de cobro: ' + (d.fechaCobro||''));
+  L.push('Fecha de renta: ' + (d.fecha||''));
+  if(parseFloat(d.total||0) >= 500) L.push('Cliente: ' + (d.cliente||''));
+  L.push('Servicio: Renta de vehiculo');
+  L.push('Duracion: ' + (d.duracion||'') + ' hrs');
+  L.push('Zona: ' + (d.zona_nombre||''));
+  L.push('');
+  L.push('Subtotal: $' + parseFloat(d.subtotal||0).toFixed(2));
+  L.push('GST 5%: $' + parseFloat(d.gst||0).toFixed(2));
+  L.push('RST 7%: $' + parseFloat(d.pst||0).toFixed(2));
+  L.push('*TOTAL CAD: $' + parseFloat(d.total||0).toFixed(2) + '*');
+  L.push('Metodo de pago: ' + (d.metodoPago||''));
+  L.push('');
+  L.push('Conserve este recibo como comprobante de pago.');
+  return L.join('\n');
+}
+
+function enviarReciboWA(docId){
+  if(!db) return;
+  db.collection('CITAS_RENTA').doc(docId).get().then(function(doc){
+    if(!doc.exists){ alert('Cita no encontrada'); return; }
+    var d = doc.data();
+    if(!d.recibo){ alert('Esta cita todavia no tiene recibo emitido.'); return; }
+    var tel = String(d.telefono||'').replace(/[^0-9]/g,'');
+    if(tel.length === 10) tel = '1' + tel;
+    if(!tel){
+      tel = prompt('Telefono del cliente (con codigo de pais):','1');
+      if(tel === null) return;
+      tel = String(tel).replace(/[^0-9]/g,'');
+      if(!tel){ alert('Telefono invalido.'); return; }
+    }
+    window.open('https://wa.me/' + tel + '?text=' + encodeURIComponent(textoRecibo(d)), '_blank');
+  }).catch(function(e){ alert('Error: ' + e.message); });
+}
+
+function enviarReciboEmail(docId){
+  if(!db) return;
+  db.collection('CITAS_RENTA').doc(docId).get().then(function(doc){
+    if(!doc.exists){ alert('Cita no encontrada'); return; }
+    var d = doc.data();
+    if(!d.recibo){ alert('Esta cita todavia no tiene recibo emitido.'); return; }
+    var dest = prompt('Email del cliente:', d.email || '');
+    if(dest === null) return;
+    dest = String(dest).trim();
+    if(!dest){ alert('Escribe un email.'); return; }
+
+    var asunto = 'Recibo #' + d.recibo + ' - ' + DATOS_NEGOCIO.comercial;
+    var cuerpo = textoRecibo(d).replace(/\*/g,'');
+    var url = 'mailto:' + encodeURIComponent(dest)
+      + '?subject=' + encodeURIComponent(asunto)
+      + '&body=' + encodeURIComponent(cuerpo);
+    window.location.href = url;
+  }).catch(function(e){ alert('Error: ' + e.message); });
+}
+
+function marcarCobrada(docId, metodo, fechaRenta){
+  if(!db) return;
+  db.collection('CITAS_RENTA').doc(docId).update({
+    cobrada: true,
+    metodoPago: metodo,
+    fechaCobro: fechaRenta || todayStr()
+  }).then(function(){
+    loadAdminBookings();
+    refrescarPanelRecibos();
+  }).catch(function(e){ alert('Error: ' + e.message); });
+}
+
+function emitirReciboAhora(docId){
+  if(!db) return;
+  db.collection('CITAS_RENTA').doc(docId).get().then(function(doc){
+    if(!doc.exists){ alert('Cita no encontrada'); return; }
+    var d = doc.data();
+    if(d.recibo){ imprimirRecibo(d); return; }
+    return tomarNumeroRecibo().then(function(num){
+      return db.collection('CITAS_RENTA').doc(docId).update({
+        recibo: num,
+        tipoEmision: 'Al momento',
+        fechaCobro: d.fechaCobro || d.fecha || todayStr()
+      }).then(function(){
+        d.recibo = num;
+        d.tipoEmision = 'Al momento';
+        d.fechaCobro = d.fechaCobro || d.fecha || todayStr();
+        reciboToGoogleSheets(d);
+        imprimirRecibo(d);
+        loadAdminBookings();
+        refrescarPanelRecibos();
+      });
+    });
+  }).catch(function(e){ alert('Error: ' + e.message); });
+}
+
+function generarRecibosLote(){
+  if(!db) return;
+  db.collection('CITAS_RENTA').where('cancelada','==',false).where('cobrada','==',true).get()
+  .then(function(snap){
+    var pend = [];
+    snap.forEach(function(doc){
+      var d = doc.data();
+      if(!d.recibo){ d.docId = doc.id; pend.push(d); }
+    });
+    if(pend.length === 0){ alert('No hay citas cobradas sin recibo.'); return; }
+    pend.sort(function(a,b){ return String(a.fecha).localeCompare(String(b.fecha)); });
+    if(!confirm('Generar ' + pend.length + ' recibos?')) return;
+
+    var primero = null, ultimo = null;
+    var cadena = Promise.resolve();
+    pend.forEach(function(d){
+      cadena = cadena.then(function(){
+        return tomarNumeroRecibo().then(function(num){
+          if(primero === null) primero = num;
+          ultimo = num;
+          return db.collection('CITAS_RENTA').doc(d.docId).update({
+            recibo: num,
+            tipoEmision: 'En lote',
+            fechaCobro: d.fechaCobro || d.fecha || todayStr()
+          }).then(function(){
+            d.recibo = num;
+            d.tipoEmision = 'En lote';
+            d.fechaCobro = d.fechaCobro || d.fecha || todayStr();
+            reciboToGoogleSheets(d);
+          });
+        });
+      });
+    });
+
+    cadena.then(function(){
+      alert(pend.length + ' recibos generados: del #' + primero + ' al #' + ultimo + '.');
+      loadAdminBookings();
+      refrescarPanelRecibos();
+      if(typeof historialData !== 'undefined' && historialData.length) loadHistorial();
+    }).catch(function(e){ alert('Error: ' + e.message); });
+  }).catch(function(e){ alert('Error: ' + e.message); });
+}
+
+function reciboToGoogleSheets(d, estado){
+  if(!GAS_URL) return;
+  fetch(GAS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      accion: 'recibo',
+      recibo: d.recibo,
+      fechaCobro: d.fechaCobro || '',
+      fechaRenta: d.fecha || '',
+      cliente: (parseFloat(d.total||0) >= 500) ? (d.cliente||'') : '',
+      subtotal: parseFloat(d.subtotal||0),
+      gst: parseFloat(d.gst||0),
+      pst: parseFloat(d.pst||0),
+      total: parseFloat(d.total||0),
+      metodoPago: d.metodoPago || '',
+      tipoEmision: d.tipoEmision || '',
+      estado: estado || (d.cancelada ? 'Anulado' : 'Activo'),
+      motivoAnulacion: d.motivoAnulacion || ''
+    })
+  }).catch(function(err){ console.warn('Sheets recibo error:', err); });
+}
+
+function imprimirRecibo(d){
+  var mostrarCliente = parseFloat(d.total||0) >= 500;
+  var html = '<!DOCTYPE html><html><head><meta charset="utf-8">'
+    + '<meta name="viewport" content="width=device-width,initial-scale=1">'
+    + '<title>Recibo #' + d.recibo + '</title>'
+    + '<style>body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:26px;max-width:460px;margin:0 auto;color:#111}'
+    + 'h1{font-size:21px;margin:0 0 3px;font-weight:800}.sub{font-size:15px;color:#555;margin-bottom:3px}'
+    + '.bn{font-size:15px;color:#555;margin-bottom:18px;font-weight:600}'
+    + '.num{font-size:30px;font-weight:900;color:#1565C0;margin-bottom:18px}'
+    + 'table{width:100%;border-collapse:collapse;font-size:17px}'
+    + 'td{padding:8px 0}td.r{text-align:right;font-weight:600}td.l{color:#555}'
+    + '.tot td{border-top:3px solid #1565C0;font-size:24px;font-weight:900;color:#1565C0;padding-top:12px}'
+    + '.ft{margin-top:22px;font-size:14px;color:#777;border-top:1px solid #ddd;padding-top:12px;line-height:1.6}'
+    + '@media print{button{display:none}}</style></head><body>'
+    + '<h1>' + DATOS_NEGOCIO.nombre + '</h1>'
+    + '<div class="sub">' + DATOS_NEGOCIO.comercial + ' &middot; ' + DATOS_NEGOCIO.tel + '</div>'
+    + '<div class="bn">GST/HST No. ' + DATOS_NEGOCIO.bn + '</div>'
+    + '<div class="num">RECIBO #' + d.recibo + '</div>'
+    + '<table>'
+    + '<tr><td class="l">Fecha de cobro</td><td class="r">' + (d.fechaCobro||'') + '</td></tr>'
+    + '<tr><td class="l">Fecha de renta</td><td class="r">' + (d.fecha||'') + '</td></tr>'
+    + (mostrarCliente ? '<tr><td class="l">Cliente</td><td class="r">' + (d.cliente||'') + '</td></tr>' : '')
+    + '<tr><td class="l">Servicio</td><td class="r">Renta de vehiculo</td></tr>'
+    + '<tr><td class="l">Duracion</td><td class="r">' + (d.duracion||'') + ' hrs</td></tr>'
+    + '<tr><td class="l">Zona</td><td class="r">' + (d.zona_nombre||'') + '</td></tr>'
+    + '<tr><td colspan="2" style="border-top:1px solid #ddd;padding-top:10px"></td></tr>'
+    + '<tr><td class="l">Subtotal</td><td class="r">$' + parseFloat(d.subtotal||0).toFixed(2) + '</td></tr>'
+    + '<tr><td class="l">GST 5%</td><td class="r">$' + parseFloat(d.gst||0).toFixed(2) + '</td></tr>'
+    + '<tr><td class="l">RST 7%</td><td class="r">$' + parseFloat(d.pst||0).toFixed(2) + '</td></tr>'
+    + '<tr class="tot"><td>TOTAL CAD</td><td class="r">$' + parseFloat(d.total||0).toFixed(2) + '</td></tr>'
+    + '<tr><td class="l">Metodo de pago</td><td class="r">' + (d.metodoPago||'') + '</td></tr>'
+    + '</table>'
+    + '<div class="ft">Conserve este recibo como comprobante de pago.</div>'
+    + '<button onclick="window.print()" style="margin-top:20px;width:100%;padding:16px;background:#1565C0;color:#fff;border:none;border-radius:9px;font-size:17px;font-weight:700;cursor:pointer">Imprimir / Guardar PDF</button>'
+    + '</body></html>';
+  var w = window.open('', '_blank');
+  if(!w){ alert('Permite las ventanas emergentes para ver el recibo.'); return; }
+  w.document.write(html);
+  w.document.close();
+}
+// ═════════════════════════════════════════════════════════════
+
 function toggleAdmin(){var p=document.getElementById('admin-panel');var open=p.style.display==='none'||p.style.display==='';p.style.display=open?'block':'none';if(open)setTimeout(function(){p.scrollIntoView({behavior:'smooth',block:'start'});},80);}
-function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();buildMonthSelector();loadAdminBookings();buildPastHoras();var yd=new Date();yd.setDate(yd.getDate()-1);document.getElementById("past-fecha").max=yd.getFullYear()+"-"+String(yd.getMonth()+1).padStart(2,"0")+"-"+String(yd.getDate()).padStart(2,"0");}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
+function adminLogin(){var pw=document.getElementById('admin-pw').value;if(pw===ADMIN_PW){adminUnlocked=true;document.getElementById('admin-login-area').style.display='none';document.getElementById('admin-content').style.display='block';document.getElementById('admin-date').value=todayStr();buildMonthSelector();loadAdminBookings();buildPastHoras();document.getElementById('card-recibos').style.display='block';refrescarPanelRecibos();var yd=new Date();yd.setDate(yd.getDate()-1);document.getElementById("past-fecha").max=yd.getFullYear()+"-"+String(yd.getMonth()+1).padStart(2,"0")+"-"+String(yd.getDate()).padStart(2,"0");}else{alert(lang==='en'?'Wrong password':'Contrasena incorrecta');}}
 
 function loadAdminBookings(){
   if(!db||!adminUnlocked)return;
@@ -1680,21 +2103,54 @@ function loadAdminBookings(){
         };
       })(d,doc.id,dateStr);
 
-      // WhatsApp button
-      var btnWA=document.createElement('button');
-      btnWA.className='btn-cancel-wa';
-      btnWA.textContent='WhatsApp';
-      (function(docData){
-        btnWA.onclick=function(){
-          var ph=docData.telefono.replace(/\D/g,'');
-          if(ph.length===10)ph='1'+ph;
-          var msg=buildCancelMsg(docData);
-          window.location.href='https://wa.me/'+ph+'?text='+encodeURIComponent(msg);
-        };
-      })(d);
-
+      if(d.recibo){
+        var lblRec=document.createElement('span');
+        lblRec.className='badge-recibo';
+        lblRec.style.cssText='display:inline-block;margin-top:6px';
+        lblRec.textContent='Recibo #'+d.recibo;
+        info.appendChild(lblRec);
+        var btnVer=document.createElement('button');
+        btnVer.className='btn-verrec';
+        btnVer.textContent='Ver recibo';
+        (function(id){ btnVer.onclick=function(){ reimprimirRecibo(id); }; })(doc.id);
+        btns.appendChild(btnVer);
+        var btnWaRec=document.createElement('button');
+        btnWaRec.className='btn-wa-rec';
+        btnWaRec.textContent='WA recibo';
+        (function(id){ btnWaRec.onclick=function(){ enviarReciboWA(id); }; })(doc.id);
+        btns.appendChild(btnWaRec);
+        var btnMail=document.createElement('button');
+        btnMail.className='btn-mail';
+        btnMail.textContent='Email recibo';
+        (function(id){ btnMail.onclick=function(){ enviarReciboEmail(id); }; })(doc.id);
+        btns.appendChild(btnMail);
+      } else if(d.cobrada){
+        var lblCob=document.createElement('span');
+        lblCob.className='badge-cobrada';
+        lblCob.style.cssText='display:inline-block;margin-top:6px';
+        lblCob.textContent='Cobrada ('+(d.metodoPago||'')+')';
+        info.appendChild(lblCob);
+        var btnRec=document.createElement('button');
+        btnRec.className='btn-recibo';
+        btnRec.textContent='Emitir recibo';
+        (function(id){ btnRec.onclick=function(){ emitirReciboAhora(id); }; })(doc.id);
+        btns.appendChild(btnRec);
+      } else {
+        var wrapCob=document.createElement('div');
+        wrapCob.className='rec-metodo-row';
+        var selMet=document.createElement('select');
+        ['Cash','E-transfer'].forEach(function(m){
+          var o=document.createElement('option');o.value=m;o.textContent=m;selMet.appendChild(o);
+        });
+        var btnCob=document.createElement('button');
+        btnCob.className='btn-cobrar';
+        btnCob.textContent='Cobrada';
+        (function(id,sel,fr){ btnCob.onclick=function(){ marcarCobrada(id, sel.value, fr); }; })(doc.id, selMet, d.fecha);
+        wrapCob.appendChild(selMet);
+        wrapCob.appendChild(btnCob);
+        btns.appendChild(wrapCob);
+      }
       btns.appendChild(btnCancel);
-      btns.appendChild(btnWA);
       top.appendChild(info);top.appendChild(btns);
       row.appendChild(top);list.appendChild(row);
     });
@@ -1708,7 +2164,7 @@ function buildMonthSelector(){var sel=document.getElementById('hist-month-sel');
 
 var signedCitaIds=new Set();
 function loadHistorial(){if(!db||!adminUnlocked)return;var selVal=document.getElementById('hist-month-sel').value;var tbody=document.getElementById('hist-tbody');var summary=document.getElementById('hist-summary');var wrap=document.getElementById('hist-wrap');var empty=document.getElementById('hist-empty');tbody.innerHTML='<tr><td colspan="12" style="text-align:center;color:#888;padding:16px;font-weight:700">Cargando...</td></tr>';wrap.style.display='block';empty.style.display='none';summary.style.display='none';document.getElementById('btn-export-xlsx').style.display='none';document.getElementById('btn-del-cancel').style.display='none';historialData=[];var query;if(selVal==='all'){query=db.collection('CITAS_RENTA').orderBy('fecha','desc');}else{var yr=parseInt(selVal.split('-')[0]),mo=parseInt(selVal.split('-')[1]);var from=selVal+'-01';var to=selVal+'-'+pad(new Date(yr,mo,0).getDate());query=db.collection('CITAS_RENTA').where('fecha','>=',from).where('fecha','<=',to).orderBy('fecha','desc');}db.collection('CONTRATOS').get().then(function(cSnap){signedCitaIds=new Set();cSnap.forEach(function(d){if(d.data().citaId)signedCitaIds.add(d.data().citaId);});return query.get();}).then(function(snap){if(snap.empty){tbody.innerHTML='';wrap.style.display='none';empty.style.display='block';return;}snap.forEach(function(doc){var d=doc.data();d.docId=doc.id;historialData.push(d);});renderHistorial();}).catch(function(e){tbody.innerHTML='<tr><td colspan="12" style="color:#dc2626;padding:12px;font-weight:700">Error: '+e.message+'</td></tr>';});}
-function renderHistorial(){var tbody=document.getElementById('hist-tbody');var summary=document.getElementById('hist-summary');var wrap=document.getElementById('hist-wrap');tbody.innerHTML='';wrap.style.display='block';var activas=historialData.filter(function(d){return !d.cancelada;});var canceladas=historialData.filter(function(d){return !!d.cancelada;});var tSub=0,tGST=0,tPST=0,tTot=0;activas.forEach(function(d){tSub+=parseFloat(d.subtotal||0);tGST+=parseFloat(d.gst||0);tPST+=parseFloat(d.pst||0);tTot+=parseFloat(d.total||0);});summary.style.display='grid';summary.innerHTML='<div class="hist-sum-item count"><div class="hist-sum-label">Citas activas</div><div class="hist-sum-value">'+activas.length+' de '+historialData.length+'</div></div><div class="hist-sum-item total"><div class="hist-sum-label">Total cobrado</div><div class="hist-sum-value">$'+tTot.toFixed(2)+' CAD</div></div><div class="hist-sum-item"><div class="hist-sum-label">Subtotal</div><div class="hist-sum-value">$'+tSub.toFixed(2)+'</div></div><div class="hist-sum-item"><div class="hist-sum-label">GST / PST</div><div class="hist-sum-value">$'+tGST.toFixed(2)+' / $'+tPST.toFixed(2)+'</div></div>';historialData.forEach(function(d){var canc=!!d.cancelada;var signed=signedCitaIds.has(d.docId);var tr=document.createElement('tr');if(canc)tr.className='hist-cancelada';tr.innerHTML='<td>'+d.fecha+'</td><td>'+d.hora+'</td><td>'+d.duracion+'h</td><td>'+(d.zona_nombre||'--')+'</td><td>'+d.cliente+'</td><td>'+d.telefono+'</td><td class="col-num">$'+parseFloat(d.subtotal||0).toFixed(2)+'</td><td class="col-num">$'+parseFloat(d.gst||0).toFixed(2)+'</td><td class="col-num">$'+parseFloat(d.pst||0).toFixed(2)+'</td><td class="col-total">$'+parseFloat(d.total||0).toFixed(2)+'</td><td>'+(canc?'<span class="badge-cancel">Cancelada</span>':'<span class="badge-activa">Activa</span>')+'</td><td style="text-align:center;font-size:16px">'+(signed?'<span title="Contrato firmado">✅</span>':'<span style="color:#ccc">—</span>')+'</td>';tbody.appendChild(tr);});document.getElementById('btn-export-xlsx').style.display='inline-block';if(canceladas.length>0)document.getElementById('btn-del-cancel').style.display='inline-block';}
+function renderHistorial(){var tbody=document.getElementById('hist-tbody');var summary=document.getElementById('hist-summary');var wrap=document.getElementById('hist-wrap');tbody.innerHTML='';wrap.style.display='block';var activas=historialData.filter(function(d){return !d.cancelada;});var canceladas=historialData.filter(function(d){return !!d.cancelada;});var tSub=0,tGST=0,tPST=0,tTot=0;activas.forEach(function(d){tSub+=parseFloat(d.subtotal||0);tGST+=parseFloat(d.gst||0);tPST+=parseFloat(d.pst||0);tTot+=parseFloat(d.total||0);});summary.style.display='grid';summary.innerHTML='<div class="hist-sum-item count"><div class="hist-sum-label">Citas activas</div><div class="hist-sum-value">'+activas.length+' de '+historialData.length+'</div></div><div class="hist-sum-item total"><div class="hist-sum-label">Total cobrado</div><div class="hist-sum-value">$'+tTot.toFixed(2)+' CAD</div></div><div class="hist-sum-item"><div class="hist-sum-label">Subtotal</div><div class="hist-sum-value">$'+tSub.toFixed(2)+'</div></div><div class="hist-sum-item"><div class="hist-sum-label">GST / PST</div><div class="hist-sum-value">$'+tGST.toFixed(2)+' / $'+tPST.toFixed(2)+'</div></div>';historialData.forEach(function(d){var canc=!!d.cancelada;var signed=signedCitaIds.has(d.docId);var tr=document.createElement('tr');if(canc)tr.className='hist-cancelada';tr.innerHTML='<td>'+d.fecha+'</td><td>'+d.hora+'</td><td>'+d.duracion+'h</td><td>'+(d.zona_nombre||'--')+'</td><td>'+d.cliente+'</td><td>'+d.telefono+'</td><td class="col-num">$'+parseFloat(d.subtotal||0).toFixed(2)+'</td><td class="col-num">$'+parseFloat(d.gst||0).toFixed(2)+'</td><td class="col-num">$'+parseFloat(d.pst||0).toFixed(2)+'</td><td class="col-total">$'+parseFloat(d.total||0).toFixed(2)+'</td><td>'+(canc?'<span class="badge-cancel">Cancelada</span>':(d.recibo?'<span class="badge-recibo">Recibo #'+d.recibo+'</span>':(d.cobrada?'<span class="badge-cobrada">Cobrada</span>':(String(d.fecha)<todayStr()?'<span class="badge-atrasada">Atrasada</span>':'<span class="badge-activa">Activa</span>'))))+'</td><td style="text-align:center;font-size:16px">'+(signed?'<span title="Contrato firmado">✅</span>':'<span style="color:#ccc">—</span>')+'</td>';tbody.appendChild(tr);});document.getElementById('btn-export-xlsx').style.display='inline-block';if(canceladas.length>0)document.getElementById('btn-del-cancel').style.display='inline-block';}
 
 var _contratos=[];
 var contratosPanelOpen=false;
