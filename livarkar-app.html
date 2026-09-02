@@ -132,6 +132,7 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .btn-cobrar{background:#0F6E56;color:#fff;border:1px solid #0F6E56}
 .btn-recibo{background:#1565C0;color:#fff;border:1px solid #1565C0}
 .btn-verrec{background:#E6F1FB;color:#0C447C;border:1px solid #bbdefb;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
+.btn-cambiar{background:#fff8e1;color:#8a5a00;border:1px solid #ffd699;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
 .btn-anular{background:#fff5f5;color:#B71C1C;border:1px solid #ffcdd2;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
 .btn-mail{background:#0F6E56;color:#fff;border:none;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
 .btn-wa-rec{background:#25D366;color:#fff;border:none;border-radius:8px;padding:11px 14px;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
@@ -674,6 +675,46 @@ body{background:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
         </div>
       </div>
       <button class="btn-lote" id="btn-lote" onclick="generarRecibosLote()" disabled>Generar recibos pendientes</button>
+    </div>
+    <button class="past-toggle-btn" onclick="toggleMantenimiento()" id="mant-toggle-btn" style="font-size:16px;padding:13px">Herramientas (usar con cuidado)</button>
+    <div id="mant-panel" style="display:none;background:#fffaf0;border:1px solid #ffd699;border-radius:10px;padding:14px 16px;margin-top:10px">
+      <div style="font-size:15px;font-weight:700;color:#8a5a00;margin-bottom:4px">Marcar cobradas en bloque</div>
+      <div style="font-size:14px;color:#666;margin-bottom:8px;line-height:1.4">Marca como cobradas todas las citas pasadas que aun no lo estan. Despues genera los recibos con el boton verde.</div>
+      <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <label style="font-size:14px;font-weight:600">Desde:</label>
+        <input type="date" id="mant-desde" style="font-size:15px;padding:9px;border:1px solid #e0e0e0;border-radius:7px">
+        <label style="font-size:14px;font-weight:600">Hasta:</label>
+        <input type="date" id="mant-hasta" style="font-size:15px;padding:9px;border:1px solid #e0e0e0;border-radius:7px">
+        <select id="mant-metodo" style="font-size:15px;font-weight:600;padding:9px;border:1px solid #e0e0e0;border-radius:7px;background:#fff">
+          <option value="Cash">Cash</option>
+          <option value="E-transfer">E-transfer</option>
+        </select>
+        <button onclick="marcarCobradasBloque()" style="background:#0F6E56;color:#fff;border:none;border-radius:7px;padding:11px 15px;font-size:15px;font-weight:700;cursor:pointer">Marcar</button>
+      </div>
+      <div style="border-top:1px solid #ffd699;padding-top:12px;margin-bottom:14px">
+        <div style="font-size:15px;font-weight:700;color:#8a5a00;margin-bottom:4px">Desmarcar cobradas antes de una fecha</div>
+        <div style="font-size:14px;color:#666;margin-bottom:8px;line-height:1.4">Quita la marca de cobrada a las citas anteriores a la fecha (las que ya tienen recibo de papel). Solo funciona en citas sin recibo digital.</div>
+        <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+          <label style="font-size:14px;font-weight:600">Antes de:</label>
+          <input type="date" id="mant-antes" style="font-size:15px;padding:9px;border:1px solid #e0e0e0;border-radius:7px">
+          <button onclick="desmarcarCobradasAntes()" style="background:#8a5a00;color:#fff;border:none;border-radius:7px;padding:11px 15px;font-size:15px;font-weight:700;cursor:pointer">Desmarcar</button>
+        </div>
+      </div>
+      <div style="border-top:1px solid #ffd699;padding-top:12px;margin-bottom:14px">
+        <div style="font-size:15px;font-weight:700;color:#8a5a00;margin-bottom:4px">Desmarcar citas futuras</div>
+        <div style="font-size:14px;color:#666;margin-bottom:8px;line-height:1.4">Quita la marca de cobrada a las citas con fecha posterior a hoy. Una renta que aun no ocurre no puede estar cobrada.</div>
+        <button onclick="desmarcarCobradasFuturas()" style="background:#8a5a00;color:#fff;border:none;border-radius:7px;padding:11px 15px;font-size:15px;font-weight:700;cursor:pointer">Desmarcar futuras</button>
+      </div>
+      <div style="border-top:1px solid #ffd699;padding-top:12px;margin-bottom:14px">
+        <div style="font-size:15px;font-weight:700;color:#8a5a00;margin-bottom:4px">Corregir fechas de cobro</div>
+        <div style="font-size:14px;color:#666;margin-bottom:8px;line-height:1.4">Pone la fecha de cobro igual a la fecha de la renta, en las citas cobradas que aun no tienen recibo. Usar si marcaste cobradas con la version vieja.</div>
+        <button onclick="corregirFechasCobro()" style="background:#0F6E56;color:#fff;border:none;border-radius:7px;padding:11px 15px;font-size:15px;font-weight:700;cursor:pointer">Corregir fechas</button>
+      </div>
+      <div style="border-top:1px solid #ffd699;padding-top:12px">
+        <div style="font-size:15px;font-weight:700;color:#8a5a00;margin-bottom:4px">Limpiar recibos de prueba</div>
+        <div style="font-size:14px;color:#666;margin-bottom:8px;line-height:1.4">Borra el numero de recibo de TODAS las citas. Las citas no se borran. Usar solo antes de empezar en serio.</div>
+        <button onclick="limpiarRecibosPrueba()" style="background:#fff5f5;color:#B71C1C;border:1px solid #ffcdd2;border-radius:7px;padding:11px 15px;font-size:15px;font-weight:700;cursor:pointer">Limpiar todos los recibos</button>
+      </div>
     </div>
     <button class="past-toggle-btn" onclick="toggleRecibos()" id="rec-toggle-btn" style="font-size:16px;padding:13px">Ver recibos emitidos</button>
     <div id="rec-panel" style="display:none">
@@ -1774,6 +1815,205 @@ function cargarRecibos(){
   });
 }
 
+function toggleMantenimiento(){
+  var p = document.getElementById('mant-panel');
+  var b = document.getElementById('mant-toggle-btn');
+  var open = p.style.display === 'none' || p.style.display === '';
+  p.style.display = open ? 'block' : 'none';
+  b.textContent = open ? 'Cerrar herramientas' : 'Herramientas (usar con cuidado)';
+  if(open && !document.getElementById('mant-hasta').value){
+    document.getElementById('mant-hasta').value = todayStr();
+  }
+}
+
+function marcarCobradasBloque(){
+  if(!db) return;
+  var desde = document.getElementById('mant-desde').value;
+  var hasta = document.getElementById('mant-hasta').value;
+  if(!desde || !hasta){ alert('Escoge las dos fechas: desde y hasta.'); return; }
+  if(desde > hasta){ alert('La fecha "desde" no puede ser mayor que "hasta".'); return; }
+  var metodo = document.getElementById('mant-metodo').value;
+  db.collection('CITAS_RENTA').where('cancelada','==',false).get().then(function(snap){
+    var objetivo = [];
+    snap.forEach(function(doc){
+      var d = doc.data();
+      var f = String(d.fecha);
+      if(!d.cobrada && f >= desde && f <= hasta){ objetivo.push({id:doc.id, fecha:f, cliente:d.cliente}); }
+    });
+    if(!objetivo.length){ alert('No hay citas sin cobrar en ese rango.'); return; }
+    objetivo.sort(function(a,b){ return a.fecha.localeCompare(b.fecha); });
+    var muestra = objetivo.slice(0,3).map(function(o){ return o.fecha+' '+(o.cliente||''); }).join('\n');
+    var ult = objetivo[objetivo.length-1];
+    if(!confirm('Marcar '+objetivo.length+' citas como cobradas ('+metodo+')?\n\nPrimeras:\n'+muestra+'\n\nUltima:\n'+ult.fecha+' '+(ult.cliente||'')+'\n\nLa fecha de cobro sera la fecha de cada renta.')) return;
+
+    var cadena = Promise.resolve();
+    objetivo.forEach(function(o){
+      cadena = cadena.then(function(){
+        return db.collection('CITAS_RENTA').doc(o.id).update({
+          cobrada: true,
+          metodoPago: metodo,
+          fechaCobro: o.fecha
+        });
+      });
+    });
+    cadena.then(function(){
+      alert(objetivo.length+' citas marcadas como cobradas.\n\nAhora usa "Generar recibos pendientes".');
+      loadAdminBookings();
+      refrescarPanelRecibos();
+    }).catch(function(e){ alert('Error: '+e.message); });
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
+function limpiarRecibosPrueba(){
+  if(!db) return;
+  if(!confirm('Borrar el numero de recibo de TODAS las citas?\n\nEsto es para limpiar pruebas. Las citas NO se borran.')) return;
+  if(!confirm('Confirma otra vez: se van a borrar todos los numeros de recibo emitidos.')) return;
+  db.collection('CITAS_RENTA').get().then(function(snap){
+    var objetivo = [];
+    snap.forEach(function(doc){
+      var d = doc.data();
+      if(d.recibo || (d.recibosAnulados && d.recibosAnulados.length)){ objetivo.push(doc.id); }
+    });
+    if(!objetivo.length){ alert('No hay recibos que limpiar.'); return; }
+    var cadena = Promise.resolve();
+    objetivo.forEach(function(id){
+      cadena = cadena.then(function(){
+        return db.collection('CITAS_RENTA').doc(id).update({
+          recibo: null,
+          tipoEmision: '',
+          recibosAnulados: []
+        });
+      });
+    });
+    cadena.then(function(){
+      alert('Listo. Se limpiaron '+objetivo.length+' citas.\n\nRecuerda borrar tambien CONTADORES/recibos en Firestore si quieres volver a empezar en #101.');
+      loadAdminBookings();
+      refrescarPanelRecibos();
+      cargarRecibos();
+    }).catch(function(e){ alert('Error: '+e.message); });
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
+function desmarcarCobradasFuturas(){
+  if(!db) return;
+  var hoy = todayStr();
+  db.collection('CITAS_RENTA').where('cobrada','==',true).get().then(function(snap){
+    var objetivo = [], conRecibo = [];
+    snap.forEach(function(doc){
+      var d = doc.data();
+      if(String(d.fecha) > hoy){
+        if(d.recibo){ conRecibo.push('#'+d.recibo+' '+d.fecha+' '+(d.cliente||'')); }
+        else { objetivo.push({id:doc.id, fecha:String(d.fecha), cliente:d.cliente}); }
+      }
+    });
+    if(conRecibo.length){
+      alert('Hay '+conRecibo.length+' citas FUTURAS que ya tienen recibo emitido:\n\n'+conRecibo.join('\n')
+        +'\n\nUsa "Limpiar todos los recibos" primero, o anulalos uno por uno.');
+      return;
+    }
+    if(!objetivo.length){ alert('No hay citas futuras marcadas como cobradas.'); return; }
+    objetivo.sort(function(a,b){ return a.fecha.localeCompare(b.fecha); });
+    var muestra = objetivo.slice(0,5).map(function(o){ return o.fecha+' '+(o.cliente||''); }).join('\n');
+    if(!confirm('Desmarcar '+objetivo.length+' citas futuras como NO cobradas?\n\n'+muestra+(objetivo.length>5?'\n...':''))) return;
+    var cadena = Promise.resolve();
+    objetivo.forEach(function(o){
+      cadena = cadena.then(function(){
+        return db.collection('CITAS_RENTA').doc(o.id).update({ cobrada:false, metodoPago:'', fechaCobro:'' });
+      });
+    });
+    cadena.then(function(){
+      alert(objetivo.length+' citas futuras desmarcadas.');
+      loadAdminBookings();
+      refrescarPanelRecibos();
+    }).catch(function(e){ alert('Error: '+e.message); });
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
+function desmarcarCobradasAntes(){
+  if(!db) return;
+  var antes = document.getElementById('mant-antes').value;
+  if(!antes){ alert('Escoge una fecha.'); return; }
+  db.collection('CITAS_RENTA').where('cobrada','==',true).get().then(function(snap){
+    var objetivo = [], conRecibo = 0;
+    snap.forEach(function(doc){
+      var d = doc.data();
+      if(String(d.fecha) < antes){
+        if(d.recibo){ conRecibo++; }
+        else { objetivo.push({id:doc.id, fecha:String(d.fecha), cliente:d.cliente}); }
+      }
+    });
+    if(conRecibo > 0){
+      alert('Hay '+conRecibo+' citas anteriores a esa fecha que YA tienen recibo digital.\n\nPrimero usa "Limpiar todos los recibos", despues vuelve aqui.');
+      return;
+    }
+    if(!objetivo.length){ alert('No hay citas cobradas antes de esa fecha.'); return; }
+    objetivo.sort(function(a,b){ return a.fecha.localeCompare(b.fecha); });
+    var muestra = objetivo.slice(0,5).map(function(o){ return o.fecha+' '+(o.cliente||''); }).join('\n');
+    if(!confirm('Desmarcar '+objetivo.length+' citas como NO cobradas?\n\n'+muestra+(objetivo.length>5?'\n...':'')+'\n\nEstas quedan fuera del sistema de recibos digitales.')) return;
+    var cadena = Promise.resolve();
+    objetivo.forEach(function(o){
+      cadena = cadena.then(function(){
+        return db.collection('CITAS_RENTA').doc(o.id).update({
+          cobrada: false, metodoPago: '', fechaCobro: ''
+        });
+      });
+    });
+    cadena.then(function(){
+      alert(objetivo.length+' citas desmarcadas.');
+      loadAdminBookings();
+      refrescarPanelRecibos();
+    }).catch(function(e){ alert('Error: '+e.message); });
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
+function corregirFechasCobro(){
+  if(!db) return;
+  db.collection('CITAS_RENTA').where('cancelada','==',false).where('cobrada','==',true).get().then(function(snap){
+    var objetivo = [];
+    snap.forEach(function(doc){
+      var d = doc.data();
+      if(!d.recibo && d.fecha && d.fechaCobro !== d.fecha){
+        objetivo.push({id:doc.id, fecha:d.fecha, cliente:d.cliente, vieja:d.fechaCobro||'(vacia)'});
+      }
+    });
+    if(!objetivo.length){ alert('Todas las fechas de cobro ya estan correctas.'); return; }
+    objetivo.sort(function(a,b){ return a.fecha.localeCompare(b.fecha); });
+    var muestra = objetivo.slice(0,5).map(function(o){
+      return (o.cliente||'')+': '+o.vieja+' -> '+o.fecha;
+    }).join('\n');
+    if(!confirm('Corregir '+objetivo.length+' fechas de cobro?\n\n'+muestra+(objetivo.length>5?'\n...':''))) return;
+    var cadena = Promise.resolve();
+    objetivo.forEach(function(o){
+      cadena = cadena.then(function(){
+        return db.collection('CITAS_RENTA').doc(o.id).update({ fechaCobro: o.fecha });
+      });
+    });
+    cadena.then(function(){
+      alert(objetivo.length+' fechas corregidas.');
+      loadAdminBookings();
+      refrescarPanelRecibos();
+    }).catch(function(e){ alert('Error: '+e.message); });
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
+function cambiarMetodoPago(docId, actual){
+  if(!db) return;
+  db.collection('CITAS_RENTA').doc(docId).get().then(function(doc){
+    if(!doc.exists){ alert('Cita no encontrada'); return; }
+    var d = doc.data();
+    if(d.recibo){
+      alert('Esta cita ya tiene el recibo #'+d.recibo+' emitido.\n\nPara corregir el metodo hay que anular ese recibo y emitir uno nuevo.');
+      return;
+    }
+    var nuevo = (String(actual) === 'Cash') ? 'E-transfer' : 'Cash';
+    if(!confirm('Cambiar metodo de pago?\n\nDe: '+(actual||'(vacio)')+'\nA: '+nuevo)) return;
+    db.collection('CITAS_RENTA').doc(docId).update({ metodoPago: nuevo }).then(function(){
+      loadAdminBookings();
+      refrescarPanelRecibos();
+    }).catch(function(e){ alert('Error: '+e.message); });
+  }).catch(function(e){ alert('Error: '+e.message); });
+}
+
 function anularRecibo(docId){
   if(!db) return;
   db.collection('CITAS_RENTA').doc(docId).get().then(function(doc){
@@ -1922,14 +2162,22 @@ function generarRecibosLote(){
   if(!db) return;
   db.collection('CITAS_RENTA').where('cancelada','==',false).where('cobrada','==',true).get()
   .then(function(snap){
-    var pend = [];
+    var pend = [], futuras = 0, hoy = todayStr();
     snap.forEach(function(doc){
       var d = doc.data();
-      if(!d.recibo){ d.docId = doc.id; pend.push(d); }
+      if(d.recibo) return;
+      if(String(d.fecha) > hoy){ futuras++; return; }
+      d.docId = doc.id; pend.push(d);
     });
-    if(pend.length === 0){ alert('No hay citas cobradas sin recibo.'); return; }
+    if(pend.length === 0){
+      alert('No hay citas cobradas sin recibo.' + (futuras?'\n\n('+futuras+' citas son de fechas futuras y no se incluyen.)':''));
+      return;
+    }
     pend.sort(function(a,b){ return String(a.fecha).localeCompare(String(b.fecha)); });
-    if(!confirm('Generar ' + pend.length + ' recibos?')) return;
+    var primeraP = pend[0], ultimaP = pend[pend.length-1];
+    if(!confirm('Generar ' + pend.length + ' recibos?\n\nPrimera: '+primeraP.fecha+' '+(primeraP.cliente||'')
+      +'\nUltima: '+ultimaP.fecha+' '+(ultimaP.cliente||'')
+      + (futuras?'\n\nSe excluyen '+futuras+' citas de fecha futura.':''))) return;
 
     var primero = null, ultimo = null;
     var cadena = Promise.resolve();
@@ -2135,6 +2383,11 @@ function loadAdminBookings(){
         btnRec.textContent='Emitir recibo';
         (function(id){ btnRec.onclick=function(){ emitirReciboAhora(id); }; })(doc.id);
         btns.appendChild(btnRec);
+        var btnCambiar=document.createElement('button');
+        btnCambiar.className='btn-cambiar';
+        btnCambiar.textContent='Cambiar metodo';
+        (function(id,actual){ btnCambiar.onclick=function(){ cambiarMetodoPago(id, actual); }; })(doc.id, d.metodoPago||'');
+        btns.appendChild(btnCambiar);
       } else {
         var wrapCob=document.createElement('div');
         wrapCob.className='rec-metodo-row';
