@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LIVARKAR INVERSIONES">
+<link rel="apple-touch-icon" href="logo-icon.png">
+<title>LIVARKAR INVERSIONES — BolivarAutos</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a1a;font-size:22px;line-height:1.75;-webkit-text-size-adjust:100%;padding-bottom:40px}
+.wrap{max-width:560px;margin:0 auto;padding:0 14px}
+@media(min-width:768px){.wrap{max-width:760px}}
+
+/* TOPBAR */
+.topbar{background:#1E293B;color:#fff;padding:18px 16px}
+.topbar-inner{max-width:560px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+@media(min-width:768px){.topbar-inner{max-width:760px}}
+.topbar h1{font-size:22px;font-weight:700;letter-spacing:0.3px}
+.topbar p{font-size:15px;color:#cbd5e1;margin-top:4px}
+.lock-btn{background:transparent;border:2px solid #2563EB;color:#e2e8f0;border-radius:9px;padding:12px 18px;font-size:16px;cursor:pointer;white-space:nowrap;font-weight:600;flex-shrink:0;min-height:50px}
+.lock-btn.on{background:#2563EB;border-color:#2563EB;color:#fff}
+.back-btn{background:transparent;border:2px solid #2563EB;color:#e2e8f0;border-radius:9px;width:50px;height:50px;font-size:22px;cursor:pointer;flex-shrink:0}
+
+/* HOME SCREEN */
+.home-wrap{max-width:460px;margin:0 auto;padding:70px 24px 0}
+.home-title{text-align:center;font-size:48px;font-weight:800;letter-spacing:1.5px;color:#0f172a}
+.home-sub{text-align:center;font-size:19px;color:#444;margin-top:8px;margin-bottom:50px}
+.fondo-btn{display:flex;justify-content:space-between;align-items:center;width:100%;background:#1A2035;border:3px solid #3D9EFF;border-radius:14px;padding:26px 24px;cursor:pointer;margin-top:18px;min-height:80px}
+.fondo-btn .lbl{color:#fff;font-size:24px;font-weight:700}
+.fondo-btn .act{color:#cbd5e1;font-size:18px;font-weight:400}
+.fondo-btn:active{opacity:0.85}
+.home-foot{text-align:center;color:#666;font-size:16px;margin-top:50px}
+
+/* MENU FONDO (pantalla intermedia con secciones) */
+.menu-fondo-wrap{max-width:460px;margin:0 auto;padding:20px 24px 0}
+.menu-section-btn{display:flex;justify-content:space-between;align-items:center;width:100%;background:#1A2035;border:3px solid #3D9EFF;border-radius:14px;padding:22px 24px;cursor:pointer;margin-top:16px;min-height:74px}
+.menu-section-btn .lbl{color:#fff;font-size:22px;font-weight:700}
+.menu-section-btn .sub{color:#94a3b8;font-size:16px;font-weight:400;margin-top:2px}
+.menu-section-btn .arr{color:#3D9EFF;font-size:24px;flex-shrink:0;margin-left:10px}
+.menu-section-btn:active{opacity:0.85}
+
+/* TAB NAV — oculto visualmente, solo para el motor de pestañas */
+.tab-nav{display:none}
+.tab-page{display:none}
+.tab-page.active{display:block}
+
+/* SECTION */
+.sec{background:#fff;border-radius:14px;padding:20px 18px;margin-top:14px;border:1.5px solid #2563EB}
+.sec-title{font-size:19px;font-weight:700;color:#1E293B;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:14px}
+.sec-sub{font-size:17px;color:#444;margin-top:-8px;margin-bottom:14px}
+.sec-toggle{display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.sec-toggle .arrow{font-size:22px;color:#2563EB;font-weight:700}
+
+/* HERO TOTAL */
+.hero-total{background:#1E293B;color:#fff;border-radius:14px;padding:24px 20px;margin-top:14px;border:2px solid #2563EB}
+.hero-total .label{font-size:15px;color:#cbd5e1;text-transform:uppercase;letter-spacing:0.5px;font-weight:700}
+.hero-total .amt-row{display:flex;gap:16px;align-items:baseline;margin-top:8px;flex-wrap:wrap}
+.hero-total .amt{font-size:40px;font-weight:700;letter-spacing:-0.5px}
+.hero-total .amt2{font-size:26px;font-weight:600;color:#e2e8f0}
+.hero-total .rate-note{font-size:15px;color:#cbd5e1;margin-top:8px}
+.hero-total .row{display:flex;justify-content:space-between;margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.2);font-size:19px;color:#e2e8f0;flex-wrap:wrap;gap:6px}
+.hero-total .row b{color:#fff;font-weight:700}
+
+/* INVESTOR CARDS */
+.inv-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.inv-card{background:#f8fafc;border:1.5px solid #2563EB;border-radius:10px;padding:16px 14px;display:flex;justify-content:space-between;align-items:center}
+.inv-card-left .nm{font-size:21px;font-weight:700;color:#1E293B}
+.inv-card-left .pct{font-size:16px;color:#2563EB;font-weight:600;margin-top:3px}
+.inv-card-right{text-align:right}
+.inv-card-right .usd{font-size:24px;font-weight:700;color:#1a1a1a}
+.inv-card-right .cad{font-size:16px;color:#444;margin-top:3px}
+
+/* NOTE BOX */
+.note{background:#eff6ff;border:1.5px solid #2563EB;border-radius:10px;padding:16px 16px;font-size:17px;color:#1e3a5f;margin-top:14px;line-height:1.6}
+.note b{color:#1d4ed8}
+
+/* CRONOGRAMA */
+.prog-bar-track{background:#eef1f5;border-radius:7px;height:11px;overflow:hidden;margin-bottom:14px}
+.prog-bar-fill{background:#2563EB;height:100%;border-radius:7px;transition:width .3s}
+.prog-label{font-size:17px;color:#444;margin-bottom:12px}
+.mes-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #f3f4f6}
+.mes-row:last-child{border-bottom:none}
+.mes-info{display:flex;flex-direction:column}
+.mes-nombre{font-size:24px;font-weight:700;color:#1a1a1a}
+.mes-cuota{font-size:16px;color:#444;margin-top:2px}
+.mes-check{display:flex;align-items:center;gap:8px;cursor:pointer}
+.badge{font-size:15px;font-weight:700;padding:8px 14px;border-radius:7px}
+.badge.pendiente{background:#fef3e2;color:#92400e}
+.badge.pagado{background:#dcfce7;color:#15803d}
+.chk{width:30px;height:30px;accent-color:#2563EB;cursor:pointer}
+
+/* AUTOS */
+.auto-card{border:1.5px solid #2563EB;border-radius:12px;overflow:hidden;margin-bottom:14px}
+.auto-photo{width:100%;background:#eef1f5;display:flex;align-items:center;justify-content:center;color:#6b7280;font-size:16px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;position:relative;overflow:hidden;min-height:60px}
+.auto-photo img{width:100%;height:auto;display:block;object-fit:contain}
+
+/* CARRUSEL DE FOTOS */
+.foto-carrusel{position:relative;width:100%;background:#eef1f5;border-radius:10px;overflow:hidden;margin-bottom:4px}
+.foto-carrusel-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.foto-carrusel-track::-webkit-scrollbar{display:none}
+.foto-carrusel-slide{flex:0 0 100%;scroll-snap-align:center;display:flex;align-items:center;justify-content:center}
+.foto-carrusel-slide img{width:100%;height:auto;display:block;object-fit:contain}
+.foto-contador{position:absolute;top:10px;right:10px;background:rgba(15,23,42,0.78);color:#fff;font-size:14px;font-weight:700;padding:4px 11px;border-radius:20px;pointer-events:none}
+.foto-dots{display:flex;justify-content:center;gap:7px;padding:8px 0 2px}
+.foto-dot{width:8px;height:8px;border-radius:50%;background:#cbd5e1;transition:.2s}
+.foto-dot.on{background:#2563EB;width:22px;border-radius:4px}
+.auto-head{display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer}
+.auto-head-left{display:flex;align-items:center;gap:10px;min-width:0}
+.auto-thumb{width:52px;height:52px;border-radius:9px;object-fit:cover;flex-shrink:0;border:1px solid #d8dde5;background:#eef1f5}
+.auto-thumb-placeholder{width:52px;height:52px;border-radius:9px;flex-shrink:0;border:1px solid #d8dde5;background:#eef1f5;display:flex;align-items:center;justify-content:center;color:#9aa3b0;font-size:9px;font-weight:700;text-align:center;line-height:1.2;padding:2px}
+.auto-nombre{font-size:24px;font-weight:700;color:#1a1a1a}
+.auto-head-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.auto-toggle-label{font-size:14px;color:#2563EB;font-weight:700;white-space:nowrap;border:1.5px solid #2563EB;border-radius:7px;padding:6px 10px}
+.auto-toggle-label.close{color:#dc2626;border-color:#dc2626}
+.auto-estado{font-size:14px;font-weight:700;padding:6px 12px;border-radius:7px;white-space:nowrap;flex-shrink:0}
+.auto-estado.prep{background:#fef3e2;color:#92400e}
+.auto-estado.disp{background:#dbeafe;color:#1d4ed8}
+.auto-estado.vendido{background:#dcfce7;color:#15803d}
+.auto-estado.cancelado{background:#e5e7eb;color:#4b5563}
+.auto-details{display:none}
+.auto-card.expanded .auto-details{display:block}
+.proceso-note{background:#eff6ff;border:1.5px solid #2563EB;border-radius:10px;padding:12px 14px;margin-top:12px}
+.proceso-badge{display:inline-block;background:#2563EB;color:#fff;font-size:14px;font-weight:700;padding:5px 11px;border-radius:7px}
+.proceso-texto{font-size:17px;color:#1e3a5f;margin-top:8px;line-height:1.5;white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
+
+/* BADGE DE NOTIFICACION (estilo WhatsApp) */
+.notif-badge{display:inline-flex;align-items:center;justify-content:center;background:#dc2626;color:#fff;font-size:14px;font-weight:700;line-height:1;min-width:26px;height:26px;padding:0 8px;border-radius:13px;flex-shrink:0}
+.menu-btn-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.notif-dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#dc2626;flex-shrink:0}
+.auto-body{padding:14px 16px}
+.auto-grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 14px;margin-top:12px;font-size:19px}
+.auto-grid .k{color:#444}
+.auto-grid .v{font-weight:700;color:#1a1a1a;text-align:right;min-width:0;overflow-wrap:anywhere;word-break:break-word}
+.auto-fin{margin-top:12px;padding-top:12px;border-top:1px solid #f3f4f6}
+.auto-fin .r{display:flex;justify-content:space-between;align-items:flex-start;font-size:17px;padding:5px 0;flex-wrap:wrap;gap:4px 10px}
+.auto-fin .r>span:first-child{flex:1 1 auto;min-width:120px}
+.auto-fin .r b{color:#1E293B;font-weight:700;text-align:right;flex-shrink:0}
+.auto-fin .r b.pos{color:#15803d}
+.auto-fin .r.cancel-msg{color:#4b5563;font-size:15px;background:#f3f4f6;border-radius:8px;padding:10px 12px;margin-top:6px}
+.dual-cad{display:block}
+.dual-usd{display:block;color:#8a93a3;font-weight:400;font-size:14px;margin-top:2px}
+@media(max-width:480px){
+  .auto-fin .r{flex-direction:column;align-items:flex-start}
+  .auto-fin .r b{text-align:left}
+  .sim-row{flex-direction:column;align-items:flex-start}
+  .sim-row .val{text-align:left}
+  .sim-table-row{flex-direction:column;align-items:flex-start}
+  .sim-table-row .p{text-align:left}
+  .auto-head{flex-wrap:wrap}
+  .auto-head-left{flex:1 1 100%}
+  .auto-head-right{flex:1 1 100%;min-width:0;flex-wrap:wrap;row-gap:8px;justify-content:space-between;margin-top:12px;margin-left:0}
+}
+
+/* SIMULADOR */
+.sim-input-row{display:flex;gap:10px;align-items:center;background:#f8fafc;border:1.5px solid #2563EB;border-radius:10px;padding:14px;margin-bottom:14px;flex-wrap:wrap}
+.sim-input-row label{font-size:16px;color:#333;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
+.sim-input-row select{flex:1;border:1px solid #ccd3dc;border-radius:8px;padding:11px 10px;font-size:18px;min-width:130px}
+.sim-result{background:#f8fafc;border:1.5px solid #2563EB;border-radius:10px;padding:18px}
+.sim-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;font-size:20px;flex-wrap:wrap;gap:4px 10px}
+.sim-row .lbl{flex:1 1 auto;min-width:120px}
+.sim-row .val{text-align:right;flex-shrink:0}
+.sim-row.tot{border-top:2px solid #e2e8f0;margin-top:6px;padding-top:12px;font-weight:700;font-size:20px}
+.sim-row .neg{color:#92400e}
+.sim-row .pos{color:#15803d}
+.sim-table{margin-top:14px;font-size:19px}
+.sim-table-title{font-size:15px;color:#555;text-transform:uppercase;font-weight:700;margin-bottom:6px;letter-spacing:0.3px}
+.sim-table-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f3f4f6;flex-wrap:wrap;gap:4px 10px}
+.sim-table-row .m{color:#333;flex:1 1 auto;min-width:100px}
+.sim-table-row .p{font-weight:700;text-align:right;flex-shrink:0}
+
+/* TRANSFERENCIAS */
+.transf-group{margin-bottom:14px}
+.transf-group-title{font-size:17px;font-weight:700;color:#333;margin-bottom:8px}
+.transf-item{display:flex;justify-content:space-between;font-size:18px;padding:8px 0;color:#222;border-bottom:1px solid #f8fafc}
+.transf-total{display:flex;justify-content:space-between;font-weight:700;font-size:19px;padding-top:10px;border-top:2px solid #f3f4f6;margin-top:6px}
+
+/* BUTTONS */
+.btn{background:#2563EB;color:#fff;border:none;padding:14px 20px;border-radius:10px;font-size:18px;font-weight:600;cursor:pointer;min-height:54px}
+.btn.sm{padding:11px 16px;font-size:16px;min-height:46px}
+.btn.ghost{background:#fff;color:#2563EB;border:2px solid #2563EB}
+.btn.block{width:100%;margin-top:12px}
+.btn:disabled{opacity:0.5}
+
+/* ADMIN MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,0.6);display:none;align-items:center;justify-content:center;z-index:999;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:14px;padding:24px;max-width:380px;width:100%;max-height:88vh;overflow-y:auto;border:2px solid #2563EB}
+.modal h3{font-size:19px;margin-bottom:18px;color:#1E293B;text-transform:uppercase;letter-spacing:0.3px;font-weight:700}
+.modal input,.modal select,.modal textarea{width:100%;padding:14px 12px;border:1.5px solid #ccd3dc;border-radius:9px;font-size:19px;margin-bottom:12px}
+.modal textarea{font-family:inherit;line-height:1.5;resize:vertical;min-height:80px}
+.modal label{font-size:15px;color:#444;font-weight:700;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.2px}
+.modal-actions{display:flex;gap:10px;margin-top:8px}
+.modal-actions .btn{flex:1}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#1E293B;color:#fff;padding:15px 22px;border-radius:10px;font-size:17px;opacity:0;transition:.25s;z-index:1000;pointer-events:none;max-width:90%;text-align:center;border:1px solid #2563EB}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+.loading{text-align:center;color:#666;padding:34px 0;font-size:18px}
+.foot{text-align:center;color:#666;font-size:15px;margin-top:28px;padding:0 20px}
+
+.photo-thumb{position:relative}
+.photo-thumb img{width:62px;height:62px;object-fit:cover;border-radius:7px;border:1px solid #ddd}
+.photo-thumb .x{position:absolute;top:-7px;right:-7px;background:#dc2626;color:#fff;border-radius:50%;width:22px;height:22px;font-size:13px;text-align:center;cursor:pointer;line-height:22px}
+
+
+</style>
+</head>
+<body>
+
+<!-- ================= HOME SCREEN ================= -->
+<div id="homeScreen">
+  <div class="home-wrap">
+    <div class="home-title">LIVARKAR</div>
+    <div class="home-sub">Inversiones · Services Management Ltd.</div>
+
+    <button class="fondo-btn" onclick="openFondo('COLOMA')">
+      <span class="lbl">Inversión Flia Coloma</span>
+      <span class="act">Ver reporte &rarr;</span>
+    </button>
+
+    <div class="home-foot">BolivarAutos · Winnipeg, MB</div>
+  </div>
+</div>
+
+<!-- ================= MENU FONDO (5 botones grandes) ================= -->
+<div id="fondoMenuScreen" style="display:none">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <button class="back-btn" onclick="goHome()">&larr;</button>
+      <div style="flex:1">
+        <h1 id="fondoMenuTitle">—</h1>
+        <p>Selecciona una sección</p>
+      </div>
+      <button class="lock-btn" id="lockBtnMenu" onclick="openLoginModal()">Editar</button>
+    </div>
+  </div>
+  <div class="menu-fondo-wrap">
+    <button class="menu-section-btn" onclick="goToSection('resumen')">
+      <div><div class="lbl">Resumen</div><div class="sub">Capital · Saldo pendiente</div></div>
+      <span class="arr">&rarr;</span>
+    </button>
+    <button class="menu-section-btn" onclick="goToSection('cronograma')">
+      <div><div class="lbl">Cronograma</div><div class="sub">Pagos del crédito</div></div>
+      <span class="arr">&rarr;</span>
+    </button>
+    <button class="menu-section-btn" onclick="goToSection('vehiculos')">
+      <div><div class="lbl">Vehículos</div><div class="sub">Inversión en autos</div></div>
+      <div class="menu-btn-right">
+        <span class="notif-badge" id="badge-vehiculos" style="display:none">0</span>
+        <span class="arr">&rarr;</span>
+      </div>
+    </button>
+    <button class="menu-section-btn" onclick="goToSection('utilidades')">
+      <div><div class="lbl">Utilidades</div><div class="sub">Distribución de ganancias</div></div>
+      <span class="arr">&rarr;</span>
+    </button>
+    <button class="menu-section-btn" onclick="goToSection('transferencias')">
+      <div><div class="lbl">Transferencias</div><div class="sub">Aportes de capital</div></div>
+      <span class="arr">&rarr;</span>
+    </button>
+    <div class="foot" style="margin-top:30px">Reporte informativo — LIVARKAR Services Management Ltd. / BolivarAutos</div>
+  </div>
+</div>
+
+<!-- ================= FONDO SCREEN (contenido de sección) ================= -->
+<div id="fondoScreen" style="display:none">
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <button class="back-btn" onclick="goToFondoMenu()">&larr;</button>
+      <div style="flex:1">
+        <h1 id="fondoTitle">—</h1>
+        <p id="fondoSectionLabel" style="color:#cbd5e1;font-size:15px;margin-top:4px">—</p>
+      </div>
+      <button class="lock-btn" id="lockBtn" onclick="openLoginModal()">Editar</button>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <div class="tab-nav-inner">
+      <button class="tab-btn active" id="tabbtn-resumen" onclick="showTab('resumen')">Resumen</button>
+      <button class="tab-btn" id="tabbtn-cronograma" onclick="showTab('cronograma')">Cronograma</button>
+      <button class="tab-btn" id="tabbtn-vehiculos" onclick="showTab('vehiculos')">Vehículos</button>
+      <button class="tab-btn" id="tabbtn-utilidades" onclick="showTab('utilidades')">Utilidades</button>
+      <button class="tab-btn" id="tabbtn-transferencias" onclick="showTab('transferencias')">Transferencias</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- TAB: RESUMEN -->
+    <div class="tab-page active" id="tab-resumen">
+      <div class="hero-total">
+        <div class="label">Capital total recibido</div>
+        <div class="amt-row">
+          <span class="amt" id="hero-usd">—</span>
+          <span class="amt2" id="hero-cad">—</span>
+        </div>
+        <div class="rate-note" id="hero-rate">Tasa de cambio de referencia: —</div>
+        <div class="row">
+          <span>Saldo pendiente</span>
+          <b id="hero-saldo">—</b>
+        </div>
+        <div class="row">
+          <span>Fecha límite de devolución</span>
+          <b id="hero-fecha">—</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CRONOGRAMA -->
+    <div class="tab-page" id="tab-cronograma">
+      <div class="sec">
+        <div class="sec-title">Cronograma de pago del crédito</div>
+        <div class="sec-sub" id="cronograma-sub">Cargando…</div>
+        <div class="prog-bar-track"><div class="prog-bar-fill" id="cron-bar" style="width:0%"></div></div>
+        <div class="prog-label" id="cron-label">Cargando…</div>
+        <div id="cron-list"><div class="loading">Cargando…</div></div>
+      </div>
+    </div>
+
+    <!-- TAB: VEHICULOS -->
+    <div class="tab-page" id="tab-vehiculos">
+      <div class="sec">
+        <div class="sec-title">Inversión en vehículos</div>
+        <div class="note" style="margin-top:0;margin-bottom:14px">Los costos y ventas de los vehículos se manejan en <b>dólares canadienses (CAD)</b>, ya que se compran en Canadá. El pago del crédito y el reparto de utilidades a los inversionistas se hace en <b>dólares americanos (USD)</b>. Se muestra el equivalente en ambas monedas con una tasa de referencia de <b>1.41 CAD por cada 1 USD</b>.</div>
+        <div id="autos-list"><div class="loading">Cargando…</div></div>
+        <button class="btn ghost block" id="btnAddAuto" style="display:none" onclick="openAutoModal()">+ Agregar vehículo</button>
+      </div>
+    </div>
+
+    <!-- TAB: UTILIDADES -->
+    <div class="tab-page" id="tab-utilidades">
+      <div class="sec">
+        <div class="sec-title">Distribución de utilidades</div>
+        <div class="sec-sub" id="util-sub">Punto de equilibrio: cubre la cuota del crédito. El excedente se distribuye en partes iguales entre los inversionistas.</div>
+        <div class="note" style="margin-top:0;margin-bottom:14px">Esta utilidad se calcula automáticamente con la ganancia neta de los vehículos marcados como <b>Vendido</b> en la pestaña Vehículos, según su fecha de venta.</div>
+
+        <div class="sim-input-row" id="sim-input-row" style="display:flex">
+          <label>Mes</label>
+          <select id="sim-mes"></select>
+        </div>
+
+        <div class="sim-result" id="sim-result">
+          <div class="loading">Cargando…</div>
+        </div>
+
+        <div class="sim-table" id="sim-table"></div>
+      </div>
+    </div>
+
+    <!-- TAB: TRANSFERENCIAS (incluye aportes de capital) -->
+    <div class="tab-page" id="tab-transferencias">
+      <div class="sec">
+        <div class="sec-title">Aportes de capital por inversionista</div>
+        <div class="inv-grid" id="inv-grid">
+          <div class="loading">Cargando…</div>
+        </div>
+        <div class="note">
+          <b>Nota sobre la moneda:</b> el capital se recibió en dólares americanos desde Ecuador y se convirtió a dólares canadienses para la compra de vehículos. La devolución del préstamo se realiza también en dólares americanos, enviando el dinero desde Canadá.
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-toggle" onclick="toggleTransferencias()">
+          <div class="sec-title" style="margin-bottom:0">Detalle de transferencias reales</div>
+          <span class="arrow" id="transf-arrow">+</span>
+        </div>
+        <div id="transf-list" style="display:none">
+          <div class="loading">Cargando…</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot" id="foot">Reporte informativo — LIVARKAR Services Management Ltd. / BolivarAutos</div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-bg" id="loginModalBg">
+  <div class="modal">
+    <h3>Acceso de edición</h3>
+    <label>Clave</label>
+    <input type="password" id="loginPass" placeholder="••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeLoginModal()">Cancelar</button>
+      <button class="btn" onclick="doLogin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- AUTO MODAL -->
+<div class="modal-bg" id="autoModalBg">
+  <div class="modal">
+    <h3 id="autoModalTitle">Agregar vehículo</h3>
+    <input type="hidden" id="autoEditId">
+    <label>Nombre (Año Marca Modelo)</label>
+    <input type="text" id="autoNombre" placeholder="Ej: 2018 Nissan Rogue">
+    <label>VIN (últ. 6)</label>
+    <input type="text" id="autoVin">
+    <label>Fecha de compra</label>
+    <input type="date" id="autoFecha">
+    <label>Costo del carro (CAD $)</label>
+    <input type="number" id="autoCosto" placeholder="0.00">
+    <label>Taxes, Safety, Arreglo, Fees (CAD $)</label>
+    <input type="number" id="autoGst" placeholder="0.00">
+    <label>Comisión BolivarAutos — dealer (%) — opcional, dejar vacío si no aplica</label>
+    <input type="number" id="autoComision" placeholder="Sin comisión" step="0.1">
+    <label>Estado</label>
+    <select id="autoEstado">
+      <option value="En Preparación">En Preparación</option>
+      <option value="Disponible">Disponible</option>
+      <option value="Vendido">Vendido</option>
+      <option value="Cancelado">Cancelado / Arbitraje</option>
+    </select>
+    <label>Qué se está haciendo con el carro ahora (opcional)</label>
+    <select id="autoProcesoEstado">
+      <option value="">— Ninguno —</option>
+      <option value="En tránsito">En tránsito</option>
+      <option value="En taller / Safety">En taller / Safety</option>
+      <option value="Buscando repuestos">Buscando repuestos</option>
+      <option value="Detailing">Detailing</option>
+      <option value="En arbitraje">En arbitraje</option>
+    </select>
+    <label>Nota adicional (opcional)</label>
+    <textarea id="autoProcesoNota" rows="3" placeholder="Ej: esperando recogerlo en Toronto"></textarea>
+    <label>Precio de venta — dejar vacío si aún no se vende (CAD $)</label>
+    <input type="number" id="autoVenta" placeholder="0.00">
+    <label>Fecha de venta — necesaria para que la utilidad se refleje en el mes correcto</label>
+    <input type="date" id="autoFechaVenta">
+    <label>Fotos</label>
+    <input type="file" id="autoFotoInput" accept="image/*" multiple>
+    <div id="autoFotoPreview" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" onclick="closeAutoModal()">Cancelar</button>
+      <button class="btn" id="btnSaveAuto" onclick="guardarAuto()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ================= CONFIG GENERAL =================
+const ADMIN_PASSWORD = '8334'; // misma clave que livarkar-app.html, aplica a todos los fondos
+const COMISION_DEFAULT = 0; // sin comisión por defecto; se escribe a mano por vehículo
+// Los costos y ventas de vehículos se registran en CAD (se compran en Canadá).
+// El pago del crédito y el reparto de utilidades a los inversionistas es en USD.
+// Esta tasa convierte CAD -> USD para poder ver ambos valores lado a lado.
+const TASA_CAMBIO_AUTOS = 1.41; // CAD por cada 1 USD
+function cadAUsd(cad){ return (cad||0) / TASA_CAMBIO_AUTOS; }
+function fmtDual(cad, dec){
+  dec = (dec===undefined)?2:dec;
+  return '<span class="dual-cad">'+fmt(cad,dec)+' CAD</span><span class="dual-usd">≈ '+fmt(cadAUsd(cad),dec)+' USD</span>';
+}
+const MESES_NOMBRES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function mesLabel(m){
+  const p = m.split('-'); const n = MESES_NOMBRES[parseInt(p[1],10)-1];
+  return n.charAt(0).toUpperCase()+n.slice(1)+' '+p[0];
+}
+
+// ================= FONDOS DE INVERSION =================
+// Cada fondo es independiente: su propia colección en Firestore, sus propios montos.
+// Para agregar un nuevo inversionista/fondo: 1) agrega su entrada aquí, 2) agrega su botón en #homeScreen.
+const FONDOS = {
+  COLOMA: {
+    nombre: 'Inversión Flia Coloma',
+    prefix: 'INVERSION_FAMILIAR_COLOMA',
+    seed: {
+      capitalUSD: 9180,
+      capitalCADReal: 12319.05,
+      tasaReferencia: 1.35,
+      fechaLimite: '2027-01-15',
+      cuotaMensualUSD: 560,
+      meses: ['2026-07','2026-08','2026-09','2026-10','2026-11','2026-12','2027-01'],
+      inversionistas: [
+        {nombre:'Zoila Coloma', usd:3060, cad:4131},
+        {nombre:'Guillo G.', usd:3060, cad:4131},
+        {nombre:'Bolívar G.', usd:3060, cad:4131}
+      ],
+      transferencias: [
+        {persona:'Guillo G.', monto:2900},
+        {persona:'Guillo G.', monto:2000},
+        {persona:'Guillo G.', monto:300},
+        {persona:'Guillo G.', monto:280},
+        {persona:'Guillo G.', monto:500},
+        {persona:'Bolívar G. (tarjeta)', monto:650},
+        {persona:'Bolívar G. (tarjeta)', monto:300},
+        {persona:'Bolívar G. (tarjeta)', monto:250},
+        {persona:'Bolívar G. (tarjeta)', monto:2000}
+      ],
+      autoSeed: { id:'rogue2018', data:{
+        nombre: '2018 Nissan Rogue', vin:'', fechaCompra:'2026-06-25',
+        costoTotal: 9515, gstPagado: 475, comisionPct: 0, ventaReal: 0, ventaFecha: '',
+        estado:'En Preparación', fotos:[]
+      }}
+    }
+  }
+  // Próximo fondo se agrega aquí con su propia clave, prefix y seed.
+};
+
+let currentFondoId = null;
+let firebaseReady = false;
+let pendingOpenId = null;
+let unsubscribers = [];
+let db, storage;
+let resumenData = null, creditoData = null, autosCache = [];
+let autosExpandState = {}; // {id: true/false} — sólo guarda overrides manuales del usuario
+
+// ===== NOTIFICACIONES (globo rojo) =====
+// Guarda en el propio teléfono qué actualizaciones ya vio esta persona.
+// Formato: {idDelAuto: marcaDeTiempoQueYaVio}
+function vistosKey(){ return 'livarkar_vistos_' + (currentFondoId||''); }
+function getVistos(){
+  try{ return JSON.parse(localStorage.getItem(vistosKey()) || '{}'); }
+  catch(e){ return {}; }
+}
+function setVistos(v){
+  try{ localStorage.setItem(vistosKey(), JSON.stringify(v)); }catch(e){}
+}
+// Marca de tiempo (en milisegundos) de la última modificación de un vehículo.
+function autoUpdateKey(a){
+  const t = a.actualizadoEn || a.creadoEn;
+  if(t && typeof t.toMillis === 'function') return t.toMillis();
+  if(t && t.seconds) return t.seconds*1000;
+  return 0;
+}
+// Un auto tiene novedad si se actualizó después de la última vez que se vio.
+function autoTieneNovedad(a){
+  const ts = autoUpdateKey(a);
+  if(!ts) return false; // registros viejos sin marca de tiempo: nunca notifican
+  const vistos = getVistos();
+  return ts > (vistos[a.id] || 0);
+}
+function marcarAutoVisto(id){
+  const a = autosCache.find(x=>x.id===id);
+  if(!a) return;
+  const ts = autoUpdateKey(a);
+  if(!ts) return;
+  const vistos = getVistos();
+  vistos[id] = ts;
+  setVistos(vistos);
+}
+function contarNovedades(){
+  return autosCache.filter(autoTieneNovedad).length;
+}
+function renderBadges(){
+  const el = document.getElementById('badge-vehiculos');
+  if(!el) return;
+  // En modo edición no se notifica: quien hace el cambio no necesita avisarse a sí mismo.
+  const n = adminMode ? 0 : contarNovedades();
+  if(n > 0){ el.textContent = n; el.style.display = 'inline-flex'; }
+  else { el.style.display = 'none'; }
+}
+
+let autoFotosNuevas = [];
+let autoFotosExistentes = [];
+let adminMode = false;
+let adminTimer = null;
+const ADMIN_TIMEOUT_MS = 5*60*1000; // 5 minutos de inactividad antes de cerrar el modo edición
+
+function col(){ return FONDOS[currentFondoId].prefix; }
+function colAutos(){ return FONDOS[currentFondoId].prefix + '_AUTOS'; }
+function fmt(n, dec){ dec=(dec===undefined)?0:dec; return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// ================= NAVEGACION HOME / FONDO =================
+const SECTION_LABELS = {
+  resumen:'Capital · Saldo pendiente', cronograma:'Pagos del crédito',
+  vehiculos:'Inversión en autos', utilidades:'Distribución de ganancias',
+  transferencias:'Aportes de capital'
+};
+
+function syncAdminBtns(){
+  const on = adminMode;
+  ['lockBtn','lockBtnMenu'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.classList.toggle('on', on);
+    el.textContent = on ? 'Editando' : 'Editar';
+  });
+}
+
+// Cierra el modo edición solo por falta de uso, para que nadie deje la pestaña
+// abierta en modo "Editando" sin querer.
+function detenerAdminTimer(){
+  if(adminTimer){ clearTimeout(adminTimer); adminTimer = null; }
+}
+function reiniciarAdminTimer(){
+  if(!adminMode) return;
+  detenerAdminTimer();
+  adminTimer = setTimeout(()=>{
+    adminMode = false;
+    updateAdminUI();
+    showToast('Modo edición desactivado por inactividad');
+  }, ADMIN_TIMEOUT_MS);
+}
+['click','touchstart','keydown','scroll'].forEach(evt=>{
+  document.addEventListener(evt, reiniciarAdminTimer, {passive:true});
+});
+
+function openFondo(id){
+  currentFondoId = id;
+  document.getElementById('homeScreen').style.display='none';
+  document.getElementById('fondoScreen').style.display='none';
+  document.getElementById('fondoMenuScreen').style.display='block';
+  document.getElementById('fondoMenuTitle').textContent = FONDOS[id].nombre.toUpperCase();
+  location.hash = id+'/menu';
+  if(firebaseReady){ initApp(); } else { pendingOpenId = id; }
+}
+
+// Al salir de la pestaña Vehículos, todo lo que estaba a la vista queda por revisado.
+// Se hace al salir (no al entrar) para que los globos rojos alcancen a verse.
+function marcarVehiculosVistos(){
+  const vistos = getVistos();
+  autosCache.forEach(a=>{
+    const ts = autoUpdateKey(a);
+    if(ts) vistos[a.id] = ts;
+  });
+  setVistos(vistos);
+  renderBadges();
+}
+
+function goToFondoMenu(){
+  const enVehiculos = document.getElementById('tab-vehiculos').classList.contains('active');
+  document.getElementById('fondoScreen').style.display='none';
+  document.getElementById('fondoMenuScreen').style.display='block';
+  document.getElementById('fondoMenuTitle').textContent = FONDOS[currentFondoId].nombre.toUpperCase();
+  location.hash = currentFondoId+'/menu';
+  if(enVehiculos) marcarVehiculosVistos();
+  window.scrollTo(0,0);
+}
+
+function goToSection(name){
+  document.getElementById('fondoMenuScreen').style.display='none';
+  document.getElementById('fondoScreen').style.display='block';
+  document.getElementById('fondoTitle').textContent = FONDOS[currentFondoId].nombre.toUpperCase();
+  document.getElementById('fondoSectionLabel').textContent = SECTION_LABELS[name]||'';
+  showTab(name);
+}
+
+function goHome(){
+  const enVehiculos = document.getElementById('tab-vehiculos').classList.contains('active')
+    && document.getElementById('fondoScreen').style.display !== 'none';
+  document.getElementById('fondoMenuScreen').style.display='none';
+  document.getElementById('fondoScreen').style.display='none';
+  document.getElementById('homeScreen').style.display='block';
+  history.replaceState(null,'',location.pathname+location.search);
+  if(enVehiculos) marcarVehiculosVistos();
+  window.scrollTo(0,0);
+}
+
+function showTab(name){
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('tabbtn-'+name).classList.add('active');
+  location.hash = (currentFondoId||'')+'/'+name;
+  window.scrollTo(0,0);
+}
+
+function toggleTransferencias(){
+  const box = document.getElementById('transf-list');
+  const arrow = document.getElementById('transf-arrow');
+  const abierto = box.style.display !== 'none';
+  box.style.display = abierto ? 'none' : 'block';
+  arrow.textContent = abierto ? '+' : '−';
+}
+
+// ================= LOGIN =================
+function openLoginModal(){
+  if(adminMode){ adminMode=false; detenerAdminTimer(); updateAdminUI(); showToast('Modo edición desactivado'); return; }
+  document.getElementById('loginModalBg').classList.add('open');
+  document.getElementById('loginPass').value='';
+  setTimeout(()=>document.getElementById('loginPass').focus(),100);
+}
+function closeLoginModal(){ document.getElementById('loginModalBg').classList.remove('open'); }
+function doLogin(){
+  const val = document.getElementById('loginPass').value;
+  if(val === ADMIN_PASSWORD){
+    adminMode = true;
+    closeLoginModal();
+    updateAdminUI();
+    reiniciarAdminTimer();
+    showToast('Modo edición activado');
+  } else {
+    showToast('Clave incorrecta');
+  }
+}
+function updateAdminUI(){
+  syncAdminBtns();
+  document.getElementById('btnAddAuto').style.display = adminMode ? 'block' : 'none';
+  renderCronograma();
+  renderAutos();
+  renderSimulador();
+  renderTransferencias();
+  renderBadges();
+}
+
+// ================= FIREBASE INIT =================
+(function(){
+  var s1=document.createElement('script');
+  s1.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js';
+  s1.onload=function(){
+    var s2=document.createElement('script');
+    s2.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js';
+    s2.onload=function(){
+      var s3=document.createElement('script');
+      s3.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js';
+      s3.onload=function(){
+        try{
+          if(!firebase.apps.length){
+            firebase.initializeApp({
+              apiKey:'AIzaSyBuRACKx_I-WLsCmmquAH9eWwkubwsdmUQ',
+              authDomain:'bolivarautos-919e4.firebaseapp.com',
+              projectId:'bolivarautos-919e4',
+              storageBucket:'bolivarautos-919e4.firebasestorage.app',
+              messagingSenderId:'397354528937',
+              appId:'1:397354528397:web:52fd2ec53984af7aaa7cc4'
+            });
+          }
+          db = firebase.firestore();
+          storage = firebase.storage();
+          firebaseReady = true;
+          if(pendingOpenId){ initApp(); pendingOpenId = null; }
+        }catch(e){ console.error(e); document.getElementById('foot').textContent='Error de conexión: '+e.message; }
+      };
+      document.head.appendChild(s3);
+    };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+})();
+
+// ================= SEED / SINCRONIZACION =================
+async function ensureSeedData(){
+  const seed = FONDOS[currentFondoId].seed;
+  // 'resumen' es información de referencia fija (sin UI de edición) — se mantiene siempre
+  // sincronizada con estos valores para evitar datos desactualizados.
+  await db.collection(col()).doc('resumen').set({
+    capitalUSD: seed.capitalUSD,
+    capitalCADReal: seed.capitalCADReal,
+    tasaReferencia: seed.tasaReferencia,
+    fechaLimite: seed.fechaLimite,
+    inversionistas: seed.inversionistas,
+    transferencias: seed.transferencias
+  });
+
+  const refC = db.collection(col()).doc('credito');
+  const snapC = await refC.get();
+  if(!snapC.exists){
+    const pagos = {};
+    seed.meses.forEach(m=>pagos[m]=false);
+    await refC.set({ cuotaMensualUSD: seed.cuotaMensualUSD, meses: seed.meses, pagos: pagos });
+  }
+  const autosSnap = await db.collection(colAutos()).limit(1).get();
+  if(autosSnap.empty && seed.autoSeed){
+    await db.collection(colAutos()).doc(seed.autoSeed.id).set(seed.autoSeed.data);
+  }
+}
+
+async function initApp(){
+  unsubscribers.forEach(u=>u());
+  unsubscribers = [];
+  resumenData = null; creditoData = null; autosCache = [];
+  try{
+    await ensureSeedData();
+    unsubscribers.push(db.collection(col()).doc('resumen').onSnapshot(doc=>{
+      resumenData = doc.data();
+      renderResumen();
+      renderTransferencias();
+    }));
+    unsubscribers.push(db.collection(col()).doc('credito').onSnapshot(doc=>{
+      creditoData = doc.data();
+      renderCronograma();
+      renderSimulador();
+    }));
+    unsubscribers.push(db.collection(colAutos()).onSnapshot(snap=>{
+      autosCache = [];
+      snap.forEach(d=>autosCache.push(Object.assign({id:d.id}, d.data())));
+      renderAutos();
+      renderSimulador();
+      renderBadges();
+    }));
+  }catch(e){
+    console.error(e);
+    document.getElementById('foot').textContent = 'Error cargando datos: '+e.message;
+  }
+}
+
+// ================= RESUMEN =================
+function renderResumen(){
+  if(!resumenData) return;
+  document.getElementById('hero-usd').textContent = fmt(resumenData.capitalUSD)+' USD';
+  document.getElementById('hero-cad').textContent = fmt(resumenData.capitalCADReal,2)+' CAD';
+  document.getElementById('hero-rate').textContent = 'Tasa de cambio de referencia: '+resumenData.tasaReferencia+' CAD por cada USD';
+  document.getElementById('hero-saldo').textContent = fmt(resumenData.capitalUSD)+' USD / '+fmt(resumenData.capitalCADReal,2)+' CAD';
+  const f = new Date(resumenData.fechaLimite+'T00:00:00');
+  document.getElementById('hero-fecha').textContent = f.toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'});
+
+  const grid = document.getElementById('inv-grid');
+  grid.innerHTML='';
+  (resumenData.inversionistas||[]).forEach(inv=>{
+    const pct = (resumenData.capitalUSD ? (inv.usd/resumenData.capitalUSD*100) : 33.3).toFixed(1);
+    grid.innerHTML += `<div class="inv-card">
+      <div class="inv-card-left">
+        <div class="nm">${inv.nombre}</div>
+        <div class="pct">${pct}% del fondo</div>
+      </div>
+      <div class="inv-card-right">
+        <div class="usd">${fmt(inv.usd)} USD</div>
+        <div class="cad">${fmt(inv.cad)} CAD</div>
+      </div>
+    </div>`;
+  });
+}
+
+// ================= CRONOGRAMA =================
+function renderCronograma(){
+  if(!creditoData) return;
+  const cuotaPersonal = (creditoData.cuotaMensualUSD/3);
+  document.getElementById('cronograma-sub').textContent = `$${creditoData.cuotaMensualUSD} USD/mes total · $${cuotaPersonal.toFixed(2)} USD/mes por inversionista`;
+
+  const meses = creditoData.meses || [];
+  const pagos = creditoData.pagos || {};
+  const pagados = meses.filter(m=>pagos[m]).length;
+  document.getElementById('cron-bar').style.width = (meses.length ? (pagados/meses.length*100) : 0)+'%';
+  document.getElementById('cron-label').textContent = `${pagados} de ${meses.length} meses pagados`;
+
+  const list = document.getElementById('cron-list');
+  list.innerHTML='';
+  meses.forEach(m=>{
+    const pagado = !!pagos[m];
+    const checkHtml = adminMode
+      ? `<input type="checkbox" class="chk" ${pagado?'checked':''} onchange="togglePagado('${m}', this.checked)">`
+      : `<span class="badge ${pagado?'pagado':'pendiente'}">${pagado?'Pagado':'Pendiente'}</span>`;
+    list.innerHTML += `<div class="mes-row">
+      <div class="mes-info">
+        <div class="mes-nombre">${mesLabel(m)}</div>
+        <div class="mes-cuota">$${cuotaPersonal.toFixed(2)} USD por inversionista</div>
+      </div>
+      <div class="mes-check">${checkHtml}</div>
+    </div>`;
+  });
+}
+
+async function togglePagado(mes, valor){
+  if(!adminMode) return;
+  try{
+    await db.collection(col()).doc('credito').update({['pagos.'+mes]: valor});
+    showToast(valor ? 'Marcado como pagado' : 'Marcado como pendiente');
+  }catch(e){ showToast('Error: '+e.message); }
+}
+
+// ================= AUTOS =================
+// Clave de orden: usa la marca de tiempo de creación (creadoEn) si existe;
+// los vehículos antiguos que no la tienen (creados antes de este cambio) usan
+// su fecha de compra como respaldo, para que igual aparezcan en un orden razonable.
+function autoOrderKey(a){
+  if(a.creadoEn && typeof a.creadoEn.toMillis === 'function') return a.creadoEn.toMillis();
+  if(a.creadoEn && a.creadoEn.seconds) return a.creadoEn.seconds*1000;
+  if(a.fechaCompra) return new Date(a.fechaCompra+'T00:00:00').getTime();
+  return 0;
+}
+
+function isAutoExpanded(a){
+  if(Object.prototype.hasOwnProperty.call(autosExpandState, a.id)) return autosExpandState[a.id];
+  return false; // todos los vehículos empiezan plegados al abrir la app
+}
+
+function onCarruselScroll(track){
+  const total = parseInt(track.dataset.total,10) || 1;
+  const idx = Math.round(track.scrollLeft / track.clientWidth);
+  const cont = track.parentElement.querySelector('.foto-actual');
+  if(cont) cont.textContent = Math.min(idx+1, total);
+  const dotsWrap = track.parentElement.parentElement;
+  const dots = dotsWrap ? dotsWrap.querySelectorAll('.foto-dot') : [];
+  dots.forEach((d,i)=>d.classList.toggle('on', i===idx));
+}
+
+function toggleAutoExpand(id){
+  const a = autosCache.find(x=>x.id===id);
+  if(!a) return;
+  const abriendo = !isAutoExpanded(a);
+  autosExpandState[id] = abriendo;
+  if(abriendo) marcarAutoVisto(id); // al abrir la ficha, la novedad queda revisada
+  renderAutos();
+  renderBadges();
+}
+
+function renderAutos(){
+  const list = document.getElementById('autos-list');
+  if(!autosCache.length){ list.innerHTML = '<div class="loading">Todavía no hay vehículos registrados</div>'; return; }
+  const ordenados = autosCache.slice().sort((a,b)=>autoOrderKey(b)-autoOrderKey(a));
+  list.innerHTML='';
+  ordenados.forEach(a=>{
+    const estadoClass = a.estado==='Vendido' ? 'vendido' : (a.estado==='Cancelado' ? 'cancelado' : (a.estado==='Disponible' ? 'disp' : 'prep'));
+    const fechaStr = a.fechaCompra ? new Date(a.fechaCompra+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    const comisionPct = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
+    const comisionMonto = (a.costoTotal||0) * comisionPct/100;
+    const gstPagado = a.gstPagado || 0;
+    const capitalInvertido = (a.costoTotal||0) + gstPagado;
+    const ventaReal = a.ventaReal || 0;
+    const editBtn = adminMode ? `<button class="btn sm ghost" style="margin-top:10px" onclick="event.stopPropagation();openAutoModal('${a.id}')">Editar</button>` : '';
+
+    let gananciaBruta = 0, gananciaNeta = 0;
+    if(ventaReal > 0){
+      gananciaBruta = ventaReal - capitalInvertido;
+      gananciaNeta = gananciaBruta - comisionMonto;
+    }
+
+    let costoRowsHtml = `<div class="r"><span>Costo del carro</span><b>${fmtDual(a.costoTotal)}</b></div>`;
+    // Siempre se muestran estas dos filas, aunque el campo esté vacío,
+    // para que la ficha tenga la misma estructura en todos los vehículos.
+    costoRowsHtml += `<div class="r"><span>Taxes, Safety, Arreglo, Fees</span><b>${gstPagado > 0 ? fmtDual(gstPagado) : 'Sin registrar'}</b></div>
+      <div class="r"><span style="font-weight:700;color:#1E293B">Total invertido</span><b style="color:#1E293B">${fmtDual(capitalInvertido)}</b></div>`;
+
+    let finHtml;
+    if(a.estado === 'Cancelado'){
+      finHtml = `<div class="auto-fin">${costoRowsHtml}
+        <div class="r cancel-msg"><span>Operación revertida — el trato se canceló (arbitraje). No genera ganancia ni pérdida para el fondo; el capital regresa.</span></div>
+      </div>`;
+    } else {
+      finHtml = `<div class="auto-fin">${costoRowsHtml}`;
+      if(comisionPct > 0){
+        finHtml += `<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmtDual(comisionMonto,2)}</b></div>`;
+      }
+      if(ventaReal > 0){
+        const ventaFechaStr = a.ventaFecha ? new Date(a.ventaFecha+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
+        finHtml += `<div class="r"><span>Precio de venta</span><b>${fmtDual(ventaReal)}</b></div>
+          <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>`;
+        if(comisionPct > 0){
+          finHtml += `<div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmtDual(gananciaBruta,2)}</b></div>
+            <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
+        } else {
+          finHtml += `<div class="r"><span>Ganancia para inversionistas — venta menos total invertido</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
+        }
+      } else {
+        finHtml += `<div class="r"><span>Precio de venta</span><b>Pendiente de venta</b></div>`;
+      }
+      finHtml += `</div>`;
+    }
+
+    const expanded = isAutoExpanded(a);
+    const fotos = (a.fotos || []).filter(Boolean);
+    const thumbHtml = fotos.length
+      ? `<img class="auto-thumb" src="${fotos[0]}">`
+      : `<div class="auto-thumb-placeholder">SIN FOTO</div>`;
+    let fotoGrandeHtml = '';
+    if(fotos.length === 1){
+      fotoGrandeHtml = `<div class="auto-photo"><img src="${fotos[0]}"></div>`;
+    } else if(fotos.length > 1){
+      const slides = fotos.map(src=>`<div class="foto-carrusel-slide"><img src="${src}"></div>`).join('');
+      const dots = fotos.map((_,i)=>`<span class="foto-dot ${i===0?'on':''}"></span>`).join('');
+      fotoGrandeHtml = `<div class="foto-carrusel">
+          <div class="foto-carrusel-track" data-total="${fotos.length}" onscroll="onCarruselScroll(this)">${slides}</div>
+          <div class="foto-contador"><span class="foto-actual">1</span>/${fotos.length}</div>
+        </div>
+        <div class="foto-dots">${dots}</div>`;
+    }
+    let procesoHtml = '';
+    if(a.procesoEstado || a.procesoNota){
+      procesoHtml = `<div class="proceso-note">
+        ${a.procesoEstado ? `<span class="proceso-badge">${a.procesoEstado}</span>` : ''}
+        ${a.procesoNota ? `<div class="proceso-texto">${escapeHtml(a.procesoNota)}</div>` : ''}
+      </div>`;
+    }
+
+    list.innerHTML += `<div class="auto-card ${expanded?'expanded':''}">
+      <div class="auto-body">
+        <div class="auto-head" onclick="toggleAutoExpand('${a.id}')">
+          <div class="auto-head-left">
+            ${thumbHtml}
+            <div class="auto-nombre">${a.nombre}</div>
+          </div>
+          <div class="auto-head-right">
+            ${(!adminMode && autoTieneNovedad(a)) ? '<span class="notif-dot"></span>' : ''}
+            <div class="auto-estado ${estadoClass}">${a.estado}</div>
+            <span class="auto-toggle-label ${expanded?'close':''}">${expanded?'Cerrar ✕':'Ver ficha'}</span>
+          </div>
+        </div>
+        <div class="auto-details">
+          ${fotoGrandeHtml}
+          ${procesoHtml}
+          <div class="auto-grid">
+            <div class="k">Fecha de compra</div><div class="v">${fechaStr}</div>
+            <div class="k">VIN</div><div class="v">${a.vin||'—'}</div>
+          </div>
+          ${finHtml}
+          ${editBtn}
+        </div>
+      </div>
+    </div>`;
+  });
+}
+
+function openAutoModal(id){
+  autoFotosNuevas = []; autoFotosExistentes = [];
+  document.getElementById('autoFotoPreview').innerHTML='';
+  document.getElementById('autoFotoInput').value='';
+  if(id){
+    const a = autosCache.find(x=>x.id===id);
+    if(!a) return;
+    document.getElementById('autoModalTitle').textContent='Editar vehículo';
+    document.getElementById('autoEditId').value = id;
+    document.getElementById('autoNombre').value = a.nombre||'';
+    document.getElementById('autoVin').value = a.vin||'';
+    document.getElementById('autoFecha').value = a.fechaCompra||'';
+    document.getElementById('autoCosto').value = a.costoTotal||'';
+    document.getElementById('autoGst').value = a.gstPagado||'';
+    document.getElementById('autoComision').value = (a.comisionPct > 0) ? a.comisionPct : '';
+    document.getElementById('autoEstado').value = a.estado||'En Preparación';
+    document.getElementById('autoProcesoEstado').value = a.procesoEstado || '';
+    document.getElementById('autoProcesoNota').value = a.procesoNota || '';
+    document.getElementById('autoVenta').value = a.ventaReal || '';
+    document.getElementById('autoFechaVenta').value = a.ventaFecha || '';
+    autoFotosExistentes = (a.fotos||[]).slice();
+    renderFotoPreview();
+  } else {
+    document.getElementById('autoModalTitle').textContent='Agregar vehículo';
+    document.getElementById('autoEditId').value='';
+    ['autoNombre','autoVin','autoFecha','autoCosto','autoGst','autoComision','autoVenta','autoFechaVenta','autoProcesoNota'].forEach(id2=>document.getElementById(id2).value='');
+    document.getElementById('autoEstado').value='En Preparación';
+    document.getElementById('autoProcesoEstado').value='';
+  }
+  document.getElementById('autoModalBg').classList.add('open');
+}
+function closeAutoModal(){ document.getElementById('autoModalBg').classList.remove('open'); }
+
+document.getElementById('autoFotoInput').addEventListener('change', function(e){
+  autoFotosNuevas = autoFotosNuevas.concat(Array.from(e.target.files));
+  renderFotoPreview();
+});
+function renderFotoPreview(){
+  const cont = document.getElementById('autoFotoPreview');
+  cont.innerHTML='';
+  autoFotosExistentes.forEach((src,i)=>{
+    cont.innerHTML += `<div class="photo-thumb"><img src="${src}"><span class="x" onclick="autoFotosExistentes.splice(${i},1);renderFotoPreview()">x</span></div>`;
+  });
+  autoFotosNuevas.forEach((file,i)=>{
+    const url = URL.createObjectURL(file);
+    cont.innerHTML += `<div class="photo-thumb"><img src="${url}"><span class="x" onclick="autoFotosNuevas.splice(${i},1);renderFotoPreview()">x</span></div>`;
+  });
+}
+
+async function guardarAuto(){
+  const nombre = document.getElementById('autoNombre').value.trim();
+  if(!nombre){ showToast('Falta el nombre del vehículo'); return; }
+  const btn = document.getElementById('btnSaveAuto');
+  btn.disabled = true; btn.textContent = 'Guardando…';
+  try{
+    let fotos = autoFotosExistentes.slice();
+    for(const file of autoFotosNuevas){
+      const ref = storage.ref('inversion_familiar/'+Date.now()+'_'+file.name);
+      await ref.put(file);
+      fotos.push(await ref.getDownloadURL());
+    }
+    const costoTotal = parseFloat(document.getElementById('autoCosto').value)||0;
+    const gstVal = parseFloat(document.getElementById('autoGst').value);
+    const comisionPct = parseFloat(document.getElementById('autoComision').value);
+    const ventaVal = parseFloat(document.getElementById('autoVenta').value);
+    const ventaFechaVal = document.getElementById('autoFechaVenta').value;
+    if(!isNaN(ventaVal) && ventaVal>0 && !ventaFechaVal){
+      showToast('Falta la fecha de venta para que la utilidad se calcule en el mes correcto');
+      btn.disabled=false; btn.textContent='Guardar';
+      return;
+    }
+    const data = {
+      nombre,
+      vin: document.getElementById('autoVin').value.trim(),
+      fechaCompra: document.getElementById('autoFecha').value,
+      costoTotal,
+      gstPagado: isNaN(gstVal) ? 0 : gstVal,
+      comisionPct: isNaN(comisionPct) ? 0 : comisionPct,
+      ventaReal: isNaN(ventaVal) ? 0 : ventaVal,
+      ventaFecha: ventaFechaVal || '',
+      estado: document.getElementById('autoEstado').value,
+      procesoEstado: document.getElementById('autoProcesoEstado').value,
+      procesoNota: document.getElementById('autoProcesoNota').value.trim(),
+      fotos
+    };
+    const editId = document.getElementById('autoEditId').value;
+    if(editId){
+      // Sólo se notifica si algo cambió de verdad. Si se abre el formulario y se
+      // guarda sin tocar nada, no se marca como novedad y no aparece el globo rojo.
+      const anterior = autosCache.find(x=>x.id===editId) || {};
+      const huboCambio = Object.keys(data).some(k=>{
+        if(k === 'fotos'){
+          return JSON.stringify(data.fotos||[]) !== JSON.stringify(anterior.fotos||[]);
+        }
+        return data[k] !== (anterior[k] !== undefined ? anterior[k] : (typeof data[k]==='number' ? 0 : ''));
+      });
+      if(huboCambio) data.actualizadoEn = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection(colAutos()).doc(editId).update(data);
+    } else {
+      data.creadoEn = firebase.firestore.FieldValue.serverTimestamp();
+      data.actualizadoEn = firebase.firestore.FieldValue.serverTimestamp();
+      await db.collection(colAutos()).add(data);
+    }
+    showToast('Vehículo guardado');
+    closeAutoModal();
+  }catch(e){
+    showToast('Error: '+e.message);
+  }finally{
+    btn.disabled=false; btn.textContent='Guardar';
+  }
+}
+
+// ================= SIMULADOR =================
+// Suma la ganancia neta (venta - costo - taxes/safety/fees - comisión) de todos los
+// vehículos vendidos cuya fecha de venta cae dentro del mes indicado ('YYYY-MM').
+// Los vehículos se manejan en CAD; se devuelve también el equivalente en USD,
+// que es la moneda en la que se paga el crédito y se reparte la utilidad.
+function utilidadDelMes(mes){
+  let total = 0;
+  const detalle = [];
+  autosCache.forEach(a=>{
+    if(a.estado!=='Vendido' || !(a.ventaReal>0) || !a.ventaFecha) return;
+    if(a.ventaFecha.slice(0,7) !== mes) return;
+    const comisionPct = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
+    const comisionMonto = (a.costoTotal||0) * comisionPct/100;
+    const capitalInvertido = (a.costoTotal||0) + (a.gstPagado||0);
+    const gananciaNeta = (a.ventaReal||0) - capitalInvertido - comisionMonto;
+    total += gananciaNeta;
+    detalle.push({nombre:a.nombre, gananciaNeta, gananciaNetaUSD: cadAUsd(gananciaNeta)});
+  });
+  return {total, totalUSD: cadAUsd(total), detalle};
+}
+
+// Combina los meses del cronograma del crédito con cualquier mes donde haya
+// una venta real registrada, aunque caiga fuera del cronograma original.
+function mesesDisponibles(){
+  const base = (creditoData && creditoData.meses) || [];
+  const ventaMeses = autosCache
+    .filter(a=>a.ventaReal>0 && a.ventaFecha)
+    .map(a=>a.ventaFecha.slice(0,7));
+  return Array.from(new Set(['2026-06', ...base, ...ventaMeses])).sort();
+}
+
+function renderSimulador(){
+  if(!creditoData) return;
+  const cuota = creditoData.cuotaMensualUSD || 0;
+  document.getElementById('util-sub').textContent = `Punto de equilibrio: $${cuota} USD/mes (cubre la cuota del crédito). El excedente se distribuye en partes iguales entre los inversionistas. Los vehículos se registran en CAD y se convierten a USD a 1.41 CAD por USD.`;
+
+  const sel = document.getElementById('sim-mes');
+  const meses = mesesDisponibles();
+  const prevValue = sel.value;
+  sel.innerHTML = '';
+  meses.forEach(m=>{
+    const o = document.createElement('option');
+    o.value = m; o.textContent = mesLabel(m);
+    sel.appendChild(o);
+  });
+  if(!meses.length) return;
+
+  const conVenta = meses.filter(m=>utilidadDelMes(m).total>0);
+  const hoy = new Date();
+  const mesActualStr = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0');
+  let mesActivo = meses.includes(prevValue) ? prevValue : (meses.includes(mesActualStr) ? mesActualStr : (meses[0] || '2026-06'));
+  sel.value = mesActivo;
+
+  const {total: util, totalUSD: utilUSD, detalle} = utilidadDelMes(mesActivo);
+  const neto = Math.max(0, utilUSD - cuota);
+  const porPersona = neto/3;
+  const cubreCuota = utilUSD >= cuota;
+
+  const detalleHtml = detalle.length
+    ? `<div class="sim-row" style="flex-direction:column;align-items:flex-start;gap:4px">
+         <span style="color:#999;font-size:11.5px;text-transform:uppercase;font-weight:700;letter-spacing:0.3px">Origen de la utilidad</span>
+         ${detalle.map(d=>`<span style="font-size:16px;color:#555">${d.nombre}: ${fmt(d.gananciaNeta,2)} CAD (≈ ${fmt(d.gananciaNetaUSD,2)} USD)</span>`).join('')}
+       </div>`
+    : `<div class="sim-row"><span style="color:#999">Ningún vehículo registra venta en este mes</span></div>`;
+
+  document.getElementById('sim-result').innerHTML = `
+    ${detalleHtml}
+    <div class="sim-row"><span class="lbl">Utilidad del mes (${mesLabel(mesActivo)})</span><b class="val">${fmtDual(util)}</b></div>
+    <div class="sim-row"><span class="lbl">Cuota del crédito</span><span class="val ${cubreCuota?'pos':'neg'}">- ${fmt(cuota)} USD</span></div>
+    <div class="sim-row tot"><span class="lbl">Utilidad neta a distribuir</span><span class="val ${neto>0?'pos':''}">${fmt(neto,2)} USD</span></div>
+    <div class="sim-row"><span class="lbl">Distribución individual entre los tres inversionistas</span><b class="val">${fmt(porPersona,2)} USD</b></div>
+    ${(utilUSD>0 && !cubreCuota) ? '<div class="sim-row"><span style="color:#b45309">La cuota del mes todavía no se cubre por completo</span></div>' : ''}
+  `;
+
+  const tabla = document.getElementById('sim-table');
+  if(!conVenta.length){ tabla.innerHTML=''; return; }
+  let html = '<div class="sim-table-title">Historial</div>';
+  conVenta.forEach(m=>{
+    const u = utilidadDelMes(m).totalUSD;
+    const n = Math.max(0,u-cuota);
+    html += `<div class="sim-table-row"><span class="m">${mesLabel(m)}</span><span class="p">${fmt(u,2)} USD → ${fmt(n/3,2)} USD c/u</span></div>`;
+  });
+  tabla.innerHTML = html;
+}
+document.getElementById('sim-mes').addEventListener('change', renderSimulador);
+
+// ================= TRANSFERENCIAS =================
+function renderTransferencias(){
+  if(!resumenData) return;
+  const transf = resumenData.transferencias || [];
+  const grupos = {};
+  transf.forEach(t=>{ (grupos[t.persona] = grupos[t.persona]||[]).push(t.monto); });
+
+  let html='';
+  Object.keys(grupos).forEach(persona=>{
+    const montos = grupos[persona];
+    const total = montos.reduce((a,b)=>a+b,0);
+    html += `<div class="transf-group">
+      <div class="transf-group-title">${persona} — ${montos.length} transferencia${montos.length>1?'s':''}</div>`;
+    montos.forEach(m=>{ html += `<div class="transf-item"><span>USD</span><span>${fmt(m)}</span></div>`; });
+    html += `<div class="transf-total"><span>Subtotal ${persona}</span><span>${fmt(total)} USD</span></div></div>`;
+  });
+  const totalGeneral = transf.reduce((a,t)=>a+t.monto,0);
+  html += `<div class="transf-total" style="font-size:18px;color:#1E293B"><span>TOTAL</span><span>${fmt(totalGeneral)} USD</span></div>`;
+  document.getElementById('transf-list').innerHTML = html;
+}
+
+document.querySelectorAll('.modal-bg').forEach(m=>{
+  m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open'); });
+});
+
+// La app siempre inicia desde la pantalla de inicio (Home), sin importar
+// qué pestaña se haya visitado la última vez. Se limpia cualquier hash
+// guardado en la URL de una sesión anterior.
+if(location.hash){ history.replaceState(null,'',location.pathname+location.search); }
+
+
+</script>
+</body>
+</html>
