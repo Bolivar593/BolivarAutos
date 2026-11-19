@@ -82,6 +82,11 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .prog-label{font-size:17px;color:#444;margin-bottom:12px}
 .mes-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #f3f4f6}
 .mes-row:last-child{border-bottom:none}
+.anio-tabs{display:flex;gap:8px;margin-bottom:10px}
+.mes-util{font-size:16px;color:#15803d;margin-top:2px}
+.mes-util b{font-weight:700}
+.anio-tab{flex:1;background:#fff;border:2px solid #2563EB;color:#2563EB;border-radius:9px;padding:10px;font-size:19px;font-weight:700;cursor:pointer;min-height:50px}
+.anio-tab.on{background:#2563EB;color:#fff}
 .mes-info{display:flex;flex-direction:column}
 .mes-nombre{font-size:24px;font-weight:700;color:#1a1a1a}
 .mes-cuota{font-size:16px;color:#444;margin-top:2px}
@@ -158,6 +163,9 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 .sim-input-row label{font-size:16px;color:#333;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;flex-shrink:0}
 .sim-input-row select{flex:1;border:1px solid #ccd3dc;border-radius:8px;padding:11px 10px;font-size:18px;min-width:130px}
 .sim-result{background:#f8fafc;border:1.5px solid #2563EB;border-radius:10px;padding:18px}
+.rep-edit{margin-top:14px;padding-top:14px;border-top:2px dashed #cbd5e1}
+.rep-edit label{display:block;font-size:15px;font-weight:700;color:#333;text-transform:uppercase;letter-spacing:0.2px;margin-bottom:6px}
+.rep-edit input{width:100%;padding:12px;border:1.5px solid #ccd3dc;border-radius:9px;font-size:19px;margin-bottom:10px}
 .sim-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;font-size:20px;flex-wrap:wrap;gap:4px 10px}
 .sim-row .lbl{flex:1 1 auto;min-width:120px}
 .sim-row .val{text-align:right;flex-shrink:0}
@@ -326,7 +334,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <div class="tab-page" id="tab-vehiculos">
       <div class="sec">
         <div class="sec-title">Inversión en vehículos</div>
-        <div class="note" style="margin-top:0;margin-bottom:14px">Los costos y ventas de los vehículos se manejan en <b>dólares canadienses (CAD)</b>, ya que se compran en Canadá. El pago del crédito y el reparto de utilidades a los inversionistas se hace en <b>dólares americanos (USD)</b>. Se muestra el equivalente en ambas monedas con una tasa de referencia de <b>1.41 CAD por cada 1 USD</b>.</div>
+        <div class="note" style="margin-top:0;margin-bottom:14px">Los costos y ventas de los vehículos se manejan en <b>dólares canadienses (CAD)</b>, ya que se compran en Canadá. El pago del crédito y el reparto de utilidades a los inversionistas se hace en <b>dólares americanos (USD)</b>. Se muestra el equivalente en ambas monedas con una tasa de referencia de <b>1.36 CAD por cada 1 USD</b>. Es solo una referencia: la conversión real se hará con el tipo de cambio vigente el día en que se envíe el dinero.</div>
         <div id="autos-list"><div class="loading">Cargando…</div></div>
         <button class="btn ghost block" id="btnAddAuto" style="display:none" onclick="openAutoModal()">+ Agregar vehículo</button>
       </div>
@@ -406,7 +414,7 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
     <input type="text" inputmode="decimal" id="autoCosto" placeholder="0.00">
     <label>Taxes, Safety, Arreglo, Fees (CAD $)</label>
     <input type="text" inputmode="decimal" id="autoGst" placeholder="0.00">
-    <label>Comisión BolivarAutos — dealer (%) — opcional, dejar vacío si no aplica</label>
+    <label>Comisión BolivarAutos — dealer (% del precio de venta) — opcional, dejar vacío si no aplica</label>
     <input type="text" inputmode="decimal" id="autoComision" placeholder="Sin comisión">
     <label>Estado</label>
     <select id="autoEstado">
@@ -446,10 +454,20 @@ body{background:#f1f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',
 // ================= CONFIG GENERAL =================
 const ADMIN_PASSWORD = '8334'; // misma clave que livarkar-app.html, aplica a todos los fondos
 const COMISION_DEFAULT = 0; // sin comisión por defecto; se escribe a mano por vehículo
+// Desde noviembre 2026 la comisión es un % del PRECIO DE VENTA.
+// Los carros vendidos antes de esa fecha (ej. Nissan Rogue) conservan la regla anterior: % del costo del carro, como se acordó.
+const FECHA_COMISION_SOBRE_VENTA = '2026-11-01';
+function comisionSobreVenta(a){ return !a.ventaFecha || a.ventaFecha >= FECHA_COMISION_SOBRE_VENTA; }
+function comisionMontoDe(a, pct){
+  const base = comisionSobreVenta(a) ? (a.ventaReal||0) : (a.costoTotal||0);
+  return base * pct/100;
+}
 // Los costos y ventas de vehículos se registran en CAD (se compran en Canadá).
 // El pago del crédito y el reparto de utilidades a los inversionistas es en USD.
 // Esta tasa convierte CAD -> USD para poder ver ambos valores lado a lado.
-const TASA_CAMBIO_AUTOS = 1.41; // CAD por cada 1 USD
+const TASA_CAMBIO_AUTOS = 1.36; // CAD por cada 1 USD — solo referencia
+// Cuota mensual del crédito en CAD: lo que realmente sale de la cuenta ($560 USD). Fija, no usa la tasa de referencia.
+const CUOTA_MENSUAL_CAD = 789.60;
 function cadAUsd(cad){ return (cad||0) / TASA_CAMBIO_AUTOS; }
 function fmtDual(cad, dec){
   dec = (dec===undefined)?2:dec;
@@ -472,9 +490,11 @@ const FONDOS = {
       capitalUSD: 9180,
       capitalCADReal: 12319.05,
       tasaReferencia: 1.35,
-      fechaLimite: '2027-01-15',
+      fechaLimite: '2027-12-15',
       cuotaMensualUSD: 560,
-      meses: ['2026-07','2026-08','2026-09','2026-10','2026-11','2026-12','2027-01'],
+      meses: ['2026-07','2026-08','2026-09','2026-10','2026-11','2026-12',
+              '2027-01','2027-02','2027-03','2027-04','2027-05','2027-06',
+              '2027-07','2027-08','2027-09','2027-10','2027-11','2027-12'],
       inversionistas: [
         {nombre:'Zoila Coloma', usd:3060, cad:4131},
         {nombre:'Guillo G.', usd:3060, cad:4131},
@@ -769,6 +789,16 @@ async function ensureSeedData(){
     const pagos = {};
     seed.meses.forEach(m=>pagos[m]=false);
     await refC.set({ cuotaMensualUSD: seed.cuotaMensualUSD, meses: seed.meses, pagos: pagos });
+  } else {
+    // Si el cronograma guardado tiene menos meses que el seed (ej. se extendió a todo 2027),
+    // agrega los meses que faltan SIN tocar los que ya están marcados como pagados.
+    const actuales = (snapC.data() || {}).meses || [];
+    const faltan = seed.meses.filter(m=>!actuales.includes(m));
+    if(faltan.length){
+      const upd = { meses: Array.from(new Set(actuales.concat(seed.meses))).sort() };
+      faltan.forEach(m=>{ upd['pagos.'+m] = false; });
+      await refC.update(upd);
+    }
   }
   const autosSnap = await db.collection(colAutos()).limit(1).get();
   if(autosSnap.empty && seed.autoSeed){
@@ -797,6 +827,7 @@ async function initApp(){
       snap.forEach(d=>autosCache.push(Object.assign({id:d.id}, d.data())));
       renderAutos();
       renderSimulador();
+      renderCronograma();
       renderBadges();
     }));
   }catch(e){
@@ -833,32 +864,56 @@ function renderResumen(){
 }
 
 // ================= CRONOGRAMA =================
+// Línea con la utilidad y el reparto del mes, para el cronograma. Vacía si el mes no tiene venta ni reparto.
+function resumenMesHtml(m){
+  const c = cuentaDelMes(m);
+  if(!(c.util > 0) && c.rep === null) return '';
+  const repTxt = c.rep !== null ? `Valor para cada inversionista: <b>${fmt(c.rep,2)} CAD</b>` : 'Valor por inversionista: por definir';
+  return `<div class="mes-util">Utilidad: ${fmt(c.util,2)} CAD · ${repTxt}</div>`;
+}
+// Año que se está viendo en el cronograma (pestañas por año).
+let cronAnio = null;
+function setCronAnio(a){ cronAnio = a; renderCronograma(); }
+
 function renderCronograma(){
   if(!creditoData) return;
   const cuotaPersonal = (creditoData.cuotaMensualUSD/3);
   document.getElementById('cronograma-sub').textContent = `$${creditoData.cuotaMensualUSD} USD/mes total · $${cuotaPersonal.toFixed(2)} USD/mes por inversionista`;
 
-  const meses = creditoData.meses || [];
+  const meses = (creditoData.meses || []).slice().sort();
   const pagos = creditoData.pagos || {};
   const pagados = meses.filter(m=>pagos[m]).length;
   document.getElementById('cron-bar').style.width = (meses.length ? (pagados/meses.length*100) : 0)+'%';
-  document.getElementById('cron-label').textContent = `${pagados} de ${meses.length} meses pagados`;
+
+  const anios = Array.from(new Set(meses.map(m=>m.slice(0,4)))).sort();
+  if(!anios.includes(cronAnio)){
+    const anioHoy = String(new Date().getFullYear());
+    cronAnio = anios.includes(anioHoy) ? anioHoy : (anios[0] || null);
+  }
+  const mesesAnio = meses.filter(m=>m.slice(0,4) === cronAnio);
+  const pagadosAnio = mesesAnio.filter(m=>pagos[m]).length;
+  document.getElementById('cron-label').textContent = `${pagados} de ${meses.length} meses pagados en total · ${cronAnio||''}: ${pagadosAnio} de ${mesesAnio.length}`;
 
   const list = document.getElementById('cron-list');
-  list.innerHTML='';
-  meses.forEach(m=>{
+  let html = '';
+  if(anios.length > 1){
+    html += '<div class="anio-tabs">' + anios.map(a=>`<button class="anio-tab ${a===cronAnio?'on':''}" onclick="setCronAnio('${a}')">${a}</button>`).join('') + '</div>';
+  }
+  mesesAnio.forEach(m=>{
     const pagado = !!pagos[m];
     const checkHtml = adminMode
       ? `<input type="checkbox" class="chk" ${pagado?'checked':''} onchange="togglePagado('${m}', this.checked)">`
       : `<span class="badge ${pagado?'pagado':'pendiente'}">${pagado?'Pagado':'Pendiente'}</span>`;
-    list.innerHTML += `<div class="mes-row">
+    html += `<div class="mes-row">
       <div class="mes-info">
         <div class="mes-nombre">${mesLabel(m)}</div>
-        <div class="mes-cuota">$${cuotaPersonal.toFixed(2)} USD por inversionista</div>
+        <div class="mes-cuota">Cuota: $${cuotaPersonal.toFixed(2)} USD por inversionista</div>
+        ${resumenMesHtml(m)}
       </div>
       <div class="mes-check">${checkHtml}</div>
     </div>`;
   });
+  list.innerHTML = html;
 }
 
 async function togglePagado(mes, valor){
@@ -914,7 +969,7 @@ function renderAutos(){
     const estadoClass = a.estado==='Vendido' ? 'vendido' : (a.estado==='Cancelado' ? 'cancelado' : (a.estado==='Disponible' ? 'disp' : 'prep'));
     const fechaStr = a.fechaCompra ? new Date(a.fechaCompra+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
     const comisionPct = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
-    const comisionMonto = (a.costoTotal||0) * comisionPct/100;
+    const comisionMonto = comisionMontoDe(a, comisionPct);
     const gstPagado = a.gstPagado || 0;
     const capitalInvertido = (a.costoTotal||0) + gstPagado;
     const ventaReal = a.ventaReal || 0;
@@ -940,7 +995,9 @@ function renderAutos(){
     } else {
       finHtml = `<div class="auto-fin">${costoRowsHtml}`;
       if(comisionPct > 0){
-        finHtml += `<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%)</span><b>${fmtDual(comisionMonto,2)}</b></div>`;
+        finHtml += ventaReal > 0
+          ? `<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}%${comisionSobreVenta(a)?' de la venta':''})</span><b>${fmtDual(comisionMonto,2)}</b></div>`
+          : `<div class="r"><span>Comisión BolivarAutos — dealer (${comisionPct}% de la venta)</span><b>Se calcula al vender</b></div>`;
       }
       if(ventaReal > 0){
         const ventaFechaStr = a.ventaFecha ? new Date(a.ventaFecha+'T00:00:00').toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : '—';
@@ -948,9 +1005,9 @@ function renderAutos(){
           <div class="r"><span>Fecha de venta</span><b>${ventaFechaStr}</b></div>`;
         if(comisionPct > 0){
           finHtml += `<div class="r"><span>Ganancia bruta — venta menos total invertido</span><b class="${gananciaBruta>=0?'pos':''}">${fmtDual(gananciaBruta,2)}</b></div>
-            <div class="r"><span>Ganancia neta para inversionistas</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
+            <div class="r"><span>Ganancia neta</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
         } else {
-          finHtml += `<div class="r"><span>Ganancia para inversionistas — venta menos total invertido</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
+          finHtml += `<div class="r"><span>Ganancia neta — venta menos total invertido</span><b class="${gananciaNeta>=0?'pos':''}">${fmtDual(gananciaNeta,2)}</b></div>`;
         }
       } else {
         finHtml += `<div class="r"><span>Precio de venta</span><b>Pendiente de venta</b></div>`;
@@ -1139,19 +1196,21 @@ async function guardarAuto(){
 // Los vehículos se manejan en CAD; se devuelve también el equivalente en USD,
 // que es la moneda en la que se paga el crédito y se reparte la utilidad.
 function utilidadDelMes(mes){
-  let total = 0;
+  let total = 0, bruta = 0, comision = 0;
   const detalle = [];
   autosCache.forEach(a=>{
     if(a.estado!=='Vendido' || !(a.ventaReal>0) || !a.ventaFecha) return;
     if(a.ventaFecha.slice(0,7) !== mes) return;
     const comisionPct = (a.comisionPct!==undefined && a.comisionPct!==null) ? a.comisionPct : COMISION_DEFAULT;
-    const comisionMonto = (a.costoTotal||0) * comisionPct/100;
+    const comisionMonto = comisionMontoDe(a, comisionPct);
     const capitalInvertido = (a.costoTotal||0) + (a.gstPagado||0);
     const gananciaNeta = (a.ventaReal||0) - capitalInvertido - comisionMonto;
     total += gananciaNeta;
+    bruta += (a.ventaReal||0) - capitalInvertido;
+    comision += comisionMonto;
     detalle.push({nombre:a.nombre, gananciaNeta, gananciaNetaUSD: cadAUsd(gananciaNeta)});
   });
-  return {total, totalUSD: cadAUsd(total), detalle};
+  return {total, totalUSD: cadAUsd(total), bruta, comision, detalle};
 }
 
 // Combina los meses del cronograma del crédito con cualquier mes donde haya
@@ -1164,10 +1223,36 @@ function mesesDisponibles(){
   return Array.from(new Set(['2026-06', ...base, ...ventaMeses])).sort();
 }
 
+// Reparto que deciden los inversionistas para un mes (CAD por inversionista).
+// Se guarda en el documento 'credito', campo repartos['AAAA-MM']. null = por decidir.
+function repartoDelMes(mes){
+  const r = (creditoData && creditoData.repartos) ? creditoData.repartos[mes] : undefined;
+  return (typeof r === 'number' && !isNaN(r)) ? r : null;
+}
+// Gastos administrativos del mes (arriendo, seguro, etc.) en CAD. Campo gastosAdmin['AAAA-MM'].
+function gastosAdminDelMes(mes){
+  const g = (creditoData && creditoData.gastosAdmin) ? creditoData.gastosAdmin[mes] : undefined;
+  return (typeof g === 'number' && !isNaN(g)) ? g : 0;
+}
+// Cálculo completo del mes, en CAD: utilidad - cuota - gastos administrativos = excedente; excedente - reparto = se guarda.
+function cuentaDelMes(mes){
+  const u = utilidadDelMes(mes);
+  const cuotaCAD = CUOTA_MENSUAL_CAD;
+  const gastos = gastosAdminDelMes(mes);
+  const antesDeGastos = u.total - cuotaCAD;
+  const excedente = Math.max(0, u.total - cuotaCAD - gastos);
+  const guardado = repartoDelMes(mes);
+  // Si no se escribió un valor para el mes, se distribuye todo el excedente en partes iguales (como funcionaba antes).
+  const rep = guardado !== null ? guardado : (excedente > 0 ? excedente/3 : null);
+  const repTotal = rep !== null ? rep*3 : 0;
+  return { util:u.total, utilUSD:u.totalUSD, bruta:u.bruta, comision:u.comision, detalle:u.detalle,
+           cuotaCAD, gastos, antesDeGastos, excedente, rep, guardado, repTotal, guarda: excedente - repTotal };
+}
+
 function renderSimulador(){
   if(!creditoData) return;
   const cuota = creditoData.cuotaMensualUSD || 0;
-  document.getElementById('util-sub').textContent = `Punto de equilibrio: $${cuota} USD/mes (cubre la cuota del crédito). El excedente se distribuye en partes iguales entre los inversionistas. Los vehículos se registran en CAD y se convierten a USD a 1.41 CAD por USD.`;
+  document.getElementById('util-sub').textContent = `Primero se cubre la cuota del crédito (${fmt(CUOTA_MENSUAL_CAD,2)} CAD = $${cuota} USD/mes) y los gastos administrativos del mes (arriendo, seguro). Del excedente se asigna un valor a cada inversionista; el resto se destina a devolución de dinero gastado, se guarda o se reinvierte. Los vehículos se registran en CAD. Los valores en USD usan una tasa de referencia de ${TASA_CAMBIO_AUTOS} CAD por USD; la conversión real se hará con el tipo de cambio vigente el día en que se envíe el dinero.`;
 
   const sel = document.getElementById('sim-mes');
   const meses = mesesDisponibles();
@@ -1180,42 +1265,86 @@ function renderSimulador(){
   });
   if(!meses.length) return;
 
-  const conVenta = meses.filter(m=>utilidadDelMes(m).total>0);
+  const conVenta = meses.filter(m=>utilidadDelMes(m).total>0 || repartoDelMes(m)!==null);
   const hoy = new Date();
   const mesActualStr = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0');
   let mesActivo = meses.includes(prevValue) ? prevValue : (meses.includes(mesActualStr) ? mesActualStr : (meses[0] || '2026-06'));
   sel.value = mesActivo;
 
-  const {total: util, totalUSD: utilUSD, detalle} = utilidadDelMes(mesActivo);
-  const neto = Math.max(0, utilUSD - cuota);
-  const porPersona = neto/3;
-  const cubreCuota = utilUSD >= cuota;
+  const c = cuentaDelMes(mesActivo);
+  const neg = v => `<span class="dual-cad">- ${fmt(v,2)} CAD</span><span class="dual-usd">≈ ${fmt(cadAUsd(v),2)} USD</span>`;
 
-  const detalleHtml = detalle.length
+  const detalleHtml = c.detalle.length
     ? `<div class="sim-row" style="flex-direction:column;align-items:flex-start;gap:4px">
          <span style="color:#999;font-size:11.5px;text-transform:uppercase;font-weight:700;letter-spacing:0.3px">Origen de la utilidad</span>
-         ${detalle.map(d=>`<span style="font-size:16px;color:#555">${d.nombre}: ${fmt(d.gananciaNeta,2)} CAD (≈ ${fmt(d.gananciaNetaUSD,2)} USD)</span>`).join('')}
+         ${c.detalle.map(d=>`<span style="font-size:16px;color:#555">${d.nombre}: ${fmt(d.gananciaNeta,2)} CAD (≈ ${fmt(d.gananciaNetaUSD,2)} USD)</span>`).join('')}
        </div>`
     : `<div class="sim-row"><span style="color:#999">Ningún vehículo registra venta en este mes</span></div>`;
 
+  const comisionHtml = c.comision > 0.005 ? `
+    <div class="sim-row"><span class="lbl">Ganancia de los vehículos</span><b class="val">${fmtDual(c.bruta)}</b></div>
+    <div class="sim-row"><span class="lbl">Comisión BolivarAutos</span><span class="val neg">${neg(c.comision)}</span></div>` : '';
+
+  let repartoHtml;
+  if(c.rep !== null){
+    repartoHtml = `
+    <div class="sim-row"><span class="lbl">Valor para cada inversionista</span><b class="val pos">${fmtDual(c.rep)}</b></div>
+    <div class="sim-row"><span class="lbl">Total para los tres inversionistas</span><b class="val">${fmtDual(c.repTotal)}</b></div>
+    ${c.guardado !== null ? `<div class="sim-row tot"><span class="lbl">Devolución de dinero gastado / Se guarda / Reinversión</span><b class="val">${fmtDual(c.guarda)}</b></div>` : ''}
+    ${c.guarda < -0.005 ? '<div class="sim-row"><span style="color:#b45309">Los valores asignados son mayores que el excedente del mes</span></div>' : ''}`;
+  } else {
+    repartoHtml = `
+    <div class="sim-row"><span class="lbl">Valor para cada inversionista</span><b class="val">Por definir</b></div>
+    ${c.excedente>0 ? `<div class="sim-row"><span class="lbl" style="color:#555">Máximo posible si se distribuye todo</span><span class="val">${fmtDual(c.excedente/3)}</span></div>` : ''}`;
+  }
+
+  const gastosVal = gastosAdminDelMes(mesActivo);
+  const adminRepHtml = adminMode ? `<div class="rep-edit">
+      <label for="gastos-input">Gastos administrativos — ${mesLabel(mesActivo)} (arriendo, seguro) (CAD $)</label>
+      <input type="text" inputmode="decimal" id="gastos-input" placeholder="Ej: 500 — vacío = sin gastos" value="${gastosVal>0?gastosVal:''}">
+      <label for="rep-input">Valor para cada inversionista — ${mesLabel(mesActivo)} (CAD $)</label>
+      <input type="text" inputmode="decimal" id="rep-input" placeholder="Ej: 130 — vacío = se distribuye todo" value="${c.guardado!==null?c.guardado:''}">
+      <button class="btn sm" onclick="guardarCuentaMes('${mesActivo}')">Guardar gastos y valores</button>
+    </div>` : '';
+
   document.getElementById('sim-result').innerHTML = `
     ${detalleHtml}
-    <div class="sim-row"><span class="lbl">Utilidad del mes (${mesLabel(mesActivo)})</span><b class="val">${fmtDual(util)}</b></div>
-    <div class="sim-row"><span class="lbl">Cuota del crédito</span><span class="val ${cubreCuota?'pos':'neg'}">- ${fmt(cuota)} USD</span></div>
-    <div class="sim-row tot"><span class="lbl">Utilidad neta a distribuir</span><span class="val ${neto>0?'pos':''}">${fmt(neto,2)} USD</span></div>
-    <div class="sim-row"><span class="lbl">Distribución individual entre los tres inversionistas</span><b class="val">${fmt(porPersona,2)} USD</b></div>
-    ${(utilUSD>0 && !cubreCuota) ? '<div class="sim-row"><span style="color:#b45309">La cuota del mes todavía no se cubre por completo</span></div>' : ''}
+    ${comisionHtml}
+    <div class="sim-row"><span class="lbl">Utilidad del mes (${mesLabel(mesActivo)})</span><b class="val">${fmtDual(c.util)}</b></div>
+    <div class="sim-row"><span class="lbl">Cuota del crédito</span><span class="val neg"><span class="dual-cad">- ${fmt(c.cuotaCAD,2)} CAD</span><span class="dual-usd">cuota de $${cuota} USD</span></span></div>
+    ${c.gastos > 0 ? `<div class="sim-row"><span class="lbl">Gastos administrativos (arriendo, seguro)</span><span class="val neg">${neg(c.gastos)}</span></div>` : ''}
+    <div class="sim-row tot"><span class="lbl">Excedente</span><span class="val ${c.excedente>0?'pos':''}">${fmtDual(c.excedente)}</span></div>
+    ${(c.util>0 && (c.util - c.cuotaCAD - c.gastos) < 0) ? '<div class="sim-row"><span style="color:#b45309">La utilidad del mes no alcanza para cubrir la cuota y los gastos</span></div>' : ''}
+    ${repartoHtml}
+    ${adminRepHtml}
   `;
 
   const tabla = document.getElementById('sim-table');
   if(!conVenta.length){ tabla.innerHTML=''; return; }
   let html = '<div class="sim-table-title">Historial</div>';
   conVenta.forEach(m=>{
-    const u = utilidadDelMes(m).totalUSD;
-    const n = Math.max(0,u-cuota);
-    html += `<div class="sim-table-row"><span class="m">${mesLabel(m)}</span><span class="p">${fmt(u,2)} USD → ${fmt(n/3,2)} USD c/u</span></div>`;
+    const cm = cuentaDelMes(m);
+    const repTxt = cm.rep !== null ? `${fmt(cm.rep,2)} CAD c/u (≈ ${fmt(cadAUsd(cm.rep),2)} USD)` : 'Por definir';
+    html += `<div class="sim-table-row"><span class="m">${mesLabel(m)} · utilidad ${fmt(cm.util,2)} CAD</span><span class="p">${repTxt}</span></div>`;
   });
   tabla.innerHTML = html;
+}
+
+async function guardarCuentaMes(mes){
+  if(!adminMode) return;
+  const txtG = document.getElementById('gastos-input').value;
+  const txtR = document.getElementById('rep-input').value;
+  const g = parseMonto(txtG), r = parseMonto(txtR);
+  if(isNaN(g) || g < 0){ showToast('No se entiende el monto de gastos. Escribe solo el número, ej: 500'); return; }
+  if(isNaN(r) || r < 0){ showToast('No se entiende el valor por inversionista. Escribe solo el número, ej: 130'); return; }
+  const del = firebase.firestore.FieldValue.delete();
+  const upd = {};
+  upd['gastosAdmin.'+mes] = (String(txtG).trim()==='' || g===0) ? del : g;
+  upd['repartos.'+mes] = (String(txtR).trim()==='') ? del : r;
+  try{
+    await db.collection(col()).doc('credito').update(upd);
+    showToast('Gastos y valores guardados');
+  }catch(e){ showToast('Error: '+e.message); }
 }
 document.getElementById('sim-mes').addEventListener('change', renderSimulador);
 
